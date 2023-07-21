@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -43,7 +44,7 @@ import static org.apache.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
 /**
  * Type 0 CIDFont (CFF).
- * 
+ *
  * @author Ben Litchfield
  * @author John Hewson
  */
@@ -53,7 +54,7 @@ public class PDCIDFontType0 extends PDCIDFont
 
     private final CFFCIDFont cidFont;  // Top DICT that uses CIDFont operators
     private final FontBoxFont t1Font; // Top DICT that does not use CIDFont operators
-    
+
     private final Map<Integer, Float> glyphHeights = new HashMap<>();
     private final boolean isEmbedded;
     private final boolean isDamaged;
@@ -65,10 +66,10 @@ public class PDCIDFontType0 extends PDCIDFont
 
     /**
      * Constructor.
-     * 
+     *
      * @param fontDictionary The font dictionary according to the PDF specification.
      * @param parent The parent font.
-     * 
+     *
      * @throws IOException if the font could not be read
      */
     public PDCIDFontType0(COSDictionary fontDictionary, PDType0Font parent) throws IOException
@@ -165,7 +166,7 @@ public class PDCIDFontType0 extends PDCIDFont
         fontMatrixTransform = getFontMatrix().createAffineTransform();
         fontMatrixTransform.scale(1000, 1000);
     }
-    
+
     @Override
     public final Matrix getFontMatrix()
     {
@@ -202,7 +203,7 @@ public class PDCIDFontType0 extends PDCIDFont
         }
         return fontMatrix;
     }
-    
+
     @Override
     public BoundingBox getBoundingBox()
     {
@@ -239,7 +240,7 @@ public class PDCIDFontType0 extends PDCIDFont
 
     /**
      * Returns the embedded CFF CIDFont, or null if the substitute is not a CFF font.
-     * 
+     *
      * @return the embedded CFF CIDFont or null
      */
     public CFFFont getCFFFont()
@@ -260,7 +261,7 @@ public class PDCIDFontType0 extends PDCIDFont
 
     /**
      * Returns the embedded or substituted font.
-     * 
+     *
      * @return the embedded or substituted font
      */
     public FontBoxFont getFontBoxFont()
@@ -281,7 +282,7 @@ public class PDCIDFontType0 extends PDCIDFont
      *
      * @param cid CID
      * @return the Type 2 charstring for the given CID or null
-     * 
+     *
      * @throws IOException if the charstring could not be read
      */
     public Type2CharString getType2CharString(int cid) throws IOException
@@ -423,7 +424,7 @@ public class PDCIDFontType0 extends PDCIDFont
         {
             width = t1Font.getWidth(getGlyphName(code));
         }
-        
+
         Point2D p = new Point2D.Float(width, 0);
         fontMatrixTransform.transform(p, p);
         return (float)p.getX();

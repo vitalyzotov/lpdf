@@ -27,9 +27,6 @@ import java.net.URISyntaxException;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
-import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.util.DateConverter;
 import org.junit.jupiter.api.Test;
 
@@ -121,8 +118,8 @@ class TestPDFParser
     /**
      * PDFBOX-3785, PDFBOX-3957:
      * Test whether truncated file with several revisions has correct page count.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     @Test
     void testPDFBox3785() throws IOException
@@ -185,41 +182,11 @@ class TestPDFParser
         }
     }
 
-    /**
-     * PDFBOX-3950: test parsing and rendering of truncated file with missing pages.
-     * 
-     * @throws IOException 
-     */
-    @Test
-    void testPDFBox3950() throws IOException
-    {
-        try (PDDocument doc = Loader
-                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3950-23EGDHXSBBYQLKYOKGZUOVYVNE675PRD.pdf")))
-        {
-            assertEquals(4, doc.getNumberOfPages());
-            PDFRenderer renderer = new PDFRenderer(doc);
-            for (int i = 0; i < doc.getNumberOfPages(); ++i)
-            {
-                try
-                {
-                    renderer.renderImage(i);
-                }
-                catch (IOException ex)
-                {
-                    if (i == 3 && ex.getMessage().equals("Missing descendant font array"))
-                    {
-                        continue;
-                    }
-                    throw ex;
-                }
-            }
-        }
-    }
 
     /**
      * PDFBOX-3951: test parsing of truncated file.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     @Test
     void testPDFBox3951() throws IOException
@@ -233,8 +200,8 @@ class TestPDFParser
 
     /**
      * PDFBOX-3964: test parsing of broken file.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     @Test
     void testPDFBox3964() throws IOException
@@ -314,23 +281,6 @@ class TestPDFParser
         catch (Exception exception)
         {
             fail("Unexpected Exception");
-        }
-    }
-
-    /**
-     * Test parsing the "WXMDXCYRWFDCMOSFQJ5OAJIAFXYRZ5OA.pdf" file, which is susceptible to
-     * regression.
-     *
-     * @throws IOException
-     */
-    @Test
-    void testPDFBox4153() throws IOException
-    {
-        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4153-WXMDXCYRWFDCMOSFQJ5OAJIAFXYRZ5OA.pdf")))
-        {
-            PDDocumentOutline documentOutline = doc.getDocumentCatalog().getDocumentOutline();
-            PDOutlineItem firstChild = documentOutline.getFirstChild();
-            assertEquals("Main Menu", firstChild.getTitle());
         }
     }
 

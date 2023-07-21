@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
     private static final Log LOG = LogFactory.getLog(PDType0Font.class);
 
     private final PDCIDFont descendantFont;
-    private final Set<Integer> noUnicode = new HashSet<>(); 
+    private final Set<Integer> noUnicode = new HashSet<>();
     private final GsubData gsubData;
     private final CmapLookup cmapLookup;
     private CMap cMap, cMapUCS2;
@@ -64,7 +65,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Constructor for reading a Type0 font from a PDF file.
-     * 
+     *
      * @param fontDictionary The font dictionary according to the PDF specification.
      * @throws IOException if the descendant font is missing.
      */
@@ -284,7 +285,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
         }
         embedder.addToSubset(codePoint);
     }
-    
+
     public void addGlyphsToSubset(Set<Integer> glyphIds)
     {
         if (!willBeSubset())
@@ -308,7 +309,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
             ttf = null;
         }
     }
-    
+
     @Override
     public boolean willBeSubset()
     {
@@ -340,14 +341,14 @@ public class PDType0Font extends PDFont implements PDVectorFont
                 LOG.warn("Invalid Encoding CMap in font " + getName());
             }
         }
-        
+
         // check if the descendant font is CJK
         PDCIDSystemInfo ros = descendantFont.getCIDSystemInfo();
         if (ros != null)
         {
             String ordering = ros.getOrdering();
             isDescendantCJK = "Adobe".equals(ros.getRegistry()) &&
-                    ("GB1".equals(ordering) || 
+                    ("GB1".equals(ordering) ||
                      "CNS1".equals(ordering) ||
                      "Japan1".equals(ordering) ||
                      "Korea1".equals(ordering));
@@ -388,7 +389,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
             {
                 strName = name.getName();
             }
-            
+
             // try to find the corresponding Unicode (UC2) CMap
             if (strName != null)
             {
@@ -408,7 +409,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the PostScript name of the font.
-     * 
+     *
      * @return the PostScript name of the font
      */
     public String getBaseFont()
@@ -418,7 +419,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the descendant font.
-     * 
+     *
      * @return the descendant font
      */
     public PDCIDFont getDescendantFont()
@@ -428,7 +429,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the font's CMap.
-     * 
+     *
      * @return the font's CMap
      */
     public CMap getCMap()
@@ -438,7 +439,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the font's UCS2 CMap, only present this font uses a predefined CMap.
-     * 
+     *
      * @return the font's UCS2 CMap if present
      */
     public CMap getCMapUCS2()
@@ -641,7 +642,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
      *
      * @param code character code
      * @return GID for the given character code
-     * 
+     *
      * @throws IOException if the data could not be read
      */
     public int codeToGID(int code) throws IOException
@@ -678,13 +679,13 @@ public class PDType0Font extends PDFont implements PDVectorFont
         return descendantFont.getPath(code);
     }
 
-    
+
     @Override
     public GeneralPath getNormalizedPath(int code) throws IOException
     {
         return descendantFont.getNormalizedPath(code);
     }
-    
+
     @Override
     public boolean hasGlyph(int code) throws IOException
     {
@@ -693,7 +694,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the GSubData if present.
-     * 
+     *
      * @return the GSubData if present
      */
     public GsubData getGsubData()
@@ -703,7 +704,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the encoded value for the given glyph ID.
-     * 
+     *
      * @param glyphId the ID of the glyph to be encoded
      * @return the encoded glyph ID
      */
@@ -714,7 +715,7 @@ public class PDType0Font extends PDFont implements PDVectorFont
 
     /**
      * Returns the CMap lookup table if present.
-     * 
+     *
      * @return the CMap lookup table if present
      */
     public CmapLookup getCmapLookup()

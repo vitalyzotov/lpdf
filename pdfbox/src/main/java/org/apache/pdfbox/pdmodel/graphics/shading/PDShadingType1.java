@@ -16,20 +16,18 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Paint;
-import java.awt.geom.AffineTransform;
-
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.util.Matrix;
 
+import java.awt.geom.AffineTransform;
+
 /**
  * Resources for a function based shading.
  */
-public class PDShadingType1 extends PDShading
-{
+public class PDShadingType1 extends PDShading {
     private COSArray domain = null;
 
     /**
@@ -37,14 +35,12 @@ public class PDShadingType1 extends PDShading
      *
      * @param shadingDictionary the dictionary for this shading
      */
-    public PDShadingType1(COSDictionary shadingDictionary)
-    {
+    public PDShadingType1(COSDictionary shadingDictionary) {
         super(shadingDictionary);
     }
 
     @Override
-    public int getShadingType()
-    {
+    public int getShadingType() {
         return PDShading.SHADING_TYPE1;
     }
 
@@ -53,8 +49,7 @@ public class PDShadingType1 extends PDShading
      *
      * @return the matrix
      */
-    public Matrix getMatrix()
-    {
+    public Matrix getMatrix() {
         return Matrix.createMatrix(getCOSObject().getDictionaryObject(COSName.MATRIX));
     }
 
@@ -63,13 +58,11 @@ public class PDShadingType1 extends PDShading
      *
      * @param transform the transformation matrix
      */
-    public void setMatrix(AffineTransform transform)
-    {
+    public void setMatrix(AffineTransform transform) {
         COSArray matrix = new COSArray();
         double[] values = new double[6];
         transform.getMatrix(values);
-        for (double v : values)
-        {
+        for (double v : values) {
             matrix.add(new COSFloat((float) v));
         }
         getCOSObject().setItem(COSName.MATRIX, matrix);
@@ -80,10 +73,8 @@ public class PDShadingType1 extends PDShading
      *
      * @return the domain values
      */
-    public COSArray getDomain()
-    {
-        if (domain == null)
-        {
+    public COSArray getDomain() {
+        if (domain == null) {
             domain = getCOSObject().getCOSArray(COSName.DOMAIN);
         }
         return domain;
@@ -94,15 +85,9 @@ public class PDShadingType1 extends PDShading
      *
      * @param newDomain the domain array
      */
-    public void setDomain(COSArray newDomain)
-    {
+    public void setDomain(COSArray newDomain) {
         domain = newDomain;
         getCOSObject().setItem(COSName.DOMAIN, newDomain);
     }
 
-    @Override
-    public Paint toPaint(Matrix matrix)
-    {
-        return new Type1ShadingPaint(this, matrix);
-    }
 }

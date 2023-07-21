@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.awt.color.ICC_Profile;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +45,8 @@ public final class PDOutputIntent implements COSObjectable
         dictionary = new COSDictionary();
         dictionary.setItem(COSName.TYPE, COSName.OUTPUT_INTENT);
         dictionary.setItem(COSName.S, COSName.GTS_PDFA1);
-        PDStream destOutputIntent = configureOutputProfile(doc, colorProfile);
-        dictionary.setItem(COSName.DEST_OUTPUT_PROFILE, destOutputIntent);
+//        PDStream destOutputIntent = configureOutputProfile(doc, colorProfile);
+//        dictionary.setItem(COSName.DEST_OUTPUT_PROFILE, destOutputIntent);
     }
 
     public PDOutputIntent(COSDictionary dictionary)
@@ -105,12 +105,4 @@ public final class PDOutputIntent implements COSObjectable
         dictionary.setString(COSName.REGISTRY_NAME, value);
     }
 
-    private PDStream configureOutputProfile(PDDocument doc, InputStream colorProfile)
-            throws IOException
-    {
-        ICC_Profile icc = ICC_Profile.getInstance(colorProfile);
-        PDStream stream = new PDStream(doc, new ByteArrayInputStream(icc.getData()), COSName.FLATE_DECODE);
-        stream.getCOSObject().setInt(COSName.N, icc.getNumComponents());
-        return stream;
-    }
-}  
+}

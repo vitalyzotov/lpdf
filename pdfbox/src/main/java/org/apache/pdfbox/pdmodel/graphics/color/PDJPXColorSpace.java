@@ -18,9 +18,6 @@ package org.apache.pdfbox.pdmodel.graphics.color;
 
 import org.apache.pdfbox.cos.COSBase;
 
-import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 
 /**
@@ -31,15 +28,13 @@ import java.io.IOException;
  */
 public final class PDJPXColorSpace extends PDColorSpace
 {
-    private final ColorSpace awtColorSpace;
+
 
     /**
      * Creates a new JPX color space from the given AWT color space.
-     * @param colorSpace AWT color space from a JPX image
      */
-    public PDJPXColorSpace(ColorSpace colorSpace)
+    public PDJPXColorSpace()
     {
-        this.awtColorSpace = colorSpace;
     }
 
     @Override
@@ -51,12 +46,15 @@ public final class PDJPXColorSpace extends PDColorSpace
     @Override
     public int getNumberOfComponents()
     {
-        return awtColorSpace.getNumComponents();
+        throw new UnsupportedOperationException("Not implemented"); //todo: vz fixme
+        //return awtColorSpace.getNumComponents();
     }
 
     @Override
     public float[] getDefaultDecode(int bitsPerComponent)
     {
+        throw new UnsupportedOperationException("Not implemented"); //todo: vz fixme
+        /*
         int n = getNumberOfComponents();
         float[] decode = new float[n * 2];
         for (int i = 0; i < n; i++)
@@ -65,30 +63,14 @@ public final class PDJPXColorSpace extends PDColorSpace
             decode[i * 2 + 1] = awtColorSpace.getMaxValue(i);
         }
         return decode;
+
+         */
     }
 
     @Override
     public PDColor getInitialColor()
     {
         throw new UnsupportedOperationException("JPX color spaces don't support drawing");
-    }
-
-    @Override
-    public float[] toRGB(float[] value)
-    {
-        throw new UnsupportedOperationException("JPX color spaces don't support drawing");
-    }
-
-    @Override
-    public BufferedImage toRGBImage(WritableRaster raster) throws IOException
-    {
-        return toRGBImageAWT(raster, awtColorSpace);
-    }
-
-    @Override
-    public BufferedImage toRawImage(WritableRaster raster)
-    {
-        return toRawImage(raster, this.awtColorSpace);
     }
 
     @Override

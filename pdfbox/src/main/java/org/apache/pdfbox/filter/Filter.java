@@ -22,9 +22,6 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.zip.Deflater;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
@@ -113,8 +110,8 @@ public abstract class Filter
         COSBase obj = dictionary.getDictionaryObject(COSName.DP, COSName.DECODE_PARMS);
         if (filter instanceof COSName && obj instanceof COSDictionary)
         {
-            // PDFBOX-3932: The PDF specification requires "If there is only one filter and that 
-            // filter has parameters, DecodeParms shall be set to the filter’s parameter dictionary" 
+            // PDFBOX-3932: The PDF specification requires "If there is only one filter and that
+            // filter has parameters, DecodeParms shall be set to the filter’s parameter dictionary"
             // but tests show that Adobe means "one filter name object".
             return (COSDictionary)obj;
         }
@@ -136,30 +133,6 @@ public abstract class Filter
                       obj.getClass().getName());
         }
         return new COSDictionary();
-    }
-
-    /**
-     * Finds a suitable image raster reader for an image format.
-     *
-     * @param formatName The image format to search for.
-     * @param errorCause The probably cause if something goes wrong.
-     * @return The image reader for the format.
-     * @throws MissingImageReaderException if no image reader is found.
-     */
-    public static final ImageReader findImageReader(String formatName, String errorCause)
-            throws MissingImageReaderException
-    {
-        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(formatName);
-        while (readers.hasNext())
-        {
-            ImageReader reader = readers.next();
-            if (reader.canReadRaster())
-            {
-                return reader;
-            }
-            reader.dispose();
-        }
-        throw new MissingImageReaderException("Cannot read " + formatName + " image: " + errorCause);
     }
 
     /**

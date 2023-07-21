@@ -15,20 +15,9 @@
  * limitations under the License.
  */
 
-package org.apache.pdfbox.pdmodel.interactive.annotation.handlers;
+//todo: vz remove AWT usage
 
-public interface PDAppearanceHandler
-{
-    default void generateAppearanceStreams()
-    {
-        generateNormalAppearance();
-        generateRolloverAppearance();
-        generateDownAppearance();
-    }
-
-    void generateNormalAppearance();
-
-    void generateRolloverAppearance();
-
-    void generateDownAppearance();
-}
+/**
+ * This package contains provides classes for working with content streams.
+ */
+package org.apache.pdfbox.contentstream;

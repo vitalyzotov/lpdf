@@ -40,11 +40,11 @@ class TestPDDocumentCatalog
 
     /**
      * Test getPageLabels().
-     * 
+     *
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-90"
      *   >PDFBOX-90</a> - Support explicit retrieval of page labels.
-     *   
+     *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
@@ -73,11 +73,11 @@ class TestPDDocumentCatalog
 
     /**
      * Test page labels for malformed PDF.
-     * 
+     *
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-900"
      *   >PDFBOX-900</a> - Handle malformed PDFs
-     *   
+     *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
@@ -95,12 +95,12 @@ class TestPDDocumentCatalog
 
     /**
      * Test getNumberOfPages().
-     * 
+     *
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-911"
      *   >PDFBOX-911</a> - Method PDDocument.getNumberOfPages() returns wrong
      * number of pages
-     * 
+     *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
@@ -115,11 +115,11 @@ class TestPDDocumentCatalog
 
     /**
      * Test OutputIntents functionality.
-     * 
+     *
      * Test case for
      * <a https://issues.apache.org/jira/browse/PDFBOX-2687">PDFBOX-2687</a>
      * ClassCastException when trying to get OutputIntents or add to it.
-     * 
+     *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
@@ -136,11 +136,11 @@ class TestPDDocumentCatalog
             assertTrue(outputIntents.isEmpty());
 
             // create and add output intent
-            PDOutputIntent oi = new PDOutputIntent(doc, colorProfile); 
-            oi.setInfo("sRGB IEC61966-2.1"); 
-            oi.setOutputCondition("sRGB IEC61966-2.1"); 
-            oi.setOutputConditionIdentifier("sRGB IEC61966-2.1"); 
-            oi.setRegistryName("http://www.color.org"); 
+            PDOutputIntent oi = new PDOutputIntent(doc, colorProfile);
+            oi.setInfo("sRGB IEC61966-2.1");
+            oi.setOutputCondition("sRGB IEC61966-2.1");
+            oi.setOutputConditionIdentifier("sRGB IEC61966-2.1");
+            oi.setRegistryName("http://www.color.org");
             doc.getDocumentCatalog().addOutputIntent(oi);
 
             // retrieve OutputIntents
@@ -154,14 +154,4 @@ class TestPDDocumentCatalog
         }
     }
 
-    @Test
-    void handleBooleanInOpenAction() throws IOException
-    {
-        //PDFBOX-3772 -- allow for COSBoolean
-        try (PDDocument doc = new PDDocument())
-        {
-            doc.getDocumentCatalog().getCOSObject().setBoolean(COSName.OPEN_ACTION, false);
-            assertNull(doc.getDocumentCatalog().getOpenAction());
-        }
-    }
 }

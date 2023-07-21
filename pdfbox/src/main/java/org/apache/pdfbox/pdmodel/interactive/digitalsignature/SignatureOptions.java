@@ -26,7 +26,6 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleSigProperties;
 
 /**
  * This contains the visual signature as a COSDocument, its preferred size and the page.
@@ -92,25 +91,12 @@ public class SignatureOptions implements Closeable
     {
         initFromRandomAccessRead(new RandomAccessReadBuffer(is));
     }
-    
+
     private void initFromRandomAccessRead(RandomAccessRead rar) throws IOException
     {
         pdfSource = rar;
         PDFParser parser = new PDFParser(pdfSource);
         visualSignature = parser.parse().getDocument();
-    }
-
-    /**
-     * Reads the visual signature from the given visual signature properties
-     *
-     * @param visSignatureProperties the <code>PDVisibleSigProperties</code> object containing the
-     * visual signature
-     *
-     * @throws IOException when something went wrong during parsing
-     */
-    public void setVisualSignature(PDVisibleSigProperties visSignatureProperties) throws IOException
-    {
-        setVisualSignature(visSignatureProperties.getVisibleSignature());
     }
 
     /**

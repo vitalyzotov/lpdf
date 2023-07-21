@@ -16,13 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +73,9 @@ public class PDDeviceN extends PDSpecialColorSpace
 
     /**
      * Creates a new DeviceN color space from the given COS array.
-     * 
+     *
      * @param deviceN an array containing the color space information
-     * 
+     *
      * @throws IOException if the colorspace could not be created
      */
     public PDDeviceN(COSArray deviceN) throws IOException
@@ -174,262 +167,6 @@ public class PDDeviceN extends PDSpecialColorSpace
         }
     }
 
-    @Override
-    public BufferedImage toRGBImage(WritableRaster raster) throws IOException
-    {
-        if (attributes != null)
-        {
-            return toRGBWithAttributes(raster);
-        }
-        else
-        {
-            return toRGBWithTintTransform(raster);
-        }
-    }
-
-    //
-    // WARNING: this method is performance sensitive, modify with care!
-    //
-    private BufferedImage toRGBWithAttributes(WritableRaster raster) throws IOException
-    {
-        int width = raster.getWidth();
-        int height = raster.getHeight();
-
-        BufferedImage rgbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        WritableRaster rgbRaster = rgbImage.getRaster();
-
-        // white background
-        Graphics2D g = rgbImage.createGraphics();
-        g.setBackground(Color.WHITE);
-        g.clearRect(0, 0, width, height);
-        g.dispose();
-
-        // look up each colorant
-        for (int c = 0; c < numColorants; c++)
-        {
-            PDColorSpace componentColorSpace;
-            if (colorantToComponent[c] >= 0)
-            {
-                // process color
-                componentColorSpace = processColorSpace;
-            }
-            else if (spotColorSpaces[c] == null)
-            {
-                // TODO this happens in the Altona Visual test, is there a better workaround?
-                // missing spot color, fallback to using tintTransform
-                return toRGBWithTintTransform(raster);
-            }
-            else
-            {
-                // spot color
-                componentColorSpace = spotColorSpaces[c];
-            }
-
-            int numberOfComponents = componentColorSpace.getNumberOfComponents();
-            // copy single-component to its own raster in the component color space
-            WritableRaster componentRaster = Raster.createBandedRaster(DataBuffer.TYPE_BYTE,
-                width, height, numberOfComponents, new Point(0, 0));
-
-            int[] samples = new int[numColorants];
-            int[] componentSamples = new int[numberOfComponents];
-            boolean isProcessColorant = colorantToComponent[c] >= 0;
-            int componentIndex = colorantToComponent[c];
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    raster.getPixel(x, y, samples);
-                    if (isProcessColorant)
-                    {
-                        // process color
-                        componentSamples[componentIndex] = samples[c];
-                    }
-                    else
-                    {
-                        // spot color
-                        componentSamples[0] = samples[c];
-                    }
-                    componentRaster.setPixel(x, y, componentSamples);
-                }
-            }
-
-            // convert single-component raster to RGB
-            BufferedImage rgbComponentImage = componentColorSpace.toRGBImage(componentRaster);
-            WritableRaster rgbComponentRaster = rgbComponentImage.getRaster();
-
-            // combine the RGB component with the RGB composite raster
-            int[] rgbChannel = new int[3];
-            int[] rgbComposite = new int[3];
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    rgbComponentRaster.getPixel(x, y, rgbChannel);
-                    rgbRaster.getPixel(x, y, rgbComposite);
-
-                    // multiply (blend mode)
-                    rgbChannel[0] = rgbChannel[0] * rgbComposite[0] >> 8;
-                    rgbChannel[1] = rgbChannel[1] * rgbComposite[1] >> 8;
-                    rgbChannel[2] = rgbChannel[2] * rgbComposite[2] >> 8;
-
-                    rgbRaster.setPixel(x, y, rgbChannel);
-                }
-            }
-        }
-
-        return rgbImage;
-    }
-
-    //
-    // WARNING: this method is performance sensitive, modify with care!
-    //
-    private BufferedImage toRGBWithTintTransform(WritableRaster raster) throws IOException
-    {
-        // cache color mappings
-        Map<String, int[]> map1 = new HashMap<>();
-        String key;
-        StringBuilder keyBuilder = new StringBuilder();
-
-        int width = raster.getWidth();
-        int height = raster.getHeight();
-
-        // use the tint transform to convert the sample into
-        // the alternate color space (this is usually 1:many)
-        BufferedImage rgbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        WritableRaster rgbRaster = rgbImage.getRaster();
-        int[] rgb = new int[3];
-        int numSrcComponents = getColorantNames().size();
-        float[] src = new float[numSrcComponents];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                raster.getPixel(x, y, src);
-                // use a string representation as key
-                keyBuilder.append(src[0]);
-                for (int s = 1; s < numSrcComponents; s++)
-                {
-                    keyBuilder.append('#').append(src[s]);
-                }
-                key = keyBuilder.toString();
-                keyBuilder.setLength(0);
-                int[] pxl = map1.get(key);
-                if (pxl != null)
-                {
-                    rgbRaster.setPixel(x, y, pxl);
-                    continue;
-                }
-                // scale to 0..1
-                for (int s = 0; s < numSrcComponents; s++)
-                {
-                    src[s] = src[s] / 255;
-                }
-
-                // convert to alternate color space via tint transform
-                float[] result = tintTransform.eval(src);
-                
-                // convert from alternate color space to RGB
-                float[] rgbFloat = alternateColorSpace.toRGB(result);
-
-                // scale to 0..255
-                rgb[0] = (int) (rgbFloat[0] * 255f);
-                rgb[1] = (int) (rgbFloat[1] * 255f);
-                rgb[2] = (int) (rgbFloat[2] * 255f);
-
-                // must clone because rgb is reused
-                map1.put(key, rgb.clone());
-
-                rgbRaster.setPixel(x, y, rgb);
-            }
-        }
-        return rgbImage;
-    }
-
-    @Override
-    public float[] toRGB(float[] value) throws IOException
-    {
-        if (attributes != null)
-        {
-            return toRGBWithAttributes(value);
-        }
-        else
-        {
-            return toRGBWithTintTransform(value);
-        }
-    }
-
-    private float[] toRGBWithAttributes(float[] value) throws IOException
-    {
-        float[] rgbValue = new float[] { 1, 1, 1 };
-
-        // look up each colorant
-        for (int c = 0; c < numColorants; c++)
-        {
-            PDColorSpace componentColorSpace;
-            boolean isProcessColorant = colorantToComponent[c] >= 0;
-            if (isProcessColorant)
-            {
-                // process color
-                componentColorSpace = processColorSpace;
-            }
-            else if (spotColorSpaces[c] == null)
-            {
-                // TODO this happens in the Altona Visual test, is there a better workaround?
-                // missing spot color, fallback to using tintTransform
-                return toRGBWithTintTransform(value);
-            }
-            else
-            {
-                // spot color
-                componentColorSpace = spotColorSpaces[c];
-            }
-
-            // get the single component
-            float[] componentSamples = new float[componentColorSpace.getNumberOfComponents()];
-
-            if (isProcessColorant)
-            {
-                // process color
-                int componentIndex = colorantToComponent[c];
-                componentSamples[componentIndex] = value[c];
-            }
-            else
-            {
-                // spot color
-                componentSamples[0] = value[c];
-            }
-
-            // convert single component to RGB
-            float[] rgbComponent = componentColorSpace.toRGB(componentSamples);
-
-            // combine the RGB component value with the RGB composite value
-
-            // multiply (blend mode)
-            rgbValue[0] *= rgbComponent[0];
-            rgbValue[1] *= rgbComponent[1];
-            rgbValue[2] *= rgbComponent[2];
-        }
-
-        return rgbValue;
-    }
-
-    private float[] toRGBWithTintTransform(float[] value) throws IOException
-    {
-        // use the tint transform to convert the sample into
-        // the alternate color space (this is usually 1:many)
-        float[] altValue = tintTransform.eval(value);
-
-        // convert the alternate color space to RGB
-        return alternateColorSpace.toRGB(altValue);
-    }
-
-    @Override
-    public BufferedImage toRawImage(WritableRaster raster)
-    {
-        // We don't know how to convert that.
-        return null;
-    }
-
     /**
      * Returns true if this color space has the NChannel subtype.
      * @return true if subtype is NChannel
@@ -519,7 +256,7 @@ public class PDDeviceN extends PDSpecialColorSpace
             array.set(DEVICEN_ATTRIBUTES, attributes.getCOSDictionary());
         }
     }
- 
+
     /**
      * This will get the alternate color space for this separation.
      *

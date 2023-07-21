@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.common;
 
+//todo: can we use it?
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class PDRectangle implements COSObjectable
 {
     /** user space units per inch */
     private static final float POINTS_PER_INCH = 72;
-    
+
     /** user space units per millimeter */
     private static final float POINTS_PER_MM = 1 / (10 * 2.54f) * POINTS_PER_INCH;
 
@@ -299,7 +300,7 @@ public class PDRectangle implements COSObjectable
     /**
      * Returns a path which represents this rectangle having been transformed by the given matrix. Note that the
      * resulting path need not be rectangular.
-     * 
+     *
      * @param matrix the matrix to be used for the transformation
      * @return the transformed rectangle
      */
@@ -338,7 +339,7 @@ public class PDRectangle implements COSObjectable
     /**
      * Returns a general path equivalent to this rectangle. This method avoids the problems caused by Rectangle2D not
      * working well with -ve rectangles.
-     * 
+     *
      * @return a general path equivalent to this rectangle
      */
     public GeneralPath toGeneralPath()

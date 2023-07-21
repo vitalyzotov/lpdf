@@ -16,10 +16,6 @@
  */
 package org.apache.pdfbox.multipdf;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSBase;
@@ -29,12 +25,10 @@ import org.apache.pdfbox.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.interactive.action.PDAction;
-import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Split a document into several other documents.
@@ -42,8 +36,7 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPa
  * @author Mario Ivankovits
  * @author Ben Litchfield
  */
-public class Splitter
-{
+public class Splitter {
     private static final Log LOG = LogFactory.getLog(Splitter.class);
 
     private PDDocument sourceDocument;
@@ -61,18 +54,16 @@ public class Splitter
     /**
      * @return the current function to be used to create an instance of stream cache.
      */
-    public StreamCacheCreateFunction getStreamCacheCreateFunction()
-    {
+    public StreamCacheCreateFunction getStreamCacheCreateFunction() {
         return streamCacheCreateFunction;
     }
 
     /**
      * Set the current function to be used to create an instance of stream cache.
-     * 
+     *
      * @param streamCacheCreateFunction the current function to be used to create an instance of stream cache.
      */
-    public void setStreamCacheCreateFunction(StreamCacheCreateFunction streamCacheCreateFunction)
-    {
+    public void setStreamCacheCreateFunction(StreamCacheCreateFunction streamCacheCreateFunction) {
         this.streamCacheCreateFunction = streamCacheCreateFunction;
     }
 
@@ -80,16 +71,13 @@ public class Splitter
      * This will take a document and split into several other documents.
      *
      * @param document The document to split.
-     *
      * @return A list of all the split documents. These should all be saved before closing any
      * documents, including the source document. Any further operations should be made after
      * reloading them, to avoid problems due to resource sharing. For the same reason, they should
      * not be saved with encryption.
-     *
      * @throws IOException If there is an IOError
      */
-    public List<PDDocument> split(PDDocument document) throws IOException
-    {
+    public List<PDDocument> split(PDDocument document) throws IOException {
         // reset the currentPageNumber for a case if the split method will be used several times
         currentPageNumber = 0;
         destinationDocuments = new ArrayList<>();
@@ -108,10 +96,8 @@ public class Splitter
      * @param split The number of pages each split document should contain.
      * @throws IllegalArgumentException if the page is smaller than one.
      */
-    public void setSplitAtPage(int split)
-    {
-        if(split <= 0)
-        {
+    public void setSplitAtPage(int split) {
+        if (split <= 0) {
             throw new IllegalArgumentException("Number of pages is smaller than one");
         }
         splitLength = split;
@@ -123,10 +109,8 @@ public class Splitter
      * @param start the 1-based start page
      * @throws IllegalArgumentException if the start page is smaller than one.
      */
-    public void setStartPage(int start)
-    {
-        if(start <= 0)
-        {
+    public void setStartPage(int start) {
+        if (start <= 0) {
             throw new IllegalArgumentException("Start page is smaller than one");
         }
         startPage = start;
@@ -138,10 +122,8 @@ public class Splitter
      * @param end the 1-based end page
      * @throws IllegalArgumentException if the end page is smaller than one.
      */
-    public void setEndPage(int end)
-    {
-        if(end <= 0)
-        {
+    public void setEndPage(int end) {
+        if (end <= 0) {
             throw new IllegalArgumentException("End page is smaller than one");
         }
         endPage = end;
@@ -152,23 +134,15 @@ public class Splitter
      *
      * @throws IOException If an IO error occurs.
      */
-    private void processPages() throws IOException
-    {
-        for (PDPage page : sourceDocument.getPages())
-        {
-            if (currentPageNumber + 1 >= startPage && currentPageNumber + 1 <= endPage)
-            {
+    private void processPages() throws IOException {
+        for (PDPage page : sourceDocument.getPages()) {
+            if (currentPageNumber + 1 >= startPage && currentPageNumber + 1 <= endPage) {
                 processPage(page);
                 currentPageNumber++;
-            }
-            else
-            {
-                if (currentPageNumber > endPage)
-                {
+            } else {
+                if (currentPageNumber > endPage) {
                     break;
-                }
-                else
-                {
+                } else {
                     currentPageNumber++;
                 }
             }
@@ -180,10 +154,8 @@ public class Splitter
      *
      * @throws IOException If there is an error creating the new document.
      */
-    private void createNewDocumentIfNecessary() throws IOException
-    {
-        if (splitAtPage(currentPageNumber) || currentDestinationDocument == null)
-        {
+    private void createNewDocumentIfNecessary() throws IOException {
+        if (splitAtPage(currentPageNumber) || currentDestinationDocument == null) {
             currentDestinationDocument = createNewDocument();
             destinationDocuments.add(currentDestinationDocument);
         }
@@ -196,52 +168,45 @@ public class Splitter
      * <code>
      * protected void splitAtPage()
      * {
-     *     // will split at pages with prime numbers only
-     *     return isPrime(pageNumber);
+     * // will split at pages with prime numbers only
+     * return isPrime(pageNumber);
      * }
      * </code>
+     *
      * @param pageNumber the 0-based page number to be checked as splitting page
-     * 
      * @return true If a new document should be created.
      */
-    protected boolean splitAtPage(int pageNumber)
-    {
+    protected boolean splitAtPage(int pageNumber) {
         return (pageNumber + 1 - Math.max(1, startPage)) % splitLength == 0;
     }
 
     /**
      * Create a new document to write the split contents to.
      *
-     * @return the newly created PDDocument. 
+     * @return the newly created PDDocument.
      * @throws IOException If there is an problem creating the new document.
      */
-    protected PDDocument createNewDocument() throws IOException
-    {
+    protected PDDocument createNewDocument() throws IOException {
         PDDocument document = streamCacheCreateFunction != null ? new PDDocument(streamCacheCreateFunction) : new PDDocument();
         document.getDocument().setVersion(getSourceDocument().getVersion());
         PDDocumentInformation sourceDocumentInformation = getSourceDocument().getDocumentInformation();
-        if (sourceDocumentInformation != null)
-        {
+        if (sourceDocumentInformation != null) {
             // PDFBOX-5317: Image Capture Plus files where /Root and /Info share the same dictionary
             // Only copy simple elements to avoid huge files
             COSDictionary sourceDocumentInformationDictionary = sourceDocumentInformation.getCOSObject();
             COSDictionary destDocumentInformationDictionary = new COSDictionary();
-            for (COSName key : sourceDocumentInformationDictionary.keySet())
-            {
+            for (COSName key : sourceDocumentInformationDictionary.keySet()) {
                 COSBase value = sourceDocumentInformationDictionary.getDictionaryObject(key);
-                if (value instanceof COSDictionary)
-                {
+                if (value instanceof COSDictionary) {
                     LOG.warn("Nested entry for key '" + key.getName()
                             + "' skipped in document information dictionary");
                     if (sourceDocument.getDocumentCatalog().getCOSObject() ==
-                            sourceDocument.getDocumentInformation().getCOSObject())
-                    {
+                            sourceDocument.getDocumentInformation().getCOSObject()) {
                         LOG.warn("/Root and /Info share the same dictionary");
                     }
                     continue;
                 }
-                if (COSName.TYPE.equals(key))
-                {
+                if (COSName.TYPE.equals(key)) {
                     continue; // there is no /Type in the document information dictionary
                 }
                 destDocumentInformationDictionary.setItem(key, value);
@@ -257,64 +222,34 @@ public class Splitter
      * Interface to start processing a new page.
      *
      * @param page The page that is about to get processed.
-     *
      * @throws IOException If there is an error creating the new document.
      */
-    protected void processPage(PDPage page) throws IOException
-    {
+    protected void processPage(PDPage page) throws IOException {
         createNewDocumentIfNecessary();
-        
+
         PDPage imported = getDestinationDocument().importPage(page);
-        if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES))
-        {
+        if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES)) {
             imported.setResources(page.getResources());
             LOG.info("Resources imported in Splitter"); // follow-up to warning in importPage
         }
-        // remove page links to avoid copying not needed resources 
-        processAnnotations(imported);
     }
 
-    private void processAnnotations(PDPage imported) throws IOException
-    {
-        List<PDAnnotation> annotations = imported.getAnnotations();
-        for (PDAnnotation annotation : annotations)
-        {
-            if (annotation instanceof PDAnnotationLink)
-            {
-                PDAnnotationLink link = (PDAnnotationLink)annotation;   
-                PDDestination destination = link.getDestination();
-                PDAction action = link.getAction();
-                if (destination == null && action instanceof PDActionGoTo)
-                {
-                    destination = ((PDActionGoTo) action).getDestination();
-                }
-                if (destination instanceof PDPageDestination)
-                {
-                    // TODO preserve links to pages within the split result  
-                    ((PDPageDestination) destination).setPage(null);
-                }
-            }
-            // TODO preserve links to pages within the split result  
-            annotation.setPage(null);
-        }
-    }
+
     /**
      * The source PDF document.
-     * 
+     *
      * @return the pdf to be split
      */
-    protected final PDDocument getSourceDocument()
-    {
+    protected final PDDocument getSourceDocument() {
         return sourceDocument;
     }
 
     /**
      * The source PDF document.
-     * 
+     *
      * @return current destination pdf
      */
-    protected final PDDocument getDestinationDocument()
-    {
+    protected final PDDocument getDestinationDocument() {
         return currentDestinationDocument;
     }
 }

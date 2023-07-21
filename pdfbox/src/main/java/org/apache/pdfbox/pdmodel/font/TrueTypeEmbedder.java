@@ -17,6 +17,7 @@
 
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.GeneralPath;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -82,7 +83,7 @@ abstract class TrueTypeEmbedder implements Subsetter
         if (!embedSubset)
         {
             // full embedding
-            
+
             // TrueType collections are not supported
             InputStream is = ttf.getOriginalData();
             byte[] b = new byte[4];
@@ -189,7 +190,7 @@ abstract class TrueTypeEmbedder implements Subsetter
         PostScriptTable post = ttf.getPostScript();
         if (post == null)
         {
-            throw new IOException("post table is missing in font " + ttfName);            
+            throw new IOException("post table is missing in font " + ttfName);
         }
 
         PDFontDescriptor fd = new PDFontDescriptor();
@@ -284,13 +285,13 @@ abstract class TrueTypeEmbedder implements Subsetter
     {
         return fontDescriptor;
     }
-    
+
     @Override
     public void addToSubset(int codePoint)
     {
         subsetCodePoints.add(codePoint);
     }
-    
+
     public void addGlyphIds(Set<Integer> glyphIds)
     {
         allGlyphIds.addAll(glyphIds);
@@ -303,7 +304,7 @@ abstract class TrueTypeEmbedder implements Subsetter
         {
             throw new IOException("This font does not permit subsetting");
         }
-        
+
         if (!embedSubset)
         {
             throw new IllegalStateException("Subsetting is disabled");
@@ -353,7 +354,7 @@ abstract class TrueTypeEmbedder implements Subsetter
     {
         return embedSubset;
     }
-    
+
     /**
      * Rebuild a font subset.
      */

@@ -16,28 +16,24 @@
  */
 package org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSStream;
 import org.apache.pdfbox.pdmodel.common.COSObjectable;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationUnknown;
+
+import java.io.IOException;
 
 /**
  * An object reference.
  * <p>
  * This is described as "Entries in an object reference dictionary" in the PDF specification.
- * 
+ *
  * @author Johannes Koch
  */
-public class PDObjectReference implements COSObjectable
-{
+public class PDObjectReference implements COSObjectable {
     /**
      * Log instance.
      */
@@ -52,10 +48,8 @@ public class PDObjectReference implements COSObjectable
 
     /**
      * Default Constructor.
-     *
      */
-    public PDObjectReference()
-    {
+    public PDObjectReference() {
         this.dictionary = new COSDictionary();
         this.dictionary.setName(COSName.TYPE, TYPE);
     }
@@ -65,61 +59,40 @@ public class PDObjectReference implements COSObjectable
      *
      * @param theDictionary The existing dictionary.
      */
-    public PDObjectReference(COSDictionary theDictionary)
-    {
+    public PDObjectReference(COSDictionary theDictionary) {
         dictionary = theDictionary;
     }
 
     /**
      * Returns the underlying dictionary.
-     * 
+     *
      * @return the dictionary
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return this.dictionary;
     }
 
     /**
      * Gets a higher-level object for the referenced object.
-     * Currently this method may return a {@link PDAnnotation},
+     * Currently this method may return
      * a {@link PDXObject} or <code>null</code>.
-     * 
+     *
      * @return a higher-level object for the referenced object
      */
-    public COSObjectable getReferencedObject()
-    {
+    public COSObjectable getReferencedObject() {
         COSDictionary objDictionary = getCOSObject().getCOSDictionary(COSName.OBJ);
-        if (objDictionary == null)
-        {
+        if (objDictionary == null) {
             return null;
         }
-        try
-        {
-            if (objDictionary instanceof COSStream)
-            {
+        try {
+            if (objDictionary instanceof COSStream) {
                 PDXObject xobject = PDXObject.createXObject(objDictionary, null); // <-- TODO: valid?
-                if (xobject != null)
-                {
+                if (xobject != null) {
                     return xobject;
                 }
             }
-            PDAnnotation annotation = PDAnnotation.createAnnotation(objDictionary);
-            /*
-             * COSName.TYPE is optional, so if annotation is of type unknown and
-             * COSName.TYPE is not COSName.ANNOT it still may be an annotation.
-             * TODO shall we return the annotation object instead of null?
-             * what else can be the target of the object reference?
-             */
-            if (!(annotation instanceof PDAnnotationUnknown) 
-                    || COSName.ANNOT.equals(objDictionary.getCOSName(COSName.TYPE)))
-            {
-                return annotation;
-            }
-        }
-        catch (IOException exception)
-        {
+        } catch (IOException exception) {
             LOG.debug("Couldn't get the referenced object - returning null instead", exception);
             // this can only happen if the target is an XObject.
         }
@@ -127,22 +100,11 @@ public class PDObjectReference implements COSObjectable
     }
 
     /**
-     * Sets the referenced annotation.
-     * 
-     * @param annotation the referenced annotation
-     */
-    public void setReferencedObject(PDAnnotation annotation)
-    {
-        this.getCOSObject().setItem(COSName.OBJ, annotation);
-    }
-
-    /**
      * Sets the referenced XObject.
-     * 
+     *
      * @param xobject the referenced XObject
      */
-    public void setReferencedObject(PDXObject xobject)
-    {
+    public void setReferencedObject(PDXObject xobject) {
         this.getCOSObject().setItem(COSName.OBJ, xobject);
     }
 

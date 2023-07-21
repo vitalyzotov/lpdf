@@ -36,18 +36,10 @@ import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.common.PDPageLabels;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDMarkInfo;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
-import org.apache.pdfbox.pdmodel.fixup.AcroFormDefaultFixup;
-import org.apache.pdfbox.pdmodel.fixup.PDDocumentFixup;
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
 import org.apache.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentProperties;
-import org.apache.pdfbox.pdmodel.interactive.action.PDActionFactory;
 import org.apache.pdfbox.pdmodel.interactive.action.PDDocumentCatalogAdditionalActions;
 import org.apache.pdfbox.pdmodel.interactive.action.PDURIDictionary;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDNamedDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThread;
 import org.apache.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences;
 
@@ -59,11 +51,9 @@ import org.apache.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferenc
 public class PDDocumentCatalog implements COSObjectable
 {
     private static final Log LOG = LogFactory.getLog(PDDocumentCatalog.class);
-    
+
     private final COSDictionary root;
     private final PDDocument document;
-    private PDDocumentFixup acroFormFixupApplied;
-    private PDAcroForm cachedAcroForm;
 
     /**
      * Constructor. Internal PDFBox use only! If you need to get the document catalog, call
@@ -104,61 +94,8 @@ public class PDDocumentCatalog implements COSObjectable
     }
 
     /**
-     * Get the documents AcroForm. This will return null if no AcroForm is part of the document.
-     *
-     * @return The document's AcroForm.
-     */
-    public PDAcroForm getAcroForm()
-    {
-        return getAcroForm(new AcroFormDefaultFixup(document));
-    }
-
-    /**
-     * Get the documents AcroForm. This will return null if no AcroForm is part of the document.
-     *
-     * Dependent on setting <code>acroFormFixup</code> some fixing/changes will be done to the AcroForm.
-     * If you need to ensure that there are no fixes applied call <code>getAcroForm</code> with <code>null</code>.
-     * 
-     * Using <code>getAcroForm(PDDocumentFixup acroFormFixup)</code> might change the original content and
-     * subsequent calls with <code>getAcroForm(null)</code> will return the changed content.
-     * 
-     * @param acroFormFixup the fix up action or null
-     * @return The document's AcroForm.
-     */
-    public PDAcroForm getAcroForm(PDDocumentFixup acroFormFixup)
-    {
-        if (acroFormFixup != null && acroFormFixup != acroFormFixupApplied)
-        {
-            acroFormFixup.apply();
-            cachedAcroForm = null;
-            acroFormFixupApplied =  acroFormFixup;
-        }
-        else if (acroFormFixupApplied != null)
-        {
-            LOG.debug("AcroForm content has already been retrieved with fixes applied - original content changed because of that");
-        }
-        if (cachedAcroForm == null)
-        {
-            COSDictionary dict = root.getCOSDictionary(COSName.ACRO_FORM);
-            cachedAcroForm = dict == null ? null : new PDAcroForm(document, dict);
-        }
-        return cachedAcroForm;
-    }
-
-    /**
-     * Sets the AcroForm for this catalog.
-     *
-     * @param acroForm The new AcroForm.
-     */
-    public void setAcroForm(PDAcroForm acroForm)
-    {
-        root.setItem(COSName.ACRO_FORM, acroForm);
-        cachedAcroForm = null;
-    }
-
-    /**
      * Returns all pages in the document, as a page tree.
-     * 
+     *
      * @return PDPageTree providing all pages of the document
      */
     public PDPageTree getPages()
@@ -189,29 +126,8 @@ public class PDDocumentCatalog implements COSObjectable
     }
 
     /**
-     * Get the outline associated with this document or null if it does not exist.
-     *
-     * @return The document's outline.
-     */
-    public PDDocumentOutline getDocumentOutline()
-    {
-        COSDictionary outlineDict = root.getCOSDictionary(COSName.OUTLINES);
-        return outlineDict != null ? new PDDocumentOutline(outlineDict) : null;
-    }
-
-    /**
-     * Sets the document outlines.
-     *
-     * @param outlines The new document outlines.
-     */
-    public void setDocumentOutline(PDDocumentOutline outlines)
-    {
-        root.setItem(COSName.OUTLINES, outlines);
-    }
-
-    /**
      * Returns the document's article threads.
-     * 
+     *
      * @return a list of all threads of the document
      */
     public List<PDThread> getThreads()
@@ -273,28 +189,6 @@ public class PDDocumentCatalog implements COSObjectable
     }
 
     /**
-     * Get the Document Open Action for this object.
-     *
-     * @return The action to perform when the document is opened.
-     * @throws IOException If there is an error creating the destination or action.
-     */
-    public PDDestinationOrAction getOpenAction() throws IOException
-    {
-        COSBase openAction = root.getDictionaryObject(COSName.OPEN_ACTION);
-        if (openAction instanceof COSDictionary)
-        {
-            return PDActionFactory.createAction((COSDictionary)openAction);
-        }
-        else if (openAction instanceof COSArray)
-        {
-            return PDDestination.create(openAction);
-        }
-        else
-        {
-            return null;
-        }
-    }
-    /**
      * @return The Additional Actions for this Document
      */
     public PDDocumentCatalogAdditionalActions getActions()
@@ -335,39 +229,7 @@ public class PDDocumentCatalog implements COSObjectable
         COSDictionary dests = root.getCOSDictionary(COSName.DESTS);
         return dests != null ? new PDDocumentNameDestinationDictionary(dests) : null;
     }
-    
-    /**
-     * Find the page destination from a named destination.
-     * @param namedDest the named destination.
-     * @return a PDPageDestination object or null if not found.
-     * @throws IOException if there is an error creating the PDPageDestination object.
-     */
-    public PDPageDestination findNamedDestinationPage(PDNamedDestination namedDest)
-            throws IOException
-    {
-        PDPageDestination pageDestination = null;
-        PDDocumentNameDictionary namesDict = getNames();
-        if (namesDict != null)
-        {
-            PDDestinationNameTreeNode destsTree = namesDict.getDests();
-            if (destsTree != null)
-            {
-                pageDestination = destsTree.getValue(namedDest.getNamedDestination());
-            }
-        }
-        if (pageDestination == null)
-        {
-            // Look up /Dests dictionary from catalog
-            PDDocumentNameDestinationDictionary nameDestDict = getDests();
-            if (nameDestDict != null)
-            {
-                String name = namedDest.getNamedDestination();
-                pageDestination = (PDPageDestination) nameDestDict.getDestination(name);
-            }
-        }
-        return pageDestination;
-    }
-    
+
     /**
      * Sets the names dictionary for the document.
      *
@@ -447,7 +309,7 @@ public class PDDocumentCatalog implements COSObjectable
      * @param outputIntents the list of OutputIntents, if the list is empty all OutputIntents are
      * removed.
      */
-    public void setOutputIntents(List<PDOutputIntent> outputIntents) 
+    public void setOutputIntents(List<PDOutputIntent> outputIntents)
     {
         COSArray array = new COSArray();
         for (PDOutputIntent intent : outputIntents)
@@ -459,7 +321,7 @@ public class PDDocumentCatalog implements COSObjectable
 
     /**
      * Returns the page display mode.
-     * 
+     *
      * @return the PageMode of the document, if not present PageMode.USE_NONE is returned
      */
     public PageMode getPageMode()
@@ -495,7 +357,7 @@ public class PDDocumentCatalog implements COSObjectable
 
     /**
      * Returns the page layout.
-     * 
+     *
      * @return the PageLayout of the document, if not present PageLayout.SINGLE_PAGE is returned
      */
     public PageLayout getPageLayout()
@@ -527,7 +389,7 @@ public class PDDocumentCatalog implements COSObjectable
 
     /**
      * Returns the document-level URI.
-     * 
+     *
      * @return the document level URI if present, otherwise null
      */
     public PDURIDictionary getURI()
@@ -548,7 +410,7 @@ public class PDDocumentCatalog implements COSObjectable
 
     /**
      * Get the document's structure tree root, or null if none exists.
-     * 
+     *
      * @return the structure tree root if present, otherwise null
      */
     public PDStructureTreeRoot getStructureTreeRoot()
@@ -569,7 +431,7 @@ public class PDDocumentCatalog implements COSObjectable
 
     /**
      * Returns the language for the document, or null.
-     * 
+     *
      * @return the language of the document if present, otherwise null
      */
     public String getLanguage()

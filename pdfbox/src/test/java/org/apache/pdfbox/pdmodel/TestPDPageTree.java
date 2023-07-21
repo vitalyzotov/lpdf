@@ -22,8 +22,6 @@ import java.io.IOException;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -42,21 +40,6 @@ class TestPDPageTree
         if (doc != null)
         {
             doc.close();
-        }
-    }
-
-    @Test
-    void indexOfPageFromOutlineDestination() throws IOException
-    {
-        doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
-                TestPDPageTree.class.getResourceAsStream("with_outline.pdf")));
-        PDDocumentOutline outline = doc.getDocumentCatalog().getDocumentOutline();
-        for (PDOutlineItem current : outline.children())
-        {
-            if (current.getTitle().contains("Second"))
-            {
-                assertEquals(2, doc.getPages().indexOf(current.findDestinationPage(doc)));
-            }
         }
     }
 

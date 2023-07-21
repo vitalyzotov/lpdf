@@ -17,26 +17,17 @@
 
 package org.apache.pdfbox.pdmodel.font;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.font.encoding.DictionaryEncoding;
 import org.apache.pdfbox.pdmodel.font.encoding.MacRomanEncoding;
 import org.apache.pdfbox.pdmodel.font.encoding.WinAnsiEncoding;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests font encoding.
@@ -74,36 +65,5 @@ class TestFontEncoding
         assertEquals(32, dictEncoding.getNameToCodeMap().get("a").intValue());
     }
 
-    /**
-     * PDFBOX-3826: Some unicodes are reached by several names in glyphlist.txt, e.g. tilde and
-     * ilde.
-     *
-     * @throws IOException
-     */
-    @Test
-    void testPDFBox3884() throws IOException
-    {
-        PDDocument doc = new PDDocument();
-        PDPage page = new PDPage();
-        doc.addPage(page);
-        PDPageContentStream cs = new PDPageContentStream(doc, page);
-        cs.setFont(new PDType1Font(FontName.HELVETICA), 20);
-        cs.beginText();
-        cs.newLineAtOffset(100, 700);
-        // first tilde is "asciitilde" (from the keyboard), 2nd tilde is "tilde"
-        // using ˜ would bring IllegalArgumentException prior to bugfix
-        cs.showText("~˜");
-        cs.endText();
-        cs.close();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        doc.save(baos);
-        doc.close();
 
-        // verify
-        doc = Loader.loadPDF(baos.toByteArray());
-        PDFTextStripper stripper = new PDFTextStripper();
-        String text = stripper.getText(doc);
-        assertEquals("~˜", text.trim());
-        doc.close();
-    }
 }

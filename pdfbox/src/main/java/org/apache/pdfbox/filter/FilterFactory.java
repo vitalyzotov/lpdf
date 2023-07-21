@@ -39,20 +39,18 @@ public final class FilterFactory
     private FilterFactory()
     {
         Filter flate = new FlateFilter();
-        Filter dct = new DCTFilter();
+
         Filter ccittFax = new CCITTFaxFilter();
         Filter lzw = new LZWFilter();
         Filter asciiHex = new ASCIIHexFilter();
         Filter ascii85 = new ASCII85Filter();
         Filter runLength = new RunLengthDecodeFilter();
         Filter crypt = new CryptFilter();
-        Filter jpx = new JPXFilter();
-        Filter jbig2 = new JBIG2Filter();
 
         filters.put(COSName.FLATE_DECODE, flate);
         filters.put(COSName.FLATE_DECODE_ABBREVIATION, flate);
-        filters.put(COSName.DCT_DECODE, dct);
-        filters.put(COSName.DCT_DECODE_ABBREVIATION, dct);
+//        filters.put(COSName.DCT_DECODE, dct);
+//        filters.put(COSName.DCT_DECODE_ABBREVIATION, dct);
         filters.put(COSName.CCITTFAX_DECODE, ccittFax);
         filters.put(COSName.CCITTFAX_DECODE_ABBREVIATION, ccittFax);
         filters.put(COSName.LZW_DECODE, lzw);
@@ -64,8 +62,6 @@ public final class FilterFactory
         filters.put(COSName.RUN_LENGTH_DECODE, runLength);
         filters.put(COSName.RUN_LENGTH_DECODE_ABBREVIATION, runLength);
         filters.put(COSName.CRYPT, crypt);
-        filters.put(COSName.JPX_DECODE, jpx);
-        filters.put(COSName.JBIG2_DECODE, jbig2);
     }
 
     /**

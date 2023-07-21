@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 
 import org.apache.pdfbox.cos.COSArray;
@@ -34,13 +31,13 @@ public final class PDPattern extends PDSpecialColorSpace
 {
     /** A pattern which leaves no marks on the page. */
     private static final PDColor EMPTY_PATTERN = new PDColor(new float[] { }, null);
-    
+
     private final PDResources resources;
     private PDColorSpace underlyingColorSpace;
 
     /**
      * Creates a new pattern color space.
-     * 
+     *
      * @param resources The current resources.
      */
     public PDPattern(PDResources resources)
@@ -52,7 +49,7 @@ public final class PDPattern extends PDSpecialColorSpace
 
     /**
      * Creates a new uncolored tiling pattern color space.
-     * 
+     *
      * @param resources The current resources.
      * @param colorSpace The underlying color space.
      */
@@ -89,27 +86,9 @@ public final class PDPattern extends PDSpecialColorSpace
         return EMPTY_PATTERN;
     }
 
-    @Override
-    public float[] toRGB(float[] value)
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public BufferedImage toRGBImage(WritableRaster raster) throws IOException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public BufferedImage toRawImage(WritableRaster raster) throws IOException
-    {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Returns the pattern for the given color.
-     * 
+     *
      * @param color color containing a pattern name
      * @return pattern for the given color
      * @throws java.io.IOException if the pattern name was not found.
@@ -129,7 +108,7 @@ public final class PDPattern extends PDSpecialColorSpace
 
     /**
      * Returns the underlying color space, if this is an uncolored tiling pattern, otherwise null.
-     * 
+     *
      * @return the underlying color space or null
      */
     public PDColorSpace getUnderlyingColorSpace()

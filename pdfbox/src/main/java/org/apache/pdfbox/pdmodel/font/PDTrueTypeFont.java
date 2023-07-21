@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.File;
@@ -62,7 +63,7 @@ import static org.apache.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
 /**
  * TrueType font.
- * 
+ *
  * @author Ben Litchfield
  */
 public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
@@ -100,7 +101,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
      * Creates a new TrueType font from a Font dictionary.
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
-     * 
+     *
      * @throws IOException if the font could not be created
      */
     public PDTrueTypeFont(COSDictionary fontDictionary) throws IOException
@@ -179,7 +180,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Loads a TTF to be embedded into a document as a simple font.
-     * 
+     *
      * <p><b>Note:</b> Simple fonts only support 256 characters. For Unicode support, use
      * {@link PDType0Font#load(PDDocument, File)} instead.</p>
      *
@@ -200,7 +201,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
      *
      * <p><b>Note:</b> Simple fonts only support 256 characters. For Unicode support, use
      * {@link PDType0Font#load(PDDocument, InputStream)} instead.</p>
-     * 
+     *
      * @param doc The PDF document that will hold the embedded font.
      * @param input A TTF file stream
      * @param encoding The PostScript encoding vector to be used for embedding.
@@ -220,7 +221,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
      * <b>Note:</b> Simple fonts only support 256 characters. For Unicode support, use
      * {@link PDType0Font#load(PDDocument, InputStream)} instead.
      * </p>
-     * 
+     *
      * @param doc The PDF document that will hold the embedded font.
      * @param ttf A true type font
      * @param encoding The PostScript encoding vector to be used for embedding.
@@ -235,7 +236,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Loads a TTF to be embedded into a document as a simple font.
-     * 
+     *
      * <p>
      * <b>Note:</b> Simple fonts only support 256 characters. For Unicode support, use
      * {@link PDType0Font#load(PDDocument, File)} instead.
@@ -255,7 +256,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the PostScript name of the font.
-     * 
+     *
      * @return the PostScript name of the font
      */
     public final String getBaseFont()
@@ -280,10 +281,10 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
             {
                 return StandardEncoding.INSTANCE;
             }
-            
+
             // normalise the standard 14 name, e.g "Symbol,Italic" -> "Symbol"
             FontName standard14Name = Standard14Fonts.getMappedFontName(getName());
-            
+
             // likewise, if the font is standard 14 then we know it's Standard Encoding
             if (isStandard14() &&
                     standard14Name != FontName.SYMBOL &&
@@ -291,7 +292,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
             {
                 return StandardEncoding.INSTANCE;
             }
-            
+
             // synthesize an encoding, so that getEncoding() is always usable
             PostScriptTable post = ttf.getPostScript();
             Map<Integer, String> codeToName = new HashMap<>();
@@ -360,7 +361,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the embedded or substituted TrueType font.
-     * 
+     *
      * @return the embedded or substituted TrueType font
      */
     public TrueTypeFont getTrueTypeFont()
@@ -432,7 +433,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
                 throw new IllegalArgumentException(
                     String.format("No glyph for U+%04X in font %s", unicode, getName()));
             }
-            
+
             int gid = ttf.nameToGID(name);
             Integer code = getGIDToCode().get(gid);
             if (code == null)
@@ -440,16 +441,16 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
                 throw new IllegalArgumentException(
                     String.format("U+%04X is not available in this font's Encoding", unicode));
             }
-            
+
             return new byte[] { (byte)(int)code };
         }
     }
 
     /**
      * Inverts the font's code -&gt; GID mapping. Any duplicate (GID -&gt; code) mappings will be lost.
-     * 
+     *
      * @return the GID for the given code
-     * 
+     *
      * @throws IOException if the data could not be read
      */
     protected Map<Integer, Integer> getGIDToCode() throws IOException
@@ -494,7 +495,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
                     ", please report this file");
         }
         GlyphData glyph = glyphTable.getGlyph(gid);
-        
+
         // some glyphs have no outlines (e.g. space, table, newline)
         if (glyph == null)
         {
@@ -505,7 +506,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
             return glyph.getPath();
         }
     }
-    
+
     @Override
     public GeneralPath getPath(String name) throws IOException
     {
@@ -532,7 +533,7 @@ public class PDTrueTypeFont extends PDSimpleFont implements PDVectorFont
         {
             return new GeneralPath();
         }
-        
+
         GlyphData glyph = ttf.getGlyph().getGlyph(gid);
         if (glyph != null)
         {

@@ -167,24 +167,6 @@ public final class PDColor
     }
 
     /**
-     * Returns the packed RGB value for this color, if any.
-     * @return RGB
-     * @throws IOException if the color conversion fails
-     * @throws UnsupportedOperationException if this color value is a pattern.
-     */
-    public int toRGB() throws IOException
-    {
-        float[] floats = colorSpace.toRGB(components);
-        int r = Math.round(floats[0] * 255);
-        int g = Math.round(floats[1] * 255);
-        int b = Math.round(floats[2] * 255);
-        int rgb = r;
-        rgb = (rgb << 8) + g;
-        rgb = (rgb << 8) + b;
-        return rgb;
-    }
-
-    /**
      * Returns the color component values as a COS array
      * @return the color component values as a COS array
      */
@@ -201,7 +183,7 @@ public final class PDColor
 
     /**
      * Returns the color space in which this color value is defined.
-     * 
+     *
      * @return the color space in which this color value is defined
      */
     public PDColorSpace getColorSpace()

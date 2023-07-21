@@ -16,12 +16,9 @@
 
 package org.apache.pdfbox.pdmodel.interactive.action;
 
-import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.pdmodel.common.COSObjectable;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDNamedDestination;
 
 /**
  * A target dictionary specifying path information to the target document. Each target dictionary
@@ -30,15 +27,13 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDNa
  *
  * @author Tilman Hausherr
  */
-public class PDTargetDirectory implements COSObjectable
-{
+public class PDTargetDirectory implements COSObjectable {
     private final COSDictionary dict;
 
     /**
      * Default constructor, creates target directory.
      */
-    public PDTargetDirectory()
-    {
+    public PDTargetDirectory() {
         dict = new COSDictionary();
     }
 
@@ -47,8 +42,7 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @param dictionary The existing graphics state.
      */
-    public PDTargetDirectory(COSDictionary dictionary)
-    {
+    public PDTargetDirectory(COSDictionary dictionary) {
         dict = dictionary;
     }
 
@@ -58,8 +52,7 @@ public class PDTargetDirectory implements COSObjectable
      * @return The underlying dictionary for this class.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dict;
     }
 
@@ -71,8 +64,7 @@ public class PDTargetDirectory implements COSObjectable
      * current document) and C (the target is a child of the current document). Invalid values or
      * null are also returned.
      */
-    public COSName getRelationship()
-    {
+    public COSName getRelationship() {
         return dict.getCOSName(COSName.R);
     }
 
@@ -81,14 +73,12 @@ public class PDTargetDirectory implements COSObjectable
      * intermediate target).
      *
      * @param relationship Valid values are P (the target is the parent of the current document) and
-     * C (the target is a child of the current document).
-     *
-     * throws IllegalArgumentException if the parameter is not P or C.
+     *                     C (the target is a child of the current document).
+     *                     <p>
+     *                     throws IllegalArgumentException if the parameter is not P or C.
      */
-    public void setRelationship(COSName relationship)
-    {
-        if (!COSName.P.equals(relationship) && !COSName.C.equals(relationship))
-        {
+    public void setRelationship(COSName relationship) {
+        if (!COSName.P.equals(relationship) && !COSName.C.equals(relationship)) {
             throw new IllegalArgumentException("The only valid are P or C, not " + relationship.getName());
         }
         dict.setItem(COSName.R, relationship);
@@ -100,8 +90,7 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @return a filename or null if there is none.
      */
-    public String getFilename()
-    {
+    public String getFilename() {
         return dict.getString(COSName.N);
     }
 
@@ -111,8 +100,7 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @param filename a filename or null if the entry is to be deleted.
      */
-    public void setFilename(String filename)
-    {
+    public void setFilename(String filename) {
         dict.setString(COSName.N, filename);
     }
 
@@ -123,8 +111,7 @@ public class PDTargetDirectory implements COSObjectable
      * @return the target directory or null if the current document is the target file containing
      * the destination.
      */
-    public PDTargetDirectory getTargetDirectory()
-    {
+    public PDTargetDirectory getTargetDirectory() {
         COSDictionary targetDict = dict.getCOSDictionary(COSName.T);
         return targetDict != null ? new PDTargetDirectory(targetDict) : null;
     }
@@ -133,10 +120,9 @@ public class PDTargetDirectory implements COSObjectable
      * Sets the target directory.
      *
      * @param targetDirectory the target directory or null if the current document is the target
-     * file containing the destination.
+     *                        file containing the destination.
      */
-    public void setTargetDirectory(PDTargetDirectory targetDirectory)
-    {
+    public void setTargetDirectory(PDTargetDirectory targetDirectory) {
         dict.setItem(COSName.T, targetDirectory);
     }
 
@@ -146,8 +132,7 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @return the zero based page number or -1 if the /P entry value is missing or not a number.
      */
-    public int getPageNumber()
-    {
+    public int getPageNumber() {
         return dict.getInt(COSName.P, -1);
     }
 
@@ -157,49 +142,11 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @param pageNumber the zero based page number. If this is &lt; 0 then the entry is removed.
      */
-    public void setPageNumber(int pageNumber)
-    {
-        if (pageNumber < 0)
-        {
+    public void setPageNumber(int pageNumber) {
+        if (pageNumber < 0) {
             dict.removeItem(COSName.P);
-        }
-        else
-        {
+        } else {
             dict.setInt(COSName.P, pageNumber);
-        }
-    }
-
-    /**
-     * If the value in the /P entry is a string, this will get a named destination in the current
-     * document that provides the page number of the file attachment annotation.
-     *
-     * @return a named destination or null if the /P entry value is missing or not a string.
-     */
-    public PDNamedDestination getNamedDestination()
-    {
-        COSBase base = dict.getDictionaryObject(COSName.P);
-        if (base instanceof COSString)
-        {
-            return new PDNamedDestination((COSString) base);
-        }
-        return null;
-    }
-
-    /**
-     * This will set a named destination in the current document that provides the page number of
-     * the file attachment annotation.
-     *
-     * @param dest a named destination or null if the entry is to be removed.
-     */
-    public void setNamedDestination(PDNamedDestination dest)
-    {
-        if (dest == null)
-        {
-            dict.removeItem(COSName.P);
-        }
-        else
-        {
-            dict.setItem(COSName.P, dest);
         }
     }
 
@@ -209,25 +156,20 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @return the zero based page number or -1 if the /P entry value is missing or not a number.
      */
-    public int getAnnotationIndex()
-    {
+    public int getAnnotationIndex() {
         return dict.getInt(COSName.A, -1);
     }
-    
+
     /**
      * This will set the index (zero-based) of the annotation in the /Annots array of the page
      * specified by the /P entry.
      *
      * @param index the zero based index. If this is &lt; 0 then the entry is removed.
      */
-    public void setAnnotationIndex(int index)
-    {
-        if (index < 0)
-        {
+    public void setAnnotationIndex(int index) {
+        if (index < 0) {
             dict.removeItem(COSName.A);
-        }
-        else
-        {
+        } else {
             dict.setInt(COSName.A, index);
         }
     }
@@ -239,8 +181,7 @@ public class PDTargetDirectory implements COSObjectable
      * @return the /NM value of an annotation dictionary or null if the /A entry value is missing or
      * not a string.
      */
-    public String getAnnotationName()
-    {
+    public String getAnnotationName() {
         return dict.getString(COSName.A);
     }
 
@@ -249,8 +190,7 @@ public class PDTargetDirectory implements COSObjectable
      *
      * @param name the /NM value of an annotation dictionary or null if the entry is to be removed.
      */
-    public void setAnnotationName(String name)
-    {
+    public void setAnnotationName(String name) {
         dict.setString(COSName.A, name);
     }
 }

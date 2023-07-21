@@ -16,9 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Paint;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
@@ -195,19 +192,6 @@ public abstract class PDShading implements COSObjectable
         {
             dictionary.setItem(COSName.BBOX, bBox.getCOSArray());
         }
-    }
-
-    /**
-     * Calculate a bounding rectangle around the areas of this shading context.
-     * 
-     * @param xform the affine transformation
-     * @param matrix the pattern matrix
-     * @return Bounding rectangle or null, if not supported by this shading type.
-     * @throws java.io.IOException if the bounds could not be created
-     */
-    public Rectangle2D getBounds(AffineTransform xform, Matrix matrix) throws IOException
-    {
-        return null;
     }
 
     /**
@@ -419,7 +403,7 @@ public abstract class PDShading implements COSObjectable
             }
         }
         // From the PDF spec:
-        // "If the value returned by the function for a given colour component 
+        // "If the value returned by the function for a given colour component
         // is out of range, it shall be adjusted to the nearest valid value."
         for (int i = 0; i < returnValues.length; ++i)
         {
@@ -434,13 +418,4 @@ public abstract class PDShading implements COSObjectable
         }
         return returnValues;
     }
-
-    /**
-     * Returns an AWT paint which corresponds to this shading
-     *
-     * @param matrix the pattern matrix concatenated with that of the parent content stream,
-     *               this matrix which maps the pattern's internal coordinate system to user space
-     * @return an AWT Paint instance
-     */
-    public abstract Paint toPaint(Matrix matrix);
 }

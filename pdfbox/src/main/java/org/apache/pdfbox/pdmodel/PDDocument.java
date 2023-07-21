@@ -16,42 +16,20 @@
  */
 package org.apache.pdfbox.pdmodel;
 
-import java.awt.Point;
-import java.awt.image.DataBuffer;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-import java.io.BufferedOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.cos.COSObjectKey;
-import org.apache.pdfbox.cos.COSUpdateInfo;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdfwriter.compress.CompressParameters;
-import org.apache.pdfbox.pdmodel.common.COSArrayList;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
@@ -60,24 +38,25 @@ import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.encryption.SecurityHandler;
 import org.apache.pdfbox.pdmodel.encryption.SecurityHandlerFactory;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceDictionary;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceStream;
-import org.apache.pdfbox.pdmodel.interactive.digitalsignature.ExternalSigningSupport;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
-import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureOptions;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SigningSupport;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDSignatureField;
+
+import java.io.BufferedOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This is the in-memory representation of the PDF document.
  * The #close() method must be called once the document is no longer needed.
- * 
+ *
  * @author Ben Litchfield
  */
 public class PDDocument implements Closeable
@@ -94,22 +73,6 @@ public class PDDocument implements Closeable
 
     private static final Log LOG = LogFactory.getLog(PDDocument.class);
 
-    /**
-     * avoid concurrency issues with PDDeviceRGB
-     */
-    static
-    {
-        try
-        {
-            WritableRaster raster = Raster.createBandedRaster(DataBuffer.TYPE_BYTE, 1, 1, 3, new Point(0, 0));
-            PDDeviceRGB.INSTANCE.toRGBImage(raster);
-        }
-        catch (IOException ex)
-        {
-            LOG.debug("voodoo error", ex);
-        }
-    }
-    
     private final COSDocument document;
 
     // cached values
@@ -132,7 +95,7 @@ public class PDDocument implements Closeable
 
     // the access permissions of the document
     private AccessPermission accessPermission;
-    
+
     // fonts to subset before saving
     private final Set<PDFont> fontsToSubset = new HashSet<>();
 
@@ -192,7 +155,7 @@ public class PDDocument implements Closeable
 
     /**
      * Constructor that uses an existing document. The COSDocument that is passed in must be valid.
-     * 
+     *
      * @param doc The COSDocument that this document wraps.
      */
     public PDDocument(COSDocument doc)
@@ -202,7 +165,7 @@ public class PDDocument implements Closeable
 
     /**
      * Constructor that uses an existing document. The COSDocument that is passed in must be valid.
-     * 
+     *
      * @param doc The COSDocument that this document wraps.
      * @param source input representing the pdf
      */
@@ -213,11 +176,11 @@ public class PDDocument implements Closeable
 
     /**
      * Constructor that uses an existing document. The COSDocument that is passed in must be valid.
-     * 
+     *
      * @param doc The COSDocument that this document wraps.
      * @param source input representing the pdf
      * @param permission he access permissions of the pdf
-     * 
+     *
      */
     public PDDocument(COSDocument doc, RandomAccessRead source, AccessPermission permission)
     {
@@ -230,7 +193,7 @@ public class PDDocument implements Closeable
     /**
      * This will add a page to the document. This is a convenience method, that will add the page to the root of the
      * hierarchy and set the parent of the page to the root.
-     * 
+     *
      * @param page The page to add to the document.
      */
     public void addPage(PDPage page)
@@ -238,408 +201,10 @@ public class PDDocument implements Closeable
         getPages().add(page);
     }
 
-    /**
-     * Add parameters of signature to be created externally using default signature options. See
-     * {@link #saveIncrementalForExternalSigning(OutputStream)} method description on external
-     * signature creation scenario details.
-     * <p>
-     * Only one signature may be added in a document. To sign several times,
-     * load document, add signature, save incremental and close again.
-     *
-     * @param sigObject is the PDSignatureField model
-     * @throws IOException if there is an error creating required fields
-     * @throws IllegalStateException if one attempts to add several signature
-     * fields.
-     */
-    public void addSignature(PDSignature sigObject) throws IOException
-    {
-        addSignature(sigObject, new SignatureOptions());
-    }
-
-    /**
-     * Add parameters of signature to be created externally. See
-     * {@link #saveIncrementalForExternalSigning(OutputStream)} method description on external
-     * signature creation scenario details.
-     * <p>
-     * Only one signature may be added in a document. To sign several times,
-     * load document, add signature, save incremental and close again.
-     *
-     * @param sigObject is the PDSignatureField model
-     * @param options signature options
-     * @throws IOException if there is an error creating required fields
-     * @throws IllegalStateException if one attempts to add several signature
-     * fields.
-     */
-    public void addSignature(PDSignature sigObject, SignatureOptions options) throws IOException
-    {
-        addSignature(sigObject, null, options);
-    }
-
-    /**
-     * Add a signature to be created using the instance of given interface.
-     * <p>
-     * Only one signature may be added in a document. To sign several times,
-     * load document, add signature, save incremental and close again.
-     * 
-     * @param sigObject is the PDSignatureField model
-     * @param signatureInterface is an interface whose implementation provides
-     * signing capabilities. Can be null if external signing if used.
-     * @throws IOException if there is an error creating required fields
-     * @throws IllegalStateException if one attempts to add several signature
-     * fields.
-     */
-    public void addSignature(PDSignature sigObject, SignatureInterface signatureInterface) throws IOException
-    {
-        addSignature(sigObject, signatureInterface, new SignatureOptions());
-    }
-
-    /**
-     * This will add a signature to the document. If the 0-based page number in the options
-     * parameter is smaller than 0 or larger than max, the nearest valid page number will be used
-     * (i.e. 0 or max) and no exception will be thrown.
-     * <p>
-     * Only one signature may be added in a document. To sign several times,
-     * load document, add signature, save incremental and close again.
-     *
-     * @param sigObject is the PDSignatureField model
-     * @param signatureInterface is an interface whose implementation provides
-     * signing capabilities. Can be null if external signing if used.
-     * @param options signature options
-     * @throws IOException if there is an error creating required fields
-     * @throws IllegalStateException if one attempts to add several signature
-     * fields.
-     */
-    public void addSignature(PDSignature sigObject, SignatureInterface signatureInterface,
-                             SignatureOptions options) throws IOException
-    {
-        if (signatureAdded)
-        {
-            throw new IllegalStateException("Only one signature may be added in a document");
-        }
-        signatureAdded = true;
-
-        // Reserve content
-        // We need to reserve some space for the signature. Some signatures including
-        // big certificate chain and we need enough space to store it.
-        int preferredSignatureSize = options.getPreferredSignatureSize();
-        if (preferredSignatureSize > 0)
-        {
-            sigObject.setContents(new byte[preferredSignatureSize]);
-        }
-        else
-        {
-            sigObject.setContents(new byte[SignatureOptions.DEFAULT_SIGNATURE_SIZE]);
-        }
-
-        // Reserve ByteRange, will be overwritten in COSWriter
-        sigObject.setByteRange(RESERVE_BYTE_RANGE);
-
-        signInterface = signatureInterface;
-
-        // Create SignatureForm for signature and append it to the document
-
-        // Get the first valid page
-        PDPageTree pageTree = getPages();
-        int pageCount = pageTree.getCount();
-        if (pageCount == 0)
-        {
-            throw new IllegalStateException("Cannot sign an empty document");
-        }
-
-        int startIndex = Math.min(Math.max(options.getPage(), 0), pageCount - 1);
-        PDPage page = pageTree.get(startIndex);
-
-        // Get the AcroForm from the Root-Dictionary and append the annotation
-        PDDocumentCatalog catalog = getDocumentCatalog();
-        PDAcroForm acroForm = catalog.getAcroForm(null);
-        catalog.getCOSObject().setNeedToBeUpdated(true);
-
-        if (acroForm == null)
-        {
-            acroForm = new PDAcroForm(this);
-            catalog.setAcroForm(acroForm);
-        }
-        else
-        {
-            acroForm.getCOSObject().setNeedToBeUpdated(true);
-        }
-
-        PDSignatureField signatureField = null;
-        COSBase cosFieldBase = acroForm.getCOSObject().getDictionaryObject(COSName.FIELDS);
-        if (cosFieldBase instanceof COSArray)
-        {
-            COSArray fieldArray = (COSArray) cosFieldBase;
-            fieldArray.setNeedToBeUpdated(true);
-            signatureField = findSignatureField(acroForm.getFieldIterator(), sigObject);
-        }
-        else
-        {
-            acroForm.getCOSObject().setItem(COSName.FIELDS, new COSArray());
-        }
-        PDAnnotationWidget firstWidget;
-        if (signatureField == null)
-        {
-            signatureField = new PDSignatureField(acroForm);
-            // append the signature object
-            signatureField.setValue(sigObject);
-            firstWidget = signatureField.getWidgets().get(0);
-            // backward linking
-            firstWidget.setPage(page);
-        }
-        else
-        {
-            firstWidget = signatureField.getWidgets().get(0);
-            sigObject.getCOSObject().setNeedToBeUpdated(true);
-        }
-
-        // TODO This "overwrites" the settings of the original signature field which might not be intended by the user
-        // better make it configurable (not all users need/want PDF/A but their own setting):
-
-        // to conform PDF/A-1 requirement:
-        // The /F key's Print flag bit shall be set to 1 and 
-        // its Hidden, Invisible and NoView flag bits shall be set to 0
-        firstWidget.setPrinted(true);
-        // This may be troublesome if several form fields are signed,
-        // see thread from PDFBox users mailing list 17.2.2021 - 19.2.2021
-        // https://mail-archives.apache.org/mod_mbox/pdfbox-users/202102.mbox/thread
-        // better set the printed flag in advance
-
-        // Set the AcroForm Fields
-        List<PDField> acroFormFields = acroForm.getFields();
-        acroForm.getCOSObject().setDirect(true);
-        acroForm.setSignaturesExist(true);
-        acroForm.setAppendOnly(true);
-
-        boolean checkFields = checkSignatureField(acroForm.getFieldIterator(), signatureField);
-        if (checkFields)
-        {
-            signatureField.getCOSObject().setNeedToBeUpdated(true);
-        }
-        else
-        {
-            acroFormFields.add(signatureField);
-        }
-
-        // Get the object from the visual signature
-        COSDocument visualSignature = options.getVisualSignature();
-
-        // Distinction of case for visual and non-visual signature
-        if (visualSignature == null)
-        {
-            prepareNonVisibleSignature(firstWidget);
-        }
-        else
-        {
-            prepareVisibleSignature(firstWidget, acroForm, visualSignature);
-        }
-
-        // Create Annotation / Field for signature
-        List<PDAnnotation> annotations = page.getAnnotations();
-
-        // Get the annotations of the page and append the signature-annotation to it
-        // take care that page and acroforms do not share the same array (if so, we don't need to add it twice)
-        if (!(checkFields &&
-              annotations instanceof COSArrayList &&
-              acroFormFields instanceof COSArrayList &&
-              ((COSArrayList) annotations).toList().
-                      equals(((COSArrayList) acroFormFields).toList())))
-        {
-            // use check to prevent the annotation widget from appearing twice
-            if (checkSignatureAnnotation(annotations, firstWidget))
-            {
-                firstWidget.getCOSObject().setNeedToBeUpdated(true);
-            }
-            else
-            {
-                annotations.add(firstWidget);
-            }   
-        }
-
-        // Make /Annots a direct object by reassigning it,
-        // to avoid problem if it is an existing indirect object: 
-        // it would not be updated in incremental save, and if we'd set the /Annots array "to be updated" 
-        // while keeping it indirect, Adobe Reader would claim that the document had been modified.
-        page.setAnnotations(annotations);
-
-        page.getCOSObject().setNeedToBeUpdated(true);
-    }
-
-    /**
-     * Search acroform fields for signature field with specific signature dictionary.
-     * 
-     * @param fieldIterator iterator on all fields.
-     * @param sigObject signature object (the /V part).
-     * @return a signature field if found, or null if none was found.
-     */
-    private PDSignatureField findSignatureField(Iterator<PDField> fieldIterator, PDSignature sigObject)
-    {
-        PDSignatureField signatureField = null;
-        while (fieldIterator.hasNext())
-        {
-            PDField pdField = fieldIterator.next();
-            if (pdField instanceof PDSignatureField)
-            {
-                PDSignature signature = ((PDSignatureField) pdField).getSignature();
-                if (signature != null && signature.getCOSObject().equals(sigObject.getCOSObject()))
-                {
-                    signatureField = (PDSignatureField) pdField;
-                    break;
-                }
-            }
-        }
-        return signatureField;
-    }
-
-    /**
-     * Check if the field already exists in the field list.
-     *
-     * @param fieldIterator iterator on all fields.
-     * @param signatureField the signature field.
-     * @return true if the field already existed in the field list, false if not.
-     */
-    private boolean checkSignatureField(Iterator<PDField> fieldIterator, PDSignatureField signatureField)
-    {
-        while (fieldIterator.hasNext())
-        {
-            PDField field = fieldIterator.next();
-            if (field instanceof PDSignatureField
-                    && field.getCOSObject().equals(signatureField.getCOSObject()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if the widget already exists in the annotation list.
-     *
-     * @param annotations the list of PDAnnotation fields.
-     * @param widget the annotation widget.
-     * @return true if the widget already existed in the annotation list, false if not.
-     */
-    private boolean checkSignatureAnnotation(List<PDAnnotation> annotations, PDAnnotationWidget widget)
-    {
-        for (PDAnnotation annotation : annotations)
-        {
-            if (annotation.getCOSObject().equals(widget.getCOSObject()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void prepareNonVisibleSignature(PDAnnotationWidget firstWidget)
-    {
-        // "Signature fields that are not intended to be visible shall
-        // have an annotation rectangle that has zero height and width."
-        // Set rectangle for non-visual signature to rectangle array [ 0 0 0 0 ]
-        firstWidget.setRectangle(new PDRectangle());
-        
-        // The visual appearance must also exist for an invisible signature but may be empty.
-        PDAppearanceDictionary appearanceDictionary = new PDAppearanceDictionary();
-        PDAppearanceStream appearanceStream = new PDAppearanceStream(this);
-        appearanceStream.setBBox(new PDRectangle());
-        appearanceDictionary.setNormalAppearance(appearanceStream);
-        firstWidget.setAppearance(appearanceDictionary);
-    }
-
-    private void prepareVisibleSignature(PDAnnotationWidget firstWidget, PDAcroForm acroForm, 
-            COSDocument visualSignature)
-    {
-        // Obtain visual signature object
-        boolean annotFound = false;
-        boolean sigFieldFound = false;
-        // get all objects
-        List<COSObject> cosObjects = visualSignature.getXrefTable().keySet().stream() //
-                .map(visualSignature::getObjectFromPool) //
-                .collect(Collectors.toList());
-        for (COSObject cosObject : cosObjects)
-        {
-            COSBase base = cosObject.getObject();
-            if (base instanceof COSDictionary)
-            {
-                COSDictionary cosBaseDict = (COSDictionary) base;
-                // Search for signature annotation
-                if (!annotFound && COSName.ANNOT.equals(cosBaseDict.getCOSName(COSName.TYPE)))
-                {
-                    assignSignatureRectangle(firstWidget, cosBaseDict);
-                    annotFound = true;
-                }
-                // Search for signature field
-                COSDictionary apDict = cosBaseDict.getCOSDictionary(COSName.AP);
-                if (apDict != null && !sigFieldFound
-                        && COSName.SIG.equals(cosBaseDict.getCOSName(COSName.FT)))
-                {
-                    assignAppearanceDictionary(firstWidget, apDict);
-                    assignAcroFormDefaultResource(acroForm, cosBaseDict);
-                    sigFieldFound = true;
-                }
-                if (annotFound && sigFieldFound)
-                {
-                    break;
-                }
-            }
-        }
-        if (!annotFound || !sigFieldFound)
-        {
-            throw new IllegalArgumentException("Template is missing required objects");
-        }
-    }
-
-    private void assignSignatureRectangle(PDAnnotationWidget firstWidget, COSDictionary annotDict)
-    {
-        // Read and set the rectangle for visual signature
-        PDRectangle existingRectangle = firstWidget.getRectangle();
-
-        //in case of an existing field keep the original rect
-        if (existingRectangle == null || existingRectangle.getCOSArray().size() != 4)
-        {
-            COSArray rectArray = annotDict.getCOSArray(COSName.RECT);
-            PDRectangle rect = new PDRectangle(rectArray);
-            firstWidget.setRectangle(rect);
-        }
-    }
-
-    private void assignAppearanceDictionary(PDAnnotationWidget firstWidget, COSDictionary apDict)
-    {
-        // read and set Appearance Dictionary
-        PDAppearanceDictionary ap = new PDAppearanceDictionary(apDict);
-        apDict.setDirect(true);
-        firstWidget.setAppearance(ap);
-    }
-
-    private void assignAcroFormDefaultResource(PDAcroForm acroForm, COSDictionary newDict)
-    {
-        // read and set/update AcroForm default resource dictionary /DR if available
-        COSDictionary newDR = newDict.getCOSDictionary(COSName.DR);
-        if (newDR != null)
-        {
-            PDResources defaultResources = acroForm.getDefaultResources();
-            if (defaultResources == null)
-            {
-                acroForm.getCOSObject().setItem(COSName.DR, newDR);
-                newDR.setDirect(true);
-                newDR.setNeedToBeUpdated(true);            
-            }
-            else
-            {
-                COSDictionary oldDR = defaultResources.getCOSObject();
-                COSDictionary newXObject = newDR.getCOSDictionary(COSName.XOBJECT);
-                COSDictionary oldXObject = oldDR.getCOSDictionary(COSName.XOBJECT);
-                if (newXObject != null && oldXObject != null)
-                {
-                    oldXObject.addAll(newXObject);
-                    oldDR.setNeedToBeUpdated(true);
-                }
-            }
-        }
-    }
 
     /**
      * Remove the page from the document.
-     * 
+     *
      * @param page The page to remove from the document.
      */
     public void removePage(PDPage page)
@@ -649,7 +214,7 @@ public class PDDocument implements Closeable
 
     /**
      * Remove the page from the document.
-     * 
+     *
      * @param pageNumber 0 based index to page number.
      */
     public void removePage(int pageNumber)
@@ -703,7 +268,7 @@ public class PDDocument implements Closeable
 
     /**
      * Determine the highest object number from the imported page to avoid mixed up numbers when saving the new pdf.
-     * 
+     *
      * @param importedPage the imported page.
      */
     private void setHighestImportedObjectNumber(PDPage importedPage)
@@ -719,7 +284,7 @@ public class PDDocument implements Closeable
 
     /**
      * This will get the low level document.
-     * 
+     *
      * @return The document that this layer sits on top of.
      */
     public COSDocument getDocument()
@@ -770,7 +335,7 @@ public class PDDocument implements Closeable
 
     /**
      * This will get the document CATALOG. This is guaranteed to not return null.
-     * 
+     *
      * @return The documents /Root dictionary
      */
     public PDDocumentCatalog getDocumentCatalog()
@@ -793,7 +358,7 @@ public class PDDocument implements Closeable
 
     /**
      * This will tell if this document is encrypted or not.
-     * 
+     *
      * @return true If this document is encrypted.
      */
     public boolean isEncrypted()
@@ -820,70 +385,12 @@ public class PDDocument implements Closeable
 
     /**
      * This will set the encryption dictionary for this document.
-     * 
+     *
      * @param encryption The encryption dictionary(most likely a PDStandardEncryption object)
      */
     public void setEncryptionDictionary(PDEncryption encryption)
     {
         this.encryption = encryption;
-    }
-
-    /**
-     * This will return the last signature from the field tree. Note that this may not be the
-     * last in time when empty signature fields are created first but signed after other fields.
-     * 
-     * @return the last signature as <code>PDSignatureField</code>.
-     */
-    public PDSignature getLastSignatureDictionary()
-    {
-        List<PDSignature> signatureDictionaries = getSignatureDictionaries();
-        int size = signatureDictionaries.size();
-        if (size > 0)
-        {
-            return signatureDictionaries.get(size - 1);
-        }
-        return null;
-    }
-
-    /**
-     * Retrieve all signature fields from the document.
-     * 
-     * @return a <code>List</code> of <code>PDSignatureField</code>s
-     */
-    public List<PDSignatureField> getSignatureFields()
-    {
-        List<PDSignatureField> fields = new ArrayList<>();
-        PDAcroForm acroForm = getDocumentCatalog().getAcroForm(null);
-        if (acroForm != null)
-        {
-            for (PDField field : acroForm.getFieldTree())
-            {
-                if (field instanceof PDSignatureField)
-                {
-                    fields.add((PDSignatureField)field);
-                }
-            }
-        }
-        return fields;
-    }
-
-    /**
-     * Retrieve all signature dictionaries from the document.
-     * 
-     * @return a <code>List</code> of <code>PDSignatureField</code>s
-     */
-    public List<PDSignature> getSignatureDictionaries()
-    {
-        List<PDSignature> signatures = new ArrayList<>();
-        for (PDSignatureField field : getSignatureFields())
-        {
-            COSDictionary value = field.getCOSObject().getCOSDictionary(COSName.V);
-            if (value != null)
-            {
-                signatures.add(new PDSignature(value));
-            }
-        }
-        return signatures;
     }
 
     /**
@@ -905,7 +412,7 @@ public class PDDocument implements Closeable
     {
         return fontsToSubset;
     }
-    
+
     /**
      * Save the document to a file using default compression.
      * <p>
@@ -930,7 +437,7 @@ public class PDDocument implements Closeable
      * <p>
      * If encryption has been activated (with {@link #protect(org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy)
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
-     * 
+     *
      * @param file The file to save as.
      *
      * @throws IOException if the output could not be written
@@ -992,7 +499,7 @@ public class PDDocument implements Closeable
      * <p>
      * If encryption has been activated (with {@link #protect(org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy)
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
-     * 
+     *
      * @param fileName The file to save as.
      * @param compressParameters The parameters for the document's compression.
      *
@@ -1044,149 +551,7 @@ public class PDDocument implements Closeable
         fontsToSubset.clear();
     }
 
-    /**
-     * Save the PDF as an incremental update. This is only possible if the PDF was loaded from a file or a stream, not
-     * if the document was created in PDFBox itself. There must be a path of objects that have
-     * {@link COSUpdateInfo#isNeedToBeUpdated()} set, starting from the document catalog. For signatures this is taken
-     * care by PDFBox itself.
-     * <p>
-     * Other usages of this method are for experienced users only. You will usually never need it. It is useful only if
-     * you are required to keep the current revision and append the changes. A typical use case is changing a signed
-     * file without invalidating the signature.
-     * <p>
-     * If your modification includes annotations, make sure these link back to their page by calling
-     * {@link PDAnnotation#setPage(PDPage)}. Although this is optional,
-     * not doing it
-     * <a href="https://stackoverflow.com/questions/74836898/">can cause trouble when PDFs get
-     * signed</a>. (PDFBox already does this for signature widget annotations)
-     * <p>
-     * Don't use the input file as target as this will produce a corrupted file.
-     *
-     * @param output stream to write to. It will be closed when done. It <i><b>must never</b></i> point to the source
-     * file or that one will be harmed!
-     * @throws IOException if the output could not be written
-     * @throws IllegalStateException if the document was not loaded from a file or a stream.
-     */
-    public void saveIncremental(OutputStream output) throws IOException
-    {
-        subsetDesignatedFonts();
-        if (pdfSource == null)
-        {
-            throw new IllegalStateException("document was not loaded from a file or a stream");
-        }
-        COSWriter writer = new COSWriter(output, pdfSource);
-        writer.write(this, signInterface);
-    }
 
-    /**
-     * Save the PDF as an incremental update. This is only possible if the PDF was loaded from a file or a stream, not
-     * if the document was created in PDFBox itself. This allows to include objects even if there is no path of objects
-     * that have {@link COSUpdateInfo#isNeedToBeUpdated()} set so the incremental update gets smaller. Only dictionaries
-     * are supported; if you need to update other objects classes, then add their parent dictionary.
-     * <p>
-     * This method is for experienced users only. You will usually never need it. It is useful only if you are required
-     * to keep the current revision and append the changes. A typical use case is changing a signed file without
-     * invalidating the signature. To know which objects are getting changed, you need to have some understanding of the
-     * PDF specification, and look at the saved file with an editor to verify that you are updating the correct objects.
-     * You should also inspect the page and document structures of the file with PDFDebugger.
-     * <p>
-     * If your modification includes annotations, make sure these link back to their page by calling
-     * {@link PDAnnotation#setPage(PDPage)}. Although this is optional,
-     * not doing it
-     * <a href="https://stackoverflow.com/questions/74836898/">can cause trouble when PDFs get
-     * signed</a>. (PDFBox already does this for signature widget annotations)
-     * <p>
-     * Don't use the input file as target as this will produce a corrupted file.
-     *
-     * @param output stream to write to. It will be closed when done. It <i><b>must never</b></i> point to the source
-     * file or that one will be harmed!
-     * @param objectsToWrite objects that <b>must</b> be part of the incremental saving.
-     * @throws IOException if the output could not be written
-     * @throws IllegalStateException if the document was not loaded from a file or a stream.
-     */
-    public void saveIncremental(OutputStream output, Set<COSDictionary> objectsToWrite) throws IOException
-    {
-        subsetDesignatedFonts();
-        if (pdfSource == null)
-        {
-            throw new IllegalStateException("document was not loaded from a file or a stream");
-        }
-        COSWriter writer = new COSWriter(output, pdfSource, objectsToWrite);
-        writer.write(this, signInterface);
-    }
-
-    /**
-     * Save PDF incrementally without closing for external signature creation scenario. The general sequence is:
-     * 
-     * <pre>
-     *    PDDocument pdDocument = ...;
-     *    OutputStream outputStream = ...;
-     *    SignatureOptions signatureOptions = ...; // options to specify fine tuned signature options or null for defaults
-     *    PDSignature pdSignature = ...;
-     *
-     *    // add signature parameters to be used when creating signature dictionary
-     *    pdDocument.addSignature(pdSignature, signatureOptions);
-     *    // prepare PDF for signing and obtain helper class to be used
-     *    ExternalSigningSupport externalSigningSupport = pdDocument.saveIncrementalForExternalSigning(outputStream);
-     *    // get data to be signed
-     *    InputStream dataToBeSigned = externalSigningSupport.getContent();
-     *    // invoke signature service
-     *    byte[] signature = sign(dataToBeSigned);
-     *    // set resulted CMS signature
-     *    externalSigningSupport.setSignature(signature);
-     *
-     *    // last step is to close the document
-     *    pdDocument.close();
-     * </pre>
-     * <p>
-     * Note that after calling this method, only {@code close()} method may invoked for {@code PDDocument} instance and
-     * only AFTER {@link ExternalSigningSupport} instance is used.
-     * </p>
-     * <p>
-     * Don't use the input file as target as this will produce a corrupted file.
-     *
-     * @param output stream to write the final PDF. It will be closed when the document is closed. It <i><b>must
-     * never</b></i> point to the source file or that one will be harmed!
-     * @return instance to be used for external signing and setting CMS signature
-     * @throws IOException if the output could not be written
-     * @throws IllegalStateException if the document was not loaded from a file or a stream or signature options were
-     * not set.
-     */
-    public ExternalSigningSupport saveIncrementalForExternalSigning(OutputStream output) throws IOException
-    {
-        subsetDesignatedFonts();
-        if (pdfSource == null)
-        {
-            throw new IllegalStateException("document was not loaded from a file or a stream");
-        }
-        // PDFBOX-3978: getLastSignatureDictionary() not helpful if signing into a template
-        // that is not the last signature. So give higher priority to signature with update flag.
-        PDSignature foundSignature = null;
-        for (PDSignature sig : getSignatureDictionaries())
-        {
-            foundSignature = sig;
-            if (sig.getCOSObject().isNeedToBeUpdated())
-            {
-                break;
-            }
-        }
-
-        if (foundSignature == null)
-        {
-            throw new IllegalStateException("document does not contain signature fields");
-        }
-
-        int[] byteRange = foundSignature.getByteRange();
-        if (!Arrays.equals(byteRange, RESERVE_BYTE_RANGE))
-        {
-            throw new IllegalStateException("signature reserve byte range has been changed "
-                    + "after addSignature(), please set the byte range that existed after addSignature()");
-        }
-        COSWriter writer = new COSWriter(output, pdfSource);
-        writer.write(this);
-        signingSupport = new SigningSupport(writer);
-        return signingSupport;
-    }
 
     /**
      * Returns the page at the given 0-based index.
@@ -1205,7 +570,7 @@ public class PDDocument implements Closeable
 
     /**
      * Returns the page tree.
-     * 
+     *
      * @return the page tree
      */
     public PDPageTree getPages()
@@ -1215,7 +580,7 @@ public class PDDocument implements Closeable
 
     /**
      * This will return the total page count of the PDF document.
-     * 
+     *
      * @return The total number of pages in the PDF document.
      */
     public int getNumberOfPages()
@@ -1225,7 +590,7 @@ public class PDDocument implements Closeable
 
     /**
      * This will close the underlying COSDocument object.
-     * 
+     *
      * @throws IOException If there is an error releasing resources.
      */
     @Override
@@ -1248,7 +613,7 @@ public class PDDocument implements Closeable
 
             // close all intermediate I/O streams
             firstException = IOUtils.closeAndLogException(document, LOG, "COSDocument", firstException);
-            
+
             // close the source PDF stream, if we read from one
             if (pdfSource != null)
             {
@@ -1291,7 +656,7 @@ public class PDDocument implements Closeable
                     + "as protect() implies setAllSecurityToBeRemoved(false)");
             setAllSecurityToBeRemoved(false);
         }
-        
+
         if (!isEncrypted())
         {
             encryption = new PDEncryption();
@@ -1312,7 +677,7 @@ public class PDDocument implements Closeable
      * method returns the access permission for a document owner (ie can do everything). The returned object is in read
      * only mode so that permissions cannot be changed. Methods providing access to content should rely on this object
      * to verify if the current user is allowed to proceed.
-     * 
+     *
      * @return the access permissions for the current user on the document.
      */
     public AccessPermission getCurrentAccessPermission()
@@ -1326,7 +691,7 @@ public class PDDocument implements Closeable
 
     /**
      * Indicates if all security is removed or not when writing the pdf.
-     * 
+     *
      * @return returns true if all security shall be removed otherwise false
      */
     public boolean isAllSecurityToBeRemoved()
@@ -1336,7 +701,7 @@ public class PDDocument implements Closeable
 
     /**
      * Activates/Deactivates the removal of all security when writing the pdf.
-     * 
+     *
      * @param removeAllSecurity remove all security if set to true
      */
     public void setAllSecurityToBeRemoved(boolean removeAllSecurity)
@@ -1356,14 +721,14 @@ public class PDDocument implements Closeable
 
     /**
      * Sets the document ID to the given value.
-     * 
+     *
      * @param docId the new document ID
      */
     public void setDocumentId(Long docId)
     {
         documentId = docId;
     }
-    
+
     /**
      * Returns the PDF specification version this document conforms to.
      *
@@ -1401,7 +766,7 @@ public class PDDocument implements Closeable
      * Sets the PDF specification version for this document.
      *
      * @param newVersion the new PDF version (e.g. 1.4f)
-     * 
+     *
      */
     public void setVersion(float newVersion)
     {
@@ -1431,7 +796,7 @@ public class PDDocument implements Closeable
 
     /**
      * Returns the resource cache associated with this document, or null if there is none.
-     * 
+     *
      * @return the resource cache of the document
      */
     public ResourceCache getResourceCache()
@@ -1441,7 +806,7 @@ public class PDDocument implements Closeable
 
     /**
      * Sets the resource cache associated with this document.
-     * 
+     *
      * @param resourceCache A resource cache, or null.
      */
     public void setResourceCache(ResourceCache resourceCache)

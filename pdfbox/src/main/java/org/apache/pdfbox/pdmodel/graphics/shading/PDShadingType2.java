@@ -16,18 +16,14 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Paint;
-
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.util.Matrix;
 
 /**
  * Resources for an axial shading.
  */
-public class PDShadingType2 extends PDShading
-{
+public class PDShadingType2 extends PDShading {
     private COSArray coords = null;
     private COSArray domain = null;
     private COSArray extend = null;
@@ -37,14 +33,12 @@ public class PDShadingType2 extends PDShading
      *
      * @param shadingDictionary the dictionary for this shading
      */
-    public PDShadingType2(COSDictionary shadingDictionary)
-    {
+    public PDShadingType2(COSDictionary shadingDictionary) {
         super(shadingDictionary);
     }
 
     @Override
-    public int getShadingType()
-    {
+    public int getShadingType() {
         return PDShading.SHADING_TYPE2;
     }
 
@@ -53,10 +47,8 @@ public class PDShadingType2 extends PDShading
      *
      * @return the extend values
      */
-    public COSArray getExtend()
-    {
-        if (extend == null)
-        {
+    public COSArray getExtend() {
+        if (extend == null) {
             extend = getCOSObject().getCOSArray(COSName.EXTEND);
         }
         return extend;
@@ -67,8 +59,7 @@ public class PDShadingType2 extends PDShading
      *
      * @param newExtend the extend array
      */
-    public void setExtend(COSArray newExtend)
-    {
+    public void setExtend(COSArray newExtend) {
         extend = newExtend;
         getCOSObject().setItem(COSName.EXTEND, newExtend);
     }
@@ -78,10 +69,8 @@ public class PDShadingType2 extends PDShading
      *
      * @return the domain values
      */
-    public COSArray getDomain()
-    {
-        if (domain == null)
-        {
+    public COSArray getDomain() {
+        if (domain == null) {
             domain = getCOSObject().getCOSArray(COSName.DOMAIN);
         }
         return domain;
@@ -92,8 +81,7 @@ public class PDShadingType2 extends PDShading
      *
      * @param newDomain the domain array
      */
-    public void setDomain(COSArray newDomain)
-    {
+    public void setDomain(COSArray newDomain) {
         domain = newDomain;
         getCOSObject().setItem(COSName.DOMAIN, newDomain);
     }
@@ -103,10 +91,8 @@ public class PDShadingType2 extends PDShading
      *
      * @return the coordinate values
      */
-    public COSArray getCoords()
-    {
-        if (coords == null)
-        {
+    public COSArray getCoords() {
+        if (coords == null) {
             coords = getCOSObject().getCOSArray(COSName.COORDS);
         }
         return coords;
@@ -117,15 +103,10 @@ public class PDShadingType2 extends PDShading
      *
      * @param newCoords the coordinates array
      */
-    public void setCoords(COSArray newCoords)
-    {
+    public void setCoords(COSArray newCoords) {
         coords = newCoords;
         getCOSObject().setItem(COSName.COORDS, newCoords);
     }
 
-    @Override
-    public Paint toPaint(Matrix matrix)
-    {
-        return new AxialShadingPaint(this, matrix);
-    }
+
 }

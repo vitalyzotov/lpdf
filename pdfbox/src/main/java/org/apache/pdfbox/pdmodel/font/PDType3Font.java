@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +64,7 @@ public class PDType3Font extends PDSimpleFont
      * Constructor.
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
-     * 
+     *
      * @throws IOException if the font could not be created
      */
     public PDType3Font(COSDictionary fontDictionary) throws IOException
@@ -76,7 +77,7 @@ public class PDType3Font extends PDSimpleFont
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
      * @param resourceCache Resource cache, can be null.
-     * 
+     *
      * @throws IOException if the font could not be created
      */
     public PDType3Font(COSDictionary fontDictionary, ResourceCache resourceCache) throws IOException
@@ -111,7 +112,7 @@ public class PDType3Font extends PDSimpleFont
         }
         glyphList = GlyphList.getAdobeGlyphList();
     }
-    
+
     @Override
     protected Encoding readEncodingFromFont() throws IOException
     {
@@ -369,7 +370,7 @@ public class PDType3Font extends PDSimpleFont
 
     /**
      * Returns the dictionary containing all streams to be used to render the glyphs.
-     * 
+     *
      * @return the dictionary containing all glyph streams.
      */
     public COSDictionary getCharProcs()
@@ -380,10 +381,10 @@ public class PDType3Font extends PDSimpleFont
         }
         return charProcs;
     }
-    
+
     /**
      * Returns the stream of the glyph for the given character code
-     * 
+     *
      * @param code character code
      * @return the stream to be used to render the glyph
      */

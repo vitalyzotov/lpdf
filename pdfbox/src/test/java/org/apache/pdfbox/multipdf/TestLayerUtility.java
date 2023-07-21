@@ -37,11 +37,13 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentGroup;
 import org.apache.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentProperties;
 import org.apache.pdfbox.util.Matrix;
 
+import org.apache.pdfbox.util.RgbColor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -179,7 +181,7 @@ class TestLayerUtility
             {
                 //Setup page content stream and paint background/title
                 PDFont font = new PDType1Font(FontName.HELVETICA_BOLD);
-                contentStream.setNonStrokingColor(Color.LIGHT_GRAY);
+                contentStream.setNonStrokingColor(new RgbColor(192, 192, 192));
                 contentStream.beginText();
                 float fontSize = 96;
                 contentStream.setFont(font, fontSize);

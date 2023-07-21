@@ -16,10 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Paint;
-
 import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.util.Matrix;
 
 /**
  * Resources for a radial shading.
@@ -42,9 +39,4 @@ public class PDShadingType3 extends PDShadingType2
         return PDShading.SHADING_TYPE3;
     }
 
-    @Override
-    public Paint toPaint(Matrix matrix)
-    {
-        return new RadialShadingPaint(this, matrix);
-    }
 }

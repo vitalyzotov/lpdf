@@ -16,10 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.image;
 
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -36,72 +32,6 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
  */
 public interface PDImage extends COSObjectable
 {
-    /**
-     * Returns the content of this image as an AWT buffered image with an (A)RGB color space. The size of the returned
-     * image is the larger of the size of the image itself or its mask.
-     * 
-     * @return content of this image as a buffered image.
-     * @throws IOException if the buffered image could not be created
-     */
-    BufferedImage getImage() throws IOException;
-
-    /**
-     * Return the image data as WritableRaster. You should consult the PDColorSpace returned by {@link #getColorSpace()}
-     * to know how to interpret the data in this WritableRaster.
-     *
-     * Use this if e.g. want access to the raw color information of a
-     * {@link org.apache.pdfbox.pdmodel.graphics.color.PDDeviceN} image.
-     *
-     * @return the raw writable raster for this image
-     * @throws IOException if the buffered raw writable raster could not be created
-     */
-    WritableRaster getRawRaster() throws IOException;
-
-    /**
-     * Try to get the raw image as AWT buffered image with it's original colorspace. No color conversion is performed.
-     *
-     * You could use the returned BufferedImage for draw operations. But this would be very slow as the color conversion
-     * would happen on demand. You rather should use {@link #getImage()} for that.
-     *
-     * This method returns null if it is not possible to map the underlying colorspace into a java.awt.ColorSpace.
-     *
-     * Use this method if you want to extract the image without loosing any color information, as no color conversion
-     * will be performed.
-     *
-     * You can alwoys use {@link #getRawRaster()}, if you want to access the raw data even if no matching
-     * java.awt.ColorSpace exists
-     *
-     * @return the raw image with a java.awt.ColorSpace or null
-     * @throws IOException if the raw image could not be created
-     */
-    BufferedImage getRawImage() throws IOException;
-
-    /**
-     * Returns the content of this image as an AWT buffered image with an (A)RGB colored space. Only the subregion
-     * specified is rendered, and is subsampled by advancing the specified amount of rows and columns in the source
-     * image for every resulting pixel.
-     *
-     * Note that unlike {@link PDImage#getImage() the unparameterized version}, this method does not cache the resulting
-     * image.
-     * 
-     * @param region The region of the source image to get, or null if the entire image is needed. The actual region
-     * will be clipped to the dimensions of the source image.
-     * @param subsampling The amount of rows and columns to advance for every output pixel, a value of 1 meaning every
-     * pixel will be read
-     * @return subsampled content of the requested subregion as a buffered image.
-     * @throws IOException if the buffered image could not be created
-     */
-    BufferedImage getImage(Rectangle region, int subsampling) throws IOException;
-
-    /**
-     * Returns an ARGB image filled with the given paint and using this image as a mask.
-     * @param paint the paint to fill the visible portions of the image with
-     * @return a masked image filled with the given paint
-     * @throws IOException if the image cannot be read
-     * @throws IllegalStateException if the image is not a stencil.
-     */
-    BufferedImage getStencilImage(Paint paint) throws IOException;
-    
     /**
      * Returns an InputStream containing the image data, irrespective of whether this is an
      * inline image or an image XObject.
@@ -131,14 +61,14 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns true if the image has no data.
-     * 
+     *
      * @return true if the image has no data
      */
     boolean isEmpty();
 
     /**
      * Returns true if the image is a stencil mask.
-     * 
+     *
      * @return true if the image is a stencil mask
      */
     boolean isStencil();
@@ -152,7 +82,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns bits per component of this image, or -1 if one has not been set.
-     * 
+     *
      * @return bits per component of this image or -1
      */
     int getBitsPerComponent();
@@ -165,7 +95,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns the image's color space.
-     * 
+     *
      * @return the image's color space
      * @throws IOException If there is an error getting the color space.
      */
@@ -179,7 +109,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns height of this image, or -1 if one has not been set.
-     * 
+     *
      * @return height of this image or -1
      */
     int getHeight();
@@ -192,7 +122,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns the width of this image, or -1 if one has not been set.
-     * 
+     *
      * @return width of this image or -1
      */
     int getWidth();
@@ -211,14 +141,14 @@ public interface PDImage extends COSObjectable
 
     /**
      * Returns the decode array.
-     * 
+     *
      * @return the decode array
      */
     COSArray getDecode();
 
     /**
      * Returns true if the image should be interpolated when rendered.
-     * 
+     *
      * @return true if the image should be interpolated when rendered
      */
     boolean getInterpolate();
@@ -226,18 +156,18 @@ public interface PDImage extends COSObjectable
 
     /**
      * Sets the Interpolate flag, true for high-quality image scaling.
-     * 
+     *
      * @param value true for high-quality image scaling
      */
     void setInterpolate(boolean value);
 
     /**
      * Returns the suffix for this image type, e.g. "jpg"
-     * 
+     *
      * @return the suffix for this image type
      */
     String getSuffix();
-    
+
     /**
      * Convert this image to a COS object.
      *

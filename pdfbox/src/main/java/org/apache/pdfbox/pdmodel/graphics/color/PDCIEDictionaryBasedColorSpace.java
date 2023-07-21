@@ -15,11 +15,12 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.awt.color.ColorSpace;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
+
+import java.awt.color.ColorSpace;
 
 /**
  * CIE-based colour spaces that use a dictionary.
@@ -31,7 +32,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
 {
     protected final COSDictionary dictionary;
 
-    private static final ColorSpace CIEXYZ = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
+    //private static final ColorSpace CIEXYZ = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
 
     // we need to cache whitepoint values, because using getWhitePoint()
     // would create a new default object for each pixel conversion if the original
@@ -71,7 +72,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
     protected boolean isWhitePoint()
     {
         return  Float.compare(wpX, 1) == 0 &&
-                Float.compare(wpY, 1) == 0 && 
+                Float.compare(wpY, 1) == 0 &&
                 Float.compare(wpZ, 1)  == 0;
     }
 
@@ -99,10 +100,12 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
         {
             z = 0;
         }
-        return CIEXYZ.toRGB(new float[]
-        {
-            x, y, z
-        });
+
+        throw new UnsupportedOperationException("Not implemented");//todo: vz implement
+//        return CIEXYZ.toRGB(new float[]
+//        {
+//            x, y, z
+//        });
     }
 
     /**

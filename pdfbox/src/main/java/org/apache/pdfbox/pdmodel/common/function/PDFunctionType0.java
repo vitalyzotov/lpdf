@@ -19,6 +19,7 @@ package org.apache.pdfbox.pdmodel.common.function;
 import java.io.IOException;
 import java.io.InputStream;
 
+//todo: vz can we use it?
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.MemoryCacheImageInputStream;
 
@@ -35,30 +36,30 @@ import org.apache.pdfbox.pdmodel.common.PDRange;
  *
  * @author Ben Litchfield
  * @author Tilman Hausherr
- * 
+ *
  */
 public class PDFunctionType0 extends PDFunction
 {
- 
+
     /**
      * Log instance.
      */
     private static final Log LOG = LogFactory.getLog(PDFunctionType0.class);
 
     /**
-     * An array of 2 x m numbers specifying the linear mapping of input values 
+     * An array of 2 x m numbers specifying the linear mapping of input values
      * into the domain of the function's sample table. Default value: [ 0 (Size0
      * - 1) 0 (Size1 - 1) ...].
      */
     private COSArray encode = null;
     /**
-     * An array of 2 x n numbers specifying the linear mapping of sample values 
+     * An array of 2 x n numbers specifying the linear mapping of sample values
      * into the range appropriate for the function's output values. Default
      * value: same as the value of Range
      */
     private COSArray decode = null;
     /**
-     * An array of m positive integers specifying the number of samples in each 
+     * An array of m positive integers specifying the number of samples in each
      * input dimension of the sample table.
      */
     private COSArray size = null;
@@ -66,7 +67,7 @@ public class PDFunctionType0 extends PDFunction
      * The samples of the function.
      */
     private int[][] samples = null;
-    
+
     /**
      * Constructor.
      *
@@ -102,8 +103,8 @@ public class PDFunctionType0 extends PDFunction
     }
 
     /**
-     * Get the number of bits that the output value will take up.  
-     * 
+     * Get the number of bits that the output value will take up.
+     *
      * Valid values are 1,2,4,8,12,16,24,32.
      *
      * @return Number of bits for each output value.
@@ -135,13 +136,13 @@ public class PDFunctionType0 extends PDFunction
     {
         getCOSObject().setInt(COSName.BITS_PER_SAMPLE, bps);
     }
-    
+
     /**
      * Returns all encode values as COSArray.
-     * 
-     * @return the encode array. 
+     *
+     * @return the encode array.
      */
-    private COSArray getEncodeValues() 
+    private COSArray getEncodeValues()
     {
         if (encode == null)
         {
@@ -164,10 +165,10 @@ public class PDFunctionType0 extends PDFunction
 
     /**
      * Returns all decode values as COSArray.
-     * 
-     * @return the decode array. 
+     *
+     * @return the decode array.
      */
-    private COSArray getDecodeValues() 
+    private COSArray getDecodeValues()
     {
         if (decode == null)
         {
@@ -394,7 +395,7 @@ public class PDFunctionType0 extends PDFunction
                 try (InputStream is = getPDStream().createInputStream())
                 {
                     // PDF spec 1.7 p.171:
-                    // Each sample value is represented as a sequence of BitsPerSample bits. 
+                    // Each sample value is represented as a sequence of BitsPerSample bits.
                     // Successive values are adjacent in the bit stream; there is no padding at byte boundaries.
                     try (ImageInputStream mciis = new MemoryCacheImageInputStream(is))
                     {
@@ -442,13 +443,13 @@ public class PDFunctionType0 extends PDFunction
             PDRange domain = getDomainForInput(i);
             PDRange encodeValues = getEncodeForParameter(i);
             input[i] = clipToRange(input[i], domain.getMin(), domain.getMax());
-            input[i] = interpolate(input[i], domain.getMin(), domain.getMax(), 
+            input[i] = interpolate(input[i], domain.getMin(), domain.getMax(),
                     encodeValues.getMin(), encodeValues.getMax());
             input[i] = clipToRange(input[i], 0, sizeValues[i] - 1);
             inputPrev[i] = (int) Math.floor(input[i]);
             inputNext[i] = (int) Math.ceil(input[i]);
         }
-        
+
         float[] outputValues = new Rinterpol(input, inputPrev, inputNext).rinterpolate();
 
         for (int i = 0; i < numberOfOutputValues; i++)

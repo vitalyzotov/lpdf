@@ -16,17 +16,12 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.action;
 
-import java.io.IOException;
-
-import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSBoolean;
 import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
+
+import java.io.IOException;
 
 /**
  * This represents a embedded go-to action that can be executed in a PDF document.
@@ -58,44 +53,6 @@ public class PDActionEmbeddedGoTo extends PDAction
     public PDActionEmbeddedGoTo(COSDictionary a)
     {
         super(a);
-    }
-
-    /**
-     * This will get the destination to jump to.
-     *
-     * @return The D entry of the specific go-to action dictionary.
-     *
-     * @throws IOException If there is an error creating the destination.
-     */
-    public PDDestination getDestination() throws IOException
-    {
-        return PDDestination.create(getCOSObject().getDictionaryObject(COSName.D));
-    }
-
-    /**
-     * This will set the destination to jump to.
-     *
-     * @param d The destination.
-     *
-     * @throws IllegalArgumentException if the destination is not a page dictionary object.
-     */
-    public void setDestination(PDDestination d)
-    {
-        if (d instanceof PDPageDestination)
-        {
-            PDPageDestination pageDest = (PDPageDestination) d;
-            COSArray destArray = pageDest.getCOSObject();
-            if (destArray.size() >= 1)
-            {
-                COSBase page = destArray.getObject(0);
-                if (!(page instanceof COSInteger))
-                {
-                    throw new IllegalArgumentException(
-                            "Destination of a GoToE action must be an integer");
-                }
-            }
-        }
-        getCOSObject().setItem(COSName.D, d);
     }
 
     /**
@@ -178,7 +135,7 @@ public class PDActionEmbeddedGoTo extends PDAction
 
     /**
      * Sets the target directory.
-     * 
+     *
      * @param targetDirectory the target directory
      */
     public void setTargetDirectory(PDTargetDirectory targetDirectory)

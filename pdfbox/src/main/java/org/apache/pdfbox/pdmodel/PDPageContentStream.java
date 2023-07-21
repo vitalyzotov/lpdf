@@ -27,7 +27,6 @@ import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.common.PDStream;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceStream;
 
 /**
  * Provides the ability to write to a page content stream.
@@ -44,11 +43,11 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
         /**
          * Overwrite the existing page content streams.
          */
-        OVERWRITE, 
+        OVERWRITE,
         /**
          * Append the content stream after all existing page content streams.
          */
-        APPEND, 
+        APPEND,
         /**
          * Insert before all other page content streams.
          */
@@ -64,7 +63,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
             return this == PREPEND;
         }
     }
-  
+
     private static final Log LOG = LogFactory.getLog(PDPageContentStream.class);
 
     private boolean sourcePageHadContents = false;
@@ -103,7 +102,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
     {
         this(document, sourcePage, appendContent, compress, false);
     }
-    
+
     /**
      * Create a new PDPage content stream.
      *
@@ -197,30 +196,6 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
 
         // configure NumberFormat
         setMaximumFractionDigits(5);
-    }
-
-    /**
-     * Create a new appearance stream. Note that this is not actually a "page" content stream.
-     *
-     * @param doc The document the page is part of.
-     * @param appearance The appearance stream to write to.
-     * @throws IOException If there is an error writing to the page contents.
-     */
-    public PDPageContentStream(PDDocument doc, PDAppearanceStream appearance) throws IOException
-    {
-        this (doc, appearance, appearance.getStream().createOutputStream()); 
-    }
-    
-    /**
-     * Create a new appearance stream. Note that this is not actually a "page" content stream.
-     *
-     * @param doc The document the appearance is part of.
-     * @param appearance The appearance stream to add to.
-     * @param outputStream The appearances output stream to write to.
-     */
-    public PDPageContentStream(PDDocument doc, PDAppearanceStream appearance, OutputStream outputStream)
-    {
-        super(doc, outputStream, appearance.getResources());
     }
 
     /**

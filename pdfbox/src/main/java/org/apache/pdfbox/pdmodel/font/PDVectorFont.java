@@ -17,6 +17,7 @@
 
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
 

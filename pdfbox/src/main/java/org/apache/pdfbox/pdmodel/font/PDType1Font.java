@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -80,12 +81,12 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      * embedded font.
      */
     private final Type1Font type1font;
-    
+
     /**
      * embedded or system font for rendering.
      */
     private final FontBoxFont genericFont;
-    
+
     private final boolean isEmbedded;
     private final boolean isDamaged;
     private final AffineTransform fontMatrixTransform;
@@ -104,7 +105,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
     public PDType1Font(FontName baseFont)
     {
         super(baseFont);
-        
+
         dict.setItem(COSName.SUBTYPE, COSName.TYPE1);
         dict.setName(COSName.BASE_FONT, baseFont.getName());
         switch (baseFont)
@@ -127,7 +128,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
                                                       .getFontBoxFont(getBaseFont(),
                                                                       getFontDescriptor());
         genericFont = mapping.getFont();
-        
+
         if (mapping.isFallback())
         {
             String fontName;
@@ -181,7 +182,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
 
     /**
      * Creates a Type 1 font from a Font dictionary in a PDF.
-     * 
+     *
      * @param fontDictionary font dictionary.
      * @throws IOException if there was an error initializing the font.
      * @throws IllegalArgumentException if /FontFile3 was used.
@@ -270,7 +271,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
             FontMapping<FontBoxFont> mapping = FontMappers.instance()
                                                           .getFontBoxFont(getBaseFont(), fd);
             genericFont = mapping.getFont();
-            
+
             if (mapping.isFallback())
             {
                 LOG.warn("Using fallback font " + genericFont.getName() + " for " + getBaseFont());
@@ -329,8 +330,8 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
             {
                 offset += 4;
                 // skip additional CR LF space characters
-                while (offset < bytes.length && 
-                        (bytes[offset] == '\r' || bytes[offset] == '\n' || 
+                while (offset < bytes.length &&
+                        (bytes[offset] == '\r' || bytes[offset] == '\n' ||
                          bytes[offset] == ' ' || bytes[offset] == '\t'))
                 {
                     offset++;
@@ -365,7 +366,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the PostScript name of the font.
-     * 
+     *
      * @return the PostScript name of the font
      */
     public final String getBaseFont()
@@ -514,7 +515,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the embedded or substituted Type 1 font, or null if there is none.
-     * 
+     *
      * @return the embedded or substituted Type 1 font or null
      */
     public Type1Font getType1Font()
@@ -646,7 +647,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
         }
         return path;
     }
-    
+
     @Override
     public boolean hasGlyph(String name) throws IOException
     {
@@ -676,7 +677,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
                 LOG.debug("Couldn't get font matrix box - returning default value", e);
                 fontMatrix = DEFAULT_FONT_MATRIX;
             }
-            
+
             if (numbers != null && numbers.size() == 6)
             {
                 fontMatrix = new Matrix(

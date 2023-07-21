@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.state;
 
+//todo: vz can we use it?
 import java.awt.BasicStroke;
 import java.awt.Composite;
 import java.awt.geom.Area;
@@ -271,7 +272,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return softMask
      */
-    public PDSoftMask getSoftMask() 
+    public PDSoftMask getSoftMask()
     {
         return softMask;
     }

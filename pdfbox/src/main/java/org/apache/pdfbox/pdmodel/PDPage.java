@@ -45,8 +45,6 @@ import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.interactive.action.PDPageAdditionalActions;
-import org.apache.pdfbox.pdmodel.interactive.annotation.AnnotationFilter;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.measurement.PDViewportDictionary;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDTransition;
@@ -54,7 +52,7 @@ import org.apache.pdfbox.util.Matrix;
 
 /**
  * A page in a PDF document.
- * 
+ *
  * @author Ben Litchfield
  */
 public class PDPage implements COSObjectable, PDContentStream
@@ -81,7 +79,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Creates a new instance of PDPage for embedding.
-     * 
+     *
      * @param mediaBox The MediaBox of the page.
      */
     public PDPage(PDRectangle mediaBox)
@@ -93,7 +91,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Creates a new instance of PDPage for reading.
-     * 
+     *
      * @param pageDictionary A page dictionary in a PDF document.
      */
     public PDPage(COSDictionary pageDictionary)
@@ -114,7 +112,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Convert this standard java object to a COS object.
-     * 
+     *
      * @return The cos object that matches this Java object.
      */
     @Override
@@ -125,7 +123,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Returns the content streams which make up this page.
-     * 
+     *
      * @return content stream iterator
      */
     public Iterator<PDStream> getContentStreams()
@@ -147,7 +145,7 @@ public class PDPage implements COSObjectable, PDContentStream
         }
         return streams.iterator();
     }
-    
+
     /**
      * Returns the content stream(s) of this page as a single input stream.
      *
@@ -213,7 +211,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Returns true if this page has one or more content streams.
-     * 
+     *
      * @return true if the page has a non empty content stream, otherwise false
      */
     public boolean hasContents()
@@ -251,7 +249,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the resources for this page.
-     * 
+     *
      * @param resources The new resources for this page.
      */
     public void setResources(PDResources resources)
@@ -269,7 +267,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will get the key of this Page in the structural parent tree.
-     * 
+     *
      * @return the integer key of the page's entry in the structural parent tree or -1 if
      * there isn't any.
      */
@@ -280,7 +278,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the key for this page in the structural parent tree.
-     * 
+     *
      * @param structParents The new key for this page.
      */
     public void setStructParents(int structParents)
@@ -304,7 +302,7 @@ public class PDPage implements COSObjectable, PDContentStream
     /**
      * A rectangle, expressed in default user space units, defining the boundaries of the physical medium on which the
      * page is intended to be displayed or printed.
-     * 
+     *
      * @return the media box of the page
      */
     public PDRectangle getMediaBox()
@@ -327,7 +325,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the mediaBox for this page.
-     * 
+     *
      * @param mediaBox The new mediaBox for this page.
      */
     public void setMediaBox(PDRectangle mediaBox)
@@ -346,7 +344,7 @@ public class PDPage implements COSObjectable, PDContentStream
     /**
      * A rectangle, expressed in default user space units, defining the visible region of default user space. When the
      * page is displayed or printed, its contents are to be clipped (cropped) to this rectangle.
-     * 
+     *
      * @return the cropbox of the page
      */
     public PDRectangle getCropBox()
@@ -364,7 +362,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the CropBox for this page.
-     * 
+     *
      * @param cropBox The new CropBox for this page.
      */
     public void setCropBox(PDRectangle cropBox)
@@ -383,7 +381,7 @@ public class PDPage implements COSObjectable, PDContentStream
      * A rectangle, expressed in default user space units, defining the region to which the contents
      * of the page should be clipped when output in a production environment. The default is the
      * CropBox.
-     * 
+     *
      * @return The BleedBox attribute.
      */
     public PDRectangle getBleedBox()
@@ -394,7 +392,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the BleedBox for this page.
-     * 
+     *
      * @param bleedBox The new BleedBox for this page.
      */
     public void setBleedBox(PDRectangle bleedBox)
@@ -412,7 +410,7 @@ public class PDPage implements COSObjectable, PDContentStream
     /**
      * A rectangle, expressed in default user space units, defining the intended dimensions of the
      * finished page after trimming. The default is the CropBox.
-     * 
+     *
      * @return The TrimBox attribute.
      */
     public PDRectangle getTrimBox()
@@ -423,7 +421,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the TrimBox for this page.
-     * 
+     *
      * @param trimBox The new TrimBox for this page.
      */
     public void setTrimBox(PDRectangle trimBox)
@@ -442,7 +440,7 @@ public class PDPage implements COSObjectable, PDContentStream
      * A rectangle, expressed in default user space units, defining the extent of the page's
      * meaningful content (including potential white space) as intended by the page's creator The
      * default is the CropBox.
-     * 
+     *
      * @return The ArtBox attribute.
      */
     public PDRectangle getArtBox()
@@ -453,7 +451,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the ArtBox for this page.
-     * 
+     *
      * @param artBox The new ArtBox for this page.
      */
     public void setArtBox(PDRectangle artBox)
@@ -467,7 +465,7 @@ public class PDPage implements COSObjectable, PDContentStream
             page.setItem(COSName.ART_BOX, artBox);
         }
     }
-    
+
     /**
      * Clips the given box to the bounds of the media box.
      */
@@ -506,7 +504,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the rotation for this page.
-     * 
+     *
      * @param rotation The new rotation for this page in degrees.
      */
     public void setRotation(int rotation)
@@ -516,7 +514,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the contents of this page.
-     * 
+     *
      * @param contents The new contents of the page.
      */
     public void setContents(PDStream contents)
@@ -565,7 +563,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * This will set the list of thread beads.
-     * 
+     *
      * @param beads A list of PDThreadBead objects or null.
      */
     public void setThreadBeads(List<PDThreadBead> beads)
@@ -576,7 +574,7 @@ public class PDPage implements COSObjectable, PDContentStream
     /**
      * Get the metadata that is part of the document catalog. This will return null if there is
      * no meta data for this object.
-     * 
+     *
      * @return The metadata for this object.
      */
     public PDMetadata getMetadata()
@@ -587,7 +585,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Set the metadata for this object. This can be null.
-     * 
+     *
      * @param meta The meta data for this object.
      */
     public void setMetadata(PDMetadata meta)
@@ -597,7 +595,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Get the page actions.
-     * 
+     *
      * @return The Actions for this Page
      */
     public PDPageAdditionalActions getActions()
@@ -613,7 +611,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Set the page actions.
-     * 
+     *
      * @param actions The actions for the page.
      */
     public void setActions(PDPageAdditionalActions actions)
@@ -640,7 +638,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Convenient method to set a transition and the display duration
-     * 
+     *
      * @param transition The new transition to set on this page.
      * @param duration The maximum length of time, in seconds, that the page shall be displayed during presentations
      * before the viewer application shall automatically advance to the next page.
@@ -649,67 +647,6 @@ public class PDPage implements COSObjectable, PDContentStream
     {
         page.setItem(COSName.TRANS, transition);
         page.setItem(COSName.DUR, new COSFloat(duration));
-    }
-
-    /**
-     * This will return a list of the annotations for this page.
-     *
-     * @return List of the PDAnnotation objects, never null. The returned list is backed by the
-     * annotations COSArray, so any adding or deleting in this list will change the document too.
-     * 
-     * @throws IOException If there is an error while creating the annotation list.
-     */
-    public List<PDAnnotation> getAnnotations() throws IOException
-    {
-        return getAnnotations(annotation -> true);
-    }
-
-    /**
-     * This will return a list of the annotations for this page.
-     *
-     * @param annotationFilter the annotation filter provided allowing to filter out specific annotations
-     * @return List of the PDAnnotation objects, never null. The returned list is backed by the
-     * annotations COSArray, so any adding or deleting in this list will change the document too.
-     * 
-     * @throws IOException If there is an error while creating the annotation list.
-     */
-    public List<PDAnnotation> getAnnotations(AnnotationFilter annotationFilter) throws IOException
-    {
-        COSArray annots = page.getCOSArray(COSName.ANNOTS);
-        if (annots == null)
-        {
-            return new COSArrayList<>(page, COSName.ANNOTS);
-        }
-
-        List<PDAnnotation> actuals = new ArrayList<>();
-        for (int i = 0; i < annots.size(); i++)
-        {
-            COSBase item = annots.getObject(i);
-            if (item == null)
-            {
-                continue;
-            }
-            PDAnnotation createdAnnotation = PDAnnotation.createAnnotation(item);
-            if (annotationFilter.accept(createdAnnotation))
-            {
-                actuals.add(createdAnnotation);
-            }
-        }
-        return new COSArrayList<>(actuals, annots);
-    }
-
-    /**
-     * This will set the list of annotations. Although this is optional, you should take care that
-     * any newly created annotations link back to this page by calling
-     * {@link PDAnnotation#setPage(org.apache.pdfbox.pdmodel.PDPage)}. Not doing it
-     * <a href="https://stackoverflow.com/questions/74836898/">can cause trouble when PDFs get
-     * signed</a>.
-     *
-     * @param annotations The new list of annotations.
-     */
-    public void setAnnotations(List<PDAnnotation> annotations)
-    {
-        page.setItem(COSName.ANNOTS, new COSArray(annotations));
     }
 
     @Override
@@ -726,7 +663,7 @@ public class PDPage implements COSObjectable, PDContentStream
 
     /**
      * Returns the resource cache associated with this page, or null if there is none.
-     * 
+     *
      * @return the resource cache of the current page
      */
     public ResourceCache getResourceCache()

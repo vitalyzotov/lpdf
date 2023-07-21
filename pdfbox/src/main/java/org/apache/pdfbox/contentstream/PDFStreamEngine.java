@@ -58,8 +58,6 @@ import org.apache.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
 import org.apache.pdfbox.pdmodel.graphics.pattern.PDTilingPattern;
 import org.apache.pdfbox.pdmodel.graphics.state.PDGraphicsState;
 import org.apache.pdfbox.pdmodel.graphics.state.PDTextState;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceStream;
 import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.util.Vector;
 import org.apache.pdfbox.contentstream.operator.Operator;
@@ -69,7 +67,7 @@ import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
 /**
  * Processes a PDF content stream and executes certain operations.
  * Provides a callback interface for clients that want to do things with the stream.
- * 
+ *
  * @author Ben Litchfield
  */
 public abstract class PDFStreamEngine
@@ -93,7 +91,7 @@ public abstract class PDFStreamEngine
 
     // default font, used if there isn't any font available
     private PDFont defaultFont;
-    
+
     /**
      * Creates a new PDFStreamEngine.
      */
@@ -130,7 +128,7 @@ public abstract class PDFStreamEngine
     }
 
     /**
-     * Provide standard 14 Helvetica font as default if there isn't any font available.  
+     * Provide standard 14 Helvetica font as default if there isn't any font available.
      * @return the default font
      */
     private PDFont getDefaultFont()
@@ -141,7 +139,7 @@ public abstract class PDFStreamEngine
         }
         return defaultFont;
     }
-    
+
     /**
      * This will initialize and process the contents of the stream.
      *
@@ -191,7 +189,7 @@ public abstract class PDFStreamEngine
 
     /**
      * Processes a soft mask transparency group stream.
-     * 
+     *
      * @param group transparency group used for the soft mask
      * @throws IOException if the transparency group cannot be processed
      */
@@ -220,7 +218,7 @@ public abstract class PDFStreamEngine
 
     /**
      * Processes a transparency group stream.
-     * 
+     *
      * @param group transparency group to be processed
      * @throws IOException if the transparency group cannot be processed
      */
@@ -234,7 +232,7 @@ public abstract class PDFStreamEngine
 
         PDResources parent = pushResources(group);
         Deque<PDGraphicsState> savedStack = saveGraphicsStack();
-        
+
         Matrix parentMatrix = initialMatrix;
         PDGraphicsState graphicsState = getGraphicsState();
 
@@ -244,8 +242,8 @@ public abstract class PDFStreamEngine
         // transform the CTM using the stream's matrix
         graphicsState.getCurrentTransformationMatrix().concatenate(group.getMatrix());
 
-        // Before execution of the transparency group XObject’s content stream, 
-        // the current blend mode in the graphics state shall be initialized to Normal, 
+        // Before execution of the transparency group XObject’s content stream,
+        // the current blend mode in the graphics state shall be initialized to Normal,
         // the current stroking and nonstroking alpha constants to 1.0, and the current soft mask to None.
         graphicsState.setBlendMode(BlendMode.NORMAL);
         graphicsState.setAlphaConstant(1);
@@ -313,66 +311,6 @@ public abstract class PDFStreamEngine
 
             restoreGraphicsStack(savedStack);
             popResources(parent);
-        }
-    }
-
-    /**
-     * Process the given annotation with the specified appearance stream.
-     *
-     * @param annotation The annotation containing the appearance stream to process.
-     * @param appearance The appearance stream to process.
-     * @throws IOException If there is an error reading or parsing the appearance content stream.
-     */
-    protected void processAnnotation(PDAnnotation annotation, PDAppearanceStream appearance)
-            throws IOException
-    {
-        PDRectangle bbox = appearance.getBBox();
-        PDRectangle rect = annotation.getRectangle();
-
-        // zero-sized rectangles are not valid
-        if (rect != null && rect.getWidth() > 0 && rect.getHeight() > 0 &&
-            bbox != null && bbox.getWidth() > 0 && bbox.getHeight() > 0)
-        {
-            PDResources parent = pushResources(appearance);
-            Deque<PDGraphicsState> savedStack = saveGraphicsStack();
-
-            Matrix matrix = appearance.getMatrix();
-
-            // transformed appearance box  fixme: may be an arbitrary shape
-            Rectangle2D transformedBox = bbox.transform(matrix).getBounds2D();
-
-            // compute a matrix which scales and translates the transformed appearance box to align
-            // with the edges of the annotation's rectangle
-            Matrix a = Matrix.getTranslateInstance(rect.getLowerLeftX(), rect.getLowerLeftY());
-            a.scale((float)(rect.getWidth() / transformedBox.getWidth()),
-                    (float)(rect.getHeight() / transformedBox.getHeight()));
-            a.translate((float) -transformedBox.getX(), (float) -transformedBox.getY());
-
-            // Matrix shall be concatenated with A to form a matrix AA that maps from the appearance's
-            // coordinate system to the annotation's rectangle in default user space
-            //
-            // HOWEVER only the opposite order works for rotated pages with 
-            // filled fields / annotations that have a matrix in the appearance stream, see PDFBOX-3083
-            Matrix aa = Matrix.concatenate(a, matrix);
-
-            // make matrix AA the CTM
-            getGraphicsState().setCurrentTransformationMatrix(aa);
-
-            // clip to bounding box
-            clipToRect(bbox);
-
-            // needed for patterns in appearance streams, e.g. PDFBOX-2182
-            initialMatrix = aa.clone();
-
-            try
-            {
-                processStreamOperators(appearance);
-            }
-            finally
-            {
-                restoreGraphicsStack(savedStack);
-                popResources(parent);
-            }
         }
     }
 
@@ -452,33 +390,6 @@ public abstract class PDFStreamEngine
             restoreGraphicsStack(savedStack);
             popResources(parent);
         }
-    }
-
-    /**
-     * Shows the given annotation.
-     *
-     * @param annotation An annotation on the current page.
-     * @throws IOException If an error occurred reading the annotation
-     */
-    public void showAnnotation(PDAnnotation annotation) throws IOException
-    {
-        PDAppearanceStream appearanceStream = getAppearance(annotation);
-        if (appearanceStream != null)
-        {
-            processAnnotation(annotation, appearanceStream);
-        }
-    }
-
-    /**
-     * Returns the appearance stream to process for the given annotation. May be used to render
-     * a specific appearance such as "hover".
-     *
-     * @param annotation The current annotation.
-     * @return The stream to process.
-     */
-    public PDAppearanceStream getAppearance(PDAnnotation annotation)
-    {
-        return annotation.getNormalAppearanceStream();
     }
 
     /**
@@ -884,7 +795,7 @@ public abstract class PDFStreamEngine
 
     /**
      * This is used to handle an operation.
-     * 
+     *
      * @param operation The operation to perform.
      * @param arguments The list of arguments.
      * @throws IOException If there is an error processing the operation.
@@ -897,7 +808,7 @@ public abstract class PDFStreamEngine
 
     /**
      * This is used to handle an operation.
-     * 
+     *
      * @param operator The operation to perform.
      * @param operands The list of arguments.
      * @throws IOException If there is an error processing the operation.
@@ -928,7 +839,7 @@ public abstract class PDFStreamEngine
      *
      * @param operator The unknown operator.
      * @param operands The list of operands.
-     * 
+     *
      * @throws IOException if there is an error processing the unsupported operator
      */
     protected void unsupportedOperator(Operator operator, List<COSBase> operands) throws IOException
@@ -942,7 +853,7 @@ public abstract class PDFStreamEngine
      * @param operator The unknown operator.
      * @param operands The list of operands.
      * @param exception the excpetion which occured when processing the operator
-     * 
+     *
      * @throws IOException if there is an error processing the operator exception
      */
     protected void operatorException(Operator operator, List<COSBase> operands, IOException exception)
@@ -988,7 +899,7 @@ public abstract class PDFStreamEngine
 
     /**
      * Saves the entire graphics stack.
-     * 
+     *
      * @return the saved graphics state stack.
      */
     protected final Deque<PDGraphicsState> saveGraphicsStack()
@@ -1001,15 +912,15 @@ public abstract class PDFStreamEngine
 
     /**
      * Restores the entire graphics stack.
-     * 
+     *
      * @param snapshot the graphics state to be restored
-     * 
+     *
      */
     protected final void restoreGraphicsStack(Deque<PDGraphicsState> snapshot)
     {
         graphicsStack = snapshot;
     }
-    
+
     /**
      * @return Returns the size of the graphicsStack.
      */
@@ -1084,7 +995,7 @@ public abstract class PDFStreamEngine
 
     /**
      * Returns the current page.
-     * 
+     *
      * @return the current page
      */
     public PDPage getCurrentPage()
@@ -1094,7 +1005,7 @@ public abstract class PDFStreamEngine
 
     /**
      * Gets the stream's initial matrix.
-     * 
+     *
      * @return the initial matrix
      */
     public Matrix getInitialMatrix()
@@ -1104,10 +1015,10 @@ public abstract class PDFStreamEngine
 
     /**
      * Transforms a point using the CTM.
-     * 
+     *
      * @param x the x-coordinate of the point to be transformed
      * @param y the y-coordinate of the point to be transformed
-     * 
+     *
      * @return the transformed point
      */
     public Point2D.Float transformedPoint(float x, float y)
@@ -1120,9 +1031,9 @@ public abstract class PDFStreamEngine
 
     /**
      * Transforms a width using the CTM.
-     * 
+     *
      * @param width the width to be transformed
-     * 
+     *
      * @return the transformed width
      */
     protected float transformWidth(float width)

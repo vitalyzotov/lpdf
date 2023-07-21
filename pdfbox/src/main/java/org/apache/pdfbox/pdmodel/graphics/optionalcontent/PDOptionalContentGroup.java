@@ -19,7 +19,6 @@ package org.apache.pdfbox.pdmodel.graphics.optionalcontent;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
-import org.apache.pdfbox.rendering.RenderDestination;
 
 /**
  * An optional content group (OCG).
@@ -49,12 +48,12 @@ public class PDOptionalContentGroup extends PDPropertyList
                     "Provided dictionary is not of type '" + COSName.OCG + "'");
         }
     }
-    
+
     /**
      * Enumeration for the renderState dictionary entry on the "Export", "View"
      * and "Print" dictionary.
      */
-    public enum RenderState 
+    public enum RenderState
     {
         /** The "ON" value. */
         ON(COSName.ON),
@@ -112,36 +111,6 @@ public class PDOptionalContentGroup extends PDPropertyList
         dict.setString(COSName.NAME, name);
     }
 
-    //TODO Add support for "Intent"
-    /**
-     * @param destination to be rendered
-     * @return state or null if undefined
-     */
-    public RenderState getRenderState(RenderDestination destination)
-    {
-        COSName state = null;
-        COSDictionary usage = dict.getCOSDictionary(COSName.USAGE);
-        if (usage != null)
-        {
-            if (RenderDestination.PRINT.equals(destination))
-            {
-                COSDictionary print = usage.getCOSDictionary(COSName.PRINT);
-                state = print == null ? null : print.getCOSName(COSName.PRINT_STATE);
-            }
-            else if (RenderDestination.VIEW.equals(destination))
-            {
-                COSDictionary view = usage.getCOSDictionary(COSName.VIEW);
-                state = view == null ? null : view.getCOSName(COSName.VIEW_STATE);
-            }
-            // Fallback to export
-            if (state == null)
-            {
-                COSDictionary export = usage.getCOSDictionary(COSName.EXPORT);
-                state = export == null ? null : export.getCOSName(COSName.EXPORT_STATE);
-            }
-        }
-        return state == null ? null : RenderState.valueOf(state);
-    }
 
     @Override
     public String toString()

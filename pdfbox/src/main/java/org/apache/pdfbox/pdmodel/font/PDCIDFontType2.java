@@ -16,6 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
@@ -43,7 +44,7 @@ import org.apache.pdfbox.util.Matrix;
 
 /**
  * Type 2 CIDFont (TrueType).
- * 
+ *
  * @author Ben Litchfield
  */
 public class PDCIDFontType2 extends PDCIDFont
@@ -62,7 +63,7 @@ public class PDCIDFontType2 extends PDCIDFont
 
     /**
      * Constructor.
-     * 
+     *
      * @param fontDictionary The font dictionary according to the PDF specification.
      * @param parent The parent font.
      * @throws IOException if the font could not be read
@@ -71,10 +72,10 @@ public class PDCIDFontType2 extends PDCIDFont
     {
         this(fontDictionary, parent, null);
     }
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param fontDictionary The font dictionary according to the PDF specification.
      * @param parent The parent font.
      * @param trueTypeFont The true type font used to create the parent font
@@ -98,7 +99,7 @@ public class PDCIDFontType2 extends PDCIDFont
         {
             boolean fontIsDamaged = false;
             TrueTypeFont ttfFont = null;
-            
+
             PDStream stream = null;
             if (fd != null)
             {
@@ -140,7 +141,7 @@ public class PDCIDFontType2 extends PDCIDFont
             }
             isEmbedded = ttfFont != null;
             isDamaged = fontIsDamaged;
-    
+
             if (ttfFont == null)
             {
                 ttfFont = findFontOrSubstitute();
@@ -208,7 +209,7 @@ public class PDCIDFontType2 extends PDCIDFont
         {
             PDRectangle bbox = getFontDescriptor().getFontBoundingBox();
             if (bbox != null &&
-                    (Float.compare(bbox.getLowerLeftX(), 0) != 0 || 
+                    (Float.compare(bbox.getLowerLeftX(), 0) != 0 ||
                      Float.compare(bbox.getLowerLeftY(), 0) != 0 ||
                      Float.compare(bbox.getUpperRightX(), 0) != 0 ||
                      Float.compare(bbox.getUpperRightY(), 0) != 0))
@@ -293,7 +294,7 @@ public class PDCIDFontType2 extends PDCIDFont
                 {
                     LOG.warn("Trying to map multi-byte character using 'cmap', result will be poor");
                 }
-                
+
                 // a non-embedded font always has a cmap (otherwise FontMapper won't load it)
                 return cmap.getGlyphId(unicode.codePointAt(0));
             }
@@ -428,7 +429,7 @@ public class PDCIDFontType2 extends PDCIDFont
 
     /**
      * Returns the embedded or substituted TrueType font. May be an OpenType font if the font is not embedded.
-     * 
+     *
      * @return the embedded or substituted TrueType font
      */
     public TrueTypeFont getTrueTypeFont()
@@ -482,7 +483,7 @@ public class PDCIDFontType2 extends PDCIDFont
             float scale = 1000f / ttf.getUnitsPerEm();
 
             // PDFBOX-5567: clone() to avoid repeated modification on cached path
-            path = (GeneralPath) path.clone(); 
+            path = (GeneralPath) path.clone();
 
             path.transform(AffineTransform.getScaleInstance(scale, scale));
         }

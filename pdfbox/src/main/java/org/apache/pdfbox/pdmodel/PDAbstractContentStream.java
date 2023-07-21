@@ -16,25 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel;
 
-import java.awt.Color;
-import java.awt.geom.AffineTransform;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.text.NumberFormat;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fontbox.ttf.CmapLookup;
@@ -68,6 +49,25 @@ import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
 import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.util.NumberFormatUtil;
+import org.apache.pdfbox.util.RgbColor;
+
+import java.awt.geom.AffineTransform;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Provides the ability to write to a content stream.
@@ -115,7 +115,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Sets the maximum number of digits allowed for fractional numbers.
-     * 
+     *
      * @see NumberFormat#setMaximumFractionDigits(int)
      * @param fractionDigitsNumber the maximum number of digits allowed for fractional numbers
      */
@@ -157,7 +157,7 @@ abstract class PDAbstractContentStream implements Closeable
         writeOperator(OperatorName.END_TEXT);
         inTextMode = false;
     }
-    
+
     /**
      * Set the font and font size to draw text with.
      *
@@ -266,7 +266,7 @@ abstract class PDAbstractContentStream implements Closeable
      * Outputs a string using the correct encoding and subsetting as required.
      *
      * @param text The Unicode text to show.
-     * 
+     *
      * @throws IOException If an io exception occurs.
      */
     protected void showTextInternal(String text) throws IOException
@@ -685,20 +685,6 @@ abstract class PDAbstractContentStream implements Closeable
     }
 
     /**
-     * Set the stroking color using an AWT color. Conversion uses the default sRGB color space.
-     *
-     * @param color The color to set.
-     * @throws IOException If an IO error occurs while writing to the stream.
-     */
-    public void setStrokingColor(Color color) throws IOException
-    {
-        float[] components = new float[] {
-                color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f };
-        PDColor pdColor = new PDColor(components, PDDeviceRGB.INSTANCE);
-        setStrokingColor(pdColor);
-    }
-
-    /**
      * Set the stroking color in the DeviceRGB color space. Range is 0..1.
      *
      * @param r The red value
@@ -803,20 +789,13 @@ abstract class PDAbstractContentStream implements Closeable
         }
     }
 
-    /**
-     * Set the non-stroking color using an AWT color. Conversion uses the default sRGB color space.
-     *
-     * @param color The color to set.
-     * @throws IOException If an IO error occurs while writing to the stream.
-     */
-    public void setNonStrokingColor(Color color) throws IOException
+    public void setNonStrokingColor(RgbColor color) throws IOException
     {
         float[] components = new float[] {
                 color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f };
         PDColor pdColor = new PDColor(components, PDDeviceRGB.INSTANCE);
         setNonStrokingColor(pdColor);
     }
-
     /**
      * Set the non-stroking color in the DeviceRGB color space. Range is 0..1.
      *
@@ -1021,7 +1000,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Stroke the path.
-     * 
+     *
      * @throws IOException If the content stream could not be written
      * @throws IllegalStateException If the method was called within a text block.
      */
@@ -1036,7 +1015,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Close and stroke the path.
-     * 
+     *
      * @throws IOException If the content stream could not be written
      * @throws IllegalStateException If the method was called within a text block.
      */
@@ -1193,7 +1172,7 @@ abstract class PDAbstractContentStream implements Closeable
             throw new IllegalStateException("Error: clip is not allowed within a text block.");
         }
         writeOperator(OperatorName.CLIP_NON_ZERO);
-        
+
         // end path without filling or stroking
         writeOperator(OperatorName.ENDPATH);
     }
@@ -1211,7 +1190,7 @@ abstract class PDAbstractContentStream implements Closeable
             throw new IllegalStateException("Error: clipEvenOdd is not allowed within a text block.");
         }
         writeOperator(OperatorName.CLIP_EVEN_ODD);
-        
+
         // end path without filling or stroking
         writeOperator(OperatorName.ENDPATH);
     }
@@ -1342,7 +1321,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Set an extended graphics state.
-     * 
+     *
      * @param state The extended graphics state to be added to the content stream
      * @throws IOException If the content stream could not be written.
      */
@@ -1356,7 +1335,7 @@ abstract class PDAbstractContentStream implements Closeable
      * Write a comment line.
      *
      * @param comment the comment to be added to the content stream
-     * 
+     *
      * @throws IOException If the content stream could not be written.
      * @throws IllegalArgumentException If the comment contains a newline. This is not allowed, because the next line
      * could be ordinary PDF content.
@@ -1374,9 +1353,9 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes a real number to the content stream.
-     * 
+     *
      * @param real the real number to be added to the content stream
-     * 
+     *
      * @throws IOException If the underlying stream has a problem being written to.
      * @throws IllegalArgumentException if the parameter is not a finite number
      */
@@ -1402,7 +1381,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes an integer number to the content stream.
-     * 
+     *
      * @param integer the integer to be added to the content stream
      * @throws IOException If the underlying stream has a problem being written to.
      */
@@ -1414,7 +1393,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes a COSName to the content stream.
-     * 
+     *
      * @param name the name to be added to the content stream
      * @throws IOException If the underlying stream has a problem being written to.
      */
@@ -1426,7 +1405,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes a string to the content stream as ASCII.
-     * 
+     *
      * @param text the text to be added to the content stream followed by a newline
      * @throws IOException If the underlying stream has a problem being written to.
      */
@@ -1438,7 +1417,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes a string to the content stream as ASCII.
-     * 
+     *
      * @param text the text to be added to the content stream
      * @throws IOException If the underlying stream has a problem being written to.
      */
@@ -1449,7 +1428,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes a newline to the content stream as ASCII.
-     * 
+     *
      * @throws IOException If the underlying stream has a problem being written to.
      */
     protected void writeLine() throws IOException
@@ -1459,7 +1438,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes binary data to the content stream.
-     * 
+     *
      * @param data as byte formatted to be added to the content stream
      * @throws IOException If the underlying stream has a problem being written to.
      */
@@ -1470,7 +1449,7 @@ abstract class PDAbstractContentStream implements Closeable
 
     /**
      * Writes an AffineTransform to the content stream as an array.
-     * 
+     *
      * @param transform AffineTransfrom to be added to the content stream
      * @throws IOException If the underlying stream has a problem being written to.
      */

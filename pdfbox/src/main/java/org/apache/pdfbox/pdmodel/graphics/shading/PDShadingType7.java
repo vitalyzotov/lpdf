@@ -16,51 +16,24 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Paint;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-
 import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.util.Matrix;
 
 /**
  * Resources for a shading type 7 (Tensor-Product Patch Mesh).
  */
-public class PDShadingType7 extends PDMeshBasedShadingType
-{
+public class PDShadingType7 extends PDMeshBasedShadingType {
     /**
      * Constructor using the given shading dictionary.
      *
      * @param shadingDictionary the dictionary for this shading
      */
-    public PDShadingType7(COSDictionary shadingDictionary)
-    {
+    public PDShadingType7(COSDictionary shadingDictionary) {
         super(shadingDictionary);
     }
 
     @Override
-    public int getShadingType()
-    {
+    public int getShadingType() {
         return PDShading.SHADING_TYPE7;
     }
 
-    @Override
-    public Paint toPaint(Matrix matrix)
-    {
-        return new Type7ShadingPaint(this, matrix);
-    }
-
-    @Override
-    protected Patch generatePatch(Point2D[] points, float[][] color)
-    {
-        return new TensorPatch(points, color);
-    }
-
-    @Override
-    public Rectangle2D getBounds(AffineTransform xform, Matrix matrix) throws IOException
-    {
-        return getBounds(xform, matrix, 16);
-    }
 }

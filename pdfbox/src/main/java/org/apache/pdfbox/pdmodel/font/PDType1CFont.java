@@ -17,6 +17,7 @@
 
 package org.apache.pdfbox.pdmodel.font;
 
+//todo: vz can we use it?
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -68,7 +69,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Constructor.
-     * 
+     *
      * @param fontDictionary the corresponding dictionary
      * @throws IOException it something went wrong
      */
@@ -127,7 +128,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
             FontMapping<FontBoxFont> mapping = FontMappers.instance()
                                                           .getFontBoxFont(getBaseFont(), fd);
             genericFont = mapping.getFont();
-            
+
             if (mapping.isFallback())
             {
                 LOG.warn("Using fallback font " + genericFont.getName() + " for " + getBaseFont());
@@ -138,7 +139,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
         fontMatrixTransform = getFontMatrix().createAffineTransform();
         fontMatrixTransform.scale(1000, 1000);
     }
-    
+
     @Override
     public FontBoxFont getFontBoxFont()
     {
@@ -147,7 +148,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the PostScript name of the font.
-     * 
+     *
      * @return the PostScript name of the font
      */
     public final String getBaseFont()
@@ -302,7 +303,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
             }
         }
     }
-    
+
     @Override
     public int readCode(InputStream in) throws IOException
     {
@@ -398,7 +399,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
         }
 
         String nameInFont = getNameInFont(name);
-        
+
         Map<String, Integer> inverted = encoding.getNameToCodeMap();
 
         if (nameInFont.equals(".notdef") || !genericFont.hasGlyph(nameInFont))
@@ -428,7 +429,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
         }
         return width;
     }
-    
+
     @Override
     public float getAverageFontWidth()
     {
@@ -441,7 +442,7 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
 
     /**
      * Returns the embedded Type 1-equivalent CFF font.
-     * 
+     *
      * @return the cffFont
      */
     public CFFType1Font getCFFType1Font()
@@ -481,5 +482,5 @@ public class PDType1CFont extends PDSimpleFont implements PDVectorFont
         }
         return ".notdef";
     }
-    
+
 }

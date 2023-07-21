@@ -19,6 +19,7 @@ package org.apache.pdfbox.pdmodel.font;
 
 import static org.apache.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
+//todo: vz can we use it?
 import java.awt.geom.GeneralPath;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -51,16 +52,16 @@ public final class Standard14Fonts
     private static final Map<String, FontName> ALIASES = new HashMap<>(38);
 
     /**
-     * Contains the font metrics for the standard 14 fonts. 
+     * Contains the font metrics for the standard 14 fonts.
      * The key is the font name, value is a FontMetrics instance.
      * Metrics are loaded into this map on demand, only if needed.
-     * 
+     *
      * @see #getAFM
      */
     private static final Map<FontName, FontMetrics> FONTS = new EnumMap<>(FontName.class);
 
     /**
-     * Contains the mapped fonts for the standard 14 fonts. 
+     * Contains the mapped fonts for the standard 14 fonts.
      * The key is the font name, value is a FontBoxFont instance.
      * FontBoxFont are loaded into this map on demand, only if needed.
      */
@@ -217,7 +218,7 @@ public final class Standard14Fonts
 
     /**
      * Returns the set of known font names, including aliases.
-     * 
+     *
      * @return the set of known font names
      */
     public static Set<String> getNames()
@@ -265,7 +266,7 @@ public final class Standard14Fonts
      * @param baseName name of the standard 14 font
      * @param glyphName name of glyph
      * @return the mapped font
-     * 
+     *
      * @throws IOException if the data could not be read
      */
     public static GeneralPath getGlyphPath(FontName baseName, String glyphName) throws IOException

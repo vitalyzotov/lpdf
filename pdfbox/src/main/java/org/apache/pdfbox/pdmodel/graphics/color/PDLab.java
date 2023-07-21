@@ -21,8 +21,6 @@ import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.common.PDRange;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 
 /**
@@ -34,7 +32,7 @@ import java.io.IOException;
 public final class PDLab extends PDCIEDictionaryBasedColorSpace
 {
     private PDColor initialColor;
-    
+
     /**
      * Creates a new Lab color space.
      */
@@ -51,90 +49,13 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
     {
         super(lab);
     }
-    
+
     @Override
     public String getName()
     {
         return COSName.LAB.getName();
     }
 
-    //
-    // WARNING: this method is performance sensitive, modify with care!
-    //
-    @Override
-    public BufferedImage toRGBImage(WritableRaster raster) throws IOException
-    {
-        int width = raster.getWidth();
-        int height = raster.getHeight();
-
-        BufferedImage rgbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        WritableRaster rgbRaster = rgbImage.getRaster();
-
-        PDRange aRange = getARange();
-        PDRange bRange = getBRange();
-        float minA = aRange.getMin();
-        float maxA = aRange.getMax();
-        float minB = bRange.getMin();
-        float maxB = bRange.getMax();
-        float deltaA = maxA - minA;
-        float deltaB = maxB - minB;
-
-        // always three components: ABC
-        float[] abc = new float[3];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                raster.getPixel(x, y, abc);
-
-                // 0..255 -> 0..1
-                abc[0] /= 255;
-                abc[1] /= 255;
-                abc[2] /= 255;
-                
-                // scale to range
-                abc[0] *= 100;
-                abc[1] = minA + abc[1] * deltaA;
-                abc[2] = minB + abc[2] * deltaB;
-
-                float[] rgb = toRGB(abc);
-
-                // 0..1 -> 0..255
-                rgb[0] *= 255;
-                rgb[1] *= 255;
-                rgb[2] *= 255;
-
-                rgbRaster.setPixel(x, y, rgb);
-            }
-        }
-
-        return rgbImage;
-    }
-
-    @Override
-    public BufferedImage toRawImage(WritableRaster raster)
-    {
-        // Not handled at the moment.
-       return null;
-    }
-
-    @Override
-    public float[] toRGB(float[] value)
-    {
-        // CIE LAB to RGB, see http://en.wikipedia.org/wiki/Lab_color_space
-
-        // L*
-        float lstar = (value[0] + 16f) * (1f / 116f);
-
-        // TODO: how to use the blackpoint? scale linearly between black & white?
-
-        // XYZ
-        float x = wpX * inverse(lstar + value[1] * (1f / 500f));
-        float y = wpY * inverse(lstar);
-        float z = wpZ * inverse(lstar - value[2] * (1f / 200f));
-        
-        return convXYZtoRGB(x, y, z);
-    }
 
     // reverse transformation (f^-1)
     private float inverse(float x)
@@ -223,7 +144,7 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
 
     /**
      * This will set the a range for the "a" component.
-     * @param range the new range for the "a" component, 
+     * @param range the new range for the "a" component,
      * or null if defaults (-100..100) are to be set.
      */
     public void setARange(PDRange range)

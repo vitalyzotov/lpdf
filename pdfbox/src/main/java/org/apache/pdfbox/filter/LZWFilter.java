@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//todo: vz can we use it?
 import javax.imageio.stream.MemoryCacheImageInputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
 
@@ -54,7 +55,7 @@ public class LZWFilter extends Filter
      * The LZW end of data code.
      */
     public static final long EOD = 257;
-    
+
     //BEWARE: codeTable must be local to each method, because there is only
     // one instance of each filter
 
@@ -114,7 +115,7 @@ public class LZWFilter extends Filter
                         decoded.write(newData);
                         codeTable.add(newData);
                     }
-                    
+
                     chunk = calculateChunk(codeTable.size(), earlyChange);
                     prevCommand = nextCommand;
                 }
@@ -179,14 +180,14 @@ public class LZWFilter extends Filter
                         out.writeBits(foundCode, chunk);
                         // create new table entry
                         codeTable.add(inputPattern);
-                        
+
                         if (codeTable.size() == 4096)
                         {
                             // code table is full
                             out.writeBits(CLEAR_TABLE, chunk);
                             codeTable = createCodeTable();
                         }
-                        
+
                         inputPattern = new byte[] { by };
                         foundCode = by & 0xff;
                     }
@@ -201,19 +202,19 @@ public class LZWFilter extends Filter
                 chunk = calculateChunk(codeTable.size() - 1, true);
                 out.writeBits(foundCode, chunk);
             }
-            
+
             // PPDFBOX-1977: the decoder wouldn't know that the encoder would output
             // an EOD as code, so he would have increased his own code table and
             // possibly adjusted the chunk. Therefore, the encoder must behave as
             // if the code table had just grown and thus it must be checked it is
             // needed to adjust the chunk, based on an increased table size parameter
             chunk = calculateChunk(codeTable.size(), true);
-            
+
             out.writeBits(EOD, chunk);
-            
+
             // pad with 0
             out.writeBits(0, 7);
-            
+
             // must do or file will be empty :-(
             out.flush();
         }

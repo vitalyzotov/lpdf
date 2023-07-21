@@ -16,26 +16,24 @@
  */
 package org.apache.pdfbox.filter;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
-import java.util.Random;
-
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 /**
  * This will test all of the filters in the PDFBox system.
  */
-class TestFilters
-{
+class TestFilters {
     /**
      * This will test all of the filters in the system. There will be COUNT
      * of deterministic tests and COUNT of non-deterministic tests, see also
@@ -44,89 +42,68 @@ class TestFilters
      * @throws IOException If there is an exception while encoding.
      */
     @Test
-    void testFilters() throws IOException
-    {
+    void testFilters() throws IOException {
         final int COUNT = 10;
         Random rd = new Random(123456);
-        for (int iter = 0; iter < COUNT * 2; iter++)
-        {
+        for (int iter = 0; iter < COUNT * 2; iter++) {
             long seed;
-            if (iter < COUNT)
-            {
+            if (iter < COUNT) {
                 // deterministic seed
                 seed = rd.nextLong();
-            }
-            else
-            {
+            } else {
                 // non-deterministic seed
                 seed = new Random().nextLong();
             }
             boolean success = false;
-            try 
-            {
+            try {
                 final Random random = new Random(seed);
                 final int numBytes = 10000 + random.nextInt(20000);
                 byte[] original = new byte[numBytes];
 
                 int upto = 0;
-                while(upto < numBytes) 
-                {
+                while (upto < numBytes) {
                     final int left = numBytes - upto;
-                    if (random.nextBoolean() || left < 2) 
-                    {
+                    if (random.nextBoolean() || left < 2) {
                         // Fill w/ pseudo-random bytes:
-                        final int end = upto + Math.min(left, 10+random.nextInt(100));
-                        while(upto < end) 
-                        {
+                        final int end = upto + Math.min(left, 10 + random.nextInt(100));
+                        while (upto < end) {
                             original[upto++] = (byte) random.nextInt();
                         }
-                    } 
-                    else 
-                    {
+                    } else {
                         // Fill w/ very predictable bytes:
-                        final int end = upto + Math.min(left, 2+random.nextInt(10));
+                        final int end = upto + Math.min(left, 2 + random.nextInt(10));
                         final byte value = (byte) random.nextInt(4);
-                        while(upto < end) 
-                        {
+                        while (upto < end) {
                             original[upto++] = value;
                         }
                     }
                 }
 
-                for( Filter filter : FilterFactory.INSTANCE.getAllFilters() )
-                {
+                for (Filter filter : FilterFactory.INSTANCE.getAllFilters()) {
                     // Skip filters that don't currently support roundtripping
-                    if( filter instanceof DCTFilter ||
-                        filter instanceof CCITTFaxFilter ||
-                        filter instanceof JPXFilter ||
-                        filter instanceof JBIG2Filter)
-                        {
-                            continue;
-                        }
+                    if (filter instanceof CCITTFaxFilter) {
+                        continue;
+                    }
 
                     checkEncodeDecode(filter, original);
                 }
                 success = true;
-            } 
-            finally 
-            {
-                if (!success) 
-                {
+            } finally {
+                if (!success) {
                     System.err.println("NOTE: test failed with seed=" + seed);
                 }
             }
         }
     }
-    
+
     /**
      * This will test the use of identity filter to decode stream and string.
      * This test threw an IOException before the correction.
-     * 
+     *
      * @throws IOException
      */
     @Test
-    void testPDFBOX4517() throws IOException
-    {
+    void testPDFBOX4517() throws IOException {
         Loader.loadPDF(new File("target/pdfs/PDFBOX-4517-cryptfilter.pdf"),
                 "userpassword1234");
     }
@@ -135,12 +112,11 @@ class TestFilters
      * This will test the LZW filter with the sequence that failed in PDFBOX-1977.
      * To check that the test itself is legit, revert LZWFilter.java to rev 1571801,
      * which should fail this test.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     @Test
-    void testPDFBOX1977() throws IOException
-    {
+    void testPDFBOX1977() throws IOException {
         Filter lzwFilter = FilterFactory.INSTANCE.getFilter(COSName.LZW_DECODE);
         byte[] byteArray = IOUtils.toByteArray(this.getClass().getResourceAsStream("PDFBOX-1977.bin"));
         checkEncodeDecode(lzwFilter, byteArray);
@@ -153,12 +129,11 @@ class TestFilters
      * @throws IOException
      */
     @Test
-    void testRLE() throws IOException
-    {
+    void testRLE() throws IOException {
         Filter rleFilter = FilterFactory.INSTANCE.getFilter(COSName.RUN_LENGTH_DECODE);
         byte[] input0 = new byte[0];
         checkEncodeDecode(rleFilter, input0);
-        byte[] input1 = new byte[] { 1, 2, 3, 4, 5, (byte) 128, (byte) 140, (byte) 180, (byte) 0xFF};
+        byte[] input1 = new byte[]{1, 2, 3, 4, 5, (byte) 128, (byte) 140, (byte) 180, (byte) 0xFF};
         checkEncodeDecode(rleFilter, input1);
         byte[] input2 = new byte[10];
         checkEncodeDecode(rleFilter, input2);
@@ -170,14 +145,13 @@ class TestFilters
         checkEncodeDecode(rleFilter, input5);
         byte[] input6 = new byte[1];
         checkEncodeDecode(rleFilter, input6);
-        byte[] input7 = new byte[] {1, 2};
+        byte[] input7 = new byte[]{1, 2};
         checkEncodeDecode(rleFilter, input7);
         byte[] input8 = new byte[2];
         checkEncodeDecode(rleFilter, input8);
     }
 
-    private void checkEncodeDecode(Filter filter, byte[] original) throws IOException
-    {
+    private void checkEncodeDecode(Filter filter, byte[] original) throws IOException {
         ByteArrayOutputStream encoded = new ByteArrayOutputStream();
         filter.encode(new ByteArrayInputStream(original), encoded, new COSDictionary());
         ByteArrayOutputStream decoded = new ByteArrayOutputStream();

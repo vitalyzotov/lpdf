@@ -16,11 +16,12 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A CalGray colour space is a special case of a single-component CIE-based
@@ -29,10 +30,9 @@ import org.apache.pdfbox.cos.COSName;
  * @author John Hewson
  * @author Ben Litchfield
  */
-public final class PDCalGray extends PDCIEDictionaryBasedColorSpace
-{
-    private final PDColor initialColor = new PDColor(new float[] { 0 }, this);
-    
+public final class PDCalGray extends PDCIEDictionaryBasedColorSpace {
+    private final PDColor initialColor = new PDColor(new float[]{0}, this);
+
     // PDFBOX-4119: cache the results for much improved performance
     // cached values MUST be cloned, because they are modified by the caller.
     // this can be observed in rendering of PDFBOX-1724
@@ -41,8 +41,7 @@ public final class PDCalGray extends PDCIEDictionaryBasedColorSpace
     /**
      * Create a new CalGray color space.
      */
-    public PDCalGray()
-    {
+    public PDCalGray() {
         super(COSName.CALGRAY);
     }
 
@@ -51,57 +50,28 @@ public final class PDCalGray extends PDCIEDictionaryBasedColorSpace
      *
      * @param array the COS array which represents this color space
      */
-    public PDCalGray(COSArray array)
-    {
+    public PDCalGray(COSArray array) {
         super(array);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.CALGRAY.getName();
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 1;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1 };
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return initialColor;
-    }
-
-    @Override
-    public float[] toRGB(float[] value)
-    {
-        // see implementation of toRGB in PDCalRGB, and PDFBOX-2971
-        if (isWhitePoint())
-        {
-            float a = value[0];
-            float[] result = map1.get(a);
-            if (result != null)
-            {
-                return result.clone();
-            }
-            float gamma = getGamma();
-            float powAG = (float) Math.pow(a, gamma);
-            result = convXYZtoRGB(powAG, powAG, powAG);
-            map1.put(a, result.clone());
-            return result;
-        }
-        else
-        {
-            return new float[] { value[0], value[0], value[0] };
-        }
     }
 
     /**
@@ -110,8 +80,7 @@ public final class PDCalGray extends PDCIEDictionaryBasedColorSpace
      *
      * @return The gamma value.
      */
-    public float getGamma()
-    {
+    public float getGamma() {
         return dictionary.getFloat(COSName.GAMMA, 1.0f);
     }
 
@@ -120,8 +89,7 @@ public final class PDCalGray extends PDCIEDictionaryBasedColorSpace
      *
      * @param value The new gamma value.
      */
-    public void setGamma(float value)
-    {
+    public void setGamma(float value) {
         dictionary.setItem(COSName.GAMMA, new COSFloat(value));
     }
 }
