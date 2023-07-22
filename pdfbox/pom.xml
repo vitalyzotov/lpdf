@@ -43,6 +43,11 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
+            <artifactId>geom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox-io</artifactId>
             <version>${project.version}</version>
         </dependency>

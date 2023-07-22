@@ -1,12 +1,12 @@
-package org.apache.pdfbox.util;
+package lpdf.harmony.awt;
 
-public class Rect {
+public class Rectangle {
     private int x;
     private int y;
     private int width;
     private int height;
 
-    public Rect(int x, int y, int width, int height) {
+    public Rectangle(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
