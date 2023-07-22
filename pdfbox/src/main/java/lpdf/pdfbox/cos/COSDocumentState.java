@@ -23,8 +23,7 @@ package lpdf.pdfbox.cos;
  * @author Christian Appl
  * @see COSDocument
  */
-public class COSDocumentState
-{
+public class COSDocumentState {
 
     /**
      * The parsing state of the document.
@@ -40,8 +39,7 @@ public class COSDocumentState
      *
      * @param parsing The {@link #parsing} state to set.
      */
-    public void setParsing(boolean parsing)
-    {
+    public void setParsing(boolean parsing) {
         this.parsing = parsing;
     }
 
@@ -50,8 +48,7 @@ public class COSDocumentState
      *
      * @return {@code true}, if the document´s {@link #parsing} is completed and it may be updated.
      */
-    public boolean isAcceptingUpdates()
-    {
+    public boolean isAcceptingUpdates() {
         return !parsing;
     }
 

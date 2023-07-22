@@ -18,8 +18,7 @@ package lpdf.pdfbox.cos;
 
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
-public interface COSUpdateInfo extends COSObjectable
-{
+public interface COSUpdateInfo extends COSObjectable {
 
     /**
      * Get the update state for the COSWriter. This indicates whether an object is to be written
@@ -27,8 +26,7 @@ public interface COSUpdateInfo extends COSObjectable
      *
      * @return the update state.
      */
-    default boolean isNeedToBeUpdated()
-    {
+    default boolean isNeedToBeUpdated() {
         return getUpdateState().isUpdated();
     }
 
@@ -38,22 +36,20 @@ public interface COSUpdateInfo extends COSObjectable
      *
      * @param flag the update state.
      */
-    default void setNeedToBeUpdated(boolean flag)
-    {
+    default void setNeedToBeUpdated(boolean flag) {
         getUpdateState().update(flag);
     }
-    
+
     /**
      * Uses this {@link COSUpdateInfo} as the base object of a new {@link COSIncrement}.
      *
      * @return A {@link COSIncrement} based on this {@link COSUpdateInfo}.
      * @see COSIncrement
      */
-    default COSIncrement toIncrement()
-    {
+    default COSIncrement toIncrement() {
         return getUpdateState().toIncrement();
     }
-    
+
     /**
      * Returns the current {@link COSUpdateState} of this {@link COSUpdateInfo}.
      *
@@ -61,5 +57,5 @@ public interface COSUpdateInfo extends COSObjectable
      * @see COSUpdateState
      */
     COSUpdateState getUpdateState();
-    
+
 }

@@ -24,9 +24,9 @@ import java.util.Objects;
 
 public abstract class Rectangle2D extends RectangularShape {
 
-    public static final int OUT_LEFT   = 1;
-    public static final int OUT_TOP    = 2;
-    public static final int OUT_RIGHT  = 4;
+    public static final int OUT_LEFT = 1;
+    public static final int OUT_TOP = 2;
+    public static final int OUT_RIGHT = 4;
     public static final int OUT_BOTTOM = 8;
 
     public static class Float extends Rectangle2D {
@@ -77,18 +77,18 @@ public abstract class Rectangle2D extends RectangularShape {
 
         @Override
         public void setRect(double x, double y, double width, double height) {
-            this.x = (float)x;
-            this.y = (float)y;
-            this.width = (float)width;
-            this.height = (float)height;
+            this.x = (float) x;
+            this.y = (float) y;
+            this.width = (float) width;
+            this.height = (float) height;
         }
 
         @Override
         public void setRect(Rectangle2D r) {
-            this.x = (float)r.getX();
-            this.y = (float)r.getY();
-            this.width = (float)r.getWidth();
-            this.height = (float)r.getHeight();
+            this.x = (float) r.getX();
+            this.y = (float) r.getY();
+            this.width = (float) r.getWidth();
+            this.height = (float) r.getHeight();
         }
 
         @Override
@@ -97,23 +97,19 @@ public abstract class Rectangle2D extends RectangularShape {
 
             if (width <= 0.0f) {
                 code |= OUT_LEFT | OUT_RIGHT;
-            } else
-                if (px < x) {
-                    code |= OUT_LEFT;
-                } else
-                    if (px > x + width) {
-                        code |= OUT_RIGHT;
-                    }
+            } else if (px < x) {
+                code |= OUT_LEFT;
+            } else if (px > x + width) {
+                code |= OUT_RIGHT;
+            }
 
             if (height <= 0.0f) {
                 code |= OUT_TOP | OUT_BOTTOM;
-            } else
-                if (py < y) {
-                    code |= OUT_TOP;
-                } else
-                    if (py > y + height) {
-                        code |= OUT_BOTTOM;
-                    }
+            } else if (py < y) {
+                code |= OUT_TOP;
+            } else if (py > y + height) {
+                code |= OUT_BOTTOM;
+            }
 
             return code;
         }
@@ -216,23 +212,19 @@ public abstract class Rectangle2D extends RectangularShape {
 
             if (width <= 0.0) {
                 code |= OUT_LEFT | OUT_RIGHT;
-            } else
-                if (px < x) {
-                    code |= OUT_LEFT;
-                } else
-                    if (px > x + width) {
-                        code |= OUT_RIGHT;
-                    }
+            } else if (px < x) {
+                code |= OUT_LEFT;
+            } else if (px > x + width) {
+                code |= OUT_RIGHT;
+            }
 
             if (height <= 0.0) {
                 code |= OUT_TOP | OUT_BOTTOM;
-            } else
-                if (py < y) {
-                    code |= OUT_TOP;
-                } else
-                    if (py > y + height) {
-                        code |= OUT_BOTTOM;
-                    }
+            } else if (py < y) {
+                code |= OUT_TOP;
+            } else if (py > y + height) {
+                code |= OUT_BOTTOM;
+            }
 
             return code;
         }
@@ -302,7 +294,8 @@ public abstract class Rectangle2D extends RectangularShape {
 
         /**
          * Constructs a new Rectangle2D.Iterator for given rectangle and transformation
-         * @param r - the source Rectangle2D object
+         *
+         * @param r  - the source Rectangle2D object
          * @param at - the AffineTransform object to apply rectangle path
          */
         Iterator(Rectangle2D r, AffineTransform at) {
@@ -342,23 +335,23 @@ public abstract class Rectangle2D extends RectangularShape {
                 coords[1] = y;
             } else {
                 type = SEG_LINETO;
-                switch(index) {
-                case 1:
-                    coords[0] = x + width;
-                    coords[1] = y;
-                    break;
-                case 2:
-                    coords[0] = x + width;
-                    coords[1] = y + height;
-                    break;
-                case 3:
-                    coords[0] = x;
-                    coords[1] = y + height;
-                    break;
-                case 4:
-                    coords[0] = x;
-                    coords[1] = y;
-                    break;
+                switch (index) {
+                    case 1:
+                        coords[0] = x + width;
+                        coords[1] = y;
+                        break;
+                    case 2:
+                        coords[0] = x + width;
+                        coords[1] = y + height;
+                        break;
+                    case 3:
+                        coords[0] = x;
+                        coords[1] = y + height;
+                        break;
+                    case 4:
+                        coords[0] = x;
+                        coords[1] = y;
+                        break;
                 }
             }
             if (t != null) {
@@ -376,28 +369,28 @@ public abstract class Rectangle2D extends RectangularShape {
             }
             int type;
             if (index == 0) {
-                coords[0] = (float)x;
-                coords[1] = (float)y;
+                coords[0] = (float) x;
+                coords[1] = (float) y;
                 type = SEG_MOVETO;
             } else {
                 type = SEG_LINETO;
-                switch(index) {
-                case 1:
-                    coords[0] = (float)(x + width);
-                    coords[1] = (float)y;
-                    break;
-                case 2:
-                    coords[0] = (float)(x + width);
-                    coords[1] = (float)(y + height);
-                    break;
-                case 3:
-                    coords[0] = (float)x;
-                    coords[1] = (float)(y + height);
-                    break;
-                case 4:
-                    coords[0] = (float)x;
-                    coords[1] = (float)y;
-                    break;
+                switch (index) {
+                    case 1:
+                        coords[0] = (float) (x + width);
+                        coords[1] = (float) y;
+                        break;
+                    case 2:
+                        coords[0] = (float) (x + width);
+                        coords[1] = (float) (y + height);
+                        break;
+                    case 3:
+                        coords[0] = (float) x;
+                        coords[1] = (float) (y + height);
+                        break;
+                    case 4:
+                        coords[0] = (float) x;
+                        coords[1] = (float) y;
+                        break;
                 }
             }
             if (t != null) {
@@ -429,7 +422,7 @@ public abstract class Rectangle2D extends RectangularShape {
     }
 
     public Rectangle2D getBounds2D() {
-        return (Rectangle2D)clone();
+        return (Rectangle2D) clone();
     }
 
     public boolean intersectsLine(double x1, double y1, double x2, double y2) {
@@ -438,10 +431,10 @@ public abstract class Rectangle2D extends RectangularShape {
         double rx2 = rx1 + getWidth();
         double ry2 = ry1 + getHeight();
         return
-            (rx1 <= x1 && x1 <= rx2 && ry1 <= y1 && y1 <= ry2) ||
-            (rx1 <= x2 && x2 <= rx2 && ry1 <= y2 && y2 <= ry2) ||
-            Line2D.linesIntersect(rx1, ry1, rx2, ry2, x1, y1, x2, y2) ||
-            Line2D.linesIntersect(rx2, ry1, rx1, ry2, x1, y1, x2, y2);
+                (rx1 <= x1 && x1 <= rx2 && ry1 <= y1 && y1 <= ry2) ||
+                        (rx1 <= x2 && x2 <= rx2 && ry1 <= y2 && y2 <= ry2) ||
+                        Line2D.linesIntersect(rx1, ry1, rx2, ry2, x1, y1, x2, y2) ||
+                        Line2D.linesIntersect(rx2, ry1, rx1, ry2, x1, y1, x2, y2);
     }
 
     public boolean intersectsLine(Line2D l) {
@@ -463,8 +456,8 @@ public abstract class Rectangle2D extends RectangularShape {
         double y2 = y1 + getHeight();
 
         return
-            x1 <= x && x < x2 &&
-            y1 <= y && y < y2;
+                x1 <= x && x < x2 &&
+                        y1 <= y && y < y2;
     }
 
     public boolean intersects(double x, double y, double width, double height) {
@@ -478,8 +471,8 @@ public abstract class Rectangle2D extends RectangularShape {
         double y2 = y1 + getHeight();
 
         return
-            x + width > x1 && x < x2 &&
-            y + height > y1 && y < y2;
+                x + width > x1 && x < x2 &&
+                        y + height > y1 && y < y2;
     }
 
     public boolean contains(double x, double y, double width, double height) {
@@ -493,8 +486,8 @@ public abstract class Rectangle2D extends RectangularShape {
         double y2 = y1 + getHeight();
 
         return
-            x1 <= x && x + width <= x2 &&
-            y1 <= y && y + height <= y2;
+                x1 <= x && x + width <= x2 &&
+                        y1 <= y && y + height <= y2;
     }
 
     public static void intersect(Rectangle2D src1, Rectangle2D src2, Rectangle2D dst) {
@@ -549,12 +542,12 @@ public abstract class Rectangle2D extends RectangularShape {
             return true;
         }
         if (obj instanceof Rectangle2D) {
-            Rectangle2D r = (Rectangle2D)obj;
+            Rectangle2D r = (Rectangle2D) obj;
             return
-                getX() == r.getX() &&
-                getY() == r.getY() &&
-                getWidth() == r.getWidth() &&
-                getHeight() == r.getHeight();
+                    getX() == r.getX() &&
+                            getY() == r.getY() &&
+                            getWidth() == r.getWidth() &&
+                            getHeight() == r.getHeight();
         }
         return false;
     }

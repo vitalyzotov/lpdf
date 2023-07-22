@@ -31,44 +31,42 @@ import java.util.Map;
  * @author Benoit Guillon
  * @author John Hewson
  */
-public final class SecurityHandlerFactory
-{
-    /** Singleton instance */
+public final class SecurityHandlerFactory {
+    /**
+     * Singleton instance
+     */
     public static final SecurityHandlerFactory INSTANCE = new SecurityHandlerFactory();
 
     private final Map<String, Class<? extends SecurityHandler>> nameToHandler = new HashMap<>();
 
     private final Map<Class<? extends ProtectionPolicy>,
-                      Class<? extends SecurityHandler>> policyToHandler = new HashMap<>();
+            Class<? extends SecurityHandler>> policyToHandler = new HashMap<>();
 
-    private SecurityHandlerFactory()
-    {
+    private SecurityHandlerFactory() {
         registerHandler(StandardSecurityHandler.FILTER,
-                        StandardSecurityHandler.class,
-                        StandardProtectionPolicy.class);
+                StandardSecurityHandler.class,
+                StandardProtectionPolicy.class);
 
         registerHandler(PublicKeySecurityHandler.FILTER,
-                        PublicKeySecurityHandler.class,
-                        PublicKeyProtectionPolicy.class);
+                PublicKeySecurityHandler.class,
+                PublicKeyProtectionPolicy.class);
     }
 
     /**
      * Registers a security handler.
-     *
+     * <p>
      * If the security handler was already registered an exception is thrown.
      * If another handler was previously registered for the same filter name or
      * for the same policy name, an exception is thrown
      *
-     * @param name the name of the filter
-     * @param securityHandler security handler class to register
+     * @param name             the name of the filter
+     * @param securityHandler  security handler class to register
      * @param protectionPolicy protection policy class to register
      */
     public void registerHandler(String name,
                                 Class<? extends SecurityHandler> securityHandler,
-                                Class<? extends ProtectionPolicy> protectionPolicy)
-    {
-        if (nameToHandler.containsKey(name))
-        {
+                                Class<? extends ProtectionPolicy> protectionPolicy) {
+        if (nameToHandler.containsKey(name)) {
             throw new IllegalStateException("The security handler name is already registered");
         }
 
@@ -78,37 +76,35 @@ public final class SecurityHandlerFactory
 
     /**
      * Returns a new security handler for the given protection policy, or null none is available.
+     *
      * @param policy the protection policy for which to create a security handler
      * @return a new SecurityHandler instance, or null if none is available
      */
-    public SecurityHandler<ProtectionPolicy> newSecurityHandlerForPolicy(ProtectionPolicy policy)
-    {
+    public SecurityHandler<ProtectionPolicy> newSecurityHandlerForPolicy(ProtectionPolicy policy) {
         Class<? extends SecurityHandler> handlerClass = policyToHandler.get(policy.getClass());
-        if (handlerClass == null)
-        {
+        if (handlerClass == null) {
             return null;
         }
 
-        Class<?>[] argsClasses = { policy.getClass() };
-        Object[] args = { policy };
+        Class<?>[] argsClasses = {policy.getClass()};
+        Object[] args = {policy};
         return newSecurityHandler(handlerClass, argsClasses, args);
     }
 
     /**
      * Returns a new security handler for the given Filter name, or null none is available.
+     *
      * @param name the Filter name from the PDF encryption dictionary
      * @return a new SecurityHandler instance, or null if none is available
      */
-    public SecurityHandler<ProtectionPolicy> newSecurityHandlerForFilter(String name)
-    {
+    public SecurityHandler<ProtectionPolicy> newSecurityHandlerForFilter(String name) {
         Class<? extends SecurityHandler> handlerClass = nameToHandler.get(name);
-        if (handlerClass == null)
-        {
+        if (handlerClass == null) {
             return null;
         }
 
-        Class<?>[] argsClasses = { };
-        Object[] args = { };
+        Class<?>[] argsClasses = {};
+        Object[] args = {};
         return newSecurityHandler(handlerClass, argsClasses, args);
     }
 
@@ -120,17 +116,13 @@ public final class SecurityHandlerFactory
      * @return a new SecurityHandler instance, or null if none is available.
      */
     private SecurityHandler<ProtectionPolicy> newSecurityHandler(Class<? extends SecurityHandler> handlerClass,
-            Class<?>[] argsClasses, Object[] args)
-    {
-        try
-        {
+                                                                 Class<?>[] argsClasses, Object[] args) {
+        try {
             Constructor<? extends SecurityHandler> ctor =
                     handlerClass.getDeclaredConstructor(argsClasses);
             return ctor.newInstance(args);
-        }
-        catch(NoSuchMethodException | IllegalAccessException | InstantiationException |
-                InvocationTargetException e)
-        {
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
+                 InvocationTargetException e) {
             // should not happen in normal operation
             throw new RuntimeException(e);
         }

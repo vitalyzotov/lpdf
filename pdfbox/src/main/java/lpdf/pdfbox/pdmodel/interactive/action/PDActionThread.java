@@ -19,19 +19,17 @@ package lpdf.pdfbox.pdmodel.interactive.action;
 
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
 
 import java.io.IOException;
-import lpdf.pdfbox.cos.COSName;
 
 /**
- *
  * This represents a thread action that can be executed in a PDF document.
  *
  * @author Evgeniy Muravitskiy
  */
-public class PDActionThread extends PDAction
-{
+public class PDActionThread extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -41,8 +39,7 @@ public class PDActionThread extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionThread()
-    {
+    public PDActionThread() {
         setSubType(SUB_TYPE);
     }
 
@@ -51,8 +48,7 @@ public class PDActionThread extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionThread(COSDictionary a)
-    {
+    public PDActionThread(COSDictionary a) {
         super(a);
     }
 
@@ -60,16 +56,14 @@ public class PDActionThread extends PDAction
      * @return The D entry of the specific thread action dictionary.
      */
     // Dictionary, Integer or String.
-    public COSBase getD()
-    {
+    public COSBase getD() {
         return action.getDictionaryObject(COSName.D);
     }
 
     /**
      * @param d The destination.
      */
-    public void setD(COSBase d)
-    {
+    public void setD(COSBase d) {
         action.setItem(COSName.D, d);
     }
 
@@ -79,8 +73,7 @@ public class PDActionThread extends PDAction
      * @return The F entry of the specific thread action dictionary.
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
+    public PDFileSpecification getFile() throws IOException {
         return PDFileSpecification.createFS(action.getDictionaryObject(COSName.F));
     }
 
@@ -89,8 +82,7 @@ public class PDActionThread extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile(PDFileSpecification fs)
-    {
+    public void setFile(PDFileSpecification fs) {
         action.setItem(COSName.F, fs);
     }
 
@@ -98,16 +90,14 @@ public class PDActionThread extends PDAction
      * @return The B entry of the specific thread action dictionary.
      */
     // Dictionary or Integer.
-    public COSBase getB()
-    {
+    public COSBase getB() {
         return action.getDictionaryObject(COSName.B);
     }
 
     /**
      * @param b The destination.
      */
-    public void setB(COSBase b)
-    {
+    public void setB(COSBase b) {
         action.setItem(COSName.B, b);
     }
 

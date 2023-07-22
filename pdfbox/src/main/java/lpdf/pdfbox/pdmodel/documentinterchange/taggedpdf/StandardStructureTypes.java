@@ -16,21 +16,21 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.taggedpdf;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The standard structure types.
  *
  * @author Johannes Koch
  */
-public class StandardStructureTypes
-{
+public class StandardStructureTypes {
 
     /**
      * Log instance.
@@ -294,27 +294,20 @@ public class StandardStructureTypes
      */
     public static final List<String> types = new ArrayList<>();
 
-    static
-    {
+    static {
         Field[] fields = StandardStructureTypes.class.getFields();
-        for (Field field : fields)
-        {
-            if (Modifier.isFinal(field.getModifiers()))
-            {
-                try
-                {
+        for (Field field : fields) {
+            if (Modifier.isFinal(field.getModifiers())) {
+                try {
                     types.add(field.get(null).toString());
-                }
-                catch (IllegalArgumentException | IllegalAccessException e)
-                {
-                    LOG.error(e.getMessage(),e);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
         Collections.sort(types);
     }
 
-    private StandardStructureTypes()
-    {
+    private StandardStructureTypes() {
     }
 }

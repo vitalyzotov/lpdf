@@ -24,8 +24,7 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author Ben Litchfield
  */
-public class StandardEncoding extends Encoding
-{
+public class StandardEncoding extends Encoding {
     /**
      * Table of octal character codes and their corresponding names.
      */
@@ -191,23 +190,19 @@ public class StandardEncoding extends Encoding
     /**
      * Constructor.
      */
-    private StandardEncoding()
-    {
-        for (Object[] encodingEntry : STANDARD_ENCODING_TABLE)
-        {
+    private StandardEncoding() {
+        for (Object[] encodingEntry : STANDARD_ENCODING_TABLE) {
             add((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return COSName.STANDARD_ENCODING;
     }
 
     @Override
-    public String getEncodingName()
-    {
+    public String getEncodingName() {
         return "StandardEncoding";
     }
 }

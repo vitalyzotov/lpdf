@@ -15,25 +15,21 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.pdmodel.graphics.pattern.PDTilingPattern;
 
+import java.io.IOException;
+
 /**
- *
  * @author Tilman Hausherr
  */
-public final class PDPatternContentStream extends PDAbstractContentStream
-{
+public final class PDPatternContentStream extends PDAbstractContentStream {
     /**
      * Create a new tiling pattern content stream.
      *
      * @param pattern The tiling pattern stream to write to.
-     * 
      * @throws IOException If there is an error writing to the form contents.
      */
-    public PDPatternContentStream(PDTilingPattern pattern) throws IOException
-    {
+    public PDPatternContentStream(PDTilingPattern pattern) throws IOException {
         super(null, pattern.getContentStream().createOutputStream(), pattern.getResources());
     }
 }

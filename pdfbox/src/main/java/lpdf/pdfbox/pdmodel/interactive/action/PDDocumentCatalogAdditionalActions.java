@@ -27,15 +27,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDDocumentCatalogAdditionalActions implements COSObjectable
-{
+public class PDDocumentCatalogAdditionalActions implements COSObjectable {
     private final COSDictionary actions;
 
     /**
      * Default constructor.
      */
-    public PDDocumentCatalogAdditionalActions()
-    {
+    public PDDocumentCatalogAdditionalActions() {
         actions = new COSDictionary();
     }
 
@@ -44,8 +42,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param a The action dictionary.
      */
-    public PDDocumentCatalogAdditionalActions( COSDictionary a )
-    {
+    public PDDocumentCatalogAdditionalActions(COSDictionary a) {
         actions = a;
     }
 
@@ -55,8 +52,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return actions;
     }
 
@@ -67,8 +63,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @return The WC entry of document catalog's additional actions dictionary.
      */
-    public PDAction getWC()
-    {
+    public PDAction getWC() {
         COSDictionary wc = actions.getCOSDictionary(COSName.WC);
         return wc != null ? PDActionFactory.createAction(wc) : null;
     }
@@ -80,8 +75,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param wc The action to be performed.
      */
-    public void setWC( PDAction wc )
-    {
+    public void setWC(PDAction wc) {
         actions.setItem(COSName.WC, wc);
     }
 
@@ -92,8 +86,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @return The WS entry of document catalog's additional actions dictionary.
      */
-    public PDAction getWS()
-    {
+    public PDAction getWS() {
         COSDictionary ws = actions.getCOSDictionary(COSName.WS);
         return ws != null ? PDActionFactory.createAction(ws) : null;
     }
@@ -105,8 +98,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param ws The action to be performed.
      */
-    public void setWS( PDAction ws )
-    {
+    public void setWS(PDAction ws) {
         actions.setItem(COSName.WS, ws);
     }
 
@@ -117,8 +109,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @return The DS entry of document catalog's additional actions dictionary.
      */
-    public PDAction getDS()
-    {
+    public PDAction getDS() {
         COSDictionary ds = actions.getCOSDictionary(COSName.DS);
         return ds != null ? PDActionFactory.createAction(ds) : null;
     }
@@ -130,8 +121,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param ds The action to be performed.
      */
-    public void setDS( PDAction ds )
-    {
+    public void setDS(PDAction ds) {
         actions.setItem(COSName.DS, ds);
     }
 
@@ -142,8 +132,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @return The WP entry of document catalog's additional actions dictionary.
      */
-    public PDAction getWP()
-    {
+    public PDAction getWP() {
         COSDictionary wp = actions.getCOSDictionary(COSName.WP);
         return wp != null ? PDActionFactory.createAction(wp) : null;
     }
@@ -155,8 +144,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param wp The action to be performed.
      */
-    public void setWP( PDAction wp )
-    {
+    public void setWP(PDAction wp) {
         actions.setItem(COSName.WP, wp);
     }
 
@@ -167,8 +155,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @return The DP entry of document catalog's additional actions dictionary.
      */
-    public PDAction getDP()
-    {
+    public PDAction getDP() {
         COSDictionary dp = actions.getCOSDictionary(COSName.DP);
         return dp != null ? PDActionFactory.createAction(dp) : null;
     }
@@ -180,8 +167,7 @@ public class PDDocumentCatalogAdditionalActions implements COSObjectable
      *
      * @param dp The action to be performed.
      */
-    public void setDP( PDAction dp )
-    {
+    public void setDP(PDAction dp) {
         actions.setItem(COSName.DP, dp);
     }
 }

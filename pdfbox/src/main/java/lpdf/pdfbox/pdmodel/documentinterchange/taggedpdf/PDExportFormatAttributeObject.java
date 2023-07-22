@@ -23,35 +23,34 @@ import lpdf.pdfbox.cos.COSDictionary;
  *
  * @author Johannes Koch
  */
-public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
-{
+public class PDExportFormatAttributeObject extends PDLayoutAttributeObject {
 
     /**
-     *  standard attribute owner: XML-1.00
+     * standard attribute owner: XML-1.00
      */
     public static final String OWNER_XML_1_00 = "XML-1.00";
     /**
-     *  standard attribute owner: HTML-3.2
+     * standard attribute owner: HTML-3.2
      */
     public static final String OWNER_HTML_3_20 = "HTML-3.2";
     /**
-     *  standard attribute owner: HTML-4.01
+     * standard attribute owner: HTML-4.01
      */
     public static final String OWNER_HTML_4_01 = "HTML-4.01";
     /**
-     *  standard attribute owner: OEB-1.00
+     * standard attribute owner: OEB-1.00
      */
     public static final String OWNER_OEB_1_00 = "OEB-1.00";
     /**
-     *  standard attribute owner: RTF-1.05
+     * standard attribute owner: RTF-1.05
      */
     public static final String OWNER_RTF_1_05 = "RTF-1.05";
     /**
-     *  standard attribute owner: CSS-1.00
+     * standard attribute owner: CSS-1.00
      */
     public static final String OWNER_CSS_1_00 = "CSS-1.00";
     /**
-     *  standard attribute owner: CSS-2.00
+     * standard attribute owner: CSS-2.00
      */
     public static final String OWNER_CSS_2_00 = "CSS-2.00";
 
@@ -61,8 +60,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param owner the owner of the attributes
      */
-    public PDExportFormatAttributeObject(String owner)
-    {
+    public PDExportFormatAttributeObject(String owner) {
         this.setOwner(owner);
     }
 
@@ -71,8 +69,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param dictionary the dictionary
      */
-    public PDExportFormatAttributeObject(COSDictionary dictionary)
-    {
+    public PDExportFormatAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -83,10 +80,9 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the list numbering
      */
-    public String getListNumbering()
-    {
+    public String getListNumbering() {
         return this.getName(PDListAttributeObject.LIST_NUMBERING,
-            PDListAttributeObject.LIST_NUMBERING_NONE);
+                PDListAttributeObject.LIST_NUMBERING_NONE);
     }
 
     /**
@@ -106,8 +102,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param listNumbering the list numbering
      */
-    public void setListNumbering(String listNumbering)
-    {
+    public void setListNumbering(String listNumbering) {
         this.setName(PDListAttributeObject.LIST_NUMBERING, listNumbering);
     }
 
@@ -117,8 +112,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the row span
      */
-    public int getRowSpan()
-    {
+    public int getRowSpan() {
         return this.getInteger(PDTableAttributeObject.ROW_SPAN, 1);
     }
 
@@ -128,8 +122,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param rowSpan the row span
      */
-    public void setRowSpan(int rowSpan)
-    {
+    public void setRowSpan(int rowSpan) {
         this.setInteger(PDTableAttributeObject.ROW_SPAN, rowSpan);
     }
 
@@ -139,8 +132,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the column span
      */
-    public int getColSpan()
-    {
+    public int getColSpan() {
         return this.getInteger(PDTableAttributeObject.COL_SPAN, 1);
     }
 
@@ -150,8 +142,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param colSpan the column span
      */
-    public void setColSpan(int colSpan)
-    {
+    public void setColSpan(int colSpan) {
         this.setInteger(PDTableAttributeObject.COL_SPAN, colSpan);
     }
 
@@ -163,8 +154,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the headers.
      */
-    public String[] getHeaders()
-    {
+    public String[] getHeaders() {
         return this.getArrayOfString(PDTableAttributeObject.HEADERS);
     }
 
@@ -176,8 +166,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param headers the headers
      */
-    public void setHeaders(String[] headers)
-    {
+    public void setHeaders(String[] headers) {
         this.setArrayOfString(PDTableAttributeObject.HEADERS, headers);
     }
 
@@ -188,8 +177,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.getName(PDTableAttributeObject.SCOPE);
     }
 
@@ -206,8 +194,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param scope the scope
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.setName(PDTableAttributeObject.SCOPE, scope);
     }
 
@@ -216,8 +203,7 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @return the summary
      */
-    public String getSummary()
-    {
+    public String getSummary() {
         return this.getString(PDTableAttributeObject.SUMMARY);
     }
 
@@ -226,38 +212,30 @@ public class PDExportFormatAttributeObject extends PDLayoutAttributeObject
      *
      * @param summary the summary
      */
-    public void setSummary(String summary)
-    {
+    public void setSummary(String summary) {
         this.setString(PDTableAttributeObject.SUMMARY, summary);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder().append(super.toString());
-        if (this.isSpecified(PDListAttributeObject.LIST_NUMBERING))
-        {
+        if (this.isSpecified(PDListAttributeObject.LIST_NUMBERING)) {
             sb.append(", ListNumbering=").append(this.getListNumbering());
         }
-        if (this.isSpecified(PDTableAttributeObject.ROW_SPAN))
-        {
+        if (this.isSpecified(PDTableAttributeObject.ROW_SPAN)) {
             sb.append(", RowSpan=").append(this.getRowSpan());
         }
-        if (this.isSpecified(PDTableAttributeObject.COL_SPAN))
-        {
+        if (this.isSpecified(PDTableAttributeObject.COL_SPAN)) {
             sb.append(", ColSpan=").append(this.getColSpan());
         }
-        if (this.isSpecified(PDTableAttributeObject.HEADERS))
-        {
+        if (this.isSpecified(PDTableAttributeObject.HEADERS)) {
             sb.append(", Headers=").append(arrayToString(this.getHeaders()));
         }
-        if (this.isSpecified(PDTableAttributeObject.SCOPE))
-        {
+        if (this.isSpecified(PDTableAttributeObject.SCOPE)) {
             sb.append(", Scope=").append(this.getScope());
         }
-        if (this.isSpecified(PDTableAttributeObject.SUMMARY))
-        {
+        if (this.isSpecified(PDTableAttributeObject.SUMMARY)) {
             sb.append(", Summary=").append(this.getSummary());
         }
         return sb.toString();

@@ -16,56 +16,50 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.pattern;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import lpdf.pdfbox.pdmodel.graphics.shading.PDShading;
+import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+
+import java.io.IOException;
 
 /**
  * A shading pattern dictionary.
- *
  */
-public class PDShadingPattern extends PDAbstractPattern
-{
+public class PDShadingPattern extends PDAbstractPattern {
     private PDExtendedGraphicsState extendedGraphicsState;
     private PDShading shading;
 
     /**
      * Creates a new shading pattern.
      */
-    public PDShadingPattern()
-    {
+    public PDShadingPattern() {
         getCOSObject().setInt(COSName.PATTERN_TYPE, PDAbstractPattern.TYPE_SHADING_PATTERN);
     }
 
     /**
      * Creates a new shading pattern from the given COS dictionary.
+     *
      * @param resourceDictionary The COSDictionary for this pattern resource.
      */
-    public PDShadingPattern(COSDictionary resourceDictionary)
-    {
+    public PDShadingPattern(COSDictionary resourceDictionary) {
         super(resourceDictionary);
     }
 
     @Override
-    public int getPatternType()
-    {
+    public int getPatternType() {
         return PDAbstractPattern.TYPE_SHADING_PATTERN;
     }
 
     /**
      * This will get the external graphics state for this pattern.
+     *
      * @return The extended graphics state for this pattern.
      */
-    public PDExtendedGraphicsState getExtendedGraphicsState()
-    {
-        if (extendedGraphicsState == null)
-        {
+    public PDExtendedGraphicsState getExtendedGraphicsState() {
+        if (extendedGraphicsState == null) {
             COSDictionary base = getCOSObject().getCOSDictionary(COSName.EXT_G_STATE);
-            if (base != null)
-            {
+            if (base != null) {
                 extendedGraphicsState = new PDExtendedGraphicsState(base);
             }
         }
@@ -74,26 +68,24 @@ public class PDShadingPattern extends PDAbstractPattern
 
     /**
      * This will set the external graphics state for this pattern.
+     *
      * @param extendedGraphicsState The new extended graphics state for this pattern.
      */
-    public void setExtendedGraphicsState(PDExtendedGraphicsState extendedGraphicsState)
-    {
+    public void setExtendedGraphicsState(PDExtendedGraphicsState extendedGraphicsState) {
         this.extendedGraphicsState = extendedGraphicsState;
         getCOSObject().setItem(COSName.EXT_G_STATE, extendedGraphicsState);
     }
 
     /**
      * This will get the shading resources for this pattern.
+     *
      * @return The shading resources for this pattern.
      * @throws IOException if something went wrong
      */
-    public PDShading getShading() throws IOException
-    {
-        if (shading == null)
-        {
+    public PDShading getShading() throws IOException {
+        if (shading == null) {
             COSDictionary base = getCOSObject().getCOSDictionary(COSName.SHADING);
-            if (base != null)
-            {
+            if (base != null) {
                 shading = PDShading.create(base);
             }
         }
@@ -102,10 +94,10 @@ public class PDShadingPattern extends PDAbstractPattern
 
     /**
      * This will set the shading resources for this pattern.
+     *
      * @param shadingResources The new shading resources for this pattern.
      */
-    public void setShading( PDShading shadingResources )
-    {
+    public void setShading(PDShading shadingResources) {
         shading = shadingResources;
         getCOSObject().setItem(COSName.SHADING, shadingResources);
     }

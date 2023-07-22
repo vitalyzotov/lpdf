@@ -17,12 +17,6 @@
 
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -32,37 +26,36 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.pdmodel.font.PDFont;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Tf: Set text font and size.
  *
  * @author Laurent Huault
  */
-public class SetFontAndSize extends OperatorProcessor
-{
+public class SetFontAndSize extends OperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(SetFontAndSize.class);
 
-    public SetFontAndSize(PDFStreamEngine context)
-    {
+    public SetFontAndSize(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.size() < 2)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.size() < 2) {
             throw new MissingOperandException(operator, arguments);
         }
 
         COSBase base0 = arguments.get(0);
         COSBase base1 = arguments.get(1);
-        if (!(base0 instanceof COSName))
-        {
+        if (!(base0 instanceof COSName)) {
             return;
         }
-        if (!(base1 instanceof COSNumber))
-        {
+        if (!(base1 instanceof COSNumber)) {
             return;
         }
         COSName fontName = (COSName) base0;
@@ -70,16 +63,14 @@ public class SetFontAndSize extends OperatorProcessor
         PDFStreamEngine context = getContext();
         context.getGraphicsState().getTextState().setFontSize(fontSize);
         PDFont font = context.getResources().getFont(fontName);
-        if (font == null)
-        {
+        if (font == null) {
             LOG.warn("font '" + fontName.getName() + "' not found in resources");
         }
         context.getGraphicsState().getTextState().setFont(font);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_FONT_AND_SIZE;
     }
 }

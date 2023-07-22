@@ -20,13 +20,11 @@ package lpdf.fontbox.ttf;
 
 /**
  * Specifies access to glyph description classes, simple and composite.
- *
+ * <p>
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics.
  * see http://xmlgraphics.apache.org/batik/ for further details.
- *
  */
-public interface GlyphDescription
-{
+public interface GlyphDescription {
     /**
      * Returns the index of the ending point of the given contour.
      *
@@ -48,6 +46,7 @@ public interface GlyphDescription
 
     /**
      * Returns the x coordinate of the given point.
+     *
      * @param i the given point
      * @return the x coordinate value for the given point
      */
@@ -55,6 +54,7 @@ public interface GlyphDescription
 
     /**
      * Returns the y coordinate of the given point.
+     *
      * @param i the given point
      * @return the y coordinate value for the given point
      */
@@ -62,18 +62,21 @@ public interface GlyphDescription
 
     /**
      * Returns whether this point is a composite or not.
+     *
      * @return true if this point is a composite
      */
     boolean isComposite();
 
     /**
      * Returns the number of points.
+     *
      * @return the number of points
      */
     int getPointCount();
 
     /**
      * Returns the number of contours.
+     *
      * @return the number of contours
      */
     int getContourCount();

@@ -16,10 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.state;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -29,41 +25,34 @@ import lpdf.pdfbox.pdmodel.common.function.PDFunction;
 import lpdf.pdfbox.pdmodel.graphics.PDXObject;
 import lpdf.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Soft mask.
  *
  * @author Kühn &amp; Weyh Software GmbH
  */
-public final class PDSoftMask implements COSObjectable
-{
+public final class PDSoftMask implements COSObjectable {
     /**
      * Creates a new soft mask.
      *
      * @param dictionary SMask
-     * 
      * @return the newly created instance of PDSoftMask
      */
-    public static PDSoftMask create(COSBase dictionary)
-    {
-        if (dictionary instanceof COSName)
-        {
-            if (COSName.NONE.equals(dictionary))
-            {
+    public static PDSoftMask create(COSBase dictionary) {
+        if (dictionary instanceof COSName) {
+            if (COSName.NONE.equals(dictionary)) {
                 return null;
-            }
-            else
-            {
+            } else {
                 LOG.warn("Invalid SMask " + dictionary);
                 return null;
             }
-        }
-        else if (dictionary instanceof COSDictionary)
-        {
+        } else if (dictionary instanceof COSDictionary) {
             return new PDSoftMask((COSDictionary) dictionary);
-        }
-        else
-        {
+        } else {
             LOG.warn("Invalid SMask " + dictionary);
             return null;
         }
@@ -87,26 +76,22 @@ public final class PDSoftMask implements COSObjectable
      *
      * @param dictionary The soft mask dictionary.
      */
-    public PDSoftMask(COSDictionary dictionary)
-    {
+    public PDSoftMask(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
     /**
      * Returns the subtype of the soft mask (Alpha, Luminosity) - S entry
-     * 
+     *
      * @return the subtype of the soft mask
      */
-    public COSName getSubType()
-    {
-        if (subType == null)
-        {
+    public COSName getSubType() {
+        if (subType == null) {
             subType = getCOSObject().getCOSName(COSName.S);
         }
         return subType;
@@ -114,20 +99,16 @@ public final class PDSoftMask implements COSObjectable
 
     /**
      * Returns the G entry of the soft mask object
-     * 
+     *
      * @return form containing the transparency group
      * @throws IOException if the group could not be read
      */
-    public PDTransparencyGroup getGroup() throws IOException
-    {
-        if (group == null)
-        {
+    public PDTransparencyGroup getGroup() throws IOException {
+        if (group == null) {
             COSBase cosGroup = getCOSObject().getDictionaryObject(COSName.G);
-            if (cosGroup != null)
-            {
+            if (cosGroup != null) {
                 PDXObject x = PDXObject.createXObject(cosGroup, null);
-                if (x instanceof PDTransparencyGroup)
-                {
+                if (x instanceof PDTransparencyGroup) {
                     group = (PDTransparencyGroup) x;
                 }
             }
@@ -137,13 +118,11 @@ public final class PDSoftMask implements COSObjectable
 
     /**
      * Returns the backdrop color.
-     * 
+     *
      * @return the backdrop color
      */
-    public COSArray getBackdropColor()
-    {
-        if (backdropColor == null)
-        {
+    public COSArray getBackdropColor() {
+        if (backdropColor == null) {
             backdropColor = (COSArray) getCOSObject().getDictionaryObject(COSName.BC);
         }
         return backdropColor;
@@ -151,17 +130,14 @@ public final class PDSoftMask implements COSObjectable
 
     /**
      * Returns the transfer function.
-     * 
+     *
      * @return the transfer function
      * @throws IOException If we are unable to create the PDFunction object.
      */
-    public PDFunction getTransferFunction() throws IOException
-    {
-        if (transferFunction == null)
-        {
+    public PDFunction getTransferFunction() throws IOException {
+        if (transferFunction == null) {
             COSBase cosTF = getCOSObject().getDictionaryObject(COSName.TR);
-            if (cosTF != null)
-            {
+            if (cosTF != null) {
                 transferFunction = PDFunction.create(cosTF);
             }
         }
@@ -173,8 +149,7 @@ public final class PDSoftMask implements COSObjectable
      *
      * @param ctm the transformation matrix
      */
-    void setInitialTransformationMatrix(Matrix ctm)
-    {
+    void setInitialTransformationMatrix(Matrix ctm) {
         this.ctm = ctm;
     }
 
@@ -183,8 +158,7 @@ public final class PDSoftMask implements COSObjectable
      *
      * @return the transformation matrix
      */
-    public Matrix getInitialTransformationMatrix()
-    {
+    public Matrix getInitialTransformationMatrix() {
         return ctm;
     }
 }

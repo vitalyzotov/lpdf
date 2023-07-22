@@ -21,8 +21,7 @@ package lpdf.fontbox.util.autodetect;
  * Unix font directory finder. This class is based on a class provided by Apache FOP. see
  * org.apache.fop.fonts.autodetect.UnixFontDirFinder
  */
-public class UnixFontDirFinder extends NativeFontDirFinder
-{
+public class UnixFontDirFinder extends NativeFontDirFinder {
 
     /**
      * Some guesses at possible unix font directory locations.
@@ -30,9 +29,8 @@ public class UnixFontDirFinder extends NativeFontDirFinder
      * @return a list of possible font locations
      */
     @Override
-    protected String[] getSearchableDirectories()
-    {
-        return new String[] { System.getProperty("user.home") + "/.fonts", // user
+    protected String[] getSearchableDirectories() {
+        return new String[]{System.getProperty("user.home") + "/.fonts", // user
                 "/usr/local/fonts", // local
                 "/usr/local/share/fonts", // local shared
                 "/usr/share/fonts", // system

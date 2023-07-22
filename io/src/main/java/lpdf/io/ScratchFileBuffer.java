@@ -23,8 +23,7 @@ import java.io.IOException;
  * Implementation of {@link RandomAccess} as sequence of multiple fixed size pages handled
  * by {@link ScratchFile}.
  */
-class ScratchFileBuffer implements RandomAccess
-{
+class ScratchFileBuffer implements RandomAccess {
     private final int pageSize;
     /**
      * The underlying page handler.
@@ -55,20 +54,22 @@ class ScratchFileBuffer implements RandomAccess
      */
     private boolean currentPageContentChanged = false;
 
-    /** contains ordered list of pages with the index the page is known by page handler ({@link ScratchFile}) */
+    /**
+     * contains ordered list of pages with the index the page is known by page handler ({@link ScratchFile})
+     */
     private int[] pageIndexes = new int[16];
-    /** number of pages held by this buffer */
+    /**
+     * number of pages held by this buffer
+     */
     private int pageCount = 0;
 
     /**
      * Creates a new buffer using pages handled by provided {@link ScratchFile}.
      *
      * @param pageHandler The {@link ScratchFile} managing the pages to be used by this buffer.
-     *
      * @throws IOException If getting first page failed.
      */
-    ScratchFileBuffer(ScratchFile pageHandler) throws IOException
-    {
+    ScratchFileBuffer(ScratchFile pageHandler) throws IOException {
         pageHandler.checkClosed();
 
         this.pageHandler = pageHandler;
@@ -84,10 +85,8 @@ class ScratchFileBuffer implements RandomAccess
      *
      * @throws IOException If either this buffer, or the underlying {@link ScratchFile} have been closed.
      */
-    private void checkClosed() throws IOException
-    {
-        if (pageHandler == null)
-        {
+    private void checkClosed() throws IOException {
+        if (pageHandler == null) {
             throw new IOException("Buffer already closed");
         }
         pageHandler.checkClosed();
@@ -98,16 +97,12 @@ class ScratchFileBuffer implements RandomAccess
      *
      * @throws IOException if requesting a new page fails
      */
-    private void addPage() throws IOException
-    {
-        if (pageCount+1 >= pageIndexes.length)
-        {
-            int newSize = pageIndexes.length*2;
+    private void addPage() throws IOException {
+        if (pageCount + 1 >= pageIndexes.length) {
+            int newSize = pageIndexes.length * 2;
             // check overflow
-            if (newSize<pageIndexes.length)
-            {
-                if (pageIndexes.length == Integer.MAX_VALUE)
-                {
+            if (newSize < pageIndexes.length) {
+                if (pageIndexes.length == Integer.MAX_VALUE) {
                     throw new IOException("Maximum buffer size reached.");
                 }
                 newSize = Integer.MAX_VALUE;
@@ -121,7 +116,7 @@ class ScratchFileBuffer implements RandomAccess
 
         pageIndexes[pageCount] = newPageIdx;
         currentPagePositionInPageIndexes = pageCount;
-        currentPageOffset = ((long)pageCount) * pageSize;
+        currentPageOffset = ((long) pageCount) * pageSize;
         pageCount++;
         currentPage = new byte[pageSize];
         positionInPage = 0;
@@ -131,8 +126,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public long length() throws IOException
-    {
+    public long length() throws IOException {
         return size;
     }
 
@@ -146,39 +140,29 @@ class ScratchFileBuffer implements RandomAccess
      *
      * @param addNewPageIfNeeded if <code>true</code> it is allowed to add a new page in case
      *                           we are currently at end of last buffer page
-     *
      * @return <code>true</code> if we were successful positioning pointer before end of page;
-     *         we might return <code>false</code> if it is not allowed to add another page
-     *         and current pointer points at end of last page
-     *
+     * we might return <code>false</code> if it is not allowed to add another page
+     * and current pointer points at end of last page
      * @throws IOException
      */
-    private boolean ensureAvailableBytesInPage(boolean addNewPageIfNeeded) throws IOException
-    {
-        if (positionInPage >= pageSize)
-        {
+    private boolean ensureAvailableBytesInPage(boolean addNewPageIfNeeded) throws IOException {
+        if (positionInPage >= pageSize) {
             // page full
-            if (currentPageContentChanged)
-            {
+            if (currentPageContentChanged) {
                 // write page
                 pageHandler.writePage(pageIndexes[currentPagePositionInPageIndexes], currentPage);
                 currentPageContentChanged = false;
             }
             // get new page
-            if (currentPagePositionInPageIndexes+1 < pageCount)
-            {
+            if (currentPagePositionInPageIndexes + 1 < pageCount) {
                 // we already have more pages assigned (there was a backward seek before)
                 currentPage = pageHandler.readPage(pageIndexes[++currentPagePositionInPageIndexes]);
-                currentPageOffset = ((long)currentPagePositionInPageIndexes) * pageSize;
+                currentPageOffset = ((long) currentPagePositionInPageIndexes) * pageSize;
                 positionInPage = 0;
-            }
-            else if (addNewPageIfNeeded)
-            {
+            } else if (addNewPageIfNeeded) {
                 // need new page
                 addPage();
-            }
-            else
-            {
+            } else {
                 // we are at last page and are not allowed to add new page
                 return false;
             }
@@ -190,8 +174,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public void write(int b) throws IOException
-    {
+    public void write(int b) throws IOException {
         checkClosed();
 
         ensureAvailableBytesInPage(true);
@@ -199,8 +182,7 @@ class ScratchFileBuffer implements RandomAccess
         currentPage[positionInPage++] = (byte) b;
         currentPageContentChanged = true;
 
-        if(currentPageOffset + positionInPage > size)
-        {
+        if (currentPageOffset + positionInPage > size) {
             size = currentPageOffset + positionInPage;
         }
     }
@@ -209,8 +191,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public void write(byte[] b) throws IOException
-    {
+    public void write(byte[] b) throws IOException {
         write(b, 0, b.length);
     }
 
@@ -218,30 +199,27 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public void write(byte[] b, int off, int len) throws IOException
-    {
+    public void write(byte[] b, int off, int len) throws IOException {
         checkClosed();
 
         int remain = len;
-        int bOff   = off;
+        int bOff = off;
 
-        while (remain > 0)
-        {
+        while (remain > 0) {
             ensureAvailableBytesInPage(true);
 
-            int bytesToWrite = Math.min(remain, pageSize-positionInPage);
+            int bytesToWrite = Math.min(remain, pageSize - positionInPage);
 
             System.arraycopy(b, bOff, currentPage, positionInPage, bytesToWrite);
 
             positionInPage += bytesToWrite;
             currentPageContentChanged = true;
 
-            bOff   += bytesToWrite;
+            bOff += bytesToWrite;
             remain -= bytesToWrite;
         }
 
-        if(currentPageOffset + positionInPage > size)
-        {
+        if (currentPageOffset + positionInPage > size) {
             size = currentPageOffset + positionInPage;
         }
     }
@@ -250,8 +228,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public final void clear() throws IOException
-    {
+    public final void clear() throws IOException {
         checkClosed();
 
         // keep only the first page, discard all other pages
@@ -259,8 +236,7 @@ class ScratchFileBuffer implements RandomAccess
         pageCount = 1;
 
         // change to first page if we are not already there
-        if (currentPagePositionInPageIndexes > 0)
-        {
+        if (currentPagePositionInPageIndexes > 0) {
             currentPage = pageHandler.readPage(pageIndexes[0]);
             currentPagePositionInPageIndexes = 0;
             currentPageOffset = 0;
@@ -274,8 +250,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public long getPosition() throws IOException
-    {
+    public long getPosition() throws IOException {
         checkClosed();
         return currentPageOffset + positionInPage;
     }
@@ -284,48 +259,40 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public void seek(long seekToPosition) throws IOException
-    {
+    public void seek(long seekToPosition) throws IOException {
         checkClosed();
 
         /*
          * for now we won't allow to seek past end of buffer; this can be changed by adding new pages as needed
          */
-        if (seekToPosition > size)
-        {
+        if (seekToPosition > size) {
             throw new EOFException();
         }
 
-        if (seekToPosition < 0)
-        {
+        if (seekToPosition < 0) {
             throw new IOException("Negative seek offset: " + seekToPosition);
         }
 
-        if ((seekToPosition >= currentPageOffset) && (seekToPosition <= currentPageOffset + pageSize))
-        {
+        if ((seekToPosition >= currentPageOffset) && (seekToPosition <= currentPageOffset + pageSize)) {
             // within same page
             positionInPage = (int) (seekToPosition - currentPageOffset);
-        }
-        else
-        {
+        } else {
             // have to go to another page
 
             // check if current page needs to be written to file
-            if (currentPageContentChanged)
-            {
+            if (currentPageContentChanged) {
                 pageHandler.writePage(pageIndexes[currentPagePositionInPageIndexes], currentPage);
                 currentPageContentChanged = false;
             }
 
             int newPagePosition = (int) (seekToPosition / pageSize);
-            if (seekToPosition % pageSize == 0 && seekToPosition == size)
-            {
+            if (seekToPosition % pageSize == 0 && seekToPosition == size) {
                 newPagePosition--; // PDFBOX-4756: Prevent seeking a non-yet-existent page...
             }
 
             currentPage = pageHandler.readPage(pageIndexes[newPagePosition]);
             currentPagePositionInPageIndexes = newPagePosition;
-            currentPageOffset = ((long)currentPagePositionInPageIndexes) * pageSize;
+            currentPageOffset = ((long) currentPagePositionInPageIndexes) * pageSize;
             positionInPage = (int) (seekToPosition - currentPageOffset);
         }
     }
@@ -334,8 +301,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public boolean isClosed()
-    {
+    public boolean isClosed() {
         return pageHandler == null;
     }
 
@@ -343,8 +309,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public boolean isEOF() throws IOException
-    {
+    public boolean isEOF() throws IOException {
         checkClosed();
         return currentPageOffset + positionInPage >= size;
     }
@@ -353,17 +318,14 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         checkClosed();
 
-        if (currentPageOffset + positionInPage >= size)
-        {
+        if (currentPageOffset + positionInPage >= size) {
             return -1;
         }
 
-        if (! ensureAvailableBytesInPage(false))
-        {
+        if (!ensureAvailableBytesInPage(false)) {
             // should not happen, we checked it before
             throw new IOException("Unexpectedly no bytes available for read in buffer.");
         }
@@ -375,24 +337,20 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
+    public int read(byte[] b, int off, int len) throws IOException {
         checkClosed();
 
-        if (currentPageOffset + positionInPage >= size)
-        {
+        if (currentPageOffset + positionInPage >= size) {
             return -1;
         }
 
         int remain = (int) Math.min(len, size - (currentPageOffset + positionInPage));
 
         int totalBytesRead = 0;
-        int bOff           = off;
+        int bOff = off;
 
-        while (remain > 0)
-        {
-            if (! ensureAvailableBytesInPage(false))
-            {
+        while (remain > 0) {
+            if (!ensureAvailableBytesInPage(false)) {
                 // should not happen, we checked it before
                 throw new IOException("Unexpectedly no bytes available for read in buffer.");
             }
@@ -414,8 +372,7 @@ class ScratchFileBuffer implements RandomAccess
      * {@inheritDoc}
      */
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         close(true);
     }
 
@@ -424,13 +381,11 @@ class ScratchFileBuffer implements RandomAccess
      *
      * @param removeBuffer remove buffer from ScratchFile if set to true
      */
-    void close(boolean removeBuffer)
-    {
+    void close(boolean removeBuffer) {
         if (pageHandler != null) {
 
             pageHandler.markPagesAsFree(pageIndexes, 0, pageCount);
-            if (removeBuffer)
-            {
+            if (removeBuffer) {
                 pageHandler.removeBuffer(this);
             }
             pageHandler = null;
@@ -444,8 +399,7 @@ class ScratchFileBuffer implements RandomAccess
     }
 
     @Override
-    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException
-    {
+    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException {
         throw new UnsupportedOperationException(
                 getClass().getName() + ".createView isn't supported.");
     }

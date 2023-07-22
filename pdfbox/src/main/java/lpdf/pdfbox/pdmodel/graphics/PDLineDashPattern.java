@@ -19,7 +19,6 @@ package lpdf.pdfbox.pdmodel.graphics;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSInteger;
-
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 import java.util.Arrays;
@@ -27,48 +26,42 @@ import java.util.Arrays;
 /**
  * A line dash pattern for stroking paths.
  * Instances of PDLineDashPattern are immutable.
+ *
  * @author Ben Litchfield
  * @author John Hewson
  */
-public final class PDLineDashPattern implements COSObjectable
-{
+public final class PDLineDashPattern implements COSObjectable {
     private final int phase;
     private final float[] array;
 
     /**
      * Creates a new line dash pattern, with no dashes and a phase of 0.
      */
-    public PDLineDashPattern()
-    {
-        array = new float[] { };
+    public PDLineDashPattern() {
+        array = new float[]{};
         phase = 0;
     }
 
     /**
      * Creates a new line dash pattern from a dash array and phase.
+     *
      * @param array the dash array
      * @param phase the phase
      */
-    public PDLineDashPattern(COSArray array, int phase)
-    {
+    public PDLineDashPattern(COSArray array, int phase) {
         this.array = array.toFloatArray();
         // PDF 2.0 specification, 8.4.3.6 Line dash pattern:
         // "If the dash phase is negative, it shall be incremented by twice the sum of all
         // lengths in the dash array until it is positive"
-        if (phase < 0)
-        {
+        if (phase < 0) {
             float sum2 = 0;
-            for (float f : this.array)
-            {
+            for (float f : this.array) {
                 sum2 += f;
             }
             sum2 *= 2;
-            if (sum2 > 0)
-            {
+            if (sum2 > 0) {
                 phase += (Math.floor(-phase / sum2) + 1) * sum2;
-            }
-            else
-            {
+            } else {
                 phase = 0;
             }
         }
@@ -76,8 +69,7 @@ public final class PDLineDashPattern implements COSObjectable
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         COSArray cos = new COSArray();
         COSArray patternArray = new COSArray();
         patternArray.setFloatArray(array);
@@ -89,25 +81,24 @@ public final class PDLineDashPattern implements COSObjectable
     /**
      * Returns the dash phase.
      * This specifies the distance into the dash pattern at which to start the dash.
+     *
      * @return the dash phase
      */
-    public int getPhase()
-    {
+    public int getPhase() {
         return phase;
     }
 
     /**
      * Returns the dash array.
+     *
      * @return the dash array, never null.
      */
-    public float[] getDashArray()
-    {
+    public float[] getDashArray() {
         return array.clone();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PDLineDashPattern{array=" + Arrays.toString(array) + ", phase=" + phase + "}";
     }
 }

@@ -17,15 +17,13 @@
 
 package lpdf.fontbox.afm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class TrackKernTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class TrackKernTest {
     @Test
-    void testTrackKern()
-    {
+    void testTrackKern() {
         TrackKern trackKern = new TrackKern(0, 1.0f, 1.0f, 10.0f, 10.0f);
         assertEquals(0, trackKern.getDegree());
         assertEquals(1.0f, trackKern.getMinPointSize(), 0.0f);

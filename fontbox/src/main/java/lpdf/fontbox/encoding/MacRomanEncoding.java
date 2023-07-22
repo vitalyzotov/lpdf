@@ -21,10 +21,8 @@ package lpdf.fontbox.encoding;
  * This is the MacRomanEncoding.
  *
  * @author Ben Litchfield
- *
  */
-public class MacRomanEncoding extends Encoding
-{
+public class MacRomanEncoding extends Encoding {
 
     private static final int CHAR_CODE = 0;
     private static final int CHAR_NAME = 1;
@@ -245,17 +243,14 @@ public class MacRomanEncoding extends Encoding
 
     /**
      * Singleton instance of this class.
-     *
      */
     public static final MacRomanEncoding INSTANCE = new MacRomanEncoding();
 
     /**
      * Constructor.
      */
-    private MacRomanEncoding()
-    {
-        for (Object[] encodingEntry : MAC_ROMAN_ENCODING_TABLE)
-        {
+    private MacRomanEncoding() {
+        for (Object[] encodingEntry : MAC_ROMAN_ENCODING_TABLE) {
             addCharacterEncoding((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
     }

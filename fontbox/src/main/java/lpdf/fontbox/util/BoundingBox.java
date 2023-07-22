@@ -25,8 +25,7 @@ import java.util.List;
  *
  * @author Ben Litchfield
  */
-public class BoundingBox
-{
+public class BoundingBox {
     private float lowerLeftX;
     private float lowerLeftY;
     private float upperRightX;
@@ -35,8 +34,7 @@ public class BoundingBox
     /**
      * Default constructor.
      */
-    public BoundingBox()
-    {
+    public BoundingBox() {
     }
 
     /**
@@ -47,8 +45,7 @@ public class BoundingBox
      * @param maxX upper right x value
      * @param maxY upper right y value
      */
-    public BoundingBox(float minX, float minY, float maxX, float maxY)
-    {
+    public BoundingBox(float minX, float minY, float maxX, float maxY) {
         lowerLeftX = minX;
         lowerLeftY = minY;
         upperRightX = maxX;
@@ -60,8 +57,7 @@ public class BoundingBox
      *
      * @param numbers list of four numbers
      */
-    public BoundingBox(List<Number> numbers)
-    {
+    public BoundingBox(List<Number> numbers) {
         lowerLeftX = numbers.get(0).floatValue();
         lowerLeftY = numbers.get(1).floatValue();
         upperRightX = numbers.get(2).floatValue();
@@ -73,8 +69,7 @@ public class BoundingBox
      *
      * @return Value of property lowerLeftX.
      */
-    public float getLowerLeftX()
-    {
+    public float getLowerLeftX() {
         return lowerLeftX;
     }
 
@@ -83,8 +78,7 @@ public class BoundingBox
      *
      * @param lowerLeftXValue New value of property lowerLeftX.
      */
-    public void setLowerLeftX(float lowerLeftXValue)
-    {
+    public void setLowerLeftX(float lowerLeftXValue) {
         this.lowerLeftX = lowerLeftXValue;
     }
 
@@ -93,8 +87,7 @@ public class BoundingBox
      *
      * @return Value of property lowerLeftY.
      */
-    public float getLowerLeftY()
-    {
+    public float getLowerLeftY() {
         return lowerLeftY;
     }
 
@@ -103,8 +96,7 @@ public class BoundingBox
      *
      * @param lowerLeftYValue New value of property lowerLeftY.
      */
-    public void setLowerLeftY(float lowerLeftYValue)
-    {
+    public void setLowerLeftY(float lowerLeftYValue) {
         this.lowerLeftY = lowerLeftYValue;
     }
 
@@ -113,8 +105,7 @@ public class BoundingBox
      *
      * @return Value of property upperRightX.
      */
-    public float getUpperRightX()
-    {
+    public float getUpperRightX() {
         return upperRightX;
     }
 
@@ -123,8 +114,7 @@ public class BoundingBox
      *
      * @param upperRightXValue New value of property upperRightX.
      */
-    public void setUpperRightX(float upperRightXValue)
-    {
+    public void setUpperRightX(float upperRightXValue) {
         this.upperRightX = upperRightXValue;
     }
 
@@ -133,8 +123,7 @@ public class BoundingBox
      *
      * @return Value of property upperRightY.
      */
-    public float getUpperRightY()
-    {
+    public float getUpperRightY() {
         return upperRightY;
     }
 
@@ -143,8 +132,7 @@ public class BoundingBox
      *
      * @param upperRightYValue New value of property upperRightY.
      */
-    public void setUpperRightY(float upperRightYValue)
-    {
+    public void setUpperRightY(float upperRightYValue) {
         this.upperRightY = upperRightYValue;
     }
 
@@ -154,8 +142,7 @@ public class BoundingBox
      *
      * @return The width of this rectangle.
      */
-    public float getWidth()
-    {
+    public float getWidth() {
         return getUpperRightX() - getLowerLeftX();
     }
 
@@ -165,8 +152,7 @@ public class BoundingBox
      *
      * @return The height of this rectangle.
      */
-    public float getHeight()
-    {
+    public float getHeight() {
         return getUpperRightY() - getLowerLeftY();
     }
 
@@ -175,13 +161,11 @@ public class BoundingBox
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
-     *
      * @return true If the point is on the edge or inside the rectangle bounds.
      */
-    public boolean contains( float x, float y )
-    {
+    public boolean contains(float x, float y) {
         return x >= lowerLeftX && x <= upperRightX &&
-               y >= lowerLeftY && y <= upperRightY;
+                y >= lowerLeftY && y <= upperRightY;
     }
 
     /**
@@ -190,10 +174,9 @@ public class BoundingBox
      * @return This object as a string.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[" + getLowerLeftX() + "," + getLowerLeftY() + "," +
-                     getUpperRightX() + "," + getUpperRightY() +"]";
+                getUpperRightX() + "," + getUpperRightY() + "]";
     }
 
 }

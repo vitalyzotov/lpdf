@@ -21,12 +21,10 @@ package lpdf.pdfbox.util;
  *
  * @author John Hewson
  */
-public final class Vector
-{
+public final class Vector {
     private final float x, y;
 
-    public Vector(float x, float y)
-    {
+    public Vector(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -36,8 +34,7 @@ public final class Vector
      *
      * @return the x magnitude
      */
-    public float getX()
-    {
+    public float getX() {
         return x;
     }
 
@@ -46,8 +43,7 @@ public final class Vector
      *
      * @return the y magnitude
      */
-    public float getY()
-    {
+    public float getY() {
         return y;
     }
 
@@ -57,14 +53,12 @@ public final class Vector
      * @param sxy x and y scale
      * @return a new vector scaled by both x and y
      */
-    public Vector scale(float sxy)
-    {
+    public Vector scale(float sxy) {
         return new Vector(x * sxy, y * sxy);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "(" + x + ", " + y + ")";
     }
 }

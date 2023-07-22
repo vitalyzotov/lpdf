@@ -23,39 +23,32 @@ package lpdf.fontbox.ttf.table.common;
  * Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class FeatureTable
-{
+public class FeatureTable {
     private final int featureParams;
     private final int lookupIndexCount;
     private final int[] lookupListIndices;
 
-    public FeatureTable(int featureParams, int lookupIndexCount, int[] lookupListIndices)
-    {
+    public FeatureTable(int featureParams, int lookupIndexCount, int[] lookupListIndices) {
         this.featureParams = featureParams;
         this.lookupIndexCount = lookupIndexCount;
         this.lookupListIndices = lookupListIndices;
     }
 
-    public int getFeatureParams()
-    {
+    public int getFeatureParams() {
         return featureParams;
     }
 
-    public int getLookupIndexCount()
-    {
+    public int getLookupIndexCount() {
         return lookupIndexCount;
     }
 
-    public int[] getLookupListIndices()
-    {
+    public int[] getLookupListIndices() {
         return lookupListIndices;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("FeatureTable[lookupListIndicesCount=%d]", lookupListIndices.length);
     }
 }

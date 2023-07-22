@@ -21,10 +21,8 @@ package lpdf.fontbox.encoding;
  * Adobe Standard Encoding
  *
  * @author Ben Litchfield
- *
  */
-public class StandardEncoding extends Encoding
-{
+public class StandardEncoding extends Encoding {
     private static final int CHAR_CODE = 0;
     private static final int CHAR_NAME = 1;
 
@@ -190,10 +188,8 @@ public class StandardEncoding extends Encoding
     /**
      * Constructor.
      */
-    public StandardEncoding()
-    {
-        for (Object[] encodingEntry : STANDARD_ENCODING_TABLE)
-        {
+    public StandardEncoding() {
+        for (Object[] encodingEntry : STANDARD_ENCODING_TABLE) {
             addCharacterEncoding((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
     }

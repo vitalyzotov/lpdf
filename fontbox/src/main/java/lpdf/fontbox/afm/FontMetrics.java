@@ -16,21 +16,20 @@
  */
 package lpdf.fontbox.afm;
 
+import lpdf.fontbox.util.BoundingBox;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lpdf.fontbox.util.BoundingBox;
-
 /**
  * This is the outermost AFM type.  This can be created by the afmparser with a valid AFM document.
  *
  * @author Ben Litchfield
  */
-public class FontMetrics
-{
+public class FontMetrics {
     /**
      * This is the version of the FontMetrics.
      */
@@ -76,8 +75,7 @@ public class FontMetrics
     /**
      * Constructor.
      */
-    public FontMetrics()
-    {
+    public FontMetrics() {
         // Default constructor
     }
 
@@ -85,15 +83,12 @@ public class FontMetrics
      * This will get the width of a character.
      *
      * @param name The character to get the width for.
-     *
      * @return The width of the character.
      */
-    public float getCharacterWidth( String name )
-    {
+    public float getCharacterWidth(String name) {
         float result = 0;
-        CharMetric metric = charMetricsMap.get( name );
-        if( metric != null )
-        {
+        CharMetric metric = charMetricsMap.get(name);
+        if (metric != null) {
             result = metric.getWx();
         }
         return result;
@@ -105,15 +100,12 @@ public class FontMetrics
      * @param name The character to get the width for.
      * @return The width of the character.
      */
-    public float getCharacterHeight( String name )
-    {
+    public float getCharacterHeight(String name) {
         float result = 0;
-        CharMetric metric = charMetricsMap.get( name );
-        if( metric != null )
-        {
+        CharMetric metric = charMetricsMap.get(name);
+        if (metric != null) {
             result = metric.getWy();
-            if( Float.compare(result, 0) == 0 )
-            {
+            if (Float.compare(result, 0) == 0) {
                 result = metric.getBoundingBox().getHeight();
             }
         }
@@ -126,21 +118,17 @@ public class FontMetrics
      *
      * @return The width of the character.
      */
-    public float getAverageCharacterWidth()
-    {
+    public float getAverageCharacterWidth() {
         float average = 0;
         float totalWidths = 0;
         float characterCount = 0;
-        for (CharMetric metric : charMetrics)
-        {
-            if( metric.getWx() > 0 )
-            {
+        for (CharMetric metric : charMetrics) {
+            if (metric.getWx() > 0) {
                 totalWidths += metric.getWx();
                 characterCount += 1;
             }
         }
-        if( totalWidths > 0 )
-        {
+        if (totalWidths > 0) {
             average = totalWidths / characterCount;
         }
         return average;
@@ -151,9 +139,8 @@ public class FontMetrics
      *
      * @param comment The comment to add to this metric.
      */
-    public void addComment( String comment )
-    {
-        comments.add( comment );
+    public void addComment(String comment) {
+        comments.add(comment);
     }
 
     /**
@@ -161,8 +148,7 @@ public class FontMetrics
      *
      * @return The list of all comments.
      */
-    public List<String> getComments()
-    {
+    public List<String> getComments() {
         return Collections.unmodifiableList(comments);
     }
 
@@ -171,8 +157,7 @@ public class FontMetrics
      *
      * @return The version of the document.
      */
-    public float getAFMVersion()
-    {
+    public float getAFMVersion() {
         return afmVersion;
     }
 
@@ -181,8 +166,7 @@ public class FontMetrics
      *
      * @return The value of the metric sets.
      */
-    public int getMetricSets()
-    {
+    public int getMetricSets() {
         return metricSets;
     }
 
@@ -191,8 +175,7 @@ public class FontMetrics
      *
      * @param afmVersionValue The version of the document.
      */
-    public void setAFMVersion( float afmVersionValue )
-    {
+    public void setAFMVersion(float afmVersionValue) {
         afmVersion = afmVersionValue;
     }
 
@@ -202,10 +185,8 @@ public class FontMetrics
      * @param metricSetsValue The new metric sets attribute.
      * @throws IllegalArgumentException If the metricSets attribute is not 0,1, or 2.
      */
-    public void setMetricSets( int metricSetsValue )
-    {
-        if( metricSetsValue < 0 || metricSetsValue > 2 )
-        {
+    public void setMetricSets(int metricSetsValue) {
+        if (metricSetsValue < 0 || metricSetsValue > 2) {
             throw new IllegalArgumentException("The metricSets attribute must be in the "
                     + "set {0,1,2} and not '" + metricSetsValue + "'");
         }
@@ -217,8 +198,7 @@ public class FontMetrics
      *
      * @return Value of property fontName.
      */
-    public String getFontName()
-    {
+    public String getFontName() {
         return fontName;
     }
 
@@ -227,8 +207,7 @@ public class FontMetrics
      *
      * @param name New value of property fontName.
      */
-    public void setFontName(String name)
-    {
+    public void setFontName(String name) {
         fontName = name;
     }
 
@@ -237,8 +216,7 @@ public class FontMetrics
      *
      * @return Value of property fullName.
      */
-    public String getFullName()
-    {
+    public String getFullName() {
         return fullName;
     }
 
@@ -247,8 +225,7 @@ public class FontMetrics
      *
      * @param fullNameValue New value of property fullName.
      */
-    public void setFullName(String fullNameValue)
-    {
+    public void setFullName(String fullNameValue) {
         fullName = fullNameValue;
     }
 
@@ -257,8 +234,7 @@ public class FontMetrics
      *
      * @return Value of property familyName.
      */
-    public String getFamilyName()
-    {
+    public String getFamilyName() {
         return familyName;
     }
 
@@ -267,8 +243,7 @@ public class FontMetrics
      *
      * @param familyNameValue New value of property familyName.
      */
-    public void setFamilyName(String familyNameValue)
-    {
+    public void setFamilyName(String familyNameValue) {
         familyName = familyNameValue;
     }
 
@@ -277,8 +252,7 @@ public class FontMetrics
      *
      * @return Value of property weight.
      */
-    public String getWeight()
-    {
+    public String getWeight() {
         return weight;
     }
 
@@ -287,8 +261,7 @@ public class FontMetrics
      *
      * @param weightValue New value of property weight.
      */
-    public void setWeight(String weightValue)
-    {
+    public void setWeight(String weightValue) {
         weight = weightValue;
     }
 
@@ -297,8 +270,7 @@ public class FontMetrics
      *
      * @return Value of property fontBBox.
      */
-    public BoundingBox getFontBBox()
-    {
+    public BoundingBox getFontBBox() {
         return fontBBox;
     }
 
@@ -307,8 +279,7 @@ public class FontMetrics
      *
      * @param bBox New value of property fontBBox.
      */
-    public void setFontBBox(BoundingBox bBox)
-    {
+    public void setFontBBox(BoundingBox bBox) {
         this.fontBBox = bBox;
     }
 
@@ -317,8 +288,7 @@ public class FontMetrics
      *
      * @return Value of property notice.
      */
-    public String getNotice()
-    {
+    public String getNotice() {
         return notice;
     }
 
@@ -327,8 +297,7 @@ public class FontMetrics
      *
      * @param noticeValue New value of property notice.
      */
-    public void setNotice(String noticeValue)
-    {
+    public void setNotice(String noticeValue) {
         notice = noticeValue;
     }
 
@@ -337,8 +306,7 @@ public class FontMetrics
      *
      * @return Value of property encodingScheme.
      */
-    public String getEncodingScheme()
-    {
+    public String getEncodingScheme() {
         return encodingScheme;
     }
 
@@ -347,8 +315,7 @@ public class FontMetrics
      *
      * @param encodingSchemeValue New value of property encodingScheme.
      */
-    public void setEncodingScheme(String encodingSchemeValue)
-    {
+    public void setEncodingScheme(String encodingSchemeValue) {
         encodingScheme = encodingSchemeValue;
     }
 
@@ -357,8 +324,7 @@ public class FontMetrics
      *
      * @return Value of property mappingScheme.
      */
-    public int getMappingScheme()
-    {
+    public int getMappingScheme() {
         return mappingScheme;
     }
 
@@ -367,8 +333,7 @@ public class FontMetrics
      *
      * @param mappingSchemeValue New value of property mappingScheme.
      */
-    public void setMappingScheme(int mappingSchemeValue)
-    {
+    public void setMappingScheme(int mappingSchemeValue) {
         mappingScheme = mappingSchemeValue;
     }
 
@@ -377,8 +342,7 @@ public class FontMetrics
      *
      * @return Value of property escChar.
      */
-    public int getEscChar()
-    {
+    public int getEscChar() {
         return escChar;
     }
 
@@ -387,8 +351,7 @@ public class FontMetrics
      *
      * @param escCharValue New value of property escChar.
      */
-    public void setEscChar(int escCharValue)
-    {
+    public void setEscChar(int escCharValue) {
         escChar = escCharValue;
     }
 
@@ -397,8 +360,7 @@ public class FontMetrics
      *
      * @return Value of property characterSet.
      */
-    public String getCharacterSet()
-    {
+    public String getCharacterSet() {
         return characterSet;
     }
 
@@ -407,8 +369,7 @@ public class FontMetrics
      *
      * @param characterSetValue New value of property characterSet.
      */
-    public void setCharacterSet(String characterSetValue)
-    {
+    public void setCharacterSet(String characterSetValue) {
         characterSet = characterSetValue;
     }
 
@@ -417,8 +378,7 @@ public class FontMetrics
      *
      * @return Value of property characters.
      */
-    public int getCharacters()
-    {
+    public int getCharacters() {
         return characters;
     }
 
@@ -427,8 +387,7 @@ public class FontMetrics
      *
      * @param charactersValue New value of property characters.
      */
-    public void setCharacters(int charactersValue)
-    {
+    public void setCharacters(int charactersValue) {
         characters = charactersValue;
     }
 
@@ -437,8 +396,7 @@ public class FontMetrics
      *
      * @return Value of property isBaseFont.
      */
-    public boolean getIsBaseFont()
-    {
+    public boolean getIsBaseFont() {
         return isBaseFont;
     }
 
@@ -447,8 +405,7 @@ public class FontMetrics
      *
      * @param isBaseFontValue New value of property isBaseFont.
      */
-    public void setIsBaseFont(boolean isBaseFontValue)
-    {
+    public void setIsBaseFont(boolean isBaseFontValue) {
         isBaseFont = isBaseFontValue;
     }
 
@@ -457,8 +414,7 @@ public class FontMetrics
      *
      * @return Value of property vVector.
      */
-    public float[] getVVector()
-    {
+    public float[] getVVector() {
         return this.vVector;
     }
 
@@ -467,8 +423,7 @@ public class FontMetrics
      *
      * @param vVectorValue New value of property vVector.
      */
-    public void setVVector(float[] vVectorValue)
-    {
+    public void setVVector(float[] vVectorValue) {
         vVector = vVectorValue;
     }
 
@@ -477,8 +432,7 @@ public class FontMetrics
      *
      * @return Value of property isFixedV.
      */
-    public boolean getIsFixedV()
-    {
+    public boolean getIsFixedV() {
         // if not set the default value depends on the existence of vVector
         return isFixedV == null ? vVector != null : isFixedV;
     }
@@ -488,8 +442,7 @@ public class FontMetrics
      *
      * @param isFixedVValue New value of property isFixedV.
      */
-    public void setIsFixedV(boolean isFixedVValue)
-    {
+    public void setIsFixedV(boolean isFixedVValue) {
         isFixedV = isFixedVValue;
     }
 
@@ -498,8 +451,7 @@ public class FontMetrics
      *
      * @return Value of property capHeight.
      */
-    public float getCapHeight()
-    {
+    public float getCapHeight() {
         return capHeight;
     }
 
@@ -508,8 +460,7 @@ public class FontMetrics
      *
      * @param capHeightValue New value of property capHeight.
      */
-    public void setCapHeight(float capHeightValue)
-    {
+    public void setCapHeight(float capHeightValue) {
         capHeight = capHeightValue;
     }
 
@@ -518,8 +469,7 @@ public class FontMetrics
      *
      * @return Value of property xHeight.
      */
-    public float getXHeight()
-    {
+    public float getXHeight() {
         return xHeight;
     }
 
@@ -528,8 +478,7 @@ public class FontMetrics
      *
      * @param xHeightValue New value of property xHeight.
      */
-    public void setXHeight( float xHeightValue )
-    {
+    public void setXHeight(float xHeightValue) {
         xHeight = xHeightValue;
     }
 
@@ -538,8 +487,7 @@ public class FontMetrics
      *
      * @return Value of property ascender.
      */
-    public float getAscender()
-    {
+    public float getAscender() {
         return ascender;
     }
 
@@ -548,8 +496,7 @@ public class FontMetrics
      *
      * @param ascenderValue New value of property ascender.
      */
-    public void setAscender( float ascenderValue )
-    {
+    public void setAscender(float ascenderValue) {
         ascender = ascenderValue;
     }
 
@@ -558,8 +505,7 @@ public class FontMetrics
      *
      * @return Value of property descender.
      */
-    public float getDescender()
-    {
+    public float getDescender() {
         return descender;
     }
 
@@ -568,8 +514,7 @@ public class FontMetrics
      *
      * @param descenderValue New value of property descender.
      */
-    public void setDescender( float descenderValue )
-    {
+    public void setDescender(float descenderValue) {
         descender = descenderValue;
     }
 
@@ -578,8 +523,7 @@ public class FontMetrics
      *
      * @return Value of property fontVersion.
      */
-    public String getFontVersion()
-    {
+    public String getFontVersion() {
         return fontVersion;
     }
 
@@ -588,8 +532,7 @@ public class FontMetrics
      *
      * @param fontVersionValue New value of property fontVersion.
      */
-    public void setFontVersion(String fontVersionValue)
-    {
+    public void setFontVersion(String fontVersionValue) {
         fontVersion = fontVersionValue;
     }
 
@@ -598,8 +541,7 @@ public class FontMetrics
      *
      * @return Value of property underlinePosition.
      */
-    public float getUnderlinePosition()
-    {
+    public float getUnderlinePosition() {
         return underlinePosition;
     }
 
@@ -608,8 +550,7 @@ public class FontMetrics
      *
      * @param underlinePositionValue New value of property underlinePosition.
      */
-    public void setUnderlinePosition(float underlinePositionValue)
-    {
+    public void setUnderlinePosition(float underlinePositionValue) {
         underlinePosition = underlinePositionValue;
     }
 
@@ -618,8 +559,7 @@ public class FontMetrics
      *
      * @return Value of property underlineThickness.
      */
-    public float getUnderlineThickness()
-    {
+    public float getUnderlineThickness() {
         return underlineThickness;
     }
 
@@ -628,8 +568,7 @@ public class FontMetrics
      *
      * @param underlineThicknessValue New value of property underlineThickness.
      */
-    public void setUnderlineThickness(float underlineThicknessValue)
-    {
+    public void setUnderlineThickness(float underlineThicknessValue) {
         underlineThickness = underlineThicknessValue;
     }
 
@@ -638,8 +577,7 @@ public class FontMetrics
      *
      * @return Value of property italicAngle.
      */
-    public float getItalicAngle()
-    {
+    public float getItalicAngle() {
         return italicAngle;
     }
 
@@ -648,8 +586,7 @@ public class FontMetrics
      *
      * @param italicAngleValue New value of property italicAngle.
      */
-    public void setItalicAngle(float italicAngleValue)
-    {
+    public void setItalicAngle(float italicAngleValue) {
         italicAngle = italicAngleValue;
     }
 
@@ -658,8 +595,7 @@ public class FontMetrics
      *
      * @return Value of property charWidth.
      */
-    public float[] getCharWidth()
-    {
+    public float[] getCharWidth() {
         return this.charWidth;
     }
 
@@ -668,8 +604,7 @@ public class FontMetrics
      *
      * @param charWidthValue New value of property charWidth.
      */
-    public void setCharWidth(float[] charWidthValue)
-    {
+    public void setCharWidth(float[] charWidthValue) {
         charWidth = charWidthValue;
     }
 
@@ -678,8 +613,7 @@ public class FontMetrics
      *
      * @return Value of property isFixedPitch.
      */
-    public boolean getIsFixedPitch()
-    {
+    public boolean getIsFixedPitch() {
         return isFixedPitch;
     }
 
@@ -688,16 +622,16 @@ public class FontMetrics
      *
      * @param isFixedPitchValue New value of property isFixedPitch.
      */
-    public void setFixedPitch(boolean isFixedPitchValue)
-    {
+    public void setFixedPitch(boolean isFixedPitchValue) {
         isFixedPitch = isFixedPitchValue;
     }
 
-    /** Getter for property charMetrics.
+    /**
+     * Getter for property charMetrics.
+     *
      * @return Value of property charMetrics.
      */
-    public List<CharMetric> getCharMetrics()
-    {
+    public List<CharMetric> getCharMetrics() {
         return Collections.unmodifiableList(charMetrics);
     }
 
@@ -706,17 +640,17 @@ public class FontMetrics
      *
      * @param metric The character metric to add.
      */
-    public void addCharMetric( CharMetric metric )
-    {
-        charMetrics.add( metric );
-        charMetricsMap.put( metric.getName(), metric );
+    public void addCharMetric(CharMetric metric) {
+        charMetrics.add(metric);
+        charMetricsMap.put(metric.getName(), metric);
     }
 
-    /** Getter for property trackKern.
+    /**
+     * Getter for property trackKern.
+     *
      * @return Value of property trackKern.
      */
-    public List<TrackKern> getTrackKern()
-    {
+    public List<TrackKern> getTrackKern() {
         return Collections.unmodifiableList(trackKern);
     }
 
@@ -725,16 +659,16 @@ public class FontMetrics
      *
      * @param kern The track kerning data.
      */
-    public void addTrackKern( TrackKern kern )
-    {
-        trackKern.add( kern );
+    public void addTrackKern(TrackKern kern) {
+        trackKern.add(kern);
     }
 
-    /** Getter for property composites.
+    /**
+     * Getter for property composites.
+     *
      * @return Value of property composites.
      */
-    public List<Composite> getComposites()
-    {
+    public List<Composite> getComposites() {
         return Collections.unmodifiableList(composites);
     }
 
@@ -743,16 +677,16 @@ public class FontMetrics
      *
      * @param composite The composite info to add.
      */
-    public void addComposite( Composite composite )
-    {
-        composites.add( composite );
+    public void addComposite(Composite composite) {
+        composites.add(composite);
     }
 
-    /** Getter for property kernPairs.
+    /**
+     * Getter for property kernPairs.
+     *
      * @return Value of property kernPairs.
      */
-    public List<KernPair> getKernPairs()
-    {
+    public List<KernPair> getKernPairs() {
         return Collections.unmodifiableList(kernPairs);
     }
 
@@ -761,16 +695,16 @@ public class FontMetrics
      *
      * @param kernPair The kern pair to add.
      */
-    public void addKernPair( KernPair kernPair )
-    {
-        kernPairs.add( kernPair );
+    public void addKernPair(KernPair kernPair) {
+        kernPairs.add(kernPair);
     }
 
-    /** Getter for property kernPairs0.
+    /**
+     * Getter for property kernPairs0.
+     *
      * @return Value of property kernPairs0.
      */
-    public List<KernPair> getKernPairs0()
-    {
+    public List<KernPair> getKernPairs0() {
         return Collections.unmodifiableList(kernPairs0);
     }
 
@@ -779,16 +713,16 @@ public class FontMetrics
      *
      * @param kernPair The kern pair to add.
      */
-    public void addKernPair0( KernPair kernPair )
-    {
-        kernPairs0.add( kernPair );
+    public void addKernPair0(KernPair kernPair) {
+        kernPairs0.add(kernPair);
     }
 
-    /** Getter for property kernPairs1.
+    /**
+     * Getter for property kernPairs1.
+     *
      * @return Value of property kernPairs1.
      */
-    public List<KernPair> getKernPairs1()
-    {
+    public List<KernPair> getKernPairs1() {
         return Collections.unmodifiableList(kernPairs1);
     }
 
@@ -797,40 +731,43 @@ public class FontMetrics
      *
      * @param kernPair The kern pair to add.
      */
-    public void addKernPair1( KernPair kernPair )
-    {
-        kernPairs1.add( kernPair );
+    public void addKernPair1(KernPair kernPair) {
+        kernPairs1.add(kernPair);
     }
 
-    /** Getter for property standardHorizontalWidth.
+    /**
+     * Getter for property standardHorizontalWidth.
+     *
      * @return Value of property standardHorizontalWidth.
      */
-    public float getStandardHorizontalWidth()
-    {
+    public float getStandardHorizontalWidth() {
         return standardHorizontalWidth;
     }
 
-    /** Setter for property standardHorizontalWidth.
+    /**
+     * Setter for property standardHorizontalWidth.
+     *
      * @param standardHorizontalWidthValue New value of property standardHorizontalWidth.
      */
-    public void setStandardHorizontalWidth(float standardHorizontalWidthValue)
-    {
+    public void setStandardHorizontalWidth(float standardHorizontalWidthValue) {
         standardHorizontalWidth = standardHorizontalWidthValue;
     }
 
-    /** Getter for property standardVerticalWidth.
+    /**
+     * Getter for property standardVerticalWidth.
+     *
      * @return Value of property standardVerticalWidth.
      */
-    public float getStandardVerticalWidth()
-    {
+    public float getStandardVerticalWidth() {
         return standardVerticalWidth;
     }
 
-    /** Setter for property standardVerticalWidth.
+    /**
+     * Setter for property standardVerticalWidth.
+     *
      * @param standardVerticalWidthValue New value of property standardVerticalWidth.
      */
-    public void setStandardVerticalWidth(float standardVerticalWidthValue)
-    {
+    public void setStandardVerticalWidth(float standardVerticalWidthValue) {
         standardVerticalWidth = standardVerticalWidthValue;
     }
 

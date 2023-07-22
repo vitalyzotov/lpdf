@@ -27,15 +27,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDFormFieldAdditionalActions implements COSObjectable
-{
+public class PDFormFieldAdditionalActions implements COSObjectable {
     private final COSDictionary actions;
 
     /**
      * Default constructor.
      */
-    public PDFormFieldAdditionalActions()
-    {
+    public PDFormFieldAdditionalActions() {
         actions = new COSDictionary();
     }
 
@@ -44,8 +42,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @param a The action dictionary.
      */
-    public PDFormFieldAdditionalActions( COSDictionary a )
-    {
+    public PDFormFieldAdditionalActions(COSDictionary a) {
         actions = a;
     }
 
@@ -55,8 +52,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return actions;
     }
 
@@ -68,8 +64,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @return The K entry of form field's additional actions dictionary.
      */
-    public PDAction getK()
-    {
+    public PDAction getK() {
         COSDictionary k = actions.getCOSDictionary(COSName.K);
         return k != null ? PDActionFactory.createAction(k) : null;
     }
@@ -82,8 +77,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @param k The action to be performed.
      */
-    public void setK( PDAction k )
-    {
+    public void setK(PDAction k) {
         actions.setItem(COSName.K, k);
     }
 
@@ -94,8 +88,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @return The F entry of form field's additional actions dictionary.
      */
-    public PDAction getF()
-    {
+    public PDAction getF() {
         COSDictionary f = actions.getCOSDictionary(COSName.F);
         return f != null ? PDActionFactory.createAction(f) : null;
     }
@@ -107,8 +100,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @param f The action to be performed.
      */
-    public void setF( PDAction f )
-    {
+    public void setF(PDAction f) {
         actions.setItem(COSName.F, f);
     }
 
@@ -120,8 +112,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @return The V entry of form field's additional actions dictionary.
      */
-    public PDAction getV()
-    {
+    public PDAction getV() {
         COSDictionary v = actions.getCOSDictionary(COSName.V);
         return v != null ? PDActionFactory.createAction(v) : null;
     }
@@ -134,8 +125,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @param v The action to be performed.
      */
-    public void setV( PDAction v )
-    {
+    public void setV(PDAction v) {
         actions.setItem(COSName.V, v);
     }
 
@@ -148,8 +138,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @return The C entry of form field's additional actions dictionary.
      */
-    public PDAction getC()
-    {
+    public PDAction getC() {
         COSDictionary c = actions.getCOSDictionary(COSName.C);
         return c != null ? PDActionFactory.createAction(c) : null;
     }
@@ -163,8 +152,7 @@ public class PDFormFieldAdditionalActions implements COSObjectable
      *
      * @param c The action to be performed.
      */
-    public void setC( PDAction c )
-    {
+    public void setC(PDAction c) {
         actions.setItem(COSName.C, c);
     }
 }

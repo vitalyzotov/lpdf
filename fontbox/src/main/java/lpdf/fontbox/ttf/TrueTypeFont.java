@@ -16,7 +16,13 @@
  */
 package lpdf.fontbox.ttf;
 
+import lpdf.fontbox.FontBoxFont;
+import lpdf.fontbox.ttf.model.GsubData;
+import lpdf.fontbox.util.BoundingBox;
 import lpdf.harmony.awt.geom.GeneralPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,26 +34,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.fontbox.FontBoxFont;
-import lpdf.fontbox.ttf.model.GsubData;
-import lpdf.fontbox.util.BoundingBox;
-
 /**
  * A TrueType font file.
  *
  * @author Ben Litchfield
  */
-public class TrueTypeFont implements FontBoxFont, Closeable
-{
+public class TrueTypeFont implements FontBoxFont, Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrueTypeFont.class);
 
     private float version;
     private int numberOfGlyphs = -1;
     private int unitsPerEm = -1;
-    protected final Map<String,TTFTable> tables = new HashMap<>();
+    protected final Map<String, TTFTable> tables = new HashMap<>();
     private final TTFDataStream data;
     private volatile Map<String, Integer> postScriptNames;
 
@@ -60,31 +59,28 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param fontData The font data.
      */
-    TrueTypeFont(TTFDataStream fontData)
-    {
+    TrueTypeFont(TTFDataStream fontData) {
         data = fontData;
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         data.close();
     }
 
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
 
     /**
      * Set the version. Package-private, used by TTFParser only.
+     *
      * @param versionValue The version to set.
      */
-    void setVersion(float versionValue)
-    {
+    void setVersion(float versionValue) {
         version = versionValue;
     }
 
@@ -93,9 +89,8 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param table The table to add.
      */
-    void addTable( TTFTable table )
-    {
-        tables.put( table.getTag(), table );
+    void addTable(TTFTable table) {
+        tables.put(table.getTag(), table);
     }
 
     /**
@@ -103,8 +98,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @return All of the tables.
      */
-    public Collection<TTFTable> getTables()
-    {
+    public Collection<TTFTable> getTables() {
         return tables.values();
     }
 
@@ -113,8 +107,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @return All of the tables.
      */
-    public Map<String, TTFTable> getTableMap()
-    {
+    public Map<String, TTFTable> getTableMap() {
         return tables;
     }
 
@@ -123,13 +116,10 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param table the table to read.
      * @return the raw bytes of the given table
-     *
      * @throws IOException if there was an error accessing the table.
      */
-    public byte[] getTableBytes(TTFTable table) throws IOException
-    {
-        synchronized (lockReadtable)
-        {
+    public byte[] getTableBytes(TTFTable table) throws IOException {
+        synchronized (lockReadtable) {
             // save current position
             long currentPosition = data.getCurrentPosition();
             data.seek(table.getOffset());
@@ -150,11 +140,9 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The table with the given tag.
      * @throws IOException if there was an error reading the table.
      */
-    protected TTFTable getTable(String tag) throws IOException
-    {
+    protected TTFTable getTable(String tag) throws IOException {
         TTFTable table = tables.get(tag);
-        if (table != null && !table.getInitialized())
-        {
+        if (table != null && !table.getInitialized()) {
             readTable(table);
         }
         return table;
@@ -166,8 +154,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The naming table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public NamingTable getNaming() throws IOException
-    {
+    public NamingTable getNaming() throws IOException {
         return (NamingTable) getTable(NamingTable.TAG);
     }
 
@@ -177,8 +164,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The postscript table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public PostScriptTable getPostScript() throws IOException
-    {
+    public PostScriptTable getPostScript() throws IOException {
         return (PostScriptTable) getTable(PostScriptTable.TAG);
     }
 
@@ -188,8 +174,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The OS/2 table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public OS2WindowsMetricsTable getOS2Windows() throws IOException
-    {
+    public OS2WindowsMetricsTable getOS2Windows() throws IOException {
         return (OS2WindowsMetricsTable) getTable(OS2WindowsMetricsTable.TAG);
     }
 
@@ -199,8 +184,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The maxp table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public MaximumProfileTable getMaximumProfile() throws IOException
-    {
+    public MaximumProfileTable getMaximumProfile() throws IOException {
         return (MaximumProfileTable) getTable(MaximumProfileTable.TAG);
     }
 
@@ -210,8 +194,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The head table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public HeaderTable getHeader() throws IOException
-    {
+    public HeaderTable getHeader() throws IOException {
         return (HeaderTable) getTable(HeaderTable.TAG);
     }
 
@@ -221,8 +204,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The hhea table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public HorizontalHeaderTable getHorizontalHeader() throws IOException
-    {
+    public HorizontalHeaderTable getHorizontalHeader() throws IOException {
         return (HorizontalHeaderTable) getTable(HorizontalHeaderTable.TAG);
     }
 
@@ -232,8 +214,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The hmtx table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public HorizontalMetricsTable getHorizontalMetrics() throws IOException
-    {
+    public HorizontalMetricsTable getHorizontalMetrics() throws IOException {
         return (HorizontalMetricsTable) getTable(HorizontalMetricsTable.TAG);
     }
 
@@ -243,8 +224,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The loca table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public IndexToLocationTable getIndexToLocation() throws IOException
-    {
+    public IndexToLocationTable getIndexToLocation() throws IOException {
         return (IndexToLocationTable) getTable(IndexToLocationTable.TAG);
     }
 
@@ -254,8 +234,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The glyf table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public GlyphTable getGlyph() throws IOException
-    {
+    public GlyphTable getGlyph() throws IOException {
         return (GlyphTable) getTable(GlyphTable.TAG);
     }
 
@@ -265,8 +244,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The "cmap" table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public CmapTable getCmap() throws IOException
-    {
+    public CmapTable getCmap() throws IOException {
         return (CmapTable) getTable(CmapTable.TAG);
     }
 
@@ -276,8 +254,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The vhea table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public VerticalHeaderTable getVerticalHeader() throws IOException
-    {
+    public VerticalHeaderTable getVerticalHeader() throws IOException {
         return (VerticalHeaderTable) getTable(VerticalHeaderTable.TAG);
     }
 
@@ -287,8 +264,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The vmtx table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public VerticalMetricsTable getVerticalMetrics() throws IOException
-    {
+    public VerticalMetricsTable getVerticalMetrics() throws IOException {
         return (VerticalMetricsTable) getTable(VerticalMetricsTable.TAG);
     }
 
@@ -298,8 +274,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The VORG table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public VerticalOriginTable getVerticalOrigin() throws IOException
-    {
+    public VerticalOriginTable getVerticalOrigin() throws IOException {
         return (VerticalOriginTable) getTable(VerticalOriginTable.TAG);
     }
 
@@ -309,8 +284,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The "kern" table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public KerningTable getKerning() throws IOException
-    {
+    public KerningTable getKerning() throws IOException {
         return (KerningTable) getTable(KerningTable.TAG);
     }
 
@@ -320,8 +294,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return The "gsub" table or null if it doesn't exist.
      * @throws IOException if there was an error reading the table.
      */
-    public GlyphSubstitutionTable getGsub() throws IOException
-    {
+    public GlyphSubstitutionTable getGsub() throws IOException {
         return (GlyphSubstitutionTable) getTable(GlyphSubstitutionTable.TAG);
     }
 
@@ -331,12 +304,10 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * object (normally from the TTFParser object).
      *
      * @return COSStream TrueType font program stream
-     *
      * @throws IOException If there is an error getting the font data.
      */
-    public InputStream getOriginalData() throws IOException
-    {
-       return data.getOriginalData();
+    public InputStream getOriginalData() throws IOException {
+        return data.getOriginalData();
     }
 
     /**
@@ -345,8 +316,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @return the size.
      */
-    public long getOriginalDataSize()
-    {
+    public long getOriginalDataSize() {
         return data.getOriginalDataSize();
     }
 
@@ -354,11 +324,9 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * Read the given table if necessary. Package-private, used by TTFParser only.
      *
      * @param table the table to be initialized
-     *
      * @throws IOException if there was an error reading the table.
      */
-    void readTable(TTFTable table) throws IOException
-    {
+    void readTable(TTFTable table) throws IOException {
         // save current position
         long currentPosition = data.getCurrentPosition();
         data.seek(table.getOffset());
@@ -373,17 +341,12 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return the number of glyphs
      * @throws IOException if there was an error reading the table.
      */
-    public int getNumberOfGlyphs() throws IOException
-    {
-        if (numberOfGlyphs == -1)
-        {
+    public int getNumberOfGlyphs() throws IOException {
+        if (numberOfGlyphs == -1) {
             MaximumProfileTable maximumProfile = getMaximumProfile();
-            if (maximumProfile != null)
-            {
+            if (maximumProfile != null) {
                 numberOfGlyphs = maximumProfile.getNumGlyphs();
-            }
-            else
-            {
+            } else {
                 // this should never happen
                 numberOfGlyphs = 0;
             }
@@ -397,17 +360,12 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return units per EM
      * @throws IOException if there was an error reading the table.
      */
-    public int getUnitsPerEm() throws IOException
-    {
-        if (unitsPerEm == -1)
-        {
+    public int getUnitsPerEm() throws IOException {
+        if (unitsPerEm == -1) {
             HeaderTable header = getHeader();
-            if (header != null)
-            {
+            if (header != null) {
                 unitsPerEm = header.getUnitsPerEm();
-            }
-            else
-            {
+            } else {
                 // this should never happen
                 unitsPerEm = 0;
             }
@@ -422,15 +380,11 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return the width
      * @throws IOException if there was an error reading the metrics table.
      */
-    public int getAdvanceWidth(int gid) throws IOException
-    {
+    public int getAdvanceWidth(int gid) throws IOException {
         HorizontalMetricsTable hmtx = getHorizontalMetrics();
-        if (hmtx != null)
-        {
+        if (hmtx != null) {
             return hmtx.getAdvanceWidth(gid);
-        }
-        else
-        {
+        } else {
             // this should never happen
             return 250;
         }
@@ -443,57 +397,41 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      * @return the height
      * @throws IOException if there was an error reading the metrics table.
      */
-    public int getAdvanceHeight(int gid) throws IOException
-    {
+    public int getAdvanceHeight(int gid) throws IOException {
         VerticalMetricsTable vmtx = getVerticalMetrics();
-        if (vmtx != null)
-        {
+        if (vmtx != null) {
             return vmtx.getAdvanceHeight(gid);
-        }
-        else
-        {
+        } else {
             // this should never happen
             return 250;
         }
     }
 
     @Override
-    public String getName() throws IOException
-    {
+    public String getName() throws IOException {
         NamingTable namingTable = getNaming();
-        if (namingTable != null)
-        {
+        if (namingTable != null) {
             return namingTable.getPostScriptName();
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    private void readPostScriptNames() throws IOException
-    {
+    private void readPostScriptNames() throws IOException {
         Map<String, Integer> psnames = postScriptNames;
-        if (psnames == null)
-        {
+        if (psnames == null) {
             // the getter is already synchronized
             PostScriptTable post = getPostScript();
-            synchronized (lockPSNames)
-            {
+            synchronized (lockPSNames) {
                 psnames = postScriptNames;
-                if (psnames == null)
-                {
+                if (psnames == null) {
                     String[] names = post != null ? post.getGlyphNames() : null;
-                    if (names != null)
-                    {
+                    if (names != null) {
                         psnames = new HashMap<>(names.length);
-                        for (int i = 0; i < names.length; i++)
-                        {
+                        for (int i = 0; i < names.length; i++) {
                             psnames.put(names[i], i);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         psnames = new HashMap<>();
                     }
                     postScriptNames = psnames;
@@ -505,37 +443,31 @@ public class TrueTypeFont implements FontBoxFont, Closeable
     /**
      * Returns the best Unicode from the font (the most general). The PDF spec says that "The means by which this is
      * accomplished are implementation-dependent."
-     *
+     * <p>
      * The returned cmap will perform glyph substitution.
      *
      * @return cmap to perform glyph substitution
-     *
      * @throws IOException if the font could not be read
      */
-    public CmapLookup getUnicodeCmapLookup() throws IOException
-    {
+    public CmapLookup getUnicodeCmapLookup() throws IOException {
         return getUnicodeCmapLookup(true);
     }
 
     /**
      * Returns the best Unicode from the font (the most general). The PDF spec says that "The means by which this is
      * accomplished are implementation-dependent."
-     *
+     * <p>
      * The returned cmap will perform glyph substitution.
      *
      * @param isStrict False if we allow falling back to any cmap, even if it's not Unicode.
      * @return cmap to perform glyph substitution
-     *
      * @throws IOException if the font could not be read, or there is no Unicode cmap
      */
-    public CmapLookup getUnicodeCmapLookup(boolean isStrict) throws IOException
-    {
+    public CmapLookup getUnicodeCmapLookup(boolean isStrict) throws IOException {
         CmapSubtable cmap = getUnicodeCmapImpl(isStrict);
-        if (!enabledGsubFeatures.isEmpty())
-        {
+        if (!enabledGsubFeatures.isEmpty()) {
             GlyphSubstitutionTable table = getGsub();
-            if (table != null)
-            {
+            if (table != null) {
                 return new SubstitutingCmapLookup(cmap, table,
                         Collections.unmodifiableList(enabledGsubFeatures));
             }
@@ -543,53 +475,40 @@ public class TrueTypeFont implements FontBoxFont, Closeable
         return cmap;
     }
 
-    private CmapSubtable getUnicodeCmapImpl(boolean isStrict) throws IOException
-    {
+    private CmapSubtable getUnicodeCmapImpl(boolean isStrict) throws IOException {
         CmapTable cmapTable = getCmap();
-        if (cmapTable == null)
-        {
-            if (isStrict)
-            {
+        if (cmapTable == null) {
+            if (isStrict) {
                 throw new IOException("The TrueType font " + getName() + " does not contain a 'cmap' table");
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
         CmapSubtable cmap = cmapTable.getSubtable(CmapTable.PLATFORM_UNICODE,
-                                                  CmapTable.ENCODING_UNICODE_2_0_FULL);
-        if (cmap == null)
-        {
+                CmapTable.ENCODING_UNICODE_2_0_FULL);
+        if (cmap == null) {
             cmap = cmapTable.getSubtable(CmapTable.PLATFORM_WINDOWS,
-                                         CmapTable.ENCODING_WIN_UNICODE_FULL);
+                    CmapTable.ENCODING_WIN_UNICODE_FULL);
         }
-        if (cmap == null)
-        {
+        if (cmap == null) {
             cmap = cmapTable.getSubtable(CmapTable.PLATFORM_UNICODE,
-                                         CmapTable.ENCODING_UNICODE_2_0_BMP);
+                    CmapTable.ENCODING_UNICODE_2_0_BMP);
         }
-        if (cmap == null)
-        {
+        if (cmap == null) {
             cmap = cmapTable.getSubtable(CmapTable.PLATFORM_WINDOWS,
-                                         CmapTable.ENCODING_WIN_UNICODE_BMP);
+                    CmapTable.ENCODING_WIN_UNICODE_BMP);
         }
-        if (cmap == null)
-        {
+        if (cmap == null) {
             // Microsoft's "Recommendations for OpenType Fonts" says that "Symbol" encoding
             // actually means "Unicode, non-standard character set"
             cmap = cmapTable.getSubtable(CmapTable.PLATFORM_WINDOWS,
-                                         CmapTable.ENCODING_WIN_SYMBOL);
+                    CmapTable.ENCODING_WIN_SYMBOL);
         }
-        if (cmap == null)
-        {
-            if (isStrict)
-            {
+        if (cmap == null) {
+            if (isStrict) {
                 throw new IOException("The TrueType font does not contain a Unicode cmap");
-            }
-            else if (cmapTable.getCmaps().length > 0)
-            {
+            } else if (cmapTable.getCmaps().length > 0) {
                 // fallback to the first cmap (may not be Unicode, so may produce poor results)
                 cmap = cmapTable.getCmaps()[0];
             }
@@ -602,33 +521,27 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param name the PostScript name.
      * @return the GID for the given PostScript name
-     *
      * @throws IOException if the font data could not be read
      */
-    public int nameToGID(String name) throws IOException
-    {
+    public int nameToGID(String name) throws IOException {
         // look up in 'post' table
         readPostScriptNames();
-        if (postScriptNames != null)
-        {
+        if (postScriptNames != null) {
             Integer gid = postScriptNames.get(name);
-            if (gid != null && gid > 0 && gid < getMaximumProfile().getNumGlyphs())
-            {
+            if (gid != null && gid > 0 && gid < getMaximumProfile().getNumGlyphs()) {
                 return gid;
             }
         }
 
         // look up in 'cmap'
         int uni = parseUniName(name);
-        if (uni > -1)
-        {
+        if (uni > -1) {
             CmapLookup cmap = getUnicodeCmapLookup(false);
             return cmap.getGlyphId(uni);
         }
 
         // PDFBOX-5604: assume gnnnnn is a gid
-        if (name.matches("g\\d+"))
-        {
+        if (name.matches("g\\d+")) {
             return Integer.parseInt(name.substring(1));
         }
 
@@ -640,14 +553,11 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @return the GSubData of the GlyphSubstitutionTable or {@link GsubData#NO_DATA_FOUND} if either no GSUB data is
      * available or its scripts are not supported
-     *
      * @throws IOException if the font data could not be read
      */
-    public GsubData getGsubData() throws IOException
-    {
+    public GsubData getGsubData() throws IOException {
         GlyphSubstitutionTable table = getGsub();
-        if (table == null)
-        {
+        if (table == null) {
             return GsubData.NO_DATA_FOUND;
         }
 
@@ -657,16 +567,12 @@ public class TrueTypeFont implements FontBoxFont, Closeable
     /**
      * Parses a Unicode PostScript name in the format uniXXXX.
      */
-    private int parseUniName(String name)
-    {
-        if (name.startsWith("uni") && name.length() == 7)
-        {
+    private int parseUniName(String name) {
+        if (name.startsWith("uni") && name.length() == 7) {
             int nameLength = name.length();
             StringBuilder uniStr = new StringBuilder();
-            try
-            {
-                for (int chPos = 3; chPos + 4 <= nameLength; chPos += 4)
-                {
+            try {
+                for (int chPos = 3; chPos + 4 <= nameLength; chPos += 4) {
                     int codePoint = Integer.parseInt(name.substring(chPos, chPos + 4), 16);
                     if (codePoint <= 0xD7FF || codePoint >= 0xE000) // disallowed code area
                     {
@@ -674,14 +580,11 @@ public class TrueTypeFont implements FontBoxFont, Closeable
                     }
                 }
                 String unicode = uniStr.toString();
-                if (unicode.length() == 0)
-                {
+                if (unicode.length() == 0) {
                     return -1;
                 }
                 return unicode.codePointAt(0);
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 return -1;
             }
         }
@@ -689,39 +592,32 @@ public class TrueTypeFont implements FontBoxFont, Closeable
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
+    public GeneralPath getPath(String name) throws IOException {
         int gid = nameToGID(name);
 
         // some glyphs have no outlines (e.g. space, table, newline)
         GlyphData glyph = getGlyph().getGlyph(gid);
-        if (glyph == null)
-        {
+        if (glyph == null) {
             return new GeneralPath();
-        }
-        else
-        {
+        } else {
             // must scaled by caller using FontMatrix
             return glyph.getPath();
         }
     }
 
     @Override
-    public float getWidth(String name) throws IOException
-    {
+    public float getWidth(String name) throws IOException {
         int gid = nameToGID(name);
         return getAdvanceWidth(gid);
     }
 
     @Override
-    public boolean hasGlyph(String name) throws IOException
-    {
+    public boolean hasGlyph(String name) throws IOException {
         return nameToGID(name) != 0;
     }
 
     @Override
-    public BoundingBox getFontBBox() throws IOException
-    {
+    public BoundingBox getFontBBox() throws IOException {
         HeaderTable headerTable = getHeader();
         short xMin = headerTable.getXMin();
         short xMax = headerTable.getXMax();
@@ -732,8 +628,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
     }
 
     @Override
-    public List<Number> getFontMatrix() throws IOException
-    {
+    public List<Number> getFontMatrix() throws IOException {
         float scale = 1000f / getUnitsPerEm();
         return Arrays.<Number>asList(0.001f * scale, 0, 0, 0.001f * scale, 0, 0);
     }
@@ -744,8 +639,7 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param featureTag The GSUB feature to enable
      */
-    public void enableGsubFeature(String featureTag)
-    {
+    public void enableGsubFeature(String featureTag) {
         enabledGsubFeatures.add(featureTag);
     }
 
@@ -754,37 +648,28 @@ public class TrueTypeFont implements FontBoxFont, Closeable
      *
      * @param featureTag The GSUB feature to disable
      */
-    public void disableGsubFeature(String featureTag)
-    {
+    public void disableGsubFeature(String featureTag) {
         enabledGsubFeatures.remove(featureTag);
     }
 
     /**
      * Enable glyph substitutions for vertical writing.
      */
-    public void enableVerticalSubstitutions()
-    {
+    public void enableVerticalSubstitutions() {
         enableGsubFeature("vrt2");
         enableGsubFeature("vert");
     }
 
     @Override
-    public String toString()
-    {
-        try
-        {
+    public String toString() {
+        try {
             NamingTable namingTable = getNaming();
-            if (namingTable != null)
-            {
+            if (namingTable != null) {
                 return namingTable.getPostScriptName();
-            }
-            else
-            {
+            } else {
                 return "(null)";
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             LOG.debug("Error getting the NamingTable for the font", e);
             return "(null - " + e.getMessage() + ")";
         }

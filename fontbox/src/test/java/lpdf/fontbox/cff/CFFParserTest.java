@@ -15,44 +15,39 @@
  */
 package lpdf.fontbox.cff;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import lpdf.fontbox.util.BoundingBox;
 import lpdf.io.RandomAccessReadBufferedFile;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- *
  * @author Petr Slaby
  */
-class CFFParserTest
-{
+class CFFParserTest {
     private static CFFType1Font testCFFType1Font;
 
     @BeforeAll
-    static void loadCFFFont() throws IOException
-    {
+    static void loadCFFFont() throws IOException {
         List<CFFFont> fonts = readFont("target/pdfs/SourceSansProBold.otf");
         testCFFType1Font = (CFFType1Font) fonts.get(0);
     }
 
     @Test
-    void testFontname()
-    {
+    void testFontname() {
         assertEquals("SourceSansPro-Bold", testCFFType1Font.getName());
     }
 
     @Test
-    void testFontBBox() throws IOException
-    {
+    void testFontBBox() throws IOException {
         BoundingBox fontBBox = testCFFType1Font.getFontBBox();
         assertNotNull(fontBBox, "FontBBox must not be null");
         assertEquals(-231.0f, fontBBox.getLowerLeftX());
@@ -62,17 +57,15 @@ class CFFParserTest
     }
 
     @Test
-    void testFontMatrix()
-    {
+    void testFontMatrix() {
         List<Number> fontMatrix = testCFFType1Font.getFontMatrix();
         assertNotNull(fontMatrix, "FontMatrix must not be null");
         assertNumberList("FontMatrix values are different than expected" + fontMatrix.toString(),
-                new float[] { 0.001f, 0.0f, 0.0f, 0.001f, 0.0f, 0.0f }, fontMatrix);
+                new float[]{0.001f, 0.0f, 0.0f, 0.001f, 0.0f, 0.0f}, fontMatrix);
     }
 
     @Test
-    void testCharset()
-    {
+    void testCharset() {
         CFFCharset charset = testCFFType1Font.getCharset();
         assertNotNull(charset, "Charset must not be null");
         assertFalse(charset.isCIDFont(), "isCIDFont has to be false");
@@ -102,8 +95,7 @@ class CFFParserTest
     }
 
     @Test
-    void voidEncoding()
-    {
+    void voidEncoding() {
         CFFEncoding encoding = testCFFType1Font.getEncoding();
         assertNotNull(encoding, "Encoding must not be null");
         assertTrue(encoding instanceof CFFStandardEncoding,
@@ -111,49 +103,47 @@ class CFFParserTest
     }
 
     @Test
-    void testCharStringBytess()
-    {
+    void testCharStringBytess() {
         List<byte[]> charStringBytes = testCFFType1Font.getCharStringBytes();
         assertFalse(charStringBytes.isEmpty());
         assertEquals(824, testCFFType1Font.getNumCharStrings());
         // check some randomly chosen values
         assertTrue(
-                Arrays.equals(new byte[] { -4, 15, 14 }, charStringBytes.get(1)), //
+                Arrays.equals(new byte[]{-4, 15, 14}, charStringBytes.get(1)), //
                 "Other char strings byte values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { 72, 29, -13, 29, -9, -74, -9, 43, 3, 33, 29, 14 },
+                Arrays.equals(new byte[]{72, 29, -13, 29, -9, -74, -9, 43, 3, 33, 29, 14},
                         charStringBytes.get(16)), //
                 "Other char strings byte values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { -41, 88, 29, -47, -9, 12, 1, -123, 10, 3, 35, 29, -9,
-                        -50, -9, 62, -9, 3, 10, 85, -56, 61, 10 }, charStringBytes.get(195)), //
+                Arrays.equals(new byte[]{-41, 88, 29, -47, -9, 12, 1, -123, 10, 3, 35, 29, -9,
+                        -50, -9, 62, -9, 3, 10, 85, -56, 61, 10}, charStringBytes.get(195)), //
                 "Other char strings byte values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { -5, -69, -61, -8, 28, 1, -9, 57, -39, -65, 29, 14 },
+                Arrays.equals(new byte[]{-5, -69, -61, -8, 28, 1, -9, 57, -39, -65, 29, 14},
                         charStringBytes.get(525)), //
                 "Other char strings byte values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { 107, -48, 10, -9, 20, -9, 123, 3, -9, -112, -8, -46, 21,
-                        -10, 115, 10 }, charStringBytes.get(738)), //
+                Arrays.equals(new byte[]{107, -48, 10, -9, 20, -9, 123, 3, -9, -112, -8, -46, 21,
+                        -10, 115, 10}, charStringBytes.get(738)), //
                 "Other char strings byte values than expected");
     }
 
     @Test
-    void testGlobalSubrIndex()
-    {
+    void testGlobalSubrIndex() {
         List<byte[]> globalSubrIndex = testCFFType1Font.getGlobalSubrIndex();
         assertFalse(globalSubrIndex.isEmpty());
         assertEquals(278, globalSubrIndex.size());
         // check some randomly chosen values
         assertTrue(
-                Arrays.equals(new byte[] { 21, -70, -83, -85, -72, -72, 105, -85, 92, 91, 105, 107,
-                        10, -83, -9, 62, 10 }, globalSubrIndex.get(12)), //
+                Arrays.equals(new byte[]{21, -70, -83, -85, -72, -72, 105, -85, 92, 91, 105, 107,
+                        10, -83, -9, 62, 10}, globalSubrIndex.get(12)), //
                 "Other global subr index values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { 58, 122, 29, -5, 48, 6, 11 }, globalSubrIndex.get(120)), //
+                Arrays.equals(new byte[]{58, 122, 29, -5, 48, 6, 11}, globalSubrIndex.get(120)), //
                 "Other global subr index values than expected");
         assertTrue(
-                Arrays.equals(new byte[] { 68, 80, 29, -45, -9, 16, -8, -92, 119, 11 },
+                Arrays.equals(new byte[]{68, 80, 29, -45, -9, 16, -8, -92, 119, 11},
                         globalSubrIndex.get(253)), //
                 "Other global subr index values than expected");
     }
@@ -165,8 +155,7 @@ class CFFParserTest
      * @throws IOException
      */
     @Test
-    void testDeltaLists() throws IOException
-    {
+    void testDeltaLists() throws IOException {
         @SuppressWarnings("unchecked")
         List<Number> blues = (List<Number>) testCFFType1Font.getPrivateDict().get("BlueValues");
 
@@ -201,27 +190,22 @@ class CFFParserTest
                 new int[]{146, 150}, stemSnapV);
     }
 
-    private static List<CFFFont> readFont(String filename) throws IOException
-    {
+    private static List<CFFFont> readFont(String filename) throws IOException {
         RandomAccessReadBufferedFile randomAccessRead = new RandomAccessReadBufferedFile(filename);
         CFFParser parser = new CFFParser();
         return parser.parse(randomAccessRead);
     }
 
-    private void assertNumberList(String message, int[] expected, List<Number> found)
-    {
+    private void assertNumberList(String message, int[] expected, List<Number> found) {
         assertEquals(expected.length, found.size(), message);
-        for (int i = 0; i < expected.length; i++)
-        {
+        for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i], found.get(i).intValue(), message);
         }
     }
 
-    private void assertNumberList(String message, float[] expected, List<Number> found)
-    {
+    private void assertNumberList(String message, float[] expected, List<Number> found) {
         assertEquals(expected.length, found.size(), message);
-        for (int i = 0; i < expected.length; i++)
-        {
+        for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i], found.get(i).floatValue(), message);
         }
     }

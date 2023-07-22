@@ -25,15 +25,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDAdditionalActions implements COSObjectable
-{
+public class PDAdditionalActions implements COSObjectable {
     private final COSDictionary actions;
 
     /**
      * Default constructor.
      */
-    public PDAdditionalActions()
-    {
+    public PDAdditionalActions() {
         actions = new COSDictionary();
     }
 
@@ -42,8 +40,7 @@ public class PDAdditionalActions implements COSObjectable
      *
      * @param a The action dictionary.
      */
-    public PDAdditionalActions( COSDictionary a )
-    {
+    public PDAdditionalActions(COSDictionary a) {
         actions = a;
     }
 
@@ -53,8 +50,7 @@ public class PDAdditionalActions implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return actions;
     }
 
@@ -63,8 +59,7 @@ public class PDAdditionalActions implements COSObjectable
      *
      * @return The F action.
      */
-    public PDAction getF()
-    {
+    public PDAction getF() {
         return PDActionFactory.createAction(actions.getCOSDictionary(COSName.F));
     }
 
@@ -73,8 +68,7 @@ public class PDAdditionalActions implements COSObjectable
      *
      * @param action Get the F action.
      */
-    public void setF( PDAction action )
-    {
-        actions.setItem( COSName.F, action );
+    public void setF(PDAction action) {
+        actions.setItem(COSName.F, action);
     }
 }

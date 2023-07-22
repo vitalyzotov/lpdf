@@ -16,11 +16,11 @@
  */
 package lpdf.io;
 
-import java.io.InputStream;
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An InputStream which reads from a RandomAccessRead.
@@ -28,8 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public class RandomAccessInputStream extends InputStream
-{
+public class RandomAccessInputStream extends InputStream {
     private static final Logger LOG = LoggerFactory.getLogger(RandomAccessInputStream.class);
 
     private final RandomAccessRead input;
@@ -41,74 +40,59 @@ public class RandomAccessInputStream extends InputStream
      *
      * @param randomAccessRead The RandomAccessRead to read from.
      */
-    public RandomAccessInputStream(RandomAccessRead randomAccessRead)
-    {
+    public RandomAccessInputStream(RandomAccessRead randomAccessRead) {
         input = randomAccessRead;
         position = 0;
     }
 
-    void restorePosition() throws IOException
-    {
+    void restorePosition() throws IOException {
         input.seek(position);
     }
 
     @Override
-    public int available() throws IOException
-    {
+    public int available() throws IOException {
         return (int) Math.max(0, Math.min(input.length() - position, Integer.MAX_VALUE));
     }
 
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         restorePosition();
-        if (input.isEOF())
-        {
+        if (input.isEOF()) {
             return -1;
         }
         int b = input.read();
-        if (b != -1)
-        {
+        if (b != -1) {
             position += 1;
-        }
-        else
-        {
+        } else {
             // should never happen due to prior isEOF() check
             // unless there is an unsynchronized concurrent access
             LOG.error("read() returns -1, assumed position: " +
-                       position + ", actual position: " + input.getPosition());
+                    position + ", actual position: " + input.getPosition());
         }
         return b;
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
+    public int read(byte[] b, int off, int len) throws IOException {
         restorePosition();
-        if (input.isEOF())
-        {
+        if (input.isEOF()) {
             return -1;
         }
         int n = input.read(b, off, len);
-        if (n != -1)
-        {
+        if (n != -1) {
             position += n;
-        }
-        else
-        {
+        } else {
             // should never happen due to prior isEOF() check
             // unless there is an unsynchronized concurrent access
             LOG.error("read() returns -1, assumed position: " +
-                       position + ", actual position: " + input.getPosition());
+                    position + ", actual position: " + input.getPosition());
         }
         return n;
     }
 
     @Override
-    public long skip(long n) throws IOException
-    {
-        if (n <= 0)
-        {
+    public long skip(long n) throws IOException {
+        if (n <= 0) {
             return 0;
         }
         restorePosition();

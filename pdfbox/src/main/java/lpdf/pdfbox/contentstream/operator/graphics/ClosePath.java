@@ -16,35 +16,31 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * h Close the path.
  *
  * @author Ben Litchfield
  */
-public final class ClosePath extends GraphicsOperatorProcessor
-{
+public final class ClosePath extends GraphicsOperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(ClosePath.class);
 
-    public ClosePath(PDFGraphicsStreamEngine context)
-    {
+    public ClosePath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (getGraphicsContext().getCurrentPoint() == null)
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (getGraphicsContext().getCurrentPoint() == null) {
             LOG.warn("ClosePath without initial MoveTo");
             return;
         }
@@ -52,8 +48,7 @@ public final class ClosePath extends GraphicsOperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CLOSE_PATH;
     }
 }

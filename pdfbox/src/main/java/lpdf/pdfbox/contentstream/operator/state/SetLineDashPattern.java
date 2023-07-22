@@ -16,10 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -28,53 +24,46 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * d: Set the line dash pattern.
  *
  * @author Ben Litchfield
  */
-public class SetLineDashPattern extends OperatorProcessor
-{
+public class SetLineDashPattern extends OperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(SetLineDashPattern.class);
-    
-    public SetLineDashPattern(PDFStreamEngine context)
-    {
+
+    public SetLineDashPattern(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException
-    {
-        if (arguments.size() < 2)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException {
+        if (arguments.size() < 2) {
             throw new MissingOperandException(operator, arguments);
         }
         COSBase base0 = arguments.get(0);
-        if (!(base0 instanceof COSArray))
-        {
+        if (!(base0 instanceof COSArray)) {
             return;
         }
         COSBase base1 = arguments.get(1);
-        if (!(base1 instanceof COSNumber))
-        {
+        if (!(base1 instanceof COSNumber)) {
             return;
         }
         COSArray dashArray = (COSArray) base0;
         int dashPhase = ((COSNumber) base1).intValue();
-        
-        for (COSBase base : dashArray)
-        {
-            if (base instanceof COSNumber)
-            {
+
+        for (COSBase base : dashArray) {
+            if (base instanceof COSNumber) {
                 COSNumber num = (COSNumber) base;
-                if (Float.compare(num.floatValue(), 0) != 0)
-                {
+                if (Float.compare(num.floatValue(), 0) != 0) {
                     break;
                 }
-            }
-            else
-            {
+            } else {
                 LOG.warn("dash array has non number element " + base + ", ignored");
                 dashArray = new COSArray();
                 break;
@@ -84,8 +73,7 @@ public class SetLineDashPattern extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_LINE_DASHPATTERN;
     }
 }

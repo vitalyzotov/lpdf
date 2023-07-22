@@ -16,15 +16,13 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNull;
 import lpdf.pdfbox.pdmodel.common.function.PDFunction;
+
+import java.io.IOException;
 
 /**
  * A Separation color space used to specify either additional colorants or for isolating the
@@ -35,9 +33,8 @@ import lpdf.pdfbox.pdmodel.common.function.PDFunction;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public class PDSeparation extends PDSpecialColorSpace
-{
-    private final PDColor initialColor = new PDColor(new float[] { 1 }, this);
+public class PDSeparation extends PDSpecialColorSpace {
+    private final PDColor initialColor = new PDColor(new float[]{1}, this);
 
     // array indexes
     private static final int COLORANT_NAMES = 1;
@@ -51,8 +48,7 @@ public class PDSeparation extends PDSpecialColorSpace
     /**
      * Creates a new Separation color space.
      */
-    public PDSeparation()
-    {
+    public PDSeparation() {
         array = new COSArray();
         array.add(COSName.SEPARATION);
         array.add(COSName.getPDFName(""));
@@ -63,18 +59,17 @@ public class PDSeparation extends PDSpecialColorSpace
 
     /**
      * Creates a new Separation color space from a PDF color space array.
+     *
      * @param separation an array containing all separation information.
      * @throws IOException if the color space or the function could not be created.
      */
-    public PDSeparation(COSArray separation) throws IOException
-    {
+    public PDSeparation(COSArray separation) throws IOException {
         array = separation;
         alternateColorSpace = PDColorSpace.create(array.getObject(ALTERNATE_CS));
         tintTransform = PDFunction.create(array.getObject(TINT_TRANSFORM));
         int numberOfOutputParameters = tintTransform.getNumberOfOutputParameters();
         if (numberOfOutputParameters > 0 &&
-                numberOfOutputParameters < alternateColorSpace.getNumberOfComponents())
-        {
+                numberOfOutputParameters < alternateColorSpace.getNumberOfComponents()) {
             throw new IOException("The tint transform function has less output parameters (" +
                     tintTransform.getNumberOfOutputParameters() + ") than the alternate colorspace " +
                     alternateColorSpace + " (" + alternateColorSpace.getNumberOfComponents() + ")");
@@ -82,36 +77,30 @@ public class PDSeparation extends PDSpecialColorSpace
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.SEPARATION.getName();
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 1;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1 };
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return initialColor;
     }
 
 
-    protected void tintTransform(float[] samples, int[] alt) throws IOException
-    {
+    protected void tintTransform(float[] samples, int[] alt) throws IOException {
         samples[0] /= 255; // 0..1
         float[] result = tintTransform.eval(samples);
-        for (int s = 0; s < alt.length; s++)
-        {
+        for (int s = 0; s < alt.length; s++) {
             // scale to 0..255
             alt[s] = (int) (result[s] * 255);
         }
@@ -119,42 +108,41 @@ public class PDSeparation extends PDSpecialColorSpace
 
     /**
      * Returns the colorant name.
+     *
      * @return the name of the colorant
      */
-    public PDColorSpace getAlternateColorSpace()
-    {
-       return alternateColorSpace;
+    public PDColorSpace getAlternateColorSpace() {
+        return alternateColorSpace;
     }
 
     /**
      * Returns the colorant name.
+     *
      * @return the name of the colorant
      */
-    public String getColorantName()
-    {
-        COSName name = (COSName)array.getObject(COLORANT_NAMES);
+    public String getColorantName() {
+        COSName name = (COSName) array.getObject(COLORANT_NAMES);
         return name.getName();
     }
 
     /**
      * Sets the colorant name.
+     *
      * @param name the name of the colorant
      */
-    public void setColorantName(String name)
-    {
+    public void setColorantName(String name) {
         array.set(1, COSName.getPDFName(name));
     }
 
     /**
      * Sets the alternate color space.
+     *
      * @param colorSpace The alternate color space.
      */
-    public void setAlternateColorSpace(PDColorSpace colorSpace)
-    {
+    public void setAlternateColorSpace(PDColorSpace colorSpace) {
         alternateColorSpace = colorSpace;
         COSBase space = null;
-        if (colorSpace != null)
-        {
+        if (colorSpace != null) {
             space = colorSpace.getCOSObject();
         }
         array.set(ALTERNATE_CS, space);
@@ -162,17 +150,16 @@ public class PDSeparation extends PDSpecialColorSpace
 
     /**
      * Sets the tint transform function.
+     *
      * @param tint the tint transform function
      */
-    public void setTintTransform(PDFunction tint)
-    {
+    public void setTintTransform(PDFunction tint) {
         tintTransform = tint;
         array.set(TINT_TRANSFORM, tint);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName() + "{" +
                 "\"" + getColorantName() + "\"" + " " +
                 alternateColorSpace.getName() + " " +

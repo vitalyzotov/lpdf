@@ -19,27 +19,26 @@
 
 package lpdf.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This is a unit test for {@link IOUtils}.
  */
-class TestIOUtils
-{
+class TestIOUtils {
 
     /**
      * Tests {@link IOUtils#populateBuffer(java.io.InputStream, byte[]).
+     *
      * @throws IOException if an I/O error occursn
      */
     @Test
-    void testPopulateBuffer() throws IOException
-    {
+    void testPopulateBuffer() throws IOException {
         byte[] data = "Hello World!".getBytes();
         byte[] buffer = new byte[data.length];
         long count = IOUtils.populateBuffer(new ByteArrayInputStream(data), buffer);

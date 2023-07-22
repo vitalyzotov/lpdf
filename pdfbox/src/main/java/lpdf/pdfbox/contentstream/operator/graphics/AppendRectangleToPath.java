@@ -17,39 +17,33 @@
 package lpdf.pdfbox.contentstream.operator.graphics;
 
 import lpdf.harmony.awt.geom.Point2D;
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * re Appends a rectangle to the path.
  *
  * @author Ben Litchfield
  */
-public final class AppendRectangleToPath extends GraphicsOperatorProcessor
-{
+public final class AppendRectangleToPath extends GraphicsOperatorProcessor {
 
-    public AppendRectangleToPath(PDFGraphicsStreamEngine context)
-    {
+    public AppendRectangleToPath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.size() < 4)
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.size() < 4) {
             throw new MissingOperandException(operator, operands);
         }
-        if (!checkArrayTypesClass(operands, COSNumber.class))
-        {
+        if (!checkArrayTypesClass(operands, COSNumber.class)) {
             return;
         }
         COSNumber x = (COSNumber) operands.get(0);
@@ -74,8 +68,7 @@ public final class AppendRectangleToPath extends GraphicsOperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.APPEND_RECT;
     }
 }

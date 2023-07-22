@@ -19,11 +19,11 @@ package lpdf.pdfbox.pdmodel.common;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSInteger;
 import lpdf.pdfbox.cos.COSFloat;
-import lpdf.pdfbox.cos.COSString;
+import lpdf.pdfbox.cos.COSInteger;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNull;
+import lpdf.pdfbox.cos.COSString;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,11 +34,10 @@ import java.util.ListIterator;
 /**
  * This is an implementation of a List that will sync its contents to a COSArray.
  *
- * @author Ben Litchfield
  * @param <E> Element type.
+ * @author Ben Litchfield
  */
-public class COSArrayList<E> implements List<E>
-{
+public class COSArrayList<E> implements List<E> {
     private final COSArray array;
     private final List<E> actual;
 
@@ -52,8 +51,7 @@ public class COSArrayList<E> implements List<E>
     /**
      * Default constructor.
      */
-    public COSArrayList()
-    {
+    public COSArrayList() {
         array = new COSArray();
         actual = new ArrayList<>();
     }
@@ -70,10 +68,9 @@ public class COSArrayList<E> implements List<E>
      * shall only be used for reading purposes and no longer for updating.
      *
      * @param actualList The list of standard java objects
-     * @param cosArray The COS array object to sync to.
+     * @param cosArray   The COS array object to sync to.
      */
-    public COSArrayList( List<E> actualList, COSArray cosArray )
-    {
+    public COSArrayList(List<E> actualList, COSArray cosArray) {
         actual = actualList;
         array = cosArray;
 
@@ -88,12 +85,11 @@ public class COSArrayList<E> implements List<E>
      * This constructor is to be used if the array doesn't exist, but is to be created and added to
      * the parent dictionary as soon as the first element is added to the array.
      *
-     * @param dictionary The dictionary that holds the item, and will hold the array if an item is
-     * added.
+     * @param dictionary    The dictionary that holds the item, and will hold the array if an item is
+     *                      added.
      * @param dictionaryKey The key into the dictionary to set the item.
      */
-    public COSArrayList(COSDictionary dictionary, COSName dictionaryKey)
-    {
+    public COSArrayList(COSDictionary dictionary, COSName dictionaryKey) {
         array = new COSArray();
         actual = new ArrayList<>();
         parentDict = dictionary;
@@ -110,17 +106,16 @@ public class COSArrayList<E> implements List<E>
      * item instead of a list, but allow more items to be added and then converted
      * to an array.
      *
-     * @param actualObject The PDModel object.
-     * @param item The COS Model object.
-     * @param dictionary The dictionary that holds the item, and will hold the array if an item is added.
+     * @param actualObject  The PDModel object.
+     * @param item          The COS Model object.
+     * @param dictionary    The dictionary that holds the item, and will hold the array if an item is added.
      * @param dictionaryKey The key into the dictionary to set the item.
      */
-    public COSArrayList( E actualObject, COSBase item, COSDictionary dictionary, COSName dictionaryKey )
-    {
+    public COSArrayList(E actualObject, COSBase item, COSDictionary dictionary, COSName dictionaryKey) {
         array = new COSArray();
-        array.add( item );
+        array.add(item);
         actual = new ArrayList<>();
-        actual.add( actualObject );
+        actual.add(actualObject);
 
         parentDict = dictionary;
         dictKey = dictionaryKey;
@@ -130,8 +125,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public int size()
-    {
+    public int size() {
         return actual.size();
     }
 
@@ -139,8 +133,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return actual.isEmpty();
     }
 
@@ -148,8 +141,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(Object o)
-    {
+    public boolean contains(Object o) {
         return actual.contains(o);
     }
 
@@ -157,8 +149,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public Iterator<E> iterator()
-    {
+    public Iterator<E> iterator() {
         return actual.iterator();
     }
 
@@ -166,8 +157,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public Object[] toArray()
-    {
+    public Object[] toArray() {
         return actual.toArray();
     }
 
@@ -175,8 +165,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public <X>X[] toArray(X[] a)
-    {
+    public <X> X[] toArray(X[] a) {
         return actual.toArray(a);
 
     }
@@ -185,27 +174,21 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean add(E o)
-    {
+    public boolean add(E o) {
         //when adding if there is a parentDict then change the item
         //in the dictionary from a single item to an array.
-        if( parentDict != null )
-        {
-            parentDict.setItem( dictKey, array );
+        if (parentDict != null) {
+            parentDict.setItem(dictKey, array);
             //clear the parent dict so it doesn't happen again, there might be
             //a usecase for keeping the parentDict around but not now.
             parentDict = null;
         }
         //string is a special case because we can't subclass to be COSObjectable
-        if( o instanceof String )
-        {
-            array.add( new COSString( (String)o ) );
-        }
-        else
-        {
-            if(array != null)
-            {
-                array.add(((COSObjectable)o).getCOSObject());
+        if (o instanceof String) {
+            array.add(new COSString((String) o));
+        } else {
+            if (array != null) {
+                array.add(((COSObjectable) o).getCOSObject());
             }
         }
         return actual.add(o);
@@ -215,22 +198,18 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean remove(Object o)
-    {
+    public boolean remove(Object o) {
 
         if (isFiltered) {
             throw new UnsupportedOperationException("removing entries from a filtered List is not permitted");
         }
 
         boolean retval = true;
-        int index = actual.indexOf( o );
-        if( index >= 0 )
-        {
-            actual.remove( index );
-            array.remove( index );
-        }
-        else
-        {
+        int index = actual.indexOf(o);
+        if (index >= 0) {
+            actual.remove(index);
+            array.remove(index);
+        } else {
             retval = false;
         }
         return retval;
@@ -240,107 +219,84 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(Collection<?> c)
-    {
-        return actual.containsAll( c );
+    public boolean containsAll(Collection<?> c) {
+        return actual.containsAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(Collection<? extends E> c)
-    {
+    public boolean addAll(Collection<? extends E> c) {
         if (isFiltered) {
             throw new UnsupportedOperationException("Adding to a filtered List is not permitted");
         }
 
         //when adding if there is a parentDict then change the item
         //in the dictionary from a single item to an array.
-        if( parentDict != null && c.size() > 0)
-        {
-            parentDict.setItem( dictKey, array );
+        if (parentDict != null && c.size() > 0) {
+            parentDict.setItem(dictKey, array);
             //clear the parent dict so it doesn't happen again, there might be
             //a usecase for keeping the parentDict around but not now.
             parentDict = null;
         }
-        array.addAll( toCOSObjectList( c ) );
-        return actual.addAll( c );
+        array.addAll(toCOSObjectList(c));
+        return actual.addAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(int index, Collection<? extends E> c)
-    {
+    public boolean addAll(int index, Collection<? extends E> c) {
         if (isFiltered) {
             throw new UnsupportedOperationException("Inserting to a filtered List is not permitted");
         }
 
         //when adding if there is a parentDict then change the item
         //in the dictionary from a single item to an array.
-        if( parentDict != null && c.size() > 0)
-        {
-            parentDict.setItem( dictKey, array );
+        if (parentDict != null && c.size() > 0) {
+            parentDict.setItem(dictKey, array);
             //clear the parent dict so it doesn't happen again, there might be
             //a usecase for keeping the parentDict around but not now.
             parentDict = null;
         }
 
-        array.addAll( index, toCOSObjectList( c ) );
-        return actual.addAll( index, c );
+        array.addAll(index, toCOSObjectList(c));
+        return actual.addAll(index, c);
     }
 
     /**
      * This will convert a list of COSObjectables to an array list of COSBase objects.
      *
      * @param cosObjectableList A list of COSObjectable.
-     *
      * @return A list of COSBase.
      * @throws IllegalArgumentException if an object type is not supported for conversion to a
-     * COSBase object.
+     *                                  COSBase object.
      */
-    public static COSArray converterToCOSArray(List<?> cosObjectableList)
-    {
+    public static COSArray converterToCOSArray(List<?> cosObjectableList) {
         COSArray array = null;
-        if( cosObjectableList != null )
-        {
-            if( cosObjectableList instanceof COSArrayList )
-            {
+        if (cosObjectableList != null) {
+            if (cosObjectableList instanceof COSArrayList) {
                 //if it is already a COSArrayList then we don't want to recreate the array, we want to reuse it.
-                array = ((COSArrayList<?>)cosObjectableList).array;
-            }
-            else
-            {
+                array = ((COSArrayList<?>) cosObjectableList).array;
+            } else {
                 array = new COSArray();
-                for (Object next : cosObjectableList)
-                {
-                    if( next instanceof String )
-                    {
-                        array.add( new COSString( (String)next ) );
-                    }
-                    else if( next instanceof Integer || next instanceof Long )
-                    {
-                        array.add( COSInteger.get( ((Number)next).longValue() ) );
-                    }
-                    else if( next instanceof Float || next instanceof Double )
-                    {
-                        array.add( new COSFloat( ((Number)next).floatValue() ) );
-                    }
-                    else if( next instanceof COSObjectable )
-                    {
-                        COSObjectable object = (COSObjectable)next;
-                        array.add( object.getCOSObject() );
-                    }
-                    else if( next == null )
-                    {
-                        array.add( COSNull.NULL );
-                    }
-                    else
-                    {
-                        throw new IllegalArgumentException( "Error: Don't know how to convert type to COSBase '" +
-                        next.getClass().getName() + "'" );
+                for (Object next : cosObjectableList) {
+                    if (next instanceof String) {
+                        array.add(new COSString((String) next));
+                    } else if (next instanceof Integer || next instanceof Long) {
+                        array.add(COSInteger.get(((Number) next).longValue()));
+                    } else if (next instanceof Float || next instanceof Double) {
+                        array.add(new COSFloat(((Number) next).floatValue()));
+                    } else if (next instanceof COSObjectable) {
+                        COSObjectable object = (COSObjectable) next;
+                        array.add(object.getCOSObject());
+                    } else if (next == null) {
+                        array.add(COSNull.NULL);
+                    } else {
+                        throw new IllegalArgumentException("Error: Don't know how to convert type to COSBase '" +
+                                next.getClass().getName() + "'");
                     }
                 }
             }
@@ -348,19 +304,15 @@ public class COSArrayList<E> implements List<E>
         return array;
     }
 
-    private List<COSBase> toCOSObjectList( Collection<?> list )
-    {
+    private List<COSBase> toCOSObjectList(Collection<?> list) {
         List<COSBase> cosObjects = new ArrayList<>(list.size());
         list.forEach(next ->
         {
-            if( next instanceof String )
-            {
-                cosObjects.add( new COSString( (String)next ) );
-            }
-            else
-            {
-                COSObjectable cos = (COSObjectable)next;
-                cosObjects.add( cos.getCOSObject() );
+            if (next instanceof String) {
+                cosObjects.add(new COSString((String) next));
+            } else {
+                COSObjectable cos = (COSObjectable) next;
+                cosObjects.add(cos.getCOSObject());
             }
         });
         return cosObjects;
@@ -370,57 +322,49 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean removeAll(Collection<?> c)
-    {
+    public boolean removeAll(Collection<?> c) {
         c.forEach(item -> {
-            COSBase itemCOSBase = ((COSObjectable)item).getCOSObject();
+            COSBase itemCOSBase = ((COSObjectable) item).getCOSObject();
             // remove all indirect objects too by dereferencing them
             // before doing the comparison
-            for (int i=array.size()-1; i>=0; i--)
-            {
-                if (itemCOSBase.equals(array.getObject(i)))
-                {
+            for (int i = array.size() - 1; i >= 0; i--) {
+                if (itemCOSBase.equals(array.getObject(i))) {
                     array.remove(i);
                 }
             }
         });
 
-        return actual.removeAll( c );
+        return actual.removeAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean retainAll(Collection<?> c)
-    {
+    public boolean retainAll(Collection<?> c) {
         c.forEach(item -> {
-            COSBase itemCOSBase = ((COSObjectable)item).getCOSObject();
+            COSBase itemCOSBase = ((COSObjectable) item).getCOSObject();
             // remove all indirect objects too by dereferencing them
             // before doing the comparison
-            for (int i=array.size()-1; i>=0; i--)
-            {
-                if (!itemCOSBase.equals(array.getObject(i)))
-                {
+            for (int i = array.size() - 1; i >= 0; i--) {
+                if (!itemCOSBase.equals(array.getObject(i))) {
                     array.remove(i);
                 }
             }
         });
 
-        return actual.retainAll( c );
+        return actual.retainAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void clear()
-    {
+    public void clear() {
         //when adding if there is a parentDict then change the item
         //in the dictionary from a single item to an array.
-        if( parentDict != null )
-        {
-            parentDict.setItem( dictKey, null );
+        if (parentDict != null) {
+            parentDict.setItem(dictKey, null);
         }
         actual.clear();
         array.clear();
@@ -430,17 +374,15 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o)
-    {
-        return actual.equals( o );
+    public boolean equals(Object o) {
+        return actual.equals(o);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return actual.hashCode();
     }
 
@@ -448,9 +390,8 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public E get(int index)
-    {
-        return actual.get( index );
+    public E get(int index) {
+        return actual.get(index);
 
     }
 
@@ -458,59 +399,48 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public E set(int index, E element)
-    {
+    public E set(int index, E element) {
         if (isFiltered) {
             throw new UnsupportedOperationException("Replacing an element in a filtered List is not permitted");
         }
 
-        if( element instanceof String )
-        {
-            COSString item = new COSString( (String)element );
-            if( parentDict != null && index == 0 )
-            {
-                parentDict.setItem( dictKey, item );
+        if (element instanceof String) {
+            COSString item = new COSString((String) element);
+            if (parentDict != null && index == 0) {
+                parentDict.setItem(dictKey, item);
             }
-            array.set( index, item );
-        }
-        else
-        {
-            if( parentDict != null && index == 0 )
-            {
-                parentDict.setItem( dictKey, ((COSObjectable)element).getCOSObject() );
+            array.set(index, item);
+        } else {
+            if (parentDict != null && index == 0) {
+                parentDict.setItem(dictKey, ((COSObjectable) element).getCOSObject());
             }
-            array.set( index, ((COSObjectable)element).getCOSObject() );
+            array.set(index, ((COSObjectable) element).getCOSObject());
         }
-        return actual.set( index, element );
+        return actual.set(index, element);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void add(int index, E element)
-    {
+    public void add(int index, E element) {
         if (isFiltered) {
             throw new UnsupportedOperationException("Adding an element in a filtered List is not permitted");
         }
 
         //when adding if there is a parentDict then change the item
         //in the dictionary from a single item to an array.
-        if( parentDict != null )
-        {
-            parentDict.setItem( dictKey, array );
+        if (parentDict != null) {
+            parentDict.setItem(dictKey, array);
             //clear the parent dict so it doesn't happen again, there might be
             //a usecase for keeping the parentDict around but not now.
             parentDict = null;
         }
-        actual.add( index, element );
-        if( element instanceof String )
-        {
-            array.add( index, new COSString( (String)element ) );
-        }
-        else
-        {
-            array.add( index, ((COSObjectable)element).getCOSObject() );
+        actual.add(index, element);
+        if (element instanceof String) {
+            array.add(index, new COSString((String) element));
+        } else {
+            array.add(index, ((COSObjectable) element).getCOSObject());
         }
     }
 
@@ -518,32 +448,29 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public E remove(int index)
-    {
+    public E remove(int index) {
         if (isFiltered) {
             throw new UnsupportedOperationException("removing entries from a filtered List is not permitted");
         }
 
-        array.remove( index );
-        return actual.remove( index );
+        array.remove(index);
+        return actual.remove(index);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int indexOf(Object o)
-    {
-        return actual.indexOf( o );
+    public int indexOf(Object o) {
+        return actual.indexOf(o);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int lastIndexOf(Object o)
-    {
-        return actual.lastIndexOf( o );
+    public int lastIndexOf(Object o) {
+        return actual.lastIndexOf(o);
 
     }
 
@@ -551,8 +478,7 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public ListIterator<E> listIterator()
-    {
+    public ListIterator<E> listIterator() {
         return actual.listIterator();
     }
 
@@ -560,26 +486,23 @@ public class COSArrayList<E> implements List<E>
      * {@inheritDoc}
      */
     @Override
-    public ListIterator<E> listIterator(int index)
-    {
-        return actual.listIterator( index );
+    public ListIterator<E> listIterator(int index) {
+        return actual.listIterator(index);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<E> subList(int fromIndex, int toIndex)
-    {
-        return actual.subList( fromIndex, toIndex );
+    public List<E> subList(int fromIndex, int toIndex) {
+        return actual.subList(fromIndex, toIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "COSArrayList{" + array.toString() + "}";
     }
 
@@ -588,8 +511,7 @@ public class COSArrayList<E> implements List<E>
      *
      * @return the COSArray
      */
-    public COSArray toList()
-    {
+    public COSArray toList() {
         return array;
     }
 

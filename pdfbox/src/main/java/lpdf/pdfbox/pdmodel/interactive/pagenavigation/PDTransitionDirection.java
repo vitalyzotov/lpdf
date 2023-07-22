@@ -27,10 +27,8 @@ import lpdf.pdfbox.cos.COSName;
  * {@link PDTransitionStyle#Push}.
  *
  * @author Andrea Vacondio
- *
  */
-public enum PDTransitionDirection
-{
+public enum PDTransitionDirection {
     LEFT_TO_RIGHT(0),
     /**
      * Relevant only for the Wipe transition
@@ -47,27 +45,23 @@ public enum PDTransitionDirection
     /**
      * Relevant only for the Fly transition when the value of SS is not 1.0
      */
-    NONE(0)
-    {
+    NONE(0) {
         @Override
-        public COSBase getCOSBase()
-        {
+        public COSBase getCOSBase() {
             return COSName.NONE;
         }
     };
 
     private final int degrees;
 
-    private PDTransitionDirection(int degrees)
-    {
+    private PDTransitionDirection(int degrees) {
         this.degrees = degrees;
     }
 
     /**
      * @return the value for this direction
      */
-    public COSBase getCOSBase()
-    {
+    public COSBase getCOSBase() {
         return COSInteger.get(degrees);
     }
 }

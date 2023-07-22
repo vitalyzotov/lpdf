@@ -16,29 +16,26 @@
  */
 package lpdf.pdfbox.pdmodel.common.function.type4;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-
 /**
  * Tests all implemented PostScript operators.
- *
  */
 @Execution(ExecutionMode.CONCURRENT)
-class TestOperators
-{
+class TestOperators {
 
     /**
      * Tests the "add" operator.
      */
     @Test
-    void testAdd()
-    {
+    void testAdd() {
         Type4Tester.create("5 6 add").pop(11).isEmpty();
 
         Type4Tester.create("5 0.23 add").pop(5.23f).isEmpty();
@@ -46,8 +43,8 @@ class TestOperators
         int bigValue = Integer.MAX_VALUE - 2;
         ExecutionContext context = Type4Tester.create(
                 bigValue + " " + bigValue + " add").toExecutionContext();
-        float floatResult = (Float)context.getStack().pop();
-        assertEquals(2 * (long)Integer.MAX_VALUE - 4, floatResult, 1);
+        float floatResult = (Float) context.getStack().pop();
+        assertEquals(2 * (long) Integer.MAX_VALUE - 4, floatResult, 1);
         assertTrue(context.getStack().isEmpty());
     }
 
@@ -56,10 +53,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testAbs()
-    {
+    void testAbs() {
         Type4Tester.create("-3 abs 2.1 abs -2.1 abs -7.5 abs")
-            .pop(7.5f).pop(2.1f).pop(2.1f).pop(3).isEmpty();
+                .pop(7.5f).pop(2.1f).pop(2.1f).pop(3).isEmpty();
     }
 
     /**
@@ -67,13 +63,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testAnd()
-    {
+    void testAnd() {
         Type4Tester.create("true true and true false and")
-            .pop(false).pop(true).isEmpty();
+                .pop(false).pop(true).isEmpty();
 
         Type4Tester.create("99 1 and 52 7 and")
-            .pop(4).pop(1).isEmpty();
+                .pop(4).pop(1).isEmpty();
     }
 
     /**
@@ -81,8 +76,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testAtan()
-    {
+    void testAtan() {
         Type4Tester.create("0 1 atan").pop(0f).isEmpty();
         Type4Tester.create("1 0 atan").pop(90f).isEmpty();
         Type4Tester.create("-100 0 atan").pop(270f).isEmpty();
@@ -94,10 +88,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testCeiling()
-    {
+    void testCeiling() {
         Type4Tester.create("3.2 ceiling -4.8 ceiling 99 ceiling")
-            .pop(99).pop(-4f).pop(4f).isEmpty();
+                .pop(99).pop(-4f).pop(4f).isEmpty();
     }
 
     /**
@@ -105,8 +98,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testCos()
-    {
+    void testCos() {
         Type4Tester.create("0 cos").popReal(1f).isEmpty();
         Type4Tester.create("90 cos").popReal(0f).isEmpty();
     }
@@ -116,8 +108,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testCvi()
-    {
+    void testCvi() {
         Type4Tester.create("-47.8 cvi").pop(-47).isEmpty();
         Type4Tester.create("520.9 cvi").pop(520).isEmpty();
     }
@@ -126,8 +117,7 @@ class TestOperators
      * Tests the "cvr" operator.
      */
     @Test
-    void testCvr()
-    {
+    void testCvr() {
         Type4Tester.create("-47.8 cvr").popReal(-47.8f).isEmpty();
         Type4Tester.create("520.9 cvr").popReal(520.9f).isEmpty();
         Type4Tester.create("77 cvr").popReal(77f).isEmpty();
@@ -145,8 +135,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testDiv()
-    {
+    void testDiv() {
         Type4Tester.create("3 2 div").popReal(1.5f).isEmpty();
         Type4Tester.create("4 2 div").popReal(2.0f).isEmpty();
     }
@@ -156,8 +145,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testExp()
-    {
+    void testExp() {
         Type4Tester.create("9 0.5 exp").popReal(3.0f).isEmpty();
         Type4Tester.create("-9 -1 exp").popReal(-0.111111f, 0.000001).isEmpty();
     }
@@ -167,28 +155,23 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testFloor()
-    {
+    void testFloor() {
         Type4Tester.create("3.2 floor -4.8 floor 99 floor")
-            .pop(99).pop(-5f).pop(3f).isEmpty();
+                .pop(99).pop(-5f).pop(3f).isEmpty();
     }
 
     /**
      * Tests the "div" operator.
      */
     @Test
-    void testIDiv()
-    {
+    void testIDiv() {
         Type4Tester.create("3 2 idiv").pop(1).isEmpty();
         Type4Tester.create("4 2 idiv").pop(2).isEmpty();
         Type4Tester.create("-5 2 idiv").pop(-2).isEmpty();
-        try
-        {
+        try {
             Type4Tester.create("4.4 2 idiv");
             fail("Expected typecheck");
-        }
-        catch (ClassCastException cce)
-        {
+        } catch (ClassCastException cce) {
             //expected
         }
     }
@@ -198,8 +181,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testLn()
-    {
+    void testLn() {
         Type4Tester.create("10 ln").popReal(2.30259f, 0.00001f).isEmpty();
         Type4Tester.create("100 ln").popReal(4.60517f, 0.00001f).isEmpty();
     }
@@ -209,8 +191,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testLog()
-    {
+    void testLog() {
         Type4Tester.create("10 log").popReal(1.0f).isEmpty();
         Type4Tester.create("100 log").popReal(2.0f).isEmpty();
     }
@@ -219,18 +200,14 @@ class TestOperators
      * Tests the "mod" operator.
      */
     @Test
-    void testMod()
-    {
+    void testMod() {
         Type4Tester.create("5 3 mod").pop(2).isEmpty();
         Type4Tester.create("5 2 mod").pop(1).isEmpty();
         Type4Tester.create("-5 3 mod").pop(-2).isEmpty();
-        try
-        {
+        try {
             Type4Tester.create("4.4 2 mod");
             fail("Expected typecheck");
-        }
-        catch (ClassCastException cce)
-        {
+        } catch (ClassCastException cce) {
             //expected
         }
     }
@@ -240,13 +217,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testMul()
-    {
+    void testMul() {
         Type4Tester.create("1 2 mul").pop(2).isEmpty();
         Type4Tester.create("1.5 2 mul").popReal(3.0f).isEmpty();
         Type4Tester.create("1.5 2.1 mul").popReal(3.15f, 0.001).isEmpty();
         Type4Tester.create((Integer.MAX_VALUE - 3) + " 2 mul") //integer overflow -> real
-            .popReal(2L * (Integer.MAX_VALUE - 3), 0.001).isEmpty();
+                .popReal(2L * (Integer.MAX_VALUE - 3), 0.001).isEmpty();
     }
 
     /**
@@ -254,16 +230,15 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testNeg()
-    {
+    void testNeg() {
         Type4Tester.create("4.5 neg").popReal(-4.5f).isEmpty();
         Type4Tester.create("-3 neg").pop(3).isEmpty();
 
         //Border cases
         Type4Tester.create((Integer.MIN_VALUE + 1) + " neg")
-            .pop(Integer.MAX_VALUE).isEmpty();
+                .pop(Integer.MAX_VALUE).isEmpty();
         Type4Tester.create(Integer.MIN_VALUE + " neg")
-            .popReal(-(float)Integer.MIN_VALUE).isEmpty();
+                .popReal(-(float) Integer.MIN_VALUE).isEmpty();
     }
 
     /**
@@ -271,8 +246,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testRound()
-    {
+    void testRound() {
         Type4Tester.create("3.2 round").popReal(3.0f).isEmpty();
         Type4Tester.create("6.5 round").popReal(7.0f).isEmpty();
         Type4Tester.create("-4.8 round").popReal(-5.0f).isEmpty();
@@ -285,8 +259,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testSin()
-    {
+    void testSin() {
         Type4Tester.create("0 sin").popReal(0f).isEmpty();
         Type4Tester.create("90 sin").popReal(1f).isEmpty();
         Type4Tester.create("-90.0 sin").popReal(-1f).isEmpty();
@@ -296,8 +269,7 @@ class TestOperators
      * Tests the "sqrt" operator.
      */
     @Test
-    void testSqrt()
-    {
+    void testSqrt() {
         Type4Tester.create("0 sqrt").popReal(0f).isEmpty();
         Type4Tester.create("1 sqrt").popReal(1f).isEmpty();
         Type4Tester.create("4 sqrt").popReal(2f).isEmpty();
@@ -311,8 +283,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testSub()
-    {
+    void testSub() {
         Type4Tester.create("5 2 sub -7.5 1 sub").pop(-8.5f).pop(3).isEmpty();
     }
 
@@ -321,8 +292,7 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testTruncate()
-    {
+    void testTruncate() {
         Type4Tester.create("3.2 truncate").popReal(3.0f).isEmpty();
         Type4Tester.create("-4.8 truncate").popReal(-4.0f).isEmpty();
         Type4Tester.create("99 truncate").pop(99).isEmpty();
@@ -333,10 +303,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testBitshift()
-    {
+    void testBitshift() {
         Type4Tester.create("7 3 bitshift 142 -3 bitshift")
-            .pop(17).pop(56).isEmpty();
+                .pop(17).pop(56).isEmpty();
     }
 
     /**
@@ -344,10 +313,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testEq()
-    {
+    void testEq() {
         Type4Tester.create("7 7 eq 7 6 eq 7 -7 eq true true eq false true eq 7.7 7.7 eq")
-            .pop(true).pop(false).pop(true).pop(false).pop(false).pop(true).isEmpty();
+                .pop(true).pop(false).pop(true).pop(false).pop(false).pop(true).isEmpty();
     }
 
     /**
@@ -355,10 +323,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testGe()
-    {
+    void testGe() {
         Type4Tester.create("5 7 ge 7 5 ge 7 7 ge -1 2 ge")
-            .pop(false).pop(true).pop(true).pop(false).isEmpty();
+                .pop(false).pop(true).pop(true).pop(false).isEmpty();
     }
 
     /**
@@ -366,10 +333,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testGt()
-    {
+    void testGt() {
         Type4Tester.create("5 7 gt 7 5 gt 7 7 gt -1 2 gt")
-            .pop(false).pop(false).pop(true).pop(false).isEmpty();
+                .pop(false).pop(false).pop(true).pop(false).isEmpty();
     }
 
     /**
@@ -377,10 +343,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testLe()
-    {
+    void testLe() {
         Type4Tester.create("5 7 le 7 5 le 7 7 le -1 2 le")
-            .pop(true).pop(true).pop(false).pop(true).isEmpty();
+                .pop(true).pop(true).pop(false).pop(true).isEmpty();
     }
 
     /**
@@ -388,10 +353,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testLt()
-    {
+    void testLt() {
         Type4Tester.create("5 7 lt 7 5 lt 7 7 lt -1 2 lt")
-            .pop(true).pop(false).pop(false).pop(true).isEmpty();
+                .pop(true).pop(false).pop(false).pop(true).isEmpty();
     }
 
     /**
@@ -399,10 +363,9 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testNe()
-    {
+    void testNe() {
         Type4Tester.create("7 7 ne 7 6 ne 7 -7 ne true true ne false true ne 7.7 7.7 ne")
-            .pop(false).pop(true).pop(false).pop(true).pop(true).pop(false).isEmpty();
+                .pop(false).pop(true).pop(false).pop(true).pop(true).pop(false).isEmpty();
     }
 
     /**
@@ -410,13 +373,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testNot()
-    {
+    void testNot() {
         Type4Tester.create("true not false not")
-            .pop(true).pop(false).isEmpty();
+                .pop(true).pop(false).isEmpty();
 
         Type4Tester.create("52 not -37 not")
-            .pop(37).pop(-52).isEmpty();
+                .pop(37).pop(-52).isEmpty();
     }
 
     /**
@@ -424,13 +386,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testOr()
-    {
+    void testOr() {
         Type4Tester.create("true true or true false or false false or")
-            .pop(false).pop(true).pop(true).isEmpty();
+                .pop(false).pop(true).pop(true).isEmpty();
 
         Type4Tester.create("17 5 or 1 1 or")
-            .pop(1).pop(21).isEmpty();
+                .pop(1).pop(21).isEmpty();
     }
 
     /**
@@ -438,26 +399,24 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testXor()
-    {
+    void testXor() {
         Type4Tester.create("true true xor true false xor false false xor")
-            .pop(false).pop(true).pop(false).isEmpty();
+                .pop(false).pop(true).pop(false).isEmpty();
 
         Type4Tester.create("7 3 xor 12 3 or")
-            .pop(15).pop(4);
+                .pop(15).pop(4);
     }
 
     /**
      * Tests the "if" operator.
      */
     @Test
-    void testIf()
-    {
+    void testIf() {
         Type4Tester.create("true { 2 1 add } if")
-            .pop(3).isEmpty();
+                .pop(3).isEmpty();
 
         Type4Tester.create("false { 2 1 add } if")
-            .isEmpty();
+                .isEmpty();
 
         assertThrows(ClassCastException.class, () -> Type4Tester.create("0 { 2 1 add } if"),
                 "Need typecheck error for the '0'");
@@ -468,13 +427,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testIfElse()
-    {
+    void testIfElse() {
         Type4Tester.create("true { 2 1 add } { 2 1 sub } ifelse")
-            .pop(3).isEmpty();
+                .pop(3).isEmpty();
 
         Type4Tester.create("false { 2 1 add } { 2 1 sub } ifelse")
-            .pop(1).isEmpty();
+                .pop(1).isEmpty();
     }
 
     /**
@@ -482,13 +440,12 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testCopy()
-    {
+    void testCopy() {
         Type4Tester.create("true 1 2 3 3 copy")
-            .pop(3).pop(2).pop(1)
-            .pop(3).pop(2).pop(1)
-            .pop(true)
-            .isEmpty();
+                .pop(3).pop(2).pop(1)
+                .pop(3).pop(2).pop(1)
+                .pop(true)
+                .isEmpty();
     }
 
     /**
@@ -496,14 +453,13 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testDup()
-    {
+    void testDup() {
         Type4Tester.create("true 1 2 dup")
-            .pop(2).pop(2).pop(1)
-            .pop(true)
-            .isEmpty();
+                .pop(2).pop(2).pop(1)
+                .pop(true)
+                .isEmpty();
         Type4Tester.create("true dup")
-            .pop(true).pop(true).isEmpty();
+                .pop(true).pop(true).isEmpty();
     }
 
     /**
@@ -511,12 +467,11 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testExch()
-    {
+    void testExch() {
         Type4Tester.create("true 1 exch")
-            .pop(true).pop(1).isEmpty();
+                .pop(true).pop(1).isEmpty();
         Type4Tester.create("1 2.5 exch")
-            .pop(1).pop(2.5f).isEmpty();
+                .pop(1).pop(2.5f).isEmpty();
     }
 
     /**
@@ -524,12 +479,11 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testIndex()
-    {
+    void testIndex() {
         Type4Tester.create("1 2 3 4 0 index")
-            .pop(4).pop(4).pop(3).pop(2).pop(1).isEmpty();
+                .pop(4).pop(4).pop(3).pop(2).pop(1).isEmpty();
         Type4Tester.create("1 2 3 4 3 index")
-            .pop(1).pop(4).pop(3).pop(2).pop(1).isEmpty();
+                .pop(1).pop(4).pop(3).pop(2).pop(1).isEmpty();
     }
 
     /**
@@ -537,12 +491,11 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testPop()
-    {
+    void testPop() {
         Type4Tester.create("1 pop 7 2 pop")
-            .pop(7).isEmpty();
+                .pop(7).isEmpty();
         Type4Tester.create("1 2 3 pop pop")
-            .pop(1).isEmpty();
+                .pop(1).isEmpty();
     }
 
     /**
@@ -550,14 +503,13 @@ class TestOperators
      */
     @SuppressWarnings("squid:S2699") // Assertion done in Type4Tester
     @Test
-    void testRoll()
-    {
+    void testRoll() {
         Type4Tester.create("1 2 3 4 5 5 -2 roll")
-            .pop(2).pop(1).pop(5).pop(4).pop(3).isEmpty();
+                .pop(2).pop(1).pop(5).pop(4).pop(3).isEmpty();
         Type4Tester.create("1 2 3 4 5 5 2 roll")
-            .pop(3).pop(2).pop(1).pop(5).pop(4).isEmpty();
+                .pop(3).pop(2).pop(1).pop(5).pop(4).isEmpty();
         Type4Tester.create("1 2 3 3 0 roll")
-            .pop(3).pop(2).pop(1).isEmpty();
+                .pop(3).pop(2).pop(1).isEmpty();
     }
 
 }

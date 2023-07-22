@@ -16,30 +16,28 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.PDStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides the ability to write to a page content stream.
  *
  * @author Ben Litchfield
  */
-public final class PDPageContentStream extends PDAbstractContentStream implements Closeable
-{
+public final class PDPageContentStream extends PDAbstractContentStream implements Closeable {
     /**
      * This is to choose what to do with the stream: overwrite, append or prepend.
      */
-    public enum AppendMode
-    {
+    public enum AppendMode {
         /**
          * Overwrite the existing page content streams.
          */
@@ -53,13 +51,11 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
          */
         PREPEND;
 
-        public boolean isOverwrite()
-        {
+        public boolean isOverwrite() {
             return this == OVERWRITE;
         }
 
-        public boolean isPrepend()
-        {
+        public boolean isPrepend() {
             return this == PREPEND;
         }
     }
@@ -72,15 +68,13 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * Create a new PDPage content stream. This constructor overwrites all existing content streams
      * of this page.
      *
-     * @param document The document the page is part of.
+     * @param document   The document the page is part of.
      * @param sourcePage The page to write the contents to.
      * @throws IOException If there is an error writing to the page contents.
      */
-    public PDPageContentStream(PDDocument document, PDPage sourcePage) throws IOException
-    {
+    public PDPageContentStream(PDDocument document, PDPage sourcePage) throws IOException {
         this(document, sourcePage, AppendMode.OVERWRITE, true, false);
-        if (sourcePageHadContents)
-        {
+        if (sourcePageHadContents) {
             LOG.warn("You are overwriting an existing content, you should use the append mode");
         }
     }
@@ -91,86 +85,73 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * {@link #PDPageContentStream(PDDocument, PDPage, PDPageContentStream.AppendMode, boolean, boolean)}
      * instead, with the fifth parameter set to true.
      *
-     * @param document The document the page is part of.
-     * @param sourcePage The page to write the contents to.
+     * @param document      The document the page is part of.
+     * @param sourcePage    The page to write the contents to.
      * @param appendContent Indicates whether content will be overwritten, appended or prepended.
-     * @param compress Tell if the content stream should compress the page contents.
+     * @param compress      Tell if the content stream should compress the page contents.
      * @throws IOException If there is an error writing to the page contents.
      */
     public PDPageContentStream(PDDocument document, PDPage sourcePage, AppendMode appendContent,
-                               boolean compress) throws IOException
-    {
+                               boolean compress) throws IOException {
         this(document, sourcePage, appendContent, compress, false);
     }
 
     /**
      * Create a new PDPage content stream.
      *
-     * @param document The document the page is part of.
-     * @param sourcePage The page to write the contents to.
+     * @param document      The document the page is part of.
+     * @param sourcePage    The page to write the contents to.
      * @param appendContent Indicates whether content will be overwritten, appended or prepended.
-     * @param compress Tell if the content stream should compress the page contents.
-     * @param resetContext Tell if the graphic context should be reset. This is only relevant when
-     * the appendContent parameter is set to {@link AppendMode#APPEND}. You should use this when
-     * appending to an existing stream, because the existing stream may have changed graphic
-     * properties (e.g. scaling, rotation).
+     * @param compress      Tell if the content stream should compress the page contents.
+     * @param resetContext  Tell if the graphic context should be reset. This is only relevant when
+     *                      the appendContent parameter is set to {@link AppendMode#APPEND}. You should use this when
+     *                      appending to an existing stream, because the existing stream may have changed graphic
+     *                      properties (e.g. scaling, rotation).
      * @throws IOException If there is an error writing to the page contents.
      */
     public PDPageContentStream(PDDocument document, PDPage sourcePage, AppendMode appendContent,
-                               boolean compress, boolean resetContext) throws IOException
-    {
+                               boolean compress, boolean resetContext) throws IOException {
         this(document, sourcePage, appendContent, compress, resetContext, new PDStream(document),
                 sourcePage.getResources() != null ? sourcePage.getResources() : new PDResources());
     }
 
     private PDPageContentStream(PDDocument document, PDPage sourcePage, AppendMode appendContent,
-                                boolean compress, boolean resetContext,PDStream stream,
-                                PDResources resources) throws IOException
-    {
+                                boolean compress, boolean resetContext, PDStream stream,
+                                PDResources resources) throws IOException {
         super(document, stream.createOutputStream(compress ? COSName.FLATE_DECODE : null), resources);
 
         // propagate resources to the page
-        if (sourcePage.getResources() == null)
-        {
+        if (sourcePage.getResources() == null) {
             sourcePage.setResources(resources);
         }
 
         // If request specifies the need to append/prepend to the document
-        if (!appendContent.isOverwrite() && sourcePage.hasContents())
-        {
+        if (!appendContent.isOverwrite() && sourcePage.hasContents()) {
             // Add new stream to contents array
             COSBase contents = sourcePage.getCOSObject().getDictionaryObject(COSName.CONTENTS);
             COSArray array;
-            if (contents instanceof COSArray)
-            {
+            if (contents instanceof COSArray) {
                 // If contents is already an array, a new stream is simply appended to it
                 array = (COSArray) contents;
-            }
-            else
-            {
+            } else {
                 // Creates a new array and adds the current stream plus a new one to it
                 array = new COSArray();
                 array.add(contents);
             }
 
-            if (appendContent.isPrepend())
-            {
+            if (appendContent.isPrepend()) {
                 array.add(0, stream.getCOSObject());
-            }
-            else
-            {
+            } else {
                 array.add(stream);
             }
 
             // save the initial/unmodified graphics context
-            if (resetContext)
-            {
+            if (resetContext) {
                 // create a new stream to prefix existing stream
                 PDStream prefixStream = new PDStream(document);
 
                 // save the pre-append graphics state
-                try (OutputStream prefixOut = prefixStream.createOutputStream())
-                {
+                try (OutputStream prefixOut = prefixStream.createOutputStream()) {
                     prefixOut.write("q".getBytes(StandardCharsets.US_ASCII));
                     prefixOut.write('\n');
                 }
@@ -183,13 +164,10 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
             sourcePage.getCOSObject().setItem(COSName.CONTENTS, array);
 
             // restore the pre-append graphics state
-            if (resetContext)
-            {
+            if (resetContext) {
                 restoreGraphicsState();
             }
-        }
-        else
-        {
+        } else {
             sourcePageHadContents = sourcePage.hasContents();
             sourcePage.setContents(stream);
         }
@@ -206,8 +184,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * @deprecated Usage of this method is discouraged.
      */
     @Deprecated
-    public void appendRawCommands(String commands) throws IOException
-    {
+    public void appendRawCommands(String commands) throws IOException {
         write(commands);
     }
 
@@ -219,8 +196,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * @deprecated Usage of this method is discouraged.
      */
     @Deprecated
-    public void appendRawCommands(byte[] commands) throws IOException
-    {
+    public void appendRawCommands(byte[] commands) throws IOException {
         writeBytes(commands);
     }
 
@@ -232,8 +208,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * @deprecated Usage of this method is discouraged.
      */
     @Deprecated
-    public void appendRawCommands(int data) throws IOException
-    {
+    public void appendRawCommands(int data) throws IOException {
         writeOperand(data);
     }
 
@@ -245,8 +220,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * @deprecated Usage of this method is discouraged.
      */
     @Deprecated
-    public void appendRawCommands(double data) throws IOException
-    {
+    public void appendRawCommands(double data) throws IOException {
         writeOperand((float) data);
     }
 
@@ -258,8 +232,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
      * @deprecated Usage of this method is discouraged.
      */
     @Deprecated
-    public void appendRawCommands(float data) throws IOException
-    {
+    public void appendRawCommands(float data) throws IOException {
         writeOperand(data);
     }
 }

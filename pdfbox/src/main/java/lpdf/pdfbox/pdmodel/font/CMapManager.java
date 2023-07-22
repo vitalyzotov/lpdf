@@ -21,19 +21,16 @@ import lpdf.fontbox.cmap.CMapParser;
 import lpdf.io.RandomAccessRead;
 
 import java.io.IOException;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * CMap resource loader and cache.
  */
-final class CMapManager
-{
+final class CMapManager {
     private static final Map<String, CMap> CMAP_CACHE = new ConcurrentHashMap<>();
 
-    private CMapManager()
-    {
+    private CMapManager() {
     }
 
     /**
@@ -43,11 +40,9 @@ final class CMapManager
      * @return The predefined CMap, never null.
      * @throws IOException
      */
-    public static CMap getPredefinedCMap(String cMapName) throws IOException
-    {
+    public static CMap getPredefinedCMap(String cMapName) throws IOException {
         CMap cmap = CMAP_CACHE.get(cMapName);
-        if (cmap != null)
-        {
+        if (cmap != null) {
             return cmap;
         }
 
@@ -64,11 +59,9 @@ final class CMapManager
      * @param randomAccessRead the source of the CMap to be read
      * @return the parsed CMap
      */
-    public static CMap parseCMap(RandomAccessRead randomAccessRead) throws IOException
-    {
+    public static CMap parseCMap(RandomAccessRead randomAccessRead) throws IOException {
         CMap targetCmap = null;
-        if (randomAccessRead != null)
-        {
+        if (randomAccessRead != null) {
             // parse CMap using strict mode
             targetCmap = new CMapParser(true).parse(randomAccessRead);
         }

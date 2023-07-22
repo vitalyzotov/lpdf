@@ -16,18 +16,6 @@
  */
 package lpdf.fontbox.ttf;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.fontbox.ttf.model.Language;
 import lpdf.io.RandomAccessRead;
@@ -39,37 +27,43 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 /**
  * A bunch of tests on {@link GlyphSubstitutionTable} for {@code LiberationSans-Regular} font
  *
  * @author Vladimir Plizga
  */
-class GlyphSubstitutionTableLiberationFontTest
-{
+class GlyphSubstitutionTableLiberationFontTest {
 
     private OpenTypeFont font;
 
     @BeforeEach
-    void setUp() throws IOException
-    {
+    void setUp() throws IOException {
         OTFParser otfParser = new OTFParser();
         String fontPath = "src/test/resources/ttf/LiberationSans-Regular.ttf";
-        try (RandomAccessRead fontFile = new RandomAccessReadBufferedFile(fontPath))
-        {
+        try (RandomAccessRead fontFile = new RandomAccessReadBufferedFile(fontPath)) {
             font = otfParser.parse(fontFile);
         }
     }
 
     @AfterEach
-    void tearDown() throws IOException
-    {
+    void tearDown() throws IOException {
         font.close();
     }
 
     @Test
     @DisplayName("getGsubData() with no args yields latn")
-    void getGsubDataDefault() throws IOException
-    {
+    void getGsubDataDefault() throws IOException {
         // given
 
         // when
@@ -81,8 +75,7 @@ class GlyphSubstitutionTableLiberationFontTest
 
     @Test
     @DisplayName("getGsubData() for an unsupported script yields null")
-    void getGsubDataForUnsupportedScriptTag() throws IOException
-    {
+    void getGsubDataForUnsupportedScriptTag() throws IOException {
         // given
         GlyphSubstitutionTable gsub = font.getGsub();
 
@@ -95,8 +88,7 @@ class GlyphSubstitutionTableLiberationFontTest
 
     @Test
     @DisplayName("getGsubData() for 'cyrl' tag yields GSUB features of Cyrillic script")
-    void testGetGsubDataForCyrillic() throws IOException
-    {
+    void testGetGsubDataForCyrillic() throws IOException {
         // given
         GlyphSubstitutionTable gsub = font.getGsub();
         String cyrillicScriptTag = "cyrl";
@@ -113,8 +105,7 @@ class GlyphSubstitutionTableLiberationFontTest
 
     @Test
     @DisplayName("All the script tags are loaded from GSUB as is")
-    void getSupportedScriptTags() throws IOException
-    {
+    void getSupportedScriptTags() throws IOException {
         // given
         GlyphSubstitutionTable gsub = font.getGsub();
         List<String> expectedSet = asList("DFLT", "bopo", "copt", "cyrl", "grek", "hebr", "latn");
@@ -128,9 +119,8 @@ class GlyphSubstitutionTableLiberationFontTest
 
     @DisplayName("GSUB data is loaded for all scripts supported by the font")
     @ParameterizedTest
-    @ValueSource(strings = { "DFLT", "bopo", "copt", "cyrl", "grek", "hebr", "latn" })
-    void checkGsubDataLoadingForAllSupportedScripts(String scriptTag) throws IOException
-    {
+    @ValueSource(strings = {"DFLT", "bopo", "copt", "cyrl", "grek", "hebr", "latn"})
+    void checkGsubDataLoadingForAllSupportedScripts(String scriptTag) throws IOException {
         // given
         GlyphSubstitutionTable gsub = font.getGsub();
 

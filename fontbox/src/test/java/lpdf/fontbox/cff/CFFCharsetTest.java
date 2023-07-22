@@ -15,19 +15,17 @@
  */
 package lpdf.fontbox.cff;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-
-class CFFCharsetTest
-{
+class CFFCharsetTest {
 
     @Test
-    void testEmbeddedCharset()
-    {
+    void testEmbeddedCharset() {
         // true -> CFFCharsetCID
         EmbeddedCharset embeddedCharsetCID = new EmbeddedCharset(true);
         assertTrue(embeddedCharsetCID.isCIDFont());
@@ -62,8 +60,7 @@ class CFFCharsetTest
     }
 
     @Test
-    void testCFFCharsetCID()
-    {
+    void testCFFCharsetCID() {
         CFFCharsetCID cffCharsetCID = new CFFCharsetCID();
         assertTrue(cffCharsetCID.isCIDFont());
         cffCharsetCID.addCID(10, 20);
@@ -82,8 +79,7 @@ class CFFCharsetTest
     }
 
     @Test
-    void testCFFCharsetType1()
-    {
+    void testCFFCharsetType1() {
         CFFCharsetType1 cffCharsetType1 = new CFFCharsetType1();
         assertFalse(cffCharsetType1.isCIDFont());
         cffCharsetType1.addSID(10, 20, "test");
@@ -101,8 +97,7 @@ class CFFCharsetTest
     }
 
     @Test
-    void testCFFExpertCharset()
-    {
+    void testCFFExpertCharset() {
         CFFExpertCharset cffExpertCharset = CFFExpertCharset.getInstance();
         // check .notdef mapping
         assertEquals(0, cffExpertCharset.getSIDForGID(0));
@@ -124,8 +119,7 @@ class CFFCharsetTest
     }
 
     @Test
-    void testCFFExpertSubsetCharset()
-    {
+    void testCFFExpertSubsetCharset() {
         CFFExpertSubsetCharset cffExpertSubsetCharset = CFFExpertSubsetCharset.getInstance();
         // check .notdef mapping
         assertEquals(0, cffExpertSubsetCharset.getSIDForGID(0));
@@ -147,8 +141,7 @@ class CFFCharsetTest
     }
 
     @Test
-    void testCFFISOAdobeCharset()
-    {
+    void testCFFISOAdobeCharset() {
         CFFISOAdobeCharset cffISOAdobeCharset = CFFISOAdobeCharset.getInstance();
         // check .notdef mapping
         assertEquals(0, cffISOAdobeCharset.getSIDForGID(0));

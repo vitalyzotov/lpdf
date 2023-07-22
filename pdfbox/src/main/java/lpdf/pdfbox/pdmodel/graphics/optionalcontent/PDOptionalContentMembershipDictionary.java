@@ -16,39 +16,37 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.optionalcontent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * An optional content membership dictionary (OCMD).
  *
  * @author Tilman Hausherr
  */
-public class PDOptionalContentMembershipDictionary extends PDPropertyList
-{
+public class PDOptionalContentMembershipDictionary extends PDPropertyList {
     /**
      * Creates a new optional content membership dictionary (OCMD).
      */
-    public PDOptionalContentMembershipDictionary()
-    {
+    public PDOptionalContentMembershipDictionary() {
         this.dict.setItem(COSName.TYPE, COSName.OCMD);
     }
 
     /**
      * Creates a new instance based on a given {@link COSDictionary}.
+     *
      * @param dict the dictionary
      */
-    public PDOptionalContentMembershipDictionary(COSDictionary dict)
-    {
+    public PDOptionalContentMembershipDictionary(COSDictionary dict) {
         super(dict);
-        if (!dict.getItem(COSName.TYPE).equals(COSName.OCMD))
-        {
+        if (!dict.getItem(COSName.TYPE).equals(COSName.OCMD)) {
             throw new IllegalArgumentException(
                     "Provided dictionary is not of type '" + COSName.OCMD + "'");
         }
@@ -59,23 +57,18 @@ public class PDOptionalContentMembershipDictionary extends PDPropertyList
      *
      * @return List of optional content groups, never null.
      */
-    public List<PDPropertyList> getOCGs()
-    {
+    public List<PDPropertyList> getOCGs() {
         COSBase base = dict.getDictionaryObject(COSName.OCGS);
-        if (base instanceof COSDictionary)
-        {
+        if (base instanceof COSDictionary) {
             return Collections.singletonList(PDPropertyList.create((COSDictionary) base));
         }
 
-        if (base instanceof COSArray)
-        {
+        if (base instanceof COSArray) {
             List<PDPropertyList> list = new ArrayList<>();
             COSArray ar = (COSArray) base;
-            for (int i = 0; i < ar.size(); ++i)
-            {
+            for (int i = 0; i < ar.size(); ++i) {
                 COSBase elem = ar.getObject(i);
-                if (elem instanceof COSDictionary)
-                {
+                if (elem instanceof COSDictionary) {
                     list.add(PDPropertyList.create((COSDictionary) elem));
                 }
             }
@@ -90,11 +83,9 @@ public class PDOptionalContentMembershipDictionary extends PDPropertyList
      *
      * @param ocgs list of optional content groups to set.
      */
-    public void setOCGs(List<PDPropertyList> ocgs)
-    {
+    public void setOCGs(List<PDPropertyList> ocgs) {
         COSArray ar = new COSArray();
-        for (PDPropertyList prop : ocgs)
-        {
+        for (PDPropertyList prop : ocgs) {
             ar.add(prop);
         }
         dict.setItem(COSName.OCGS, ar);
@@ -105,8 +96,7 @@ public class PDOptionalContentMembershipDictionary extends PDPropertyList
      *
      * @return the visibility policy, never null.
      */
-    public COSName getVisibilityPolicy()
-    {
+    public COSName getVisibilityPolicy() {
         return dict.getCOSName(COSName.P, COSName.ANY_ON);
     }
 
@@ -115,8 +105,7 @@ public class PDOptionalContentMembershipDictionary extends PDPropertyList
      *
      * @param visibilityPolicy the visibility policy name
      */
-    public void setVisibilityPolicy(COSName visibilityPolicy)
-    {
+    public void setVisibilityPolicy(COSName visibilityPolicy) {
         dict.setItem(COSName.P, visibilityPolicy);
     }
 

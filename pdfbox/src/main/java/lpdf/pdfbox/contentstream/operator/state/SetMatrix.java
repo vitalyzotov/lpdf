@@ -16,8 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -27,47 +25,43 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.util.Matrix;
 
+import java.util.List;
+
 /**
  * Tm: Set text matrix and text line matrix.
  *
  * @author Laurent Huault
  */
-public class SetMatrix extends OperatorProcessor
-{
-    public SetMatrix(PDFStreamEngine context)
-    {
+public class SetMatrix extends OperatorProcessor {
+    public SetMatrix(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException
-    {
-        if (arguments.size() < 6)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException {
+        if (arguments.size() < 6) {
             throw new MissingOperandException(operator, arguments);
         }
-        if (!checkArrayTypesClass(arguments, COSNumber.class))
-        {
+        if (!checkArrayTypesClass(arguments, COSNumber.class)) {
             return;
         }
 
-        COSNumber a = (COSNumber)arguments.get( 0 );
-        COSNumber b = (COSNumber)arguments.get( 1 );
-        COSNumber c = (COSNumber)arguments.get( 2 );
-        COSNumber d = (COSNumber)arguments.get( 3 );
-        COSNumber e = (COSNumber)arguments.get( 4 );
-        COSNumber f = (COSNumber)arguments.get( 5 );
+        COSNumber a = (COSNumber) arguments.get(0);
+        COSNumber b = (COSNumber) arguments.get(1);
+        COSNumber c = (COSNumber) arguments.get(2);
+        COSNumber d = (COSNumber) arguments.get(3);
+        COSNumber e = (COSNumber) arguments.get(4);
+        COSNumber f = (COSNumber) arguments.get(5);
 
         Matrix matrix = new Matrix(a.floatValue(), b.floatValue(), c.floatValue(),
-                                   d.floatValue(), e.floatValue(), f.floatValue());
+                d.floatValue(), e.floatValue(), f.floatValue());
         PDFStreamEngine context = getContext();
         context.setTextMatrix(matrix);
         context.setTextLineMatrix(matrix.clone());
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_MATRIX;
     }
 }

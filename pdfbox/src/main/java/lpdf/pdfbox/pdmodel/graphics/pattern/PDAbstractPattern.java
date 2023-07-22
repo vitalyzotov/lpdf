@@ -17,8 +17,6 @@
 package lpdf.pdfbox.pdmodel.graphics.pattern;
 
 import lpdf.harmony.awt.geom.AffineTransform;
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSFloat;
@@ -27,30 +25,34 @@ import lpdf.pdfbox.pdmodel.ResourceCache;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 import lpdf.pdfbox.util.Matrix;
 
+import java.io.IOException;
+
 /**
  * This class wraps a pattern dictionary. Patterns can be found in resource dictionaries.
  */
-public abstract class PDAbstractPattern implements COSObjectable
-{
-    /** Tiling pattern type. */
+public abstract class PDAbstractPattern implements COSObjectable {
+    /**
+     * Tiling pattern type.
+     */
     public static final int TYPE_TILING_PATTERN = 1;
 
-    /** Shading pattern type. */
+    /**
+     * Shading pattern type.
+     */
     public static final int TYPE_SHADING_PATTERN = 2;
 
     /**
      * Create the correct PD Model pattern based on the COS base pattern.
-     * @param dictionary the COS pattern dictionary
+     *
+     * @param dictionary    the COS pattern dictionary
      * @param resourceCache the resource cache, may be null, useful for tiling patterns.
      * @return the newly created pattern object
      * @throws IOException If we are unable to create the PDPattern object.
      */
-    public static PDAbstractPattern create(COSDictionary dictionary, ResourceCache resourceCache) throws IOException
-    {
+    public static PDAbstractPattern create(COSDictionary dictionary, ResourceCache resourceCache) throws IOException {
         PDAbstractPattern pattern;
         int patternType = dictionary.getInt(COSName.PATTERN_TYPE, 0);
-        switch (patternType)
-        {
+        switch (patternType) {
             case TYPE_TILING_PATTERN:
                 pattern = new PDTilingPattern(dictionary, resourceCache);
                 break;
@@ -68,60 +70,60 @@ public abstract class PDAbstractPattern implements COSObjectable
     /**
      * Creates a new Pattern dictionary.
      */
-    public PDAbstractPattern()
-    {
+    public PDAbstractPattern() {
         patternDictionary = new COSDictionary();
         patternDictionary.setName(COSName.TYPE, COSName.PATTERN.getName());
     }
 
     /**
      * Creates a new Pattern dictionary from the given COS dictionary.
+     *
      * @param dictionary The COSDictionary for this pattern.
      */
-    public PDAbstractPattern(COSDictionary dictionary)
-    {
+    public PDAbstractPattern(COSDictionary dictionary) {
         patternDictionary = dictionary;
     }
 
     /**
      * This will get the underlying dictionary.
+     *
      * @return The dictionary for this pattern.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return patternDictionary;
     }
 
     /**
      * This will set the paint type.
+     *
      * @param paintType The new paint type.
      */
-    public void setPaintType(int paintType)
-    {
+    public void setPaintType(int paintType) {
         patternDictionary.setInt(COSName.PAINT_TYPE, paintType);
     }
 
     /**
      * This will return the paint type.
+     *
      * @return The type of object that this is.
      */
-    public String getType()
-    {
+    public String getType() {
         return COSName.PATTERN.getName();
     }
 
     /**
      * This will set the pattern type.
+     *
      * @param patternType The new pattern type.
      */
-    public void setPatternType(int patternType)
-    {
+    public void setPatternType(int patternType) {
         patternDictionary.setInt(COSName.PATTERN_TYPE, patternType);
     }
 
     /**
      * This will return the pattern type.
+     *
      * @return The pattern type
      */
     public abstract int getPatternType();
@@ -131,23 +133,21 @@ public abstract class PDAbstractPattern implements COSObjectable
      *
      * @return the pattern matrix
      */
-    public Matrix getMatrix()
-    {
+    public Matrix getMatrix() {
         return Matrix.createMatrix(getCOSObject().getDictionaryObject(COSName.MATRIX));
     }
 
     /**
      * Sets the optional Matrix entry for the Pattern.
+     *
      * @param transform the transformation matrix
      */
-    public void setMatrix(AffineTransform transform)
-    {
+    public void setMatrix(AffineTransform transform) {
         COSArray matrix = new COSArray();
         double[] values = new double[6];
         transform.getMatrix(values);
-        for (double v : values)
-        {
-            matrix.add(new COSFloat((float)v));
+        for (double v : values) {
+            matrix.add(new COSFloat((float) v));
         }
         getCOSObject().setItem(COSName.MATRIX, matrix);
     }

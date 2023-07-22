@@ -17,18 +17,16 @@
 
 package lpdf.fontbox.afm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-class CompositeTest
-{
+class CompositeTest {
     @Test
-    void testComposite()
-    {
+    void testComposite() {
         Composite composite = new Composite("name");
         assertEquals("name", composite.getName());
         assertEquals(0, composite.getParts().size());
@@ -37,13 +35,10 @@ class CompositeTest
         List<CompositePart> parts = composite.getParts();
         assertEquals(1, parts.size());
         assertEquals("name", parts.get(0).getName());
-        try
-        {
+        try {
             parts.add(compositePart);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // do nothing
         }
     }

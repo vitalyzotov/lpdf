@@ -124,10 +124,10 @@ public abstract class RectangularShape implements Shape, Cloneable {
     }
 
     public Rectangle getBounds() {
-        int x1 = (int)Math.floor(getMinX());
-        int y1 = (int)Math.floor(getMinY());
-        int x2 = (int)Math.ceil(getMaxX());
-        int y2 = (int)Math.ceil(getMaxY());
+        int x1 = (int) Math.floor(getMinX());
+        int y1 = (int) Math.floor(getMinY());
+        int x2 = (int) Math.ceil(getMaxX());
+        int y2 = (int) Math.ceil(getMaxY());
         return new Rectangle(x1, y1, x2 - x1, y2 - y1);
     }
 

@@ -22,8 +22,7 @@ import java.io.IOException;
 /**
  * Interface for a font subsetter.
  */
-interface Subsetter
-{
+interface Subsetter {
     /**
      * Adds the given Unicode code point to this subset.
      *

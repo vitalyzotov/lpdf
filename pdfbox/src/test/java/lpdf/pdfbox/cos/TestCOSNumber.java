@@ -17,6 +17,10 @@
 
 package lpdf.pdfbox.cos;
 
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,15 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-
 /**
  * Test class for {@link COSNumber}
  */
-abstract class TestCOSNumber extends TestCOSBase
-{
+abstract class TestCOSNumber extends TestCOSBase {
     /**
      * Test floatValue() - test that the correct float value is returned.
      */
@@ -52,10 +51,8 @@ abstract class TestCOSNumber extends TestCOSBase
      * Tests get() - tests a static constructor for COSNumber classes.
      */
     @Test
-    void testGet()
-    {
-        try
-        {
+    void testGet() {
+        try {
 
             // Ensure the basic static numbers are recognized
             assertEquals(COSInteger.ZERO, COSNumber.get("0"));
@@ -80,9 +77,7 @@ abstract class TestCOSNumber extends TestCOSBase
 
             assertThrows(NullPointerException.class, () -> COSNumber.get(null));
             assertThrows(IOException.class, () -> COSNumber.get("a"));
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             fail("Failed to convert a number " + e.getMessage());
         }
     }
@@ -92,8 +87,7 @@ abstract class TestCOSNumber extends TestCOSBase
      *
      * @throws IOException
      */
-    public void testLargeNumber() throws IOException
-    {
+    public void testLargeNumber() throws IOException {
         // max value
         COSNumber cosNumber = COSNumber.get(Long.toString(Long.MAX_VALUE));
         assertTrue(cosNumber instanceof COSInteger);
@@ -118,15 +112,11 @@ abstract class TestCOSNumber extends TestCOSBase
     }
 
     @Test
-    void testInvalidNumber()
-    {
-        try
-        {
+    void testInvalidNumber() {
+        try {
             COSNumber.get("18446744073307F448448");
             fail("Was expecting an IOException");
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
         }
     }
 

@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class HorizontalHeaderTable extends TTFTable
-{
+public class HorizontalHeaderTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -48,21 +47,19 @@ public class HorizontalHeaderTable extends TTFTable
     private short metricDataFormat;
     private int numberOfHMetrics;
 
-    HorizontalHeaderTable()
-    {
+    HorizontalHeaderTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.read32Fixed();
         ascender = data.readSignedShort();
         descender = data.readSignedShort();
@@ -86,239 +83,238 @@ public class HorizontalHeaderTable extends TTFTable
     /**
      * @return Returns the advanceWidthMax.
      */
-    public int getAdvanceWidthMax()
-    {
+    public int getAdvanceWidthMax() {
         return advanceWidthMax;
     }
+
     /**
      * @param advanceWidthMaxValue The advanceWidthMax to set.
      */
-    public void setAdvanceWidthMax(int advanceWidthMaxValue)
-    {
+    public void setAdvanceWidthMax(int advanceWidthMaxValue) {
         this.advanceWidthMax = advanceWidthMaxValue;
     }
+
     /**
      * @return Returns the ascender.
      */
-    public short getAscender()
-    {
+    public short getAscender() {
         return ascender;
     }
+
     /**
      * @param ascenderValue The ascender to set.
      */
-    public void setAscender(short ascenderValue)
-    {
+    public void setAscender(short ascenderValue) {
         this.ascender = ascenderValue;
     }
+
     /**
      * @return Returns the caretSlopeRise.
      */
-    public short getCaretSlopeRise()
-    {
+    public short getCaretSlopeRise() {
         return caretSlopeRise;
     }
+
     /**
      * @param caretSlopeRiseValue The caretSlopeRise to set.
      */
-    public void setCaretSlopeRise(short caretSlopeRiseValue)
-    {
+    public void setCaretSlopeRise(short caretSlopeRiseValue) {
         this.caretSlopeRise = caretSlopeRiseValue;
     }
+
     /**
      * @return Returns the caretSlopeRun.
      */
-    public short getCaretSlopeRun()
-    {
+    public short getCaretSlopeRun() {
         return caretSlopeRun;
     }
+
     /**
      * @param caretSlopeRunValue The caretSlopeRun to set.
      */
-    public void setCaretSlopeRun(short caretSlopeRunValue)
-    {
+    public void setCaretSlopeRun(short caretSlopeRunValue) {
         this.caretSlopeRun = caretSlopeRunValue;
     }
+
     /**
      * @return Returns the descender.
      */
-    public short getDescender()
-    {
+    public short getDescender() {
         return descender;
     }
+
     /**
      * @param descenderValue The descender to set.
      */
-    public void setDescender(short descenderValue)
-    {
+    public void setDescender(short descenderValue) {
         this.descender = descenderValue;
     }
+
     /**
      * @return Returns the lineGap.
      */
-    public short getLineGap()
-    {
+    public short getLineGap() {
         return lineGap;
     }
+
     /**
      * @param lineGapValue The lineGap to set.
      */
-    public void setLineGap(short lineGapValue)
-    {
+    public void setLineGap(short lineGapValue) {
         this.lineGap = lineGapValue;
     }
+
     /**
      * @return Returns the metricDataFormat.
      */
-    public short getMetricDataFormat()
-    {
+    public short getMetricDataFormat() {
         return metricDataFormat;
     }
+
     /**
      * @param metricDataFormatValue The metricDataFormat to set.
      */
-    public void setMetricDataFormat(short metricDataFormatValue)
-    {
+    public void setMetricDataFormat(short metricDataFormatValue) {
         this.metricDataFormat = metricDataFormatValue;
     }
+
     /**
      * @return Returns the minLeftSideBearing.
      */
-    public short getMinLeftSideBearing()
-    {
+    public short getMinLeftSideBearing() {
         return minLeftSideBearing;
     }
+
     /**
      * @param minLeftSideBearingValue The minLeftSideBearing to set.
      */
-    public void setMinLeftSideBearing(short minLeftSideBearingValue)
-    {
+    public void setMinLeftSideBearing(short minLeftSideBearingValue) {
         this.minLeftSideBearing = minLeftSideBearingValue;
     }
+
     /**
      * @return Returns the minRightSideBearing.
      */
-    public short getMinRightSideBearing()
-    {
+    public short getMinRightSideBearing() {
         return minRightSideBearing;
     }
+
     /**
      * @param minRightSideBearingValue The minRightSideBearing to set.
      */
-    public void setMinRightSideBearing(short minRightSideBearingValue)
-    {
+    public void setMinRightSideBearing(short minRightSideBearingValue) {
         this.minRightSideBearing = minRightSideBearingValue;
     }
+
     /**
      * @return Returns the numberOfHMetrics.
      */
-    public int getNumberOfHMetrics()
-    {
+    public int getNumberOfHMetrics() {
         return numberOfHMetrics;
     }
+
     /**
      * @param numberOfHMetricsValue The numberOfHMetrics to set.
      */
-    public void setNumberOfHMetrics(int numberOfHMetricsValue)
-    {
+    public void setNumberOfHMetrics(int numberOfHMetricsValue) {
         this.numberOfHMetrics = numberOfHMetricsValue;
     }
+
     /**
      * @return Returns the reserved1.
      */
-    public short getReserved1()
-    {
+    public short getReserved1() {
         return reserved1;
     }
+
     /**
      * @param reserved1Value The reserved1 to set.
      */
-    public void setReserved1(short reserved1Value)
-    {
+    public void setReserved1(short reserved1Value) {
         this.reserved1 = reserved1Value;
     }
+
     /**
      * @return Returns the reserved2.
      */
-    public short getReserved2()
-    {
+    public short getReserved2() {
         return reserved2;
     }
+
     /**
      * @param reserved2Value The reserved2 to set.
      */
-    public void setReserved2(short reserved2Value)
-    {
+    public void setReserved2(short reserved2Value) {
         this.reserved2 = reserved2Value;
     }
+
     /**
      * @return Returns the reserved3.
      */
-    public short getReserved3()
-    {
+    public short getReserved3() {
         return reserved3;
     }
+
     /**
      * @param reserved3Value The reserved3 to set.
      */
-    public void setReserved3(short reserved3Value)
-    {
+    public void setReserved3(short reserved3Value) {
         this.reserved3 = reserved3Value;
     }
+
     /**
      * @return Returns the reserved4.
      */
-    public short getReserved4()
-    {
+    public short getReserved4() {
         return reserved4;
     }
+
     /**
      * @param reserved4Value The reserved4 to set.
      */
-    public void setReserved4(short reserved4Value)
-    {
+    public void setReserved4(short reserved4Value) {
         this.reserved4 = reserved4Value;
     }
+
     /**
      * @return Returns the reserved5.
      */
-    public short getReserved5()
-    {
+    public short getReserved5() {
         return reserved5;
     }
+
     /**
      * @param reserved5Value The reserved5 to set.
      */
-    public void setReserved5(short reserved5Value)
-    {
+    public void setReserved5(short reserved5Value) {
         this.reserved5 = reserved5Value;
     }
+
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
+
     /**
      * @param versionValue The version to set.
      */
-    public void setVersion(float versionValue)
-    {
+    public void setVersion(float versionValue) {
         this.version = versionValue;
     }
+
     /**
      * @return Returns the xMaxExtent.
      */
-    public short getXMaxExtent()
-    {
+    public short getXMaxExtent() {
         return xMaxExtent;
     }
+
     /**
      * @param maxExtentValue The xMaxExtent to set.
      */
-    public void setXMaxExtent(short maxExtentValue)
-    {
+    public void setXMaxExtent(short maxExtentValue) {
         xMaxExtent = maxExtentValue;
     }
 }

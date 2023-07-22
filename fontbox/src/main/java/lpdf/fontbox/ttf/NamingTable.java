@@ -29,8 +29,7 @@ import java.util.Map;
  *
  * @author Ben Litchfield
  */
-public class NamingTable extends TTFTable
-{
+public class NamingTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -44,57 +43,46 @@ public class NamingTable extends TTFTable
     private String fontSubFamily = null;
     private String psName = null;
 
-    NamingTable()
-    {
+    NamingTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         int formatSelector = data.readUnsignedShort();
         int numberOfNameRecords = data.readUnsignedShort();
         int offsetToStartOfStringStorage = data.readUnsignedShort();
         nameRecords = new ArrayList<>(numberOfNameRecords);
-        for (int i=0; i< numberOfNameRecords; i++)
-        {
+        for (int i = 0; i < numberOfNameRecords; i++) {
             NameRecord nr = new NameRecord();
             nr.initData(ttf, data);
             nameRecords.add(nr);
         }
 
-        for (NameRecord nr : nameRecords)
-        {
+        for (NameRecord nr : nameRecords) {
             // don't try to read invalid offsets, see PDFBOX-2608
-            if (nr.getStringOffset() > getLength())
-            {
+            if (nr.getStringOffset() > getLength()) {
                 nr.setString(null);
                 continue;
             }
 
-            data.seek(getOffset() + (2L*3)+numberOfNameRecords*2L*6+nr.getStringOffset());
+            data.seek(getOffset() + (2L * 3) + numberOfNameRecords * 2L * 6 + nr.getStringOffset());
             int platform = nr.getPlatformId();
             int encoding = nr.getPlatformEncodingId();
             Charset charset = StandardCharsets.ISO_8859_1;
-            if (platform == NameRecord.PLATFORM_WINDOWS && (encoding == NameRecord.ENCODING_WINDOWS_SYMBOL || encoding == NameRecord.ENCODING_WINDOWS_UNICODE_BMP))
-            {
+            if (platform == NameRecord.PLATFORM_WINDOWS && (encoding == NameRecord.ENCODING_WINDOWS_SYMBOL || encoding == NameRecord.ENCODING_WINDOWS_UNICODE_BMP)) {
                 charset = StandardCharsets.UTF_16;
-            }
-            else if (platform == NameRecord.PLATFORM_UNICODE)
-            {
+            } else if (platform == NameRecord.PLATFORM_UNICODE) {
                 charset = StandardCharsets.UTF_16;
-            }
-            else if (platform == NameRecord.PLATFORM_ISO)
-            {
-                switch (encoding)
-                {
+            } else if (platform == NameRecord.PLATFORM_ISO) {
+                switch (encoding) {
                     case 0:
                         charset = StandardCharsets.US_ASCII;
                         break;
@@ -115,8 +103,7 @@ public class NamingTable extends TTFTable
 
         // build multi-dimensional lookup table
         lookupTable = new HashMap<>(nameRecords.size());
-        for (NameRecord nr : nameRecords)
-        {
+        for (NameRecord nr : nameRecords) {
             // name id
             Map<Integer, Map<Integer, Map<Integer, String>>> platformLookup = lookupTable.computeIfAbsent(nr.getNameId(), k -> new HashMap<>());
             // platform id
@@ -133,18 +120,16 @@ public class NamingTable extends TTFTable
 
         // extract PostScript name, only these two formats are valid
         psName = getName(NameRecord.NAME_POSTSCRIPT_NAME,
-                         NameRecord.PLATFORM_MACINTOSH,
-                         NameRecord.ENCODING_MACINTOSH_ROMAN,
-                         NameRecord.LANGUAGE_MACINTOSH_ENGLISH);
-        if (psName == null)
-        {
+                NameRecord.PLATFORM_MACINTOSH,
+                NameRecord.ENCODING_MACINTOSH_ROMAN,
+                NameRecord.LANGUAGE_MACINTOSH_ENGLISH);
+        if (psName == null) {
             psName = getName(NameRecord.NAME_POSTSCRIPT_NAME,
-                             NameRecord.PLATFORM_WINDOWS,
-                             NameRecord.ENCODING_WINDOWS_UNICODE_BMP,
-                             NameRecord.LANGUAGE_WINDOWS_EN_US);
+                    NameRecord.PLATFORM_WINDOWS,
+                    NameRecord.ENCODING_WINDOWS_UNICODE_BMP,
+                    NameRecord.LANGUAGE_WINDOWS_EN_US);
         }
-        if (psName != null)
-        {
+        if (psName != null) {
             psName = psName.trim();
         }
 
@@ -154,18 +139,15 @@ public class NamingTable extends TTFTable
     /**
      * Helper to get English names by best effort.
      */
-    private String getEnglishName(int nameId)
-    {
+    private String getEnglishName(int nameId) {
         // Unicode, Full, BMP, 1.1, 1.0
-        for (int i = 4; i >= 0; i--)
-        {
+        for (int i = 4; i >= 0; i--) {
             String nameUni =
                     getName(nameId,
                             NameRecord.PLATFORM_UNICODE,
                             i,
                             NameRecord.LANGUAGE_UNICODE);
-            if (nameUni != null)
-            {
+            if (nameUni != null) {
                 return nameUni;
             }
         }
@@ -176,42 +158,37 @@ public class NamingTable extends TTFTable
                         NameRecord.PLATFORM_WINDOWS,
                         NameRecord.ENCODING_WINDOWS_UNICODE_BMP,
                         NameRecord.LANGUAGE_WINDOWS_EN_US);
-        if (nameWin != null)
-        {
+        if (nameWin != null) {
             return nameWin;
         }
 
         // Macintosh, Roman, English
         return getName(nameId,
-                        NameRecord.PLATFORM_MACINTOSH,
-                        NameRecord.ENCODING_MACINTOSH_ROMAN,
-                        NameRecord.LANGUAGE_MACINTOSH_ENGLISH);
+                NameRecord.PLATFORM_MACINTOSH,
+                NameRecord.ENCODING_MACINTOSH_ROMAN,
+                NameRecord.LANGUAGE_MACINTOSH_ENGLISH);
     }
 
     /**
      * Returns a name from the table, or null it it does not exist.
      *
-     * @param nameId Name ID from NameRecord constants.
+     * @param nameId     Name ID from NameRecord constants.
      * @param platformId Platform ID from NameRecord constants.
      * @param encodingId Platform Encoding ID from NameRecord constants.
      * @param languageId Language ID from NameRecord constants.
      * @return name, or null
      */
-    public String getName(int nameId, int platformId, int encodingId, int languageId)
-    {
+    public String getName(int nameId, int platformId, int encodingId, int languageId) {
         Map<Integer, Map<Integer, Map<Integer, String>>> platforms = lookupTable.get(nameId);
-        if (platforms == null)
-        {
+        if (platforms == null) {
             return null;
         }
         Map<Integer, Map<Integer, String>> encodings = platforms.get(platformId);
-        if (encodings == null)
-        {
+        if (encodings == null) {
             return null;
         }
         Map<Integer, String> languages = encodings.get(encodingId);
-        if (languages == null)
-        {
+        if (languages == null) {
             return null;
         }
         return languages.get(languageId);
@@ -222,8 +199,7 @@ public class NamingTable extends TTFTable
      *
      * @return A list of NameRecord objects.
      */
-    public List<NameRecord> getNameRecords()
-    {
+    public List<NameRecord> getNameRecords() {
         return nameRecords;
     }
 
@@ -232,8 +208,7 @@ public class NamingTable extends TTFTable
      *
      * @return the font family name, in English
      */
-    public String getFontFamily()
-    {
+    public String getFontFamily() {
         return fontFamily;
     }
 
@@ -242,8 +217,7 @@ public class NamingTable extends TTFTable
      *
      * @return the font sub family name, in English
      */
-    public String getFontSubFamily()
-    {
+    public String getFontSubFamily() {
         return fontSubFamily;
     }
 
@@ -252,8 +226,7 @@ public class NamingTable extends TTFTable
      *
      * @return the PostScript name
      */
-    public String getPostScriptName()
-    {
+    public String getPostScriptName() {
         return psName;
     }
 }

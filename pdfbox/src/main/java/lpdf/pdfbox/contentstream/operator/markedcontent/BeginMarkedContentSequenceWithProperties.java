@@ -16,42 +16,35 @@
  */
 package lpdf.pdfbox.contentstream.operator.markedcontent;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * BDC : Begins a marked-content sequence with property list.
  *
  * @author Johannes Koch
  */
-public class BeginMarkedContentSequenceWithProperties extends OperatorProcessor
-{
-    public BeginMarkedContentSequenceWithProperties(PDFStreamEngine context)
-    {
+public class BeginMarkedContentSequenceWithProperties extends OperatorProcessor {
+    public BeginMarkedContentSequenceWithProperties(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         COSName tag = null;
         COSDictionary properties = null;
-        for (COSBase argument : arguments)
-        {
-            if (argument instanceof COSName)
-            {
+        for (COSBase argument : arguments) {
+            if (argument instanceof COSName) {
                 tag = (COSName) argument;
-            }
-            else if (argument instanceof COSDictionary)
-            {
+            } else if (argument instanceof COSDictionary) {
                 properties = (COSDictionary) argument;
             }
         }
@@ -59,8 +52,7 @@ public class BeginMarkedContentSequenceWithProperties extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.BEGIN_MARKED_CONTENT_SEQ;
     }
 }

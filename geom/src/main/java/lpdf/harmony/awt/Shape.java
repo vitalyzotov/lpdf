@@ -27,7 +27,6 @@ import lpdf.harmony.awt.geom.Rectangle2D;
 
 /**
  * Shape
- *
  */
 public interface Shape {
     public boolean contains(double x, double y);

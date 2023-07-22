@@ -17,32 +17,32 @@
 
 package lpdf.pdfbox.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utility functions for hex encoding.
  *
  * @author John Hewson
  */
-public final class Hex
-{
+public final class Hex {
     private static final Logger LOG = LoggerFactory.getLogger(Hex.class);
 
     /**
      * for hex conversion.
-     *
+     * <p>
      * https://stackoverflow.com/questions/2817752/java-code-to-convert-byte-to-hexadecimal
-     *
      */
-    private static final byte[] HEX_BYTES = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-    private static final char[] HEX_CHARS = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    private static final byte[] HEX_BYTES = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    private Hex() {}
+    private Hex() {
+    }
 
     /**
      * Returns a hex string of the given byte.
@@ -50,8 +50,7 @@ public final class Hex
      * @param b the byte to be converted
      * @return the hex string representing the given byte
      */
-    public static String getString(byte b)
-    {
+    public static String getString(byte b) {
         char[] chars = new char[]{HEX_CHARS[getHighNibble(b)], HEX_CHARS[getLowNibble(b)]};
         return new String(chars);
     }
@@ -62,11 +61,9 @@ public final class Hex
      * @param bytes the bytes to be converted
      * @return the hex string representing the given bytes
      */
-    public static String getString(byte[] bytes)
-    {
+    public static String getString(byte[] bytes) {
         StringBuilder string = new StringBuilder(bytes.length * 2);
-        for (byte b : bytes)
-        {
+        for (byte b : bytes) {
             string.append(HEX_CHARS[getHighNibble(b)]).append(HEX_CHARS[getLowNibble(b)]);
         }
         return string.toString();
@@ -78,8 +75,7 @@ public final class Hex
      * @param b the byte to be converted
      * @return the ASCII hex encoding of the given byte
      */
-    public static byte[] getBytes(byte b)
-    {
+    public static byte[] getBytes(byte b) {
         return new byte[]{HEX_BYTES[getHighNibble(b)], HEX_BYTES[getLowNibble(b)]};
     }
 
@@ -89,13 +85,11 @@ public final class Hex
      * @param bytes the bytey to be converted
      * @return the ASCII hex encoding of the given bytes
      */
-    public static byte[] getBytes(byte[] bytes)
-    {
-        byte[] asciiBytes = new byte[bytes.length*2];
-        for(int i=0; i< bytes.length; i++)
-        {
-            asciiBytes[i*2] = HEX_BYTES[getHighNibble(bytes[i])];
-            asciiBytes[i*2+1] = HEX_BYTES[getLowNibble(bytes[i])];
+    public static byte[] getBytes(byte[] bytes) {
+        byte[] asciiBytes = new byte[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            asciiBytes[i * 2] = HEX_BYTES[getHighNibble(bytes[i])];
+            asciiBytes[i * 2 + 1] = HEX_BYTES[getLowNibble(bytes[i])];
         }
         return asciiBytes;
     }
@@ -106,8 +100,7 @@ public final class Hex
      * @param num the short value to be converted
      * @return the ASCII hex encoding of the given short value
      */
-    public static char[] getChars(short num)
-    {
+    public static char[] getChars(short num) {
         char[] hex = new char[4];
         hex[0] = HEX_CHARS[(num >> 12) & 0x0F];
         hex[1] = HEX_CHARS[(num >> 8) & 0x0F];
@@ -120,7 +113,7 @@ public final class Hex
      * Takes the characters in the given string, convert it to bytes in UTF16-BE format
      * and build a char array that corresponds to the ASCII hex encoding of the resulting
      * bytes.
-     *
+     * <p>
      * Example:
      * <pre>
      *   getCharsUTF16BE("ab") == new char[]{'0','0','6','1','0','0','6','2'}
@@ -129,14 +122,12 @@ public final class Hex
      * @param text The string to convert
      * @return The string converted to hex
      */
-    public static char[] getCharsUTF16BE(String text)
-    {
+    public static char[] getCharsUTF16BE(String text) {
         // Note that the internal representation of string in Java is already UTF-16. Therefore
         // we do not need to use an encoder to convert the string to its byte representation.
-        char[] hex = new char[text.length()*4];
+        char[] hex = new char[text.length() * 4];
 
-        for (int stringIdx = 0, charIdx = 0; stringIdx < text.length(); stringIdx++)
-        {
+        for (int stringIdx = 0, charIdx = 0; stringIdx < text.length(); stringIdx++) {
             char c = text.charAt(stringIdx);
             hex[charIdx++] = HEX_CHARS[(c >> 12) & 0x0F];
             hex[charIdx++] = HEX_CHARS[(c >> 8) & 0x0F];
@@ -149,26 +140,25 @@ public final class Hex
 
     /**
      * Writes the given byte as hex value to the given output stream.
-     * @param b the byte to be written
+     *
+     * @param b      the byte to be written
      * @param output the output stream to be written to
      * @throws IOException exception if anything went wrong
      */
-    public static void writeHexByte(byte b, OutputStream output) throws IOException
-    {
+    public static void writeHexByte(byte b, OutputStream output) throws IOException {
         output.write(HEX_BYTES[getHighNibble(b)]);
         output.write(HEX_BYTES[getLowNibble(b)]);
     }
 
     /**
      * Writes the given byte array as hex value to the given output stream.
-     * @param bytes the byte array to be written
+     *
+     * @param bytes  the byte array to be written
      * @param output the output stream to be written to
      * @throws IOException exception if anything went wrong
      */
-    public static void writeHexBytes(byte[] bytes, OutputStream output) throws IOException
-    {
-        for (byte b : bytes)
-        {
+    public static void writeHexBytes(byte[] bytes, OutputStream output) throws IOException {
+        for (byte b : bytes) {
             writeHexByte(b, output);
         }
     }
@@ -179,8 +169,7 @@ public final class Hex
      * @param b the given byte
      * @return the high nibble
      */
-    private static int getHighNibble(byte b)
-    {
+    private static int getHighNibble(byte b) {
         return (b & 0xF0) >> 4;
     }
 
@@ -190,8 +179,7 @@ public final class Hex
      * @param b the given byte
      * @return the low nibble
      */
-    private static int getLowNibble(byte b)
-    {
+    private static int getLowNibble(byte b) {
         return b & 0x0F;
     }
 
@@ -199,13 +187,10 @@ public final class Hex
      * Decode a base64 String.
      *
      * @param base64Value a base64 encoded String.
-     *
      * @return the decoded String as a byte array.
-     *
      * @throws IllegalArgumentException if this isn't a base64 encoded string.
      */
-    public static byte[] decodeBase64(String base64Value)
-    {
+    public static byte[] decodeBase64(String base64Value) {
         return Base64.getDecoder().decode(base64Value.replaceAll("\\s", ""));
     }
 
@@ -215,25 +200,17 @@ public final class Hex
      * @param s A String with ASCII hex.
      * @return decoded byte array.
      */
-    public static byte[] decodeHex(String s)
-    {
+    public static byte[] decodeHex(String s) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int i = 0;
-        while (i < s.length() - 1)
-        {
-            if (s.charAt(i) == '\n' || s.charAt(i) == '\r')
-            {
+        while (i < s.length() - 1) {
+            if (s.charAt(i) == '\n' || s.charAt(i) == '\r') {
                 ++i;
-            }
-            else
-            {
+            } else {
                 String hexByte = s.substring(i, i + 2);
-                try
-                {
+                try {
                     baos.write(Integer.parseInt(hexByte, 16)); // Byte.parseByte won't work with "9C"
-                }
-                catch (NumberFormatException ex)
-                {
+                } catch (NumberFormatException ex) {
                     LOG.error("Can't parse " + hexByte + ", aborting decode", ex);
                     break;
                 }

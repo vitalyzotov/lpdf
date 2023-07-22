@@ -17,40 +17,35 @@
 
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.graphics.state.RenderingIntent;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * ri: Set the rendering intent.
  *
  * @author John Hewson
  */
-public class SetRenderingIntent extends OperatorProcessor
-{
-    public SetRenderingIntent(PDFStreamEngine context)
-    {
+public class SetRenderingIntent extends OperatorProcessor {
+    public SetRenderingIntent(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.isEmpty()) {
             throw new MissingOperandException(operator, operands);
         }
         COSBase base = operands.get(0);
-        if (!(base instanceof COSName))
-        {
+        if (!(base instanceof COSName)) {
             return;
         }
         getContext().getGraphicsState() //
@@ -58,8 +53,7 @@ public class SetRenderingIntent extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_RENDERINGINTENT;
     }
 }

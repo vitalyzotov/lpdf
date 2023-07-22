@@ -16,31 +16,29 @@
  */
 package lpdf.fontbox.cmap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-
 import lpdf.fontbox.ttf.CmapLookup;
 import lpdf.fontbox.ttf.TTFParser;
 import lpdf.fontbox.ttf.TrueTypeFont;
 import lpdf.io.RandomAccessReadBufferedFile;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * This will test the CMap implementation.
- *
  */
-class TestCMap
-{
+class TestCMap {
 
     /**
      * Check whether the mapping is working correct.
+     *
      * @throws IOException If something went wrong during adding a mapping
      */
     @Test
-    void testLookup() throws IOException
-    {
-        byte[] bs = new byte[] { (byte) 200 };
+    void testLookup() throws IOException {
+        byte[] bs = new byte[]{(byte) 200};
         CMap cMap = new CMap();
         cMap.addCharMapping(bs, "a");
         assertEquals("a", cMap.toUnicode(bs));
@@ -53,11 +51,9 @@ class TestCMap
      * @throws IOException
      */
     @Test
-    void testPDFBox3997() throws IOException
-    {
+    void testPDFBox3997() throws IOException {
         try (TrueTypeFont ttf = new TTFParser()
-                .parse(new RandomAccessReadBufferedFile("target/pdfs/NotoEmoji-Regular.ttf")))
-        {
+                .parse(new RandomAccessReadBufferedFile("target/pdfs/NotoEmoji-Regular.ttf"))) {
             CmapLookup cmap = ttf.getUnicodeCmapLookup(false);
             assertEquals(886, cmap.getGlyphId(0x1F681));
         }

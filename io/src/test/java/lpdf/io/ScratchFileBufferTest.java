@@ -16,23 +16,22 @@
  */
 package lpdf.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.io.EOFException;
 import java.io.IOException;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Regression test to check the known bugs in {@link ScratchFileBuffer}.
  *
  * @author Kühn &amp; Weyh Software GmbH
  */
-class ScratchFileBufferTest
-{
+class ScratchFileBufferTest {
 
     private static final int PAGE_SIZE = 4096;
     private static final int NUM_ITERATIONS = 3;
@@ -44,14 +43,11 @@ class ScratchFileBufferTest
      * @throws IOException
      */
     @Test
-    void testEOFBugInSeek() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testEOFBugInSeek() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             RandomAccess scratchFileBuffer = scratchFile.createBuffer();
             byte[] bytes = new byte[PAGE_SIZE];
-            for (int i = 0; i < NUM_ITERATIONS; i++)
-            {
+            for (int i = 0; i < NUM_ITERATIONS; i++) {
                 long p0 = scratchFileBuffer.getPosition();
                 scratchFileBuffer.write(bytes);
                 long p1 = scratchFileBuffer.getPosition();
@@ -66,10 +62,8 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testBufferLength() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testBufferLength() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             byte[] bytes = new byte[PAGE_SIZE];
             RandomAccess scratchFileBuffer1 = scratchFile.createBuffer();
             scratchFileBuffer1.write(bytes);
@@ -78,10 +72,8 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testBufferSeek() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testBufferSeek() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             byte[] bytes = new byte[PAGE_SIZE];
             RandomAccess scratchFileBuffer1 = scratchFile.createBuffer();
             scratchFileBuffer1.write(bytes);
@@ -91,10 +83,8 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testBufferEOF() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testBufferEOF() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             byte[] bytes = new byte[PAGE_SIZE];
             RandomAccess scratchFileBuffer1 = scratchFile.createBuffer();
             scratchFileBuffer1.write(bytes);
@@ -106,10 +96,8 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testAlreadyClose() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testAlreadyClose() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             byte[] bytes = new byte[PAGE_SIZE];
             RandomAccess scratchFileBuffer = scratchFile.createBuffer();
             scratchFileBuffer.write(bytes);
@@ -119,10 +107,8 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testBuffersClosed() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testBuffersClosed() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             byte[] bytes = new byte[PAGE_SIZE];
             RandomAccess scratchFileBuffer1 = scratchFile.createBuffer();
             scratchFileBuffer1.write(bytes);
@@ -151,12 +137,10 @@ class ScratchFileBufferTest
     }
 
     @Test
-    void testView() throws IOException
-    {
-        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly()))
-        {
+    void testView() throws IOException {
+        try (ScratchFile scratchFile = new ScratchFile(MemoryUsageSetting.setupMainMemoryOnly())) {
             RandomAccess scratchFileBuffer = scratchFile.createBuffer();
-            byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
             scratchFileBuffer.write(inputValues);
             assertThrows(UnsupportedOperationException.class,
                     () -> scratchFileBuffer.createView(0, 10));

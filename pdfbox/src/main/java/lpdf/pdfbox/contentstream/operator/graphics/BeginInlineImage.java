@@ -16,45 +16,40 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.pdmodel.graphics.image.PDImage;
-import lpdf.pdfbox.pdmodel.graphics.image.PDInlineImage;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.pdmodel.graphics.image.PDImage;
+import lpdf.pdfbox.pdmodel.graphics.image.PDInlineImage;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * BI Begins an inline image.
  *
  * @author Ben Litchfield
  */
-public final class BeginInlineImage extends GraphicsOperatorProcessor
-{
-    public BeginInlineImage(PDFGraphicsStreamEngine context)
-    {
+public final class BeginInlineImage extends GraphicsOperatorProcessor {
+    public BeginInlineImage(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operator.getImageData() == null || operator.getImageData().length == 0)
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operator.getImageData() == null || operator.getImageData().length == 0) {
             return;
         }
         PDFGraphicsStreamEngine context = getGraphicsContext();
         PDImage image = new PDInlineImage(operator.getImageParameters(),
-                                          operator.getImageData(),
-                                          context.getResources());
+                operator.getImageData(),
+                context.getResources());
         context.drawImage(image);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.BEGIN_INLINE_IMAGE;
     }
 }

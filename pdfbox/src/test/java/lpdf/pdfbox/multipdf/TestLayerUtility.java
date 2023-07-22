@@ -46,32 +46,28 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests the {@link lpdf.pdfbox.multipdf.LayerUtility} class.
- *
  */
-class TestLayerUtility
-{
+class TestLayerUtility {
     private static final File TESTRESULTSDIR = new File("target/test-output");
 
     @BeforeAll
-    static void setUp() throws Exception
-    {
+    static void setUp() throws Exception {
         TESTRESULTSDIR.mkdirs();
     }
 
     /**
      * Tests layer import.
+     *
      * @throws Exception if an error occurs
      */
     @Test
-    void testLayerImport() throws Exception
-    {
+    void testLayerImport() throws Exception {
         File mainPDF = createMainPDF();
         File overlay1 = createOverlay1();
         File targetFile = new File(TESTRESULTSDIR, "text-with-form-overlay.pdf");
 
         try (PDDocument targetDoc = Loader.loadPDF(mainPDF);
-                PDDocument overlay1Doc = Loader.loadPDF(overlay1))
-        {
+             PDDocument overlay1Doc = Loader.loadPDF(overlay1)) {
             assertEquals(1.4f, targetDoc.getVersion());
             LayerUtility layerUtil = new LayerUtility(targetDoc);
             PDFormXObject form = layerUtil.importPageAsForm(overlay1Doc, 0);
@@ -86,8 +82,7 @@ class TestLayerUtility
             assertEquals(1.5f, targetDoc.getVersion());
         }
 
-        try (PDDocument doc = Loader.loadPDF(targetFile))
-        {
+        try (PDDocument doc = Loader.loadPDF(targetFile)) {
             PDDocumentCatalog catalog = doc.getDocumentCatalog();
 
             //OCGs require PDF 1.5 or later
@@ -108,22 +103,19 @@ class TestLayerUtility
         }
     }
 
-    private File createMainPDF() throws IOException
-    {
+    private File createMainPDF() throws IOException {
         File targetFile = new File(TESTRESULTSDIR, "text-doc.pdf");
-        try (PDDocument doc = new PDDocument())
-        {
+        try (PDDocument doc = new PDDocument()) {
             //Create new page
             PDPage page = new PDPage();
             doc.addPage(page);
             PDResources resources = page.getResources();
-            if( resources == null )
-            {
+            if (resources == null) {
                 resources = new PDResources();
-                page.setResources( resources );
+                page.setResources(resources);
             }
 
-            final String[] text = new String[] {
+            final String[] text = new String[]{
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer fermentum lacus in eros",
                     "condimentum eget tristique risus viverra. Sed ac sem et lectus ultrices placerat. Nam",
                     "fringilla tincidunt nulla id euismod. Vivamus eget mauris dui. Mauris luctus ullamcorper",
@@ -132,8 +124,7 @@ class TestLayerUtility
                     "vulputate."
             };
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false)) {
                 //Setup page content stream and paint background/title
                 PDFont font = new PDType1Font(FontName.HELVETICA_BOLD);
                 contentStream.beginText();
@@ -146,8 +137,7 @@ class TestLayerUtility
                 int fontSize = 12;
                 contentStream.setFont(font, fontSize);
                 contentStream.newLineAtOffset(50, 700);
-                for (String line : text)
-                {
+                for (String line : text) {
                     contentStream.newLineAtOffset(0, -fontSize * 1.2f);
                     contentStream.showText(line);
                 }
@@ -159,23 +149,19 @@ class TestLayerUtility
         return targetFile;
     }
 
-    private File createOverlay1() throws IOException
-    {
+    private File createOverlay1() throws IOException {
         File targetFile = new File(TESTRESULTSDIR, "overlay1.pdf");
-        try (PDDocument doc = new PDDocument())
-        {
+        try (PDDocument doc = new PDDocument()) {
             //Create new page
             PDPage page = new PDPage();
             doc.addPage(page);
             PDResources resources = page.getResources();
-            if( resources == null )
-            {
+            if (resources == null) {
                 resources = new PDResources();
-                page.setResources( resources );
+                page.setResources(resources);
             }
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false)) {
                 //Setup page content stream and paint background/title
                 PDFont font = new PDType1Font(FontName.HELVETICA_BOLD);
                 contentStream.setNonStrokingColor(new RgbColor(192, 192, 192));

@@ -23,24 +23,23 @@ import lpdf.pdfbox.cos.COSDictionary;
  *
  * @author Johannes Koch
  */
-public class PDTableAttributeObject extends PDStandardAttributeObject
-{
+public class PDTableAttributeObject extends PDStandardAttributeObject {
 
     /**
-     *  standard attribute owner: Table
+     * standard attribute owner: Table
      */
     public static final String OWNER_TABLE = "Table";
 
     protected static final String ROW_SPAN = "RowSpan";
     protected static final String COL_SPAN = "ColSpan";
-    protected static final String HEADERS  = "Headers";
-    protected static final String SCOPE    = "Scope";
-    protected static final String SUMMARY  = "Summary";
+    protected static final String HEADERS = "Headers";
+    protected static final String SCOPE = "Scope";
+    protected static final String SUMMARY = "Summary";
 
     /**
      * Scope: Both
      */
-    public static final String SCOPE_BOTH   = "Both";
+    public static final String SCOPE_BOTH = "Both";
     /**
      * Scope: Column
      */
@@ -48,14 +47,13 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
     /**
      * Scope: Row
      */
-    public static final String SCOPE_ROW    = "Row";
+    public static final String SCOPE_ROW = "Row";
 
 
     /**
      * Default constructor.
      */
-    public PDTableAttributeObject()
-    {
+    public PDTableAttributeObject() {
         this.setOwner(OWNER_TABLE);
     }
 
@@ -64,8 +62,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param dictionary the dictionary
      */
-    public PDTableAttributeObject(COSDictionary dictionary)
-    {
+    public PDTableAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -76,8 +73,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @return the row span
      */
-    public int getRowSpan()
-    {
+    public int getRowSpan() {
         return this.getInteger(ROW_SPAN, 1);
     }
 
@@ -87,8 +83,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param rowSpan the row span
      */
-    public void setRowSpan(int rowSpan)
-    {
+    public void setRowSpan(int rowSpan) {
         this.setInteger(ROW_SPAN, rowSpan);
     }
 
@@ -98,8 +93,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @return the column span
      */
-    public int getColSpan()
-    {
+    public int getColSpan() {
         return this.getInteger(COL_SPAN, 1);
     }
 
@@ -109,8 +103,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param colSpan the column span
      */
-    public void setColSpan(int colSpan)
-    {
+    public void setColSpan(int colSpan) {
         this.setInteger(COL_SPAN, colSpan);
     }
 
@@ -122,8 +115,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @return the headers.
      */
-    public String[] getHeaders()
-    {
+    public String[] getHeaders() {
         return this.getArrayOfString(HEADERS);
     }
 
@@ -135,8 +127,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param headers the headers
      */
-    public void setHeaders(String[] headers)
-    {
+    public void setHeaders(String[] headers) {
         this.setArrayOfString(HEADERS, headers);
     }
 
@@ -147,8 +138,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.getName(SCOPE);
     }
 
@@ -165,8 +155,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param scope the scope
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.setName(SCOPE, scope);
     }
 
@@ -175,8 +164,7 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @return the summary
      */
-    public String getSummary()
-    {
+    public String getSummary() {
         return this.getString(SUMMARY);
     }
 
@@ -185,33 +173,26 @@ public class PDTableAttributeObject extends PDStandardAttributeObject
      *
      * @param summary the summary
      */
-    public void setSummary(String summary)
-    {
+    public void setSummary(String summary) {
         this.setString(SUMMARY, summary);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder().append(super.toString());
-        if (this.isSpecified(ROW_SPAN))
-        {
+        if (this.isSpecified(ROW_SPAN)) {
             sb.append(", RowSpan=").append(this.getRowSpan());
         }
-        if (this.isSpecified(COL_SPAN))
-        {
+        if (this.isSpecified(COL_SPAN)) {
             sb.append(", ColSpan=").append(this.getColSpan());
         }
-        if (this.isSpecified(HEADERS))
-        {
+        if (this.isSpecified(HEADERS)) {
             sb.append(", Headers=").append(arrayToString(this.getHeaders()));
         }
-        if (this.isSpecified(SCOPE))
-        {
+        if (this.isSpecified(SCOPE)) {
             sb.append(", Scope=").append(this.getScope());
         }
-        if (this.isSpecified(SUMMARY))
-        {
+        if (this.isSpecified(SUMMARY)) {
             sb.append(", Summary=").append(this.getSummary());
         }
         return sb.toString();

@@ -29,10 +29,8 @@ import java.util.regex.Pattern;
  * should be substituted and the ones that can be processed normally.
  *
  * @author Palash Ray
- *
  */
-public class CompoundCharacterTokenizer
-{
+public class CompoundCharacterTokenizer {
     private final Pattern regexExpression;
 
     /**
@@ -42,18 +40,15 @@ public class CompoundCharacterTokenizer
      *
      * @param compoundWords A set of strings like _79_99_, _80_99_ or _92_99_ .
      */
-    public CompoundCharacterTokenizer(Set<String> compoundWords)
-    {
+    public CompoundCharacterTokenizer(Set<String> compoundWords) {
         regexExpression = Pattern.compile(getRegexFromTokens(compoundWords));
     }
 
-    public CompoundCharacterTokenizer(String singleRegex)
-    {
+    public CompoundCharacterTokenizer(String singleRegex) {
         regexExpression = Pattern.compile(singleRegex);
     }
 
-    public List<String> tokenize(String text)
-    {
+    public List<String> tokenize(String text) {
         List<String> tokens = new ArrayList<>();
 
         Matcher regexMatcher = regexExpression.matcher(text);
@@ -61,14 +56,13 @@ public class CompoundCharacterTokenizer
         int lastIndexOfPrevMatch = 0;
 
         while (regexMatcher.find()) // this is where the magic happens:
-                                    // the regexp is used to find a matching pattern for substitution
+        // the regexp is used to find a matching pattern for substitution
         {
             int beginIndexOfNextMatch = regexMatcher.start();
 
             String prevToken = text.substring(lastIndexOfPrevMatch, beginIndexOfNextMatch);
 
-            if (prevToken.length() > 0)
-            {
+            if (prevToken.length() > 0) {
                 tokens.add(prevToken);
             }
 
@@ -82,16 +76,14 @@ public class CompoundCharacterTokenizer
 
         String tail = text.substring(lastIndexOfPrevMatch);
 
-        if (tail.length() > 0)
-        {
+        if (tail.length() > 0) {
             tokens.add(tail);
         }
 
         return tokens;
     }
 
-    private String getRegexFromTokens(Set<String> compoundWords)
-    {
+    private String getRegexFromTokens(Set<String> compoundWords) {
         StringJoiner sj = new StringJoiner(")|(", "(", ")");
         compoundWords.forEach(sj::add);
         return sj.toString();

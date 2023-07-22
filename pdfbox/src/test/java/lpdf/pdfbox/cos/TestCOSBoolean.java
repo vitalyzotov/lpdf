@@ -16,43 +16,39 @@
  */
 package lpdf.pdfbox.cos;
 
+import lpdf.pdfbox.pdfwriter.COSWriter;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-
-import lpdf.pdfbox.pdfwriter.COSWriter;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 /**
  * Unittests for {@link COSBoolean}
  */
-class TestCOSBoolean extends TestCOSBase
-{
+class TestCOSBoolean extends TestCOSBase {
     final COSBoolean cosBooleanTrue = COSBoolean.TRUE;
     final COSBoolean cosBooleanFalse = COSBoolean.FALSE;
 
     @BeforeAll
-    static void setUp()
-    {
+    static void setUp() {
         testCOSBase = COSBoolean.TRUE;
     }
 
     @Test
-    void testGetValue()
-    {
+    void testGetValue() {
         assertTrue(cosBooleanTrue.getValue());
         assertFalse(cosBooleanFalse.getValue());
     }
 
     @Test
-    void testGetValueAsObject()
-    {
+    void testGetValueAsObject() {
         assertTrue(cosBooleanTrue.getValueAsObject() instanceof Boolean);
         assertEquals(Boolean.TRUE, cosBooleanTrue.getValueAsObject());
         assertTrue(cosBooleanFalse.getValueAsObject() instanceof Boolean);
@@ -60,15 +56,13 @@ class TestCOSBoolean extends TestCOSBase
     }
 
     @Test
-    void testGetBoolean()
-    {
+    void testGetBoolean() {
         assertEquals(cosBooleanTrue, COSBoolean.getBoolean(Boolean.TRUE));
         assertEquals(cosBooleanFalse, COSBoolean.getBoolean(Boolean.FALSE));
     }
 
     @Test
-    void testEquals()
-    {
+    void testEquals() {
         COSBoolean test1 = COSBoolean.TRUE;
         COSBoolean test2 = COSBoolean.TRUE;
         COSBoolean test3 = COSBoolean.TRUE;
@@ -92,22 +86,18 @@ class TestCOSBoolean extends TestCOSBase
 
     @Override
     @Test
-    void testAccept()
-    {
+    void testAccept() {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         COSWriter visitor = new COSWriter(outStream);
         int index = 0;
-        try
-        {
+        try {
             cosBooleanTrue.accept(visitor);
             testByteArrays(String.valueOf(cosBooleanTrue).getBytes(StandardCharsets.ISO_8859_1), outStream.toByteArray());
             outStream.reset();
             cosBooleanFalse.accept(visitor);
             testByteArrays(String.valueOf(cosBooleanFalse).getBytes(StandardCharsets.ISO_8859_1), outStream.toByteArray());
             outStream.reset();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             fail("Failed to write " + index + " exception: " + e.getMessage());
         }
     }

@@ -26,15 +26,12 @@ import java.util.Comparator;
  *
  * @author Ben Litchfield
  */
-public class TextPositionComparator implements Comparator<TextPosition>
-{
+public class TextPositionComparator implements Comparator<TextPosition> {
     @Override
-    public int compare(TextPosition pos1, TextPosition pos2)
-    {
+    public int compare(TextPosition pos1, TextPosition pos2) {
         // only compare text that is in the same direction
         int cmp1 = Float.compare(pos1.getDir(), pos2.getDir());
-        if (cmp1 != 0)
-        {
+        if (cmp1 != 0) {
             return cmp1;
         }
 
@@ -53,17 +50,12 @@ public class TextPositionComparator implements Comparator<TextPosition>
 
         // we will do a simple tolerance comparison
         if (yDifference < .1 ||
-            pos2YBottom >= pos1YTop && pos2YBottom <= pos1YBottom ||
-            pos1YBottom >= pos2YTop && pos1YBottom <= pos2YBottom)
-        {
+                pos2YBottom >= pos1YTop && pos2YBottom <= pos1YBottom ||
+                pos1YBottom >= pos2YTop && pos1YBottom <= pos2YBottom) {
             return Float.compare(x1, x2);
-        }
-        else if (pos1YBottom < pos2YBottom)
-        {
+        } else if (pos1YBottom < pos2YBottom) {
             return -1;
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }

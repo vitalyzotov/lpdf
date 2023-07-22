@@ -21,13 +21,11 @@ package lpdf.fontbox.cff;
  *
  * @author Villu Ruusmann
  */
-public final class CFFStandardEncoding extends CFFEncoding
-{
+public final class CFFStandardEncoding extends CFFEncoding {
     private static final int CHAR_CODE = 0;
     private static final int CHAR_SID = 1;
 
-    private CFFStandardEncoding()
-    {
+    private CFFStandardEncoding() {
         // Table of character codes and their corresponding sid.
         int[][] cffStandardEncodingTable = {
                 {0, 0},
@@ -287,18 +285,17 @@ public final class CFFStandardEncoding extends CFFEncoding
                 {254, 0},
                 {255, 0}
         };
-        for (int[] encodingEntry : cffStandardEncodingTable)
-        {
+        for (int[] encodingEntry : cffStandardEncodingTable) {
             add(encodingEntry[CHAR_CODE], encodingEntry[CHAR_SID]);
         }
     }
 
     /**
      * Returns an instance of the CFFStandardEncoding class.
+     *
      * @return an instance of CFFStandardEncoding
      */
-    public static CFFStandardEncoding getInstance()
-    {
+    public static CFFStandardEncoding getInstance() {
         return CFFStandardEncoding.INSTANCE;
     }
 

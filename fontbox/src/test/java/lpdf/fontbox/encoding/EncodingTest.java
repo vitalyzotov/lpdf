@@ -15,16 +15,14 @@
  */
 package lpdf.fontbox.encoding;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class EncodingTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class EncodingTest {
     @Test
-    void testStandardEncoding()
-    {
-    	StandardEncoding standardEncoding = StandardEncoding.INSTANCE;
+    void testStandardEncoding() {
+        StandardEncoding standardEncoding = StandardEncoding.INSTANCE;
         // check some randomly chosen mappings
         assertEquals(".notdef", standardEncoding.getName(0));
         assertEquals("space", standardEncoding.getName(32));
@@ -36,9 +34,8 @@ class EncodingTest
     }
 
     @Test
-    void testMacRomanEncoding()
-    {
-    	MacRomanEncoding macRomanEncoding = MacRomanEncoding.INSTANCE;
+    void testMacRomanEncoding() {
+        MacRomanEncoding macRomanEncoding = MacRomanEncoding.INSTANCE;
         // check some randomly chosen mappings
         assertEquals(".notdef", macRomanEncoding.getName(0));
         assertEquals("space", macRomanEncoding.getName(32));

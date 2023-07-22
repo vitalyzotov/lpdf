@@ -24,8 +24,7 @@ import lpdf.pdfbox.cos.COSName;
 /**
  * @author Timur Kamalov
  */
-public class PDActionResetForm extends PDAction
-{
+public class PDActionResetForm extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -35,8 +34,7 @@ public class PDActionResetForm extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionResetForm()
-    {
+    public PDActionResetForm() {
         setSubType(SUB_TYPE);
     }
 
@@ -45,8 +43,7 @@ public class PDActionResetForm extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionResetForm(COSDictionary a)
-    {
+    public PDActionResetForm(COSDictionary a) {
         super(a);
     }
 
@@ -56,16 +53,14 @@ public class PDActionResetForm extends PDAction
      *
      * @return the array of fields
      */
-    public COSArray getFields()
-    {
+    public COSArray getFields() {
         return action.getCOSArray(COSName.FIELDS);
     }
 
     /**
      * @param array the array of fields
      */
-    public void setFields(COSArray array)
-    {
+    public void setFields(COSArray array) {
         this.action.setItem(COSName.FIELDS, array);
     }
 
@@ -74,16 +69,14 @@ public class PDActionResetForm extends PDAction
      *
      * @return the flags
      */
-    public int getFlags()
-    {
+    public int getFlags() {
         return this.action.getInt(COSName.FLAGS, 0);
     }
 
     /**
      * @param flags the flags
      */
-    public void setFlags(int flags)
-    {
+    public void setFlags(int flags) {
         this.action.setInt(COSName.FLAGS, flags);
     }
 

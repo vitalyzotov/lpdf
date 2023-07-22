@@ -20,10 +20,8 @@ package lpdf.pdfbox.cos;
  * Object representing the physical reference to an indirect pdf object.
  *
  * @author Michael Traut
- *
  */
-public final class COSObjectKey implements Comparable<COSObjectKey>
-{
+public final class COSObjectKey implements Comparable<COSObjectKey> {
     private static final int NUMBER_OFFSET = Short.SIZE;
     private static final long GENERATION_MASK = (long) Math.pow(2, NUMBER_OFFSET) - 1;
     // combined number and generation
@@ -39,14 +37,11 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      * @param num The object number.
      * @param gen The object generation number.
      */
-    public COSObjectKey(long num, int gen)
-    {
-        if (num < 0)
-        {
+    public COSObjectKey(long num, int gen) {
+        if (num < 0) {
             throw new IllegalArgumentException("Object number must not be a negative value");
         }
-        if (gen < 0)
-        {
+        if (gen < 0) {
             throw new IllegalArgumentException("Generation number must not be a negative value");
         }
         numberAndGeneration = num << NUMBER_OFFSET | (gen & GENERATION_MASK);
@@ -56,18 +51,15 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
     /**
      * Constructor.
      *
-     * @param num The object number.
-     * @param gen The object generation number.
+     * @param num   The object number.
+     * @param gen   The object generation number.
      * @param index The index within a compressed object stream
      */
-    public COSObjectKey(long num, int gen, int index)
-    {
-        if (num < 0)
-        {
+    public COSObjectKey(long num, int gen, int index) {
+        if (num < 0) {
             throw new IllegalArgumentException("Object number must not be a negative value");
         }
-        if (gen < 0)
-        {
+        if (gen < 0) {
             throw new IllegalArgumentException("Generation number must not be a negative value");
         }
         numberAndGeneration = computeInternalHash(num, gen);
@@ -81,8 +73,7 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      * @param gen the generation number
      * @return the internal hash for the given values
      */
-    public static final long computeInternalHash(long num, int gen)
-    {
+    public static final long computeInternalHash(long num, int gen) {
         return num << NUMBER_OFFSET | (gen & GENERATION_MASK);
     }
 
@@ -90,9 +81,8 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj)
-    {
-        COSObjectKey objToBeCompared = obj instanceof COSObjectKey ? (COSObjectKey)obj : null;
+    public boolean equals(Object obj) {
+        COSObjectKey objToBeCompared = obj instanceof COSObjectKey ? (COSObjectKey) obj : null;
         return objToBeCompared != null
                 && objToBeCompared.numberAndGeneration == numberAndGeneration;
     }
@@ -102,8 +92,7 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      *
      * @return The object generation number.
      */
-    public int getGeneration()
-    {
+    public int getGeneration() {
         return (int) (numberAndGeneration & GENERATION_MASK);
     }
 
@@ -112,8 +101,7 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      *
      * @return The object number.
      */
-    public long getNumber()
-    {
+    public long getNumber() {
         return numberAndGeneration >>> NUMBER_OFFSET;
     }
 
@@ -122,8 +110,7 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      *
      * @return the index within a compressed object stream if applicable otherwise -1
      */
-    public int getStreamIndex()
-    {
+    public int getStreamIndex() {
         return streamIndex;
     }
 
@@ -131,20 +118,17 @@ public final class COSObjectKey implements Comparable<COSObjectKey>
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(numberAndGeneration);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getNumber() + " " + getGeneration() + " R";
     }
 
     @Override
-    public int compareTo(COSObjectKey other)
-    {
+    public int compareTo(COSObjectKey other) {
         return Long.compare(numberAndGeneration, other.numberAndGeneration);
     }
 

@@ -21,8 +21,7 @@ import java.util.Map;
 /**
  * This class provides all the supported operators.
  */
-public class Operators
-{
+public class Operators {
 
     //Arithmetic operators
     private static final Operator ABS = new ArithmeticOperators.Abs();
@@ -79,8 +78,7 @@ public class Operators
     /**
      * Creates a new Operators object with the default set of operators.
      */
-    public Operators()
-    {
+    public Operators() {
         operators.put("add", ADD);
         operators.put("abs", ABS);
         operators.put("atan", ATAN);
@@ -130,11 +128,11 @@ public class Operators
 
     /**
      * Returns the operator for the given operator name.
+     *
      * @param operatorName the operator name
      * @return the operator (or null if there's no such operator
      */
-    public Operator getOperator(String operatorName)
-    {
+    public Operator getOperator(String operatorName) {
         return this.operators.get(operatorName);
     }
 

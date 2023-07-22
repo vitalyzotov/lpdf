@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class HorizontalMetricsTable extends TTFTable
-{
+public class HorizontalMetricsTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -35,34 +34,30 @@ public class HorizontalMetricsTable extends TTFTable
     private short[] nonHorizontalLeftSideBearing;
     private int numHMetrics;
 
-    HorizontalMetricsTable()
-    {
+    HorizontalMetricsTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         HorizontalHeaderTable hHeader = ttf.getHorizontalHeader();
-        if (hHeader == null)
-        {
+        if (hHeader == null) {
             throw new IOException("Could not get hmtx table");
         }
         numHMetrics = hHeader.getNumberOfHMetrics();
         int numGlyphs = ttf.getNumberOfGlyphs();
 
         int bytesRead = 0;
-        advanceWidth = new int[ numHMetrics ];
-        leftSideBearing = new short[ numHMetrics ];
-        for( int i=0; i<numHMetrics; i++ )
-        {
+        advanceWidth = new int[numHMetrics];
+        leftSideBearing = new short[numHMetrics];
+        for (int i = 0; i < numHMetrics; i++) {
             advanceWidth[i] = data.readUnsignedShort();
             leftSideBearing[i] = data.readSignedShort();
             bytesRead += 4;
@@ -71,8 +66,7 @@ public class HorizontalMetricsTable extends TTFTable
         int numberNonHorizontal = numGlyphs - numHMetrics;
 
         // handle bad fonts with too many hmetrics
-        if (numberNonHorizontal < 0)
-        {
+        if (numberNonHorizontal < 0) {
             numberNonHorizontal = numGlyphs;
         }
 
@@ -80,12 +74,9 @@ public class HorizontalMetricsTable extends TTFTable
         // "leftSideBearing" table although they should
         nonHorizontalLeftSideBearing = new short[numberNonHorizontal];
 
-        if (bytesRead < getLength())
-        {
-            for( int i=0; i<numberNonHorizontal; i++ )
-            {
-                if (bytesRead < getLength())
-                {
+        if (bytesRead < getLength()) {
+            for (int i = 0; i < numberNonHorizontal; i++) {
+                if (bytesRead < getLength()) {
                     nonHorizontalLeftSideBearing[i] = data.readSignedShort();
                     bytesRead += 2;
                 }
@@ -99,24 +90,18 @@ public class HorizontalMetricsTable extends TTFTable
      * Returns the advance width for the given GID.
      *
      * @param gid GID
-     *
      * @return the advance width of the given GID
      */
-    public int getAdvanceWidth(int gid)
-    {
-        if (advanceWidth.length == 0)
-        {
+    public int getAdvanceWidth(int gid) {
+        if (advanceWidth.length == 0) {
             return 250;
         }
-        if (gid < numHMetrics)
-        {
+        if (gid < numHMetrics) {
             return advanceWidth[gid];
-        }
-        else
-        {
+        } else {
             // monospaced fonts may not have a width for every glyph
             // the last one is for subsequent glyphs
-            return advanceWidth[advanceWidth.length -1];
+            return advanceWidth[advanceWidth.length - 1];
         }
     }
 
@@ -124,22 +109,16 @@ public class HorizontalMetricsTable extends TTFTable
      * Returns the left side bearing for the given GID.
      *
      * @param gid GID
-     *
      * @return the left side bearing of the given GID
      */
-    public int getLeftSideBearing(int gid)
-    {
-        if (leftSideBearing.length == 0)
-        {
+    public int getLeftSideBearing(int gid) {
+        if (leftSideBearing.length == 0) {
             return 0;
         }
-        if (gid < numHMetrics)
-        {
+        if (gid < numHMetrics) {
             return leftSideBearing[gid];
-        }
-        else
-        {
+        } else {
             return nonHorizontalLeftSideBearing[gid - numHMetrics];
         }
-   }
+    }
 }

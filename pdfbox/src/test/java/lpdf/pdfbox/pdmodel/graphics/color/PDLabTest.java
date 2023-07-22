@@ -15,30 +15,28 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.pdmodel.common.PDRange;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- *
  * @author Tilman Hausherr
  */
-class PDLabTest
-{
+class PDLabTest {
 
     /**
      * This test checks that getting default values do not alter the object,
      * and checks getters and setters.
      */
     @Test
-    void testLAB()
-    {
+    void testLAB() {
         PDLab pdLab = new PDLab();
         COSArray cosArray = (COSArray) pdLab.getCOSObject();
         COSDictionary dict = (COSDictionary) cosArray.getObject(1);
@@ -47,7 +45,7 @@ class PDLabTest
         assertEquals("Lab", pdLab.getName());
         assertEquals(3, pdLab.getNumberOfComponents());
         assertNotNull(pdLab.getInitialColor());
-        assertTrue(Arrays.equals(new float[]{0,0,0}, pdLab.getInitialColor().getComponents()));
+        assertTrue(Arrays.equals(new float[]{0, 0, 0}, pdLab.getInitialColor().getComponents()));
         assertEquals(0f, pdLab.getBlackPoint().getX(), 0f);
         assertEquals(0f, pdLab.getBlackPoint().getY(), 0f);
         assertEquals(0f, pdLab.getBlackPoint().getZ(), 0f);
@@ -90,7 +88,7 @@ class PDLabTest
         assertEquals(8f, pdLab.getBlackPoint().getX(), 0f);
         assertEquals(9f, pdLab.getBlackPoint().getY(), 0f);
         assertEquals(10f, pdLab.getBlackPoint().getZ(), 0f);
-        assertTrue(Arrays.equals(new float[]{0,0,3}, pdLab.getInitialColor().getComponents()));
+        assertTrue(Arrays.equals(new float[]{0, 0, 3}, pdLab.getInitialColor().getComponents()));
     }
 
 }

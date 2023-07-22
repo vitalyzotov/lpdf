@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -27,31 +24,28 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * J: Set the line cap style.
- *
  */
-public class SetLineCapStyle extends OperatorProcessor
-{
-    public SetLineCapStyle(PDFStreamEngine context)
-    {
+public class SetLineCapStyle extends OperatorProcessor {
+    public SetLineCapStyle(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
-        int lineCapStyle = ((COSNumber)arguments.get( 0 )).intValue();
+        int lineCapStyle = ((COSNumber) arguments.get(0)).intValue();
         getContext().getGraphicsState().setLineCap(lineCapStyle);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_LINE_CAPSTYLE;
     }
 }

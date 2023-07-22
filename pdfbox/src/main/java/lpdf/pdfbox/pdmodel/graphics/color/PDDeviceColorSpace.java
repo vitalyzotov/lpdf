@@ -24,17 +24,14 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author John Hewson
  */
-public abstract class PDDeviceColorSpace extends PDColorSpace
-{
+public abstract class PDDeviceColorSpace extends PDColorSpace {
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName();
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return COSName.getPDFName(getName());
     }
 }

@@ -27,26 +27,23 @@ import lpdf.fontbox.ttf.gsub.GsubWorkerFactory;
  * {@link GsubWorkerFactory#getGsubWorker(org.apache.fontbox.ttf.CmapLookup, GsubData)}
  *
  * @author Palash Ray
- *
  */
-public enum Language
-{
+public enum Language {
 
-    BENGALI(new String[] { "bng2", "beng" }),
-    LATIN(new String[] { "latn" }),
+    BENGALI(new String[]{"bng2", "beng"}),
+    LATIN(new String[]{"latn"}),
 
     /**
      * An entry explicitly denoting the absence of any concrete language. May be useful when no actual glyph
      * substitution is required but only the content of GSUB table is of interest.
-     *
+     * <p>
      * Must be the last one as it is not a language per se.
      */
     UNSPECIFIED(new String[0]);
 
     private final String[] scriptNames;
 
-    private Language(String[] scriptNames)
-    {
+    private Language(String[] scriptNames) {
         this.scriptNames = scriptNames;
     }
 
@@ -57,8 +54,7 @@ public enum Language
      *
      * @return an array containing all supported languages
      */
-    public String[] getScriptNames()
-    {
+    public String[] getScriptNames() {
         return scriptNames;
     }
 

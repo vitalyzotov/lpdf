@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class MaximumProfileTable extends TTFTable
-{
+public class MaximumProfileTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -46,236 +45,232 @@ public class MaximumProfileTable extends TTFTable
     private int maxComponentElements;
     private int maxComponentDepth;
 
-    MaximumProfileTable()
-    {
+    MaximumProfileTable() {
         super();
     }
 
     /**
      * @return Returns the maxComponentDepth.
      */
-    public int getMaxComponentDepth()
-    {
+    public int getMaxComponentDepth() {
         return maxComponentDepth;
     }
+
     /**
      * @param maxComponentDepthValue The maxComponentDepth to set.
      */
-    public void setMaxComponentDepth(int maxComponentDepthValue)
-    {
+    public void setMaxComponentDepth(int maxComponentDepthValue) {
         this.maxComponentDepth = maxComponentDepthValue;
     }
+
     /**
      * @return Returns the maxComponentElements.
      */
-    public int getMaxComponentElements()
-    {
+    public int getMaxComponentElements() {
         return maxComponentElements;
     }
+
     /**
      * @param maxComponentElementsValue The maxComponentElements to set.
      */
-    public void setMaxComponentElements(int maxComponentElementsValue)
-    {
+    public void setMaxComponentElements(int maxComponentElementsValue) {
         this.maxComponentElements = maxComponentElementsValue;
     }
+
     /**
      * @return Returns the maxCompositeContours.
      */
-    public int getMaxCompositeContours()
-    {
+    public int getMaxCompositeContours() {
         return maxCompositeContours;
     }
+
     /**
      * @param maxCompositeContoursValue The maxCompositeContours to set.
      */
-    public void setMaxCompositeContours(int maxCompositeContoursValue)
-    {
+    public void setMaxCompositeContours(int maxCompositeContoursValue) {
         this.maxCompositeContours = maxCompositeContoursValue;
     }
+
     /**
      * @return Returns the maxCompositePoints.
      */
-    public int getMaxCompositePoints()
-    {
+    public int getMaxCompositePoints() {
         return maxCompositePoints;
     }
+
     /**
      * @param maxCompositePointsValue The maxCompositePoints to set.
      */
-    public void setMaxCompositePoints(int maxCompositePointsValue)
-    {
+    public void setMaxCompositePoints(int maxCompositePointsValue) {
         this.maxCompositePoints = maxCompositePointsValue;
     }
+
     /**
      * @return Returns the maxContours.
      */
-    public int getMaxContours()
-    {
+    public int getMaxContours() {
         return maxContours;
     }
+
     /**
      * @param maxContoursValue The maxContours to set.
      */
-    public void setMaxContours(int maxContoursValue)
-    {
+    public void setMaxContours(int maxContoursValue) {
         this.maxContours = maxContoursValue;
     }
+
     /**
      * @return Returns the maxFunctionDefs.
      */
-    public int getMaxFunctionDefs()
-    {
+    public int getMaxFunctionDefs() {
         return maxFunctionDefs;
     }
+
     /**
      * @param maxFunctionDefsValue The maxFunctionDefs to set.
      */
-    public void setMaxFunctionDefs(int maxFunctionDefsValue)
-    {
+    public void setMaxFunctionDefs(int maxFunctionDefsValue) {
         this.maxFunctionDefs = maxFunctionDefsValue;
     }
+
     /**
      * @return Returns the maxInstructionDefs.
      */
-    public int getMaxInstructionDefs()
-    {
+    public int getMaxInstructionDefs() {
         return maxInstructionDefs;
     }
+
     /**
      * @param maxInstructionDefsValue The maxInstructionDefs to set.
      */
-    public void setMaxInstructionDefs(int maxInstructionDefsValue)
-    {
+    public void setMaxInstructionDefs(int maxInstructionDefsValue) {
         this.maxInstructionDefs = maxInstructionDefsValue;
     }
+
     /**
      * @return Returns the maxPoints.
      */
-    public int getMaxPoints()
-    {
+    public int getMaxPoints() {
         return maxPoints;
     }
+
     /**
      * @param maxPointsValue The maxPoints to set.
      */
-    public void setMaxPoints(int maxPointsValue)
-    {
+    public void setMaxPoints(int maxPointsValue) {
         this.maxPoints = maxPointsValue;
     }
+
     /**
      * @return Returns the maxSizeOfInstructions.
      */
-    public int getMaxSizeOfInstructions()
-    {
+    public int getMaxSizeOfInstructions() {
         return maxSizeOfInstructions;
     }
+
     /**
      * @param maxSizeOfInstructionsValue The maxSizeOfInstructions to set.
      */
-    public void setMaxSizeOfInstructions(int maxSizeOfInstructionsValue)
-    {
+    public void setMaxSizeOfInstructions(int maxSizeOfInstructionsValue) {
         this.maxSizeOfInstructions = maxSizeOfInstructionsValue;
     }
+
     /**
      * @return Returns the maxStackElements.
      */
-    public int getMaxStackElements()
-    {
+    public int getMaxStackElements() {
         return maxStackElements;
     }
+
     /**
      * @param maxStackElementsValue The maxStackElements to set.
      */
-    public void setMaxStackElements(int maxStackElementsValue)
-    {
+    public void setMaxStackElements(int maxStackElementsValue) {
         this.maxStackElements = maxStackElementsValue;
     }
+
     /**
      * @return Returns the maxStorage.
      */
-    public int getMaxStorage()
-    {
+    public int getMaxStorage() {
         return maxStorage;
     }
+
     /**
      * @param maxStorageValue The maxStorage to set.
      */
-    public void setMaxStorage(int maxStorageValue)
-    {
+    public void setMaxStorage(int maxStorageValue) {
         this.maxStorage = maxStorageValue;
     }
+
     /**
      * @return Returns the maxTwilightPoints.
      */
-    public int getMaxTwilightPoints()
-    {
+    public int getMaxTwilightPoints() {
         return maxTwilightPoints;
     }
+
     /**
      * @param maxTwilightPointsValue The maxTwilightPoints to set.
      */
-    public void setMaxTwilightPoints(int maxTwilightPointsValue)
-    {
+    public void setMaxTwilightPoints(int maxTwilightPointsValue) {
         this.maxTwilightPoints = maxTwilightPointsValue;
     }
+
     /**
      * @return Returns the maxZones.
      */
-    public int getMaxZones()
-    {
+    public int getMaxZones() {
         return maxZones;
     }
+
     /**
      * @param maxZonesValue The maxZones to set.
      */
-    public void setMaxZones(int maxZonesValue)
-    {
+    public void setMaxZones(int maxZonesValue) {
         this.maxZones = maxZonesValue;
     }
+
     /**
      * @return Returns the numGlyphs.
      */
-    public int getNumGlyphs()
-    {
+    public int getNumGlyphs() {
         return numGlyphs;
     }
+
     /**
      * @param numGlyphsValue The numGlyphs to set.
      */
-    public void setNumGlyphs(int numGlyphsValue)
-    {
+    public void setNumGlyphs(int numGlyphsValue) {
         this.numGlyphs = numGlyphsValue;
     }
+
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
+
     /**
      * @param versionValue The version to set.
      */
-    public void setVersion(float versionValue)
-    {
+    public void setVersion(float versionValue) {
         this.version = versionValue;
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.read32Fixed();
         numGlyphs = data.readUnsignedShort();
-        if (version >= 1.0f)
-        {
+        if (version >= 1.0f) {
             maxPoints = data.readUnsignedShort();
             maxContours = data.readUnsignedShort();
             maxCompositePoints = data.readUnsignedShort();

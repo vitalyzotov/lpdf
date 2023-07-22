@@ -23,25 +23,20 @@ import lpdf.harmony.awt.geom.Point2D;
  *
  * @author Tilman Hausherr
  */
-class Vertex
-{
+class Vertex {
     final Point2D point;
     final float[] color;
 
-    Vertex(Point2D p, float[] c)
-    {
+    Vertex(Point2D p, float[] c) {
         point = p;
         color = c.clone();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (float f : color)
-        {
-            if (sb.length() > 0)
-            {
+        for (float f : color) {
+            if (sb.length() > 0) {
                 sb.append(' ');
             }
             sb.append(String.format("%3.2f", f));

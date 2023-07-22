@@ -18,31 +18,27 @@
  */
 package lpdf.fontbox.type1;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- *
  * @author Tilman Hausherr
  */
-class Type1LexerTest
-{
+class Type1LexerTest {
 
-    Type1LexerTest()
-    {
+    Type1LexerTest() {
     }
 
     /**
      * PDFBOX-5155: test real numbers.
      */
     @Test
-    void testRealNumbers() throws IOException
-    {
+    void testRealNumbers() throws IOException {
         String s = "/FontMatrix [1e-3 0e-3 0e-3 -1E-03 0 0 1.23 -1.23 ] readonly def";
         Type1Lexer t1l = new Type1Lexer(s.getBytes(StandardCharsets.US_ASCII));
         List<Token> tokens = readTokens(t1l);
@@ -72,29 +68,23 @@ class Type1LexerTest
     }
 
     @Test
-    void testEmptyName() throws IOException
-    {
+    void testEmptyName() throws IOException {
         String s = "dup 127 / put";
         Type1Lexer t1l = new Type1Lexer(s.getBytes(StandardCharsets.US_ASCII));
         Token nextToken;
-        try
-        {
-            do
-            {
+        try {
+            do {
                 nextToken = t1l.nextToken();
             }
             while (nextToken != null);
             Assertions.fail("DamagedFontException expected");
-        }
-        catch (DamagedFontException ex)
-        {
+        } catch (DamagedFontException ex) {
             Assertions.assertEquals("Could not read token at position 9", ex.getMessage());
         }
     }
 
     @Test
-    void testProcAndNameAndDictAndString() throws IOException
-    {
+    void testProcAndNameAndDictAndString() throws IOException {
         String s = "/ND {noaccess def} executeonly def \n 8#173 +2#110 \n%comment \n<< (string \\n \\r \\t \\b \\f \\\\ \\( \\) \\123) >>";
         Type1Lexer t1l = new Type1Lexer(s.getBytes(StandardCharsets.US_ASCII));
         List<Token> tokens = readTokens(t1l);
@@ -121,28 +111,24 @@ class Type1LexerTest
     }
 
     @Test
-    void TestData() throws IOException
-    {
+    void TestData() throws IOException {
         String s = "3 RD 123 ND";
         Type1Lexer t1l = new Type1Lexer(s.getBytes(StandardCharsets.US_ASCII));
         List<Token> tokens = readTokens(t1l);
         Assertions.assertEquals(Token.INTEGER, tokens.get(0).getKind());
         Assertions.assertEquals(3, tokens.get(0).intValue());
         Assertions.assertEquals(Token.CHARSTRING, tokens.get(1).getKind());
-        Assertions.assertArrayEquals(new byte[] {'1', '2', '3'}, tokens.get(1).getData());
+        Assertions.assertArrayEquals(new byte[]{'1', '2', '3'}, tokens.get(1).getData());
         Assertions.assertEquals(Token.NAME, tokens.get(2).getKind());
         Assertions.assertEquals("ND", tokens.get(2).getText());
     }
 
-    private List<Token> readTokens(Type1Lexer t1l) throws IOException
-    {
+    private List<Token> readTokens(Type1Lexer t1l) throws IOException {
         Token nextToken;
         List<Token> tokens = new ArrayList<>();
-        do
-        {
+        do {
             nextToken = t1l.nextToken();
-            if (nextToken != null)
-            {
+            if (nextToken != null) {
                 tokens.add(nextToken);
             }
         }

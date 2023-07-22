@@ -16,19 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.common;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-
-import lpdf.pdfbox.Loader;
 import lpdf.io.RandomAccessReadBuffer;
+import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDDocumentCatalog;
 import lpdf.pdfbox.pdmodel.PDDocumentNameDictionary;
@@ -37,15 +26,23 @@ import lpdf.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
 import lpdf.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
 import org.junit.jupiter.api.Test;
 
-class TestEmbeddedFiles
-{
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class TestEmbeddedFiles {
     @Test
-    void testNullEmbeddedFile() throws IOException
-    {
+    void testNullEmbeddedFile() throws IOException {
         PDEmbeddedFile embeddedFile = null;
         boolean ok = false;
-        try
-        {
+        try {
             PDDocument doc = Loader
                     .loadPDF(RandomAccessReadBuffer.createBufferFromStream(TestEmbeddedFiles.class
                             .getResourceAsStream("null_PDComplexFileSpecification.pdf")));
@@ -57,8 +54,7 @@ class TestEmbeddedFiles
 
             PDComplexFileSpecification spec = embeddedFiles.getNames().get("non-existent-file.docx");
 
-            if (spec != null)
-            {
+            if (spec != null) {
                 embeddedFile = spec.getEmbeddedFile();
                 ok = true;
             }
@@ -67,9 +63,7 @@ class TestEmbeddedFiles
             assertNotNull(spec, "one attachment actually exists");
             assertEquals(17660, spec.getEmbeddedFile().getLength(), "existing file length");
             spec = embeddedFiles.getNames().get("non-existent-file.docx");
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             fail("null pointer exception");
         }
         assertTrue(ok, "Was able to get file without exception");
@@ -77,8 +71,7 @@ class TestEmbeddedFiles
     }
 
     @Test
-    void testOSSpecificAttachments() throws IOException
-    {
+    void testOSSpecificAttachments() throws IOException {
         PDEmbeddedFile nonOSFile = null;
         PDEmbeddedFile macFile = null;
         PDEmbeddedFile dosFile = null;
@@ -91,8 +84,7 @@ class TestEmbeddedFiles
         PDDocumentNameDictionary names = catalog.getNames();
         PDEmbeddedFilesNameTreeNode treeNode = names.getEmbeddedFiles();
         List<PDNameTreeNode<PDComplexFileSpecification>> kids = treeNode.getKids();
-        for (PDNameTreeNode<PDComplexFileSpecification> kid : kids)
-        {
+        for (PDNameTreeNode<PDComplexFileSpecification> kid : kids) {
             Map<String, PDComplexFileSpecification> tmpNames = kid.getNames();
             COSObjectable obj = tmpNames.get("My first attachment");
 
@@ -115,8 +107,7 @@ class TestEmbeddedFiles
     }
 
     private boolean byteArrayContainsLC(String target, byte[] bytes, String encoding)
-            throws UnsupportedEncodingException
-    {
+            throws UnsupportedEncodingException {
         String s = new String(bytes, encoding);
         return s.toLowerCase().contains(target);
     }

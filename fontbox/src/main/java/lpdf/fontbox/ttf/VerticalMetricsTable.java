@@ -20,17 +20,15 @@ import java.io.IOException;
 
 /**
  * A vertical metrics 'vmtx' table in a TrueType or OpenType font.
- *
+ * <p>
  * This table is required by the OpenType CJK Font Guidelines for "all
  * OpenType fonts that are used for vertical writing".
- *
+ * <p>
  * This table is specified in both the TrueType and OpenType specifications.
  *
  * @author Glenn Adams
- *
  */
-public class VerticalMetricsTable extends TTFTable
-{
+public class VerticalMetricsTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -41,54 +39,46 @@ public class VerticalMetricsTable extends TTFTable
     private short[] additionalTopSideBearing;
     private int numVMetrics;
 
-    VerticalMetricsTable()
-    {
+    VerticalMetricsTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         VerticalHeaderTable vHeader = ttf.getVerticalHeader();
-        if (vHeader == null)
-        {
+        if (vHeader == null) {
             throw new IOException("Could not get vhea table");
         }
         numVMetrics = vHeader.getNumberOfVMetrics();
         int numGlyphs = ttf.getNumberOfGlyphs();
 
         int bytesRead = 0;
-        advanceHeight = new int[ numVMetrics ];
-        topSideBearing = new short[ numVMetrics ];
-        for( int i=0; i<numVMetrics; i++ )
-        {
+        advanceHeight = new int[numVMetrics];
+        topSideBearing = new short[numVMetrics];
+        for (int i = 0; i < numVMetrics; i++) {
             advanceHeight[i] = data.readUnsignedShort();
             topSideBearing[i] = data.readSignedShort();
             bytesRead += 4;
         }
 
-        if (bytesRead < getLength())
-        {
+        if (bytesRead < getLength()) {
             int numberNonVertical = numGlyphs - numVMetrics;
 
             // handle bad fonts with too many vmetrics
-            if (numberNonVertical < 0)
-            {
+            if (numberNonVertical < 0) {
                 numberNonVertical = numGlyphs;
             }
 
             additionalTopSideBearing = new short[numberNonVertical];
-            for( int i=0; i<numberNonVertical; i++ )
-            {
-                if (bytesRead < getLength())
-                {
+            for (int i = 0; i < numberNonVertical; i++) {
+                if (bytesRead < getLength()) {
                     additionalTopSideBearing[i] = data.readSignedShort();
                     bytesRead += 2;
                 }
@@ -103,16 +93,11 @@ public class VerticalMetricsTable extends TTFTable
      *
      * @param gid GID
      * @return top sidebearing for the given GID
-     *
      */
-    public int getTopSideBearing(int gid)
-    {
-        if (gid < numVMetrics)
-        {
+    public int getTopSideBearing(int gid) {
+        if (gid < numVMetrics) {
             return topSideBearing[gid];
-        }
-        else
-        {
+        } else {
             return additionalTopSideBearing[gid - numVMetrics];
         }
     }
@@ -123,17 +108,13 @@ public class VerticalMetricsTable extends TTFTable
      * @param gid GID
      * @return advance height for the given GID
      */
-    public int getAdvanceHeight(int gid)
-    {
-        if (gid < numVMetrics)
-        {
+    public int getAdvanceHeight(int gid) {
+        if (gid < numVMetrics) {
             return advanceHeight[gid];
-        }
-        else
-        {
+        } else {
             // monospaced fonts may not have a height for every glyph
             // the last one is for subsequent glyphs
-            return advanceHeight[advanceHeight.length -1];
+            return advanceHeight[advanceHeight.length - 1];
         }
     }
 }

@@ -16,25 +16,23 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.cos.COSDictionary;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.io.IOUtils;
-
 /**
  * Decodes data encoded in an ASCII base-85 representation, reproducing the original binary data.
+ *
  * @author Ben Litchfield
  */
-final class ASCII85Filter extends Filter
-{
+final class ASCII85Filter extends Filter {
     @Override
     public DecodeResult decode(InputStream encoded, OutputStream decoded,
-                                         COSDictionary parameters, int index) throws IOException
-    {
-        try (ASCII85InputStream is = new ASCII85InputStream(encoded))
-        {
+                               COSDictionary parameters, int index) throws IOException {
+        try (ASCII85InputStream is = new ASCII85InputStream(encoded)) {
             IOUtils.copy(is, decoded);
         }
         decoded.flush();
@@ -43,10 +41,8 @@ final class ASCII85Filter extends Filter
 
     @Override
     protected void encode(InputStream input, OutputStream encoded, COSDictionary parameters)
-        throws IOException
-    {
-        try (ASCII85OutputStream os = new ASCII85OutputStream(encoded))
-        {
+            throws IOException {
+        try (ASCII85OutputStream os = new ASCII85OutputStream(encoded)) {
             IOUtils.copy(input, os);
         }
         encoded.flush();

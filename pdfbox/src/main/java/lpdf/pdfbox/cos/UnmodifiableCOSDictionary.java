@@ -23,13 +23,11 @@ import java.util.Collections;
  *
  * @author John Hewson
  */
-final class UnmodifiableCOSDictionary extends COSDictionary
-{
+final class UnmodifiableCOSDictionary extends COSDictionary {
     /**
      * {@inheritDoc}
      */
-    UnmodifiableCOSDictionary(COSDictionary dict)
-    {
+    UnmodifiableCOSDictionary(COSDictionary dict) {
         super();
         items = Collections.unmodifiableMap(dict.items);
     }
@@ -38,8 +36,7 @@ final class UnmodifiableCOSDictionary extends COSDictionary
      * {@inheritDoc}
      */
     @Override
-    public void setNeedToBeUpdated(boolean flag)
-    {
+    public void setNeedToBeUpdated(boolean flag) {
         throw new UnsupportedOperationException();
     }
 }

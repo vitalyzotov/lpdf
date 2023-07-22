@@ -31,16 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests font encoding.
- *
  */
-class TestFontEncoding
-{
+class TestFontEncoding {
     /**
      * Test the add method of a font encoding.
      */
     @Test
-    void testAdd() throws Exception
-    {
+    void testAdd() throws Exception {
         // see PDFDBOX-3332
         int codeForSpace = WinAnsiEncoding.INSTANCE.getNameToCodeMap().get("space");
         assertEquals(32, codeForSpace);
@@ -50,8 +47,7 @@ class TestFontEncoding
     }
 
     @Test
-    void testOverwrite() throws Exception
-    {
+    void testOverwrite() throws Exception {
         // see PDFDBOX-3332
         COSDictionary dictEncodingDict = new COSDictionary();
         dictEncodingDict.setItem(COSName.TYPE, COSName.ENCODING);

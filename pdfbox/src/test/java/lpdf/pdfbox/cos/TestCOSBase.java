@@ -17,28 +17,28 @@
 
 package lpdf.pdfbox.cos;
 
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-
 /**
  * Test class for {@link COSBase}.
  */
-abstract class TestCOSBase
-{
-    /** The COSBase abstraction of the object being tested. */
+abstract class TestCOSBase {
+    /**
+     * The COSBase abstraction of the object being tested.
+     */
     protected static COSBase testCOSBase;
 
     /**
      * Tests getCOSObject() - tests that the underlying object is returned.
      */
     @Test
-    void testGetCOSObject()
-    {
+    void testGetCOSObject() {
         assertEquals(testCOSBase, testCOSBase.getCOSObject());
     }
 
@@ -51,8 +51,7 @@ abstract class TestCOSBase
      * Tests isDirect() and setDirect() - tests the getter/setter methods.
      */
     @Test
-    void testIsSetDirect()
-    {
+    void testIsSetDirect() {
         testCOSBase.setDirect(true);
         assertTrue(testCOSBase.isDirect());
         testCOSBase.setDirect(false);
@@ -61,15 +60,14 @@ abstract class TestCOSBase
 
     /**
      * A simple utility function to compare two byte arrays.
+     *
      * @param byteArr1 the expected byte array
      * @param byteArr2 the byte array being compared
      */
     @SuppressWarnings({"java:S5863"}) // don't flag tests for reflexivity
-    protected void testByteArrays(byte[] byteArr1, byte[] byteArr2)
-    {
+    protected void testByteArrays(byte[] byteArr1, byte[] byteArr2) {
         assertEquals(byteArr1.length, byteArr1.length);
-        for (int i = 0; i < byteArr1.length; i++)
-        {
+        for (int i = 0; i < byteArr1.length; i++) {
             assertEquals(byteArr1[i], byteArr2[i]);
         }
     }

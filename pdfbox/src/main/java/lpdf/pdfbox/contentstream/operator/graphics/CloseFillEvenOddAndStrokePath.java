@@ -16,38 +16,32 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * b* Close, fill and stroke the path with even-odd winding rule.
- *
  */
-public final class CloseFillEvenOddAndStrokePath extends GraphicsOperatorProcessor
-{
-    public CloseFillEvenOddAndStrokePath(PDFGraphicsStreamEngine context)
-    {
+public final class CloseFillEvenOddAndStrokePath extends GraphicsOperatorProcessor {
+    public CloseFillEvenOddAndStrokePath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
         PDFStreamEngine context = getContext();
         context.processOperator(OperatorName.CLOSE_PATH, operands);
         context.processOperator(OperatorName.FILL_EVEN_ODD_AND_STROKE, operands);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CLOSE_FILL_EVEN_ODD_AND_STROKE;
     }
 }

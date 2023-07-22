@@ -17,35 +17,32 @@
 
 package lpdf.pdfbox.pdmodel.font.encoding;
 
-import java.util.Map;
 import lpdf.pdfbox.cos.COSBase;
+
+import java.util.Map;
 
 /**
  * A font's built-in encoding.
  *
  * @author John Hewson
  */
-public class BuiltInEncoding extends Encoding
-{
+public class BuiltInEncoding extends Encoding {
     /**
      * Constructor.
      *
      * @param codeToName the given code to name mapping
      */
-    public BuiltInEncoding(Map<Integer, String> codeToName)
-    {
+    public BuiltInEncoding(Map<Integer, String> codeToName) {
         codeToName.forEach(this::add);
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         throw new UnsupportedOperationException("Built-in encodings cannot be serialized");
     }
 
     @Override
-    public String getEncodingName()
-    {
+    public String getEncodingName() {
         return "built-in (TTF)";
     }
 }

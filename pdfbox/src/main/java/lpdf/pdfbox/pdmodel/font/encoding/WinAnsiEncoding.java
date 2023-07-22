@@ -21,11 +21,10 @@ import lpdf.pdfbox.cos.COSName;
 
 /**
  * This the win ansi encoding.
- * 
+ *
  * @author Ben Litchfield
  */
-public class WinAnsiEncoding extends Encoding
-{
+public class WinAnsiEncoding extends Encoding {
     /**
      * Table of octal character codes and their corresponding names.
      */
@@ -253,7 +252,7 @@ public class WinAnsiEncoding extends Encoding
 
     /**
      * Singleton instance of this class.
-     * 
+     *
      * @since Apache PDFBox 1.3.0
      */
     public static final WinAnsiEncoding INSTANCE = new WinAnsiEncoding();
@@ -261,33 +260,27 @@ public class WinAnsiEncoding extends Encoding
     /**
      * Constructor.
      */
-    private WinAnsiEncoding()
-    {
-        for (Object[] encodingEntry : WIN_ANSI_ENCODING_TABLE)
-        {
+    private WinAnsiEncoding() {
+        for (Object[] encodingEntry : WIN_ANSI_ENCODING_TABLE) {
             add((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
 
         // From the PDF specification:
         // In WinAnsiEncoding, all unused codes greater than 40 map to the bullet character.
-        for (int i = 041; i <= 255; i++)
-        {
-            if (!codeToName.containsKey(i))
-            {
+        for (int i = 041; i <= 255; i++) {
+            if (!codeToName.containsKey(i)) {
                 add(i, "bullet");
             }
         }
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return COSName.WIN_ANSI_ENCODING;
     }
 
     @Override
-    public String getEncodingName()
-    {
+    public String getEncodingName() {
         return "WinAnsiEncoding";
     }
 }

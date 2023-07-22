@@ -17,30 +17,6 @@
 
 package lpdf.pdfbox.pdmodel.encryption;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.AlgorithmParameterGenerator;
-import java.security.AlgorithmParameters;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Provider;
-import java.security.SecureRandom;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSString;
@@ -71,15 +47,39 @@ import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
 import org.bouncycastle.util.Arrays;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Provider;
+import java.security.SecureRandom;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * This class implements the public key security handler described in the PDF specification.
  *
- * @see PublicKeyProtectionPolicy to see how to protect document with this security handler.
  * @author Benoit Guillon
+ * @see PublicKeyProtectionPolicy to see how to protect document with this security handler.
  */
-public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyProtectionPolicy>
-{
-    /** The filter name. */
+public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyProtectionPolicy> {
+    /**
+     * The filter name.
+     */
     public static final String FILTER = "Adobe.PubSec";
 
     private static final String SUBFILTER4 = "adbe.pkcs7.s4";
@@ -88,8 +88,7 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
     /**
      * Constructor.
      */
-    public PublicKeySecurityHandler()
-    {
+    public PublicKeySecurityHandler() {
     }
 
     /**
@@ -97,59 +96,50 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
      *
      * @param publicKeyProtectionPolicy The protection policy.
      */
-    public PublicKeySecurityHandler(PublicKeyProtectionPolicy publicKeyProtectionPolicy)
-    {
+    public PublicKeySecurityHandler(PublicKeyProtectionPolicy publicKeyProtectionPolicy) {
         super(publicKeyProtectionPolicy);
     }
 
     /**
      * Prepares everything to decrypt the document.
      *
-     * @param encryption encryption dictionary, can be retrieved via
-     * {@link PDDocument#getEncryption()}
-     * @param documentIDArray document id which is returned via
-     * {@link lpdf.pdfbox.cos.COSDocument#getDocumentID()} (not used by
-     * this handler)
+     * @param encryption         encryption dictionary, can be retrieved via
+     *                           {@link PDDocument#getEncryption()}
+     * @param documentIDArray    document id which is returned via
+     *                           {@link lpdf.pdfbox.cos.COSDocument#getDocumentID()} (not used by
+     *                           this handler)
      * @param decryptionMaterial Information used to decrypt the document.
-     *
      * @throws IOException If there is an error accessing data. If verbose mode
-     * is enabled, the exception message will provide more details why the
-     * match wasn't successful.
+     *                     is enabled, the exception message will provide more details why the
+     *                     match wasn't successful.
      */
     @Override
     public void prepareForDecryption(PDEncryption encryption, COSArray documentIDArray,
-            DecryptionMaterial decryptionMaterial)
-            throws IOException
-    {
-        if (!(decryptionMaterial instanceof PublicKeyDecryptionMaterial))
-        {
+                                     DecryptionMaterial decryptionMaterial)
+            throws IOException {
+        if (!(decryptionMaterial instanceof PublicKeyDecryptionMaterial)) {
             throw new IOException(
                     "Provided decryption material is not compatible with the document - "
                             + "did you pass a null keyStore?");
         }
 
         PDCryptFilterDictionary defaultCryptFilterDictionary = encryption.getDefaultCryptFilterDictionary();
-        if (defaultCryptFilterDictionary != null && defaultCryptFilterDictionary.getLength() != 0)
-        {
+        if (defaultCryptFilterDictionary != null && defaultCryptFilterDictionary.getLength() != 0) {
             setKeyLength(defaultCryptFilterDictionary.getLength());
             setDecryptMetadata(defaultCryptFilterDictionary.isEncryptMetaData());
-        }
-        else if (encryption.getLength() != 0)
-        {
+        } else if (encryption.getLength() != 0) {
             setKeyLength(encryption.getLength());
             setDecryptMetadata(encryption.isEncryptMetaData());
         }
 
         PublicKeyDecryptionMaterial material = (PublicKeyDecryptionMaterial) decryptionMaterial;
 
-        try
-        {
+        try {
             boolean foundRecipient = false;
 
             X509Certificate certificate = material.getCertificate();
             X509CertificateHolder materialCert = null;
-            if (certificate != null)
-            {
+            if (certificate != null) {
                 materialCert = new X509CertificateHolder(certificate.getEncoded());
             }
 
@@ -159,12 +149,10 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             // the bytes of each recipient in the recipients array
             COSArray array = encryption.getCOSObject().getCOSArray(COSName.RECIPIENTS);
-            if (array == null && defaultCryptFilterDictionary != null)
-            {
+            if (array == null && defaultCryptFilterDictionary != null) {
                 array = defaultCryptFilterDictionary.getCOSObject().getCOSArray(COSName.RECIPIENTS);
             }
-            if (array == null)
-            {
+            if (array == null) {
                 throw new IOException("/Recipients entry is missing in encryption dictionary");
             }
             byte[][] recipientFieldsBytes = new byte[array.size()][];
@@ -172,21 +160,18 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             int recipientFieldsLength = 0;
             StringBuilder extraInfo = new StringBuilder();
-            for (int i = 0; i < array.size(); i++)
-            {
+            for (int i = 0; i < array.size(); i++) {
                 COSString recipientFieldString = (COSString) array.getObject(i);
                 byte[] recipientBytes = recipientFieldString.getBytes();
                 CMSEnvelopedData data = new CMSEnvelopedData(recipientBytes);
                 Collection<RecipientInformation> recipCertificatesIt = data.getRecipientInfos()
                         .getRecipients();
                 int j = 0;
-                for (RecipientInformation ri : recipCertificatesIt)
-                {
+                for (RecipientInformation ri : recipCertificatesIt) {
                     // Impl: if a matching certificate was previously found it is an error,
                     // here we just don't care about it
                     RecipientId rid = ri.getRID();
-                    if (!foundRecipient && rid.match(materialCert))
-                    {
+                    if (!foundRecipient && rid.match(materialCert)) {
                         foundRecipient = true;
                         PrivateKey privateKey = (PrivateKey) material.getPrivateKey();
                         // might need to call setContentProvider() if we use PKI token, see
@@ -195,13 +180,11 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
                         break;
                     }
                     j++;
-                    if (certificate != null)
-                    {
+                    if (certificate != null) {
                         extraInfo.append('\n');
                         extraInfo.append(j);
                         extraInfo.append(": ");
-                        if (rid instanceof KeyTransRecipientId)
-                        {
+                        if (rid instanceof KeyTransRecipientId) {
                             appendCertInfo(extraInfo, (KeyTransRecipientId) rid, certificate, materialCert);
                         }
                     }
@@ -209,13 +192,11 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
                 recipientFieldsBytes[i] = recipientBytes;
                 recipientFieldsLength += recipientBytes.length;
             }
-            if (!foundRecipient || envelopedData == null)
-            {
+            if (!foundRecipient || envelopedData == null) {
                 throw new IOException("The certificate matches none of " + array.size()
                         + " recipient entries" + extraInfo.toString());
             }
-            if (envelopedData.length != 24)
-            {
+            if (envelopedData.length != 24) {
                 throw new IOException("The enveloped data does not contain 24 bytes");
             }
             // now envelopedData contains:
@@ -237,67 +218,53 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             // put each bytes of the recipients array in the sha1 input
             int sha1InputOffset = 20;
-            for (byte[] recipientFieldsByte : recipientFieldsBytes)
-            {
+            for (byte[] recipientFieldsByte : recipientFieldsBytes) {
                 System.arraycopy(recipientFieldsByte, 0, sha1Input, sha1InputOffset,
                         recipientFieldsByte.length);
                 sha1InputOffset += recipientFieldsByte.length;
             }
 
             byte[] mdResult;
-            if (encryption.getVersion() == 4 || encryption.getVersion() == 5)
-            {
-                if (!isDecryptMetadata())
-                {
+            if (encryption.getVersion() == 4 || encryption.getVersion() == 5) {
+                if (!isDecryptMetadata()) {
                     // "4 bytes with the value 0xFF if the key being generated is intended for use in
                     // document-level encryption and the document metadata is being left as plaintext"
                     sha1Input = Arrays.copyOf(sha1Input, sha1Input.length + 4);
-                    System.arraycopy(new byte[]{ (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff}, 0, sha1Input, sha1Input.length - 4, 4);
+                    System.arraycopy(new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff}, 0, sha1Input, sha1Input.length - 4, 4);
                 }
-                if (encryption.getVersion() == 4)
-                {
+                if (encryption.getVersion() == 4) {
                     mdResult = MessageDigests.getSHA1().digest(sha1Input);
-                }
-                else
-                {
+                } else {
                     mdResult = MessageDigests.getSHA256().digest(sha1Input);
                 }
 
                 // detect whether AES encryption is used. This assumes that the encryption algo is
                 // stored in the PDCryptFilterDictionary
                 // However, crypt filters are used only when V is 4 or 5.
-                if (defaultCryptFilterDictionary != null)
-                {
+                if (defaultCryptFilterDictionary != null) {
                     COSName cryptFilterMethod = defaultCryptFilterDictionary.getCryptFilterMethod();
                     setAES(COSName.AESV2.equals(cryptFilterMethod) ||
-                           COSName.AESV3.equals(cryptFilterMethod));
+                            COSName.AESV3.equals(cryptFilterMethod));
                 }
-            }
-            else
-            {
+            } else {
                 mdResult = MessageDigests.getSHA1().digest(sha1Input);
             }
 
             // we have the encryption key ...
             setEncryptionKey(new byte[getKeyLength() / 8]);
             System.arraycopy(mdResult, 0, getEncryptionKey(), 0, getKeyLength() / 8);
-        }
-        catch (CMSException | KeyStoreException | CertificateEncodingException e)
-        {
+        } catch (CMSException | KeyStoreException | CertificateEncodingException e) {
             throw new IOException(e);
         }
     }
 
     private void appendCertInfo(StringBuilder extraInfo, KeyTransRecipientId ktRid,
-            X509Certificate certificate, X509CertificateHolder materialCert)
-    {
+                                X509Certificate certificate, X509CertificateHolder materialCert) {
         BigInteger ridSerialNumber = ktRid.getSerialNumber();
-        if (ridSerialNumber != null)
-        {
+        if (ridSerialNumber != null) {
             String certSerial = "unknown";
             BigInteger certSerialNumber = certificate.getSerialNumber();
-            if (certSerialNumber != null)
-            {
+            if (certSerialNumber != null) {
                 certSerial = certSerialNumber.toString(16);
             }
             extraInfo.append("serial-#: rid ");
@@ -316,17 +283,13 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
      * Prepare the document for encryption.
      *
      * @param doc The document that will be encrypted.
-     *
      * @throws IOException If there is an error while encrypting.
      */
     @Override
-    public void prepareDocumentForEncryption(PDDocument doc) throws IOException
-    {
-        try
-        {
+    public void prepareDocumentForEncryption(PDDocument doc) throws IOException {
+        try {
             PDEncryption dictionary = doc.getEncryption();
-            if (dictionary == null)
-            {
+            if (dictionary == null) {
                 dictionary = new PDEncryption();
             }
 
@@ -342,12 +305,9 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
             byte[] seed = new byte[20];
 
             KeyGenerator key;
-            try
-            {
+            try {
                 key = KeyGenerator.getInstance("AES");
-            }
-            catch (NoSuchAlgorithmException e)
-            {
+            } catch (NoSuchAlgorithmException e) {
                 // should never happen
                 throw new RuntimeException(e);
             }
@@ -362,8 +322,7 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             int shaInputLength = seed.length;
 
-            for (byte[] field : recipientsFields)
-            {
+            for (byte[] field : recipientsFields) {
                 shaInputLength += field.length;
             }
 
@@ -373,15 +332,13 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             int shaInputOffset = 20;
 
-            for (byte[] recipientsField : recipientsFields)
-            {
+            for (byte[] recipientsField : recipientsFields) {
                 System.arraycopy(recipientsField, 0, shaInput, shaInputOffset, recipientsField.length);
                 shaInputOffset += recipientsField.length;
             }
 
             byte[] mdResult;
-            switch (version)
-            {
+            switch (version) {
                 case 4:
                     dictionary.setSubFilter(SUBFILTER5);
                     mdResult = MessageDigests.getSHA1().digest(shaInput);
@@ -404,21 +361,17 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
 
             doc.setEncryptionDictionary(dictionary);
             doc.getDocument().setEncryptionDictionary(dictionary.getCOSObject());
-        }
-        catch(GeneralSecurityException e)
-        {
+        } catch (GeneralSecurityException e) {
             throw new IOException(e);
         }
     }
 
-    private void prepareEncryptionDictAES(PDEncryption encryptionDictionary, COSName aesVName, byte[][] recipients)
-    {
+    private void prepareEncryptionDictAES(PDEncryption encryptionDictionary, COSName aesVName, byte[][] recipients) {
         PDCryptFilterDictionary cryptFilterDictionary = new PDCryptFilterDictionary();
         cryptFilterDictionary.setCryptFilterMethod(aesVName);
         cryptFilterDictionary.setLength(getKeyLength());
         COSArray array = new COSArray();
-        for (byte[] recipient : recipients)
-        {
+        for (byte[] recipient : recipients) {
             array.add(new COSString(recipient));
         }
         cryptFilterDictionary.getCOSObject().setItem(COSName.RECIPIENTS, array);
@@ -430,24 +383,22 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
         setAES(true);
     }
 
-    private byte[][] computeRecipientsField(byte[] seed) throws GeneralSecurityException, IOException
-    {
+    private byte[][] computeRecipientsField(byte[] seed) throws GeneralSecurityException, IOException {
         PublicKeyProtectionPolicy protectionPolicy = getProtectionPolicy();
         byte[][] recipientsField = new byte[protectionPolicy.getNumberOfRecipients()][];
         Iterator<PublicKeyRecipient> it = protectionPolicy.getRecipientsIterator();
         int i = 0;
 
-        while(it.hasNext())
-        {
+        while (it.hasNext()) {
             PublicKeyRecipient recipient = it.next();
             X509Certificate certificate = recipient.getX509();
             int permission = recipient.getPermission().getPermissionBytesForPublicKey();
 
             byte[] pkcs7input = new byte[24];
-            byte one = (byte)(permission);
-            byte two = (byte)(permission >>> 8);
-            byte three = (byte)(permission >>> 16);
-            byte four = (byte)(permission >>> 24);
+            byte one = (byte) (permission);
+            byte two = (byte) (permission >>> 8);
+            byte three = (byte) (permission >>> 16);
+            byte four = (byte) (permission >>> 24);
 
             // put this seed in the pkcs7 input
             System.arraycopy(seed, 0, pkcs7input, 0, 20);
@@ -469,27 +420,21 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
     }
 
     private ASN1Primitive createDERForRecipient(byte[] in, X509Certificate cert)
-            throws IOException, GeneralSecurityException
-    {
+            throws IOException, GeneralSecurityException {
         String algorithm = PKCSObjectIdentifiers.RC2_CBC.getId();
         AlgorithmParameterGenerator apg;
         KeyGenerator keygen;
         Cipher cipher;
-        try
-        {
+        try {
             Provider provider = SecurityProvider.getProvider();
             apg = AlgorithmParameterGenerator.getInstance(algorithm, provider);
             keygen = KeyGenerator.getInstance(algorithm, provider);
             cipher = Cipher.getInstance(algorithm, provider);
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             // happens when using the command line app .jar file
             throw new IOException("Could not find a suitable javax.crypto provider for algorithm " +
                     algorithm + "; possible reason: using an unsigned .jar file", e);
-        }
-        catch (NoSuchPaddingException e)
-        {
+        } catch (NoSuchPaddingException e) {
             // should never happen, if this happens throw IOException instead
             throw new RuntimeException("Could not find a suitable javax.crypto provider", e);
         }
@@ -497,8 +442,7 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
         AlgorithmParameters parameters = apg.generateParameters();
 
         ASN1Primitive object;
-        try (ASN1InputStream input = new ASN1InputStream(parameters.getEncoded("ASN.1")))
-        {
+        try (ASN1InputStream input = new ASN1InputStream(parameters.getEncoded("ASN.1"))) {
             object = input.readObject();
         }
 
@@ -521,12 +465,10 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
     }
 
     private KeyTransRecipientInfo computeRecipientInfo(X509Certificate x509certificate, byte[] abyte0)
-        throws IOException, CertificateEncodingException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException
-    {
+            throws IOException, CertificateEncodingException, InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException {
         TBSCertificate certificate;
-        try (ASN1InputStream input = new ASN1InputStream(x509certificate.getTBSCertificate()))
-        {
+        try (ASN1InputStream input = new ASN1InputStream(x509certificate.getTBSCertificate())) {
             certificate = TBSCertificate.getInstance(input.readObject());
         }
 
@@ -537,13 +479,10 @@ public final class PublicKeySecurityHandler extends SecurityHandler<PublicKeyPro
                 certificate.getSerialNumber().getValue());
 
         Cipher cipher;
-        try
-        {
+        try {
             cipher = Cipher.getInstance(algorithmId.getAlgorithm().getId(),
                     SecurityProvider.getProvider());
-        }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException e)
-        {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             // should never happen, if this happens throw IOException instead
             throw new RuntimeException("Could not find a suitable javax.crypto provider", e);
         }

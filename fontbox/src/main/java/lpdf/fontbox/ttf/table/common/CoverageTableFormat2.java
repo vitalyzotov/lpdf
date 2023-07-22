@@ -26,39 +26,31 @@ import java.util.List;
  * in the Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class CoverageTableFormat2 extends CoverageTableFormat1
-{
+public class CoverageTableFormat2 extends CoverageTableFormat1 {
     private final RangeRecord[] rangeRecords;
 
-    public CoverageTableFormat2(int coverageFormat, RangeRecord[] rangeRecords)
-    {
+    public CoverageTableFormat2(int coverageFormat, RangeRecord[] rangeRecords) {
         super(coverageFormat, getRangeRecordsAsArray(rangeRecords));
         this.rangeRecords = rangeRecords;
     }
 
-    public RangeRecord[] getRangeRecords()
-    {
+    public RangeRecord[] getRangeRecords() {
         return rangeRecords;
     }
 
-    private static int[] getRangeRecordsAsArray(RangeRecord[] rangeRecords)
-    {
+    private static int[] getRangeRecordsAsArray(RangeRecord[] rangeRecords) {
         List<Integer> glyphIds = new ArrayList<>();
 
-        for (RangeRecord rangeRecord : rangeRecords)
-        {
-            for (int glyphId = rangeRecord.getStartGlyphID(); glyphId <= rangeRecord.getEndGlyphID(); glyphId++)
-            {
+        for (RangeRecord rangeRecord : rangeRecords) {
+            for (int glyphId = rangeRecord.getStartGlyphID(); glyphId <= rangeRecord.getEndGlyphID(); glyphId++) {
                 glyphIds.add(glyphId);
             }
         }
 
         int[] glyphArray = new int[glyphIds.size()];
 
-        for (int i = 0; i < glyphArray.length; i++)
-        {
+        for (int i = 0; i < glyphArray.length; i++) {
             glyphArray[i] = glyphIds.get(i);
         }
 
@@ -66,8 +58,7 @@ public class CoverageTableFormat2 extends CoverageTableFormat1
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("CoverageTableFormat2[coverageFormat=%d]", getCoverageFormat());
     }
 }

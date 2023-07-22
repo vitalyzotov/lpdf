@@ -21,9 +21,7 @@ package lpdf.pdfbox.pdmodel.interactive.pagenavigation;
  * PDF32000-1:2008
  *
  * @author Andrea Vacondio
- *
  */
-public enum PDTransitionStyle
-{
+public enum PDTransitionStyle {
     Split, Blinds, Box, Wipe, Dissolve, Glitter, R, Fly, Push, Cover, Uncover, Fade
 }

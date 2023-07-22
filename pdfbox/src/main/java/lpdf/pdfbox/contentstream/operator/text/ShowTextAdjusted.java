@@ -16,44 +16,37 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSArray;
-import lpdf.pdfbox.cos.COSBase;
-import java.io.IOException;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSArray;
+import lpdf.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * TJ: Show text, with position adjustments.
  *
  * @author Laurent Huault
  */
-public class ShowTextAdjusted extends OperatorProcessor
-{
-    public ShowTextAdjusted(PDFStreamEngine context)
-    {
+public class ShowTextAdjusted extends OperatorProcessor {
+    public ShowTextAdjusted(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             return;
         }
         COSBase base = arguments.get(0);
-        if (!(base instanceof COSArray))
-        {
+        if (!(base instanceof COSArray)) {
             return;
         }
         PDFStreamEngine context = getContext();
-        if (context.getTextMatrix() == null)
-        {
+        if (context.getTextMatrix() == null) {
             // ignore: outside of BT...ET
             return;
         }
@@ -62,8 +55,7 @@ public class ShowTextAdjusted extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SHOW_TEXT_ADJUSTED;
     }
 }

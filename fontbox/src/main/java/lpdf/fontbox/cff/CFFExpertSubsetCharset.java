@@ -22,14 +22,12 @@ package lpdf.fontbox.cff;
  *
  * @author Villu Ruusmann
  */
-public final class CFFExpertSubsetCharset extends CFFCharsetType1
-{
+public final class CFFExpertSubsetCharset extends CFFCharsetType1 {
 
     private static final int CHAR_CODE = 0;
     private static final int CHAR_NAME = 1;
 
-    private CFFExpertSubsetCharset()
-    {
+    private CFFExpertSubsetCharset() {
         // Table of character codes and their corresponding names.
         Object[][] cffExpertSubsetCharsetTable = {
                 {0, ".notdef"},
@@ -121,18 +119,17 @@ public final class CFFExpertSubsetCharset extends CFFCharsetType1
                 {346, "commainferior"}
         };
         int gid = 0;
-        for (Object[] charsetEntry : cffExpertSubsetCharsetTable)
-        {
+        for (Object[] charsetEntry : cffExpertSubsetCharsetTable) {
             addSID(gid++, (Integer) charsetEntry[CHAR_CODE], charsetEntry[CHAR_NAME].toString());
         }
     }
 
     /**
      * Returns an instance of the CFFExpertSubsetCharset class.
+     *
      * @return an instance of CFFExpertSubsetCharset
      */
-    public static CFFExpertSubsetCharset getInstance()
-    {
+    public static CFFExpertSubsetCharset getInstance() {
         return CFFExpertSubsetCharset.INSTANCE;
     }
 

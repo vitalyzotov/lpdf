@@ -16,27 +16,24 @@
  */
 package lpdf.fontbox.ttf;
 
+import lpdf.io.RandomAccessReadBufferedFile;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import lpdf.io.RandomAccessReadBufferedFile;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- *
  * @author Tilman Hausherr
  */
-class TestCMapSubtable
-{
+class TestCMapSubtable {
     /**
      * Test that we get multiple encodings from cmap table
      */
     @Test
-    void testPDFBox5328() throws IOException
-    {
+    void testPDFBox5328() throws IOException {
         List<Integer> expectedCharCodes = Arrays.asList(19981, 63847);
         int gid = 8712;
         File fontFile = new File("target/pdfs", "NotoSansSC-Regular.otf");

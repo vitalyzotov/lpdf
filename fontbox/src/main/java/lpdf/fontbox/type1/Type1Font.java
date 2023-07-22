@@ -17,7 +17,15 @@
 
 package lpdf.fontbox.type1;
 
+import lpdf.fontbox.EncodedFont;
+import lpdf.fontbox.FontBoxFont;
+import lpdf.fontbox.cff.Type1CharString;
+import lpdf.fontbox.cff.Type1CharStringParser;
+import lpdf.fontbox.encoding.Encoding;
+import lpdf.fontbox.pfb.PfbParser;
+import lpdf.fontbox.util.BoundingBox;
 import lpdf.harmony.awt.geom.GeneralPath;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,31 +34,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lpdf.fontbox.FontBoxFont;
-import lpdf.fontbox.EncodedFont;
-import lpdf.fontbox.cff.Type1CharString;
-import lpdf.fontbox.cff.Type1CharStringParser;
-import lpdf.fontbox.encoding.Encoding;
-import lpdf.fontbox.pfb.PfbParser;
-import lpdf.fontbox.util.BoundingBox;
 
 /**
  * Represents an Adobe Type 1 (.pfb) font. Thread safe.
  *
  * @author John Hewson
  */
-public final class Type1Font implements Type1CharStringReader, EncodedFont, FontBoxFont
-{
+public final class Type1Font implements Type1CharStringReader, EncodedFont, FontBoxFont {
     /**
      * Constructs a new Type1Font object from a .pfb stream.
      *
      * @param pfbStream .pfb input stream, including headers
      * @return a type1 font
-     *
      * @throws IOException if something went wrong
      */
-    public static Type1Font createWithPFB(InputStream pfbStream) throws IOException
-    {
+    public static Type1Font createWithPFB(InputStream pfbStream) throws IOException {
         PfbParser pfb = new PfbParser(pfbStream);
         Type1Parser parser = new Type1Parser();
         return parser.parse(pfb.getSegment1(), pfb.getSegment2());
@@ -61,11 +59,9 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @param pfbBytes .pfb data, including headers
      * @return a type1 font
-     *
      * @throws IOException if something went wrong
      */
-    public static Type1Font createWithPFB(byte[] pfbBytes) throws IOException
-    {
+    public static Type1Font createWithPFB(byte[] pfbBytes) throws IOException {
         PfbParser pfb = new PfbParser(pfbBytes);
         Type1Parser parser = new Type1Parser();
         return parser.parse(pfb.getSegment1(), pfb.getSegment2());
@@ -79,8 +75,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      * @return A new Type1Font instance
      * @throws IOException if something went wrong
      */
-    public static Type1Font createWithSegments(byte[] segment1, byte[] segment2) throws IOException
-    {
+    public static Type1Font createWithSegments(byte[] segment1, byte[] segment2) throws IOException {
         Type1Parser parser = new Type1Parser();
         return parser.parse(segment1, segment2);
     }
@@ -138,8 +133,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
     /**
      * Constructs a new Type1Font, called by Type1Parser.
      */
-    Type1Font(byte[] segment1, byte[] segment2)
-    {
+    Type1Font(byte[] segment1, byte[] segment2) {
         this.segment1 = segment1;
         this.segment2 = segment2;
     }
@@ -149,8 +143,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return Type 1 char string bytes
      */
-    public List<byte[]> getSubrsArray()
-    {
+    public List<byte[]> getSubrsArray() {
         return Collections.unmodifiableList(subrs);
     }
 
@@ -159,44 +152,36 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return Type 1 char string bytes
      */
-    public Map<String, byte[]> getCharStringsDict()
-    {
+    public Map<String, byte[]> getCharStringsDict() {
         return Collections.unmodifiableMap(charstrings);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return fontName;
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
+    public GeneralPath getPath(String name) throws IOException {
         return getType1CharString(name).getPath();
     }
 
     @Override
-    public float getWidth(String name) throws IOException
-    {
+    public float getWidth(String name) throws IOException {
         return getType1CharString(name).getWidth();
     }
 
     @Override
-    public boolean hasGlyph(String name)
-    {
+    public boolean hasGlyph(String name) {
         return charstrings.get(name) != null;
     }
 
     @Override
-    public Type1CharString getType1CharString(String name) throws IOException
-    {
+    public Type1CharString getType1CharString(String name) throws IOException {
         Type1CharString type1 = charStringCache.get(name);
-        if (type1 == null)
-        {
+        if (type1 == null) {
             byte[] bytes = charstrings.get(name);
-            if (bytes == null)
-            {
+            if (bytes == null) {
                 bytes = charstrings.get(".notdef");
             }
             List<Object> sequence = getParser().parse(bytes, subrs, name);
@@ -206,10 +191,8 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
         return type1;
     }
 
-    private Type1CharStringParser getParser()
-    {
-        if (charStringParser == null)
-        {
+    private Type1CharStringParser getParser() {
+        if (charStringParser == null) {
             charStringParser = new Type1CharStringParser(fontName);
         }
         return charStringParser;
@@ -222,8 +205,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the font name
      */
-    public String getFontName()
-    {
+    public String getFontName() {
         return fontName;
     }
 
@@ -233,8 +215,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      * @return the encoding or null
      */
     @Override
-    public Encoding getEncoding()
-    {
+    public Encoding getEncoding() {
         return encoding;
     }
 
@@ -243,8 +224,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the paint type
      */
-    public int getPaintType()
-    {
+    public int getPaintType() {
         return paintType;
     }
 
@@ -253,8 +233,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the font type
      */
-    public int getFontType()
-    {
+    public int getFontType() {
         return fontType;
     }
 
@@ -264,8 +243,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      * @return the font matrix
      */
     @Override
-    public List<Number> getFontMatrix()
-    {
+    public List<Number> getFontMatrix() {
         return Collections.unmodifiableList(fontMatrix);
     }
 
@@ -273,14 +251,11 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      * Returns the font bounding box.
      *
      * @return the font bounding box
-     *
      * @throws IOException if there are less than 4 numbers
      */
     @Override
-    public BoundingBox getFontBBox() throws IOException
-    {
-        if (fontBBox.size() < 4)
-        {
+    public BoundingBox getFontBBox() throws IOException {
+        if (fontBBox.size() < 4) {
             throw new IOException("FontBBox must have 4 numbers, but is " + fontBBox);
         }
         return new BoundingBox(fontBBox);
@@ -291,8 +266,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the unique ID
      */
-    public int getUniqueID()
-    {
+    public int getUniqueID() {
         return uniqueID;
     }
 
@@ -301,8 +275,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the stroke width
      */
-    public float getStrokeWidth()
-    {
+    public float getStrokeWidth() {
         return strokeWidth;
     }
 
@@ -311,8 +284,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the font ID
      */
-    public String getFontID()
-    {
+    public String getFontID() {
         return fontID;
     }
 
@@ -323,8 +295,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the version
      */
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
@@ -333,8 +304,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the notice
      */
-    public String getNotice()
-    {
+    public String getNotice() {
         return notice;
     }
 
@@ -343,8 +313,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the full name
      */
-    public String getFullName()
-    {
+    public String getFullName() {
         return fullName;
     }
 
@@ -353,8 +322,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the family name
      */
-    public String getFamilyName()
-    {
+    public String getFamilyName() {
         return familyName;
     }
 
@@ -363,8 +331,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the weight
      */
-    public String getWeight()
-    {
+    public String getWeight() {
         return weight;
     }
 
@@ -373,8 +340,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the italic angle
      */
-    public float getItalicAngle()
-    {
+    public float getItalicAngle() {
         return italicAngle;
     }
 
@@ -383,8 +349,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return true if the font has a fixed pitch
      */
-    public boolean isFixedPitch()
-    {
+    public boolean isFixedPitch() {
         return isFixedPitch;
     }
 
@@ -393,8 +358,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the underline position
      */
-    public float getUnderlinePosition()
-    {
+    public float getUnderlinePosition() {
         return underlinePosition;
     }
 
@@ -403,8 +367,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the underline thickness
      */
-    public float getUnderlineThickness()
-    {
+    public float getUnderlineThickness() {
         return underlineThickness;
     }
 
@@ -415,8 +378,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the blues values
      */
-    public List<Number> getBlueValues()
-    {
+    public List<Number> getBlueValues() {
         return Collections.unmodifiableList(blueValues);
     }
 
@@ -425,8 +387,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the other blues values
      */
-    public List<Number> getOtherBlues()
-    {
+    public List<Number> getOtherBlues() {
         return Collections.unmodifiableList(otherBlues);
     }
 
@@ -435,8 +396,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the family blues values
      */
-    public List<Number> getFamilyBlues()
-    {
+    public List<Number> getFamilyBlues() {
         return Collections.unmodifiableList(familyBlues);
     }
 
@@ -445,8 +405,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the other family blues values
      */
-    public List<Number> getFamilyOtherBlues()
-    {
+    public List<Number> getFamilyOtherBlues() {
         return Collections.unmodifiableList(familyOtherBlues);
     }
 
@@ -455,8 +414,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the blue scale
      */
-    public float getBlueScale()
-    {
+    public float getBlueScale() {
         return blueScale;
     }
 
@@ -465,8 +423,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the blue shift
      */
-    public int getBlueShift()
-    {
+    public int getBlueShift() {
         return blueShift;
     }
 
@@ -475,8 +432,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the blue fuzz
      */
-    public int getBlueFuzz()
-    {
+    public int getBlueFuzz() {
         return blueFuzz;
     }
 
@@ -485,8 +441,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the StdHW value
      */
-    public List<Number> getStdHW()
-    {
+    public List<Number> getStdHW() {
         return Collections.unmodifiableList(stdHW);
     }
 
@@ -495,8 +450,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the StdVW value
      */
-    public List<Number> getStdVW()
-    {
+    public List<Number> getStdVW() {
         return Collections.unmodifiableList(stdVW);
     }
 
@@ -505,8 +459,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the StemSnapH value
      */
-    public List<Number> getStemSnapH()
-    {
+    public List<Number> getStemSnapH() {
         return Collections.unmodifiableList(stemSnapH);
     }
 
@@ -515,8 +468,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the StemSnapV value
      */
-    public List<Number> getStemSnapV()
-    {
+    public List<Number> getStemSnapV() {
         return Collections.unmodifiableList(stemSnapV);
     }
 
@@ -525,8 +477,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return true if the font is bold
      */
-    public boolean isForceBold()
-    {
+    public boolean isForceBold() {
         return forceBold;
     }
 
@@ -535,8 +486,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the language group
      */
-    public int getLanguageGroup()
-    {
+    public int getLanguageGroup() {
         return languageGroup;
     }
 
@@ -545,8 +495,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the ASCII segment.
      */
-    public byte[] getASCIISegment()
-    {
+    public byte[] getASCIISegment() {
         return segment1;
     }
 
@@ -555,8 +504,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      *
      * @return the binary segment.
      */
-    public byte[] getBinarySegment()
-    {
+    public byte[] getBinarySegment() {
         return segment2;
     }
 
@@ -564,8 +512,7 @@ public final class Type1Font implements Type1CharStringReader, EncodedFont, Font
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getClass().getName() + "[fontName=" + fontName + ", fullName=" + fullName
                 + ", encoding=" + encoding + ", charStringsDict=" + charstrings + "]";
     }

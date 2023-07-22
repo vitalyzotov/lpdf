@@ -17,9 +17,13 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
-import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
-
+import lpdf.fontbox.FontBoxFont;
+import lpdf.fontbox.afm.AFMParser;
+import lpdf.fontbox.afm.FontMetrics;
 import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.pdfbox.pdmodel.font.encoding.GlyphList;
+import lpdf.pdfbox.pdmodel.font.encoding.SymbolEncoding;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,11 +32,8 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import lpdf.fontbox.FontBoxFont;
-import lpdf.fontbox.afm.AFMParser;
-import lpdf.fontbox.afm.FontMetrics;
-import lpdf.pdfbox.pdmodel.font.encoding.GlyphList;
-import lpdf.pdfbox.pdmodel.font.encoding.SymbolEncoding;
+
+import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
 /**
  * The "Standard 14" PDF fonts, also known as the "base 14" fonts.
@@ -40,8 +41,7 @@ import lpdf.pdfbox.pdmodel.font.encoding.SymbolEncoding;
  *
  * @author John Hewson
  */
-public final class Standard14Fonts
-{
+public final class Standard14Fonts {
     /**
      * Contains all base names and alias names for the known fonts.
      * For base fonts both the key and the value will be the base name.
@@ -66,8 +66,7 @@ public final class Standard14Fonts
      */
     private static final Map<FontName, FontBoxFont> GENERIC_FONTS = new EnumMap<>(FontName.class);
 
-    static
-    {
+    static {
         // the 14 standard fonts
         mapName(FontName.COURIER);
         mapName(FontName.COURIER_BOLD);
@@ -115,8 +114,7 @@ public final class Standard14Fonts
         mapName("Arial-BoldItalicMT", FontName.HELVETICA_BOLD_OBLIQUE);
     }
 
-    private Standard14Fonts()
-    {
+    private Standard14Fonts() {
     }
 
     /**
@@ -126,16 +124,13 @@ public final class Standard14Fonts
      * @param fontName one of the standard 14 font names for which to load the metrics.
      * @throws IOException if no metrics exist for that font.
      */
-    private static void loadMetrics(FontName fontName) throws IOException
-    {
+    private static void loadMetrics(FontName fontName) throws IOException {
         String resourceName = "/lpdf/pdfbox/resources/afm/" + fontName.getName() + ".afm";
         InputStream resourceAsStream = PDType1Font.class.getResourceAsStream(resourceName);
-        if (resourceAsStream == null)
-        {
+        if (resourceAsStream == null) {
             throw new IOException("resource '" + resourceName + "' not found");
         }
-        try (InputStream afmStream = new BufferedInputStream(resourceAsStream))
-        {
+        try (InputStream afmStream = new BufferedInputStream(resourceAsStream)) {
             AFMParser parser = new AFMParser(afmStream);
             FontMetrics metric = parser.parse(true);
             FONTS.put(fontName, metric);
@@ -147,11 +142,10 @@ public final class Standard14Fonts
      * font metrics by name. We want a single lookup in the map to find the font both by a base name or
      * an alias.
      *
-     * @see #getAFM
      * @param baseName the font name of the Standard 14 font
+     * @see #getAFM
      */
-    private static void mapName(FontName baseName)
-    {
+    private static void mapName(FontName baseName) {
         ALIASES.put(baseName.getName(), baseName);
     }
 
@@ -159,11 +153,10 @@ public final class Standard14Fonts
      * Adds an alias name for a standard font to the map of known aliases to the map of aliases (alias as key, standard
      * name as value). We want a single lookup in tbaseNamehe map to find the font both by a base name or an alias.
      *
-     * @param alias an alias for the font
-     * @param baseName  the font name of the Standard 14 font
+     * @param alias    an alias for the font
+     * @param baseName the font name of the Standard 14 font
      */
-    private static void mapName(String alias, FontName baseName)
-    {
+    private static void mapName(String alias, FontName baseName) {
         ALIASES.put(alias, baseName);
     }
 
@@ -175,26 +168,18 @@ public final class Standard14Fonts
      * @return the font metrics or null if the name is not one of the known names
      * @throws IllegalArgumentException if no metrics exist for that font.
      */
-    public static FontMetrics getAFM(String fontName)
-    {
+    public static FontMetrics getAFM(String fontName) {
         FontName baseName = ALIASES.get(fontName);
-        if (baseName == null)
-        {
+        if (baseName == null) {
             return null;
         }
 
-        if (FONTS.get(baseName) == null)
-        {
-            synchronized (FONTS)
-            {
-                if (FONTS.get(baseName) == null)
-                {
-                    try
-                    {
+        if (FONTS.get(baseName) == null) {
+            synchronized (FONTS) {
+                if (FONTS.get(baseName) == null) {
+                    try {
                         loadMetrics(baseName);
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         throw new IllegalArgumentException(e);
                     }
                 }
@@ -210,8 +195,7 @@ public final class Standard14Fonts
      * @param fontName the name of font, either a base name or alias
      * @return true if the name is one of the known names
      */
-    public static boolean containsName(String fontName)
-    {
+    public static boolean containsName(String fontName) {
         return ALIASES.containsKey(fontName);
     }
 
@@ -220,8 +204,7 @@ public final class Standard14Fonts
      *
      * @return the set of known font names
      */
-    public static Set<String> getNames()
-    {
+    public static Set<String> getNames() {
         return Collections.unmodifiableSet(ALIASES.keySet());
     }
 
@@ -231,8 +214,7 @@ public final class Standard14Fonts
      * @param fontName name of font, either a base name or an alias
      * @return the base name or null if this is not one of the known names
      */
-    public static FontName getMappedFontName(String fontName)
-    {
+    public static FontName getMappedFontName(String fontName) {
         return ALIASES.get(fontName);
     }
 
@@ -242,14 +224,10 @@ public final class Standard14Fonts
      * @param baseName name of the standard 14 font
      * @return the mapped font
      */
-    private static FontBoxFont getMappedFont(FontName baseName)
-    {
-        if (!GENERIC_FONTS.containsKey(baseName))
-        {
-            synchronized (GENERIC_FONTS)
-            {
-                if (!GENERIC_FONTS.containsKey(baseName))
-                {
+    private static FontBoxFont getMappedFont(FontName baseName) {
+        if (!GENERIC_FONTS.containsKey(baseName)) {
+            synchronized (GENERIC_FONTS) {
+                if (!GENERIC_FONTS.containsKey(baseName)) {
                     PDType1Font type1Font = new PDType1Font(baseName);
                     GENERIC_FONTS.put(baseName, type1Font.getFontBoxFont());
                 }
@@ -262,41 +240,31 @@ public final class Standard14Fonts
      * Returns the path for the character with the given name for the specified Standard 14 font. The mapped font is
      * cached. The path may differ in different environments as it depends on the mapped font.
      *
-     * @param baseName name of the standard 14 font
+     * @param baseName  name of the standard 14 font
      * @param glyphName name of glyph
      * @return the mapped font
-     *
      * @throws IOException if the data could not be read
      */
-    public static GeneralPath getGlyphPath(FontName baseName, String glyphName) throws IOException
-    {
+    public static GeneralPath getGlyphPath(FontName baseName, String glyphName) throws IOException {
         // copied and adapted from PDType1Font.getNameInFont(String)
-        if (!glyphName.equals(".notdef"))
-        {
+        if (!glyphName.equals(".notdef")) {
             FontBoxFont mappedFont = getMappedFont(baseName);
-            if (mappedFont != null)
-            {
-                if (mappedFont.hasGlyph(glyphName))
-                {
+            if (mappedFont != null) {
+                if (mappedFont.hasGlyph(glyphName)) {
                     return mappedFont.getPath(glyphName);
                 }
                 String unicodes = getGlyphList(baseName).toUnicode(glyphName);
-                if (unicodes != null && unicodes.length() == 1)
-                {
+                if (unicodes != null && unicodes.length() == 1) {
                     String uniName = getUniNameOfCodePoint(unicodes.codePointAt(0));
-                    if (mappedFont.hasGlyph(uniName))
-                    {
+                    if (mappedFont.hasGlyph(uniName)) {
                         return mappedFont.getPath(uniName);
                     }
                 }
-                if ("SymbolMT".equals(mappedFont.getName()))
-                {
+                if ("SymbolMT".equals(mappedFont.getName())) {
                     Integer code = SymbolEncoding.INSTANCE.getNameToCodeMap().get(glyphName);
-                    if (code != null)
-                    {
+                    if (code != null) {
                         String uniName = getUniNameOfCodePoint(code + 0xF000);
-                        if (mappedFont.hasGlyph(uniName))
-                        {
+                        if (mappedFont.hasGlyph(uniName)) {
                             return mappedFont.getPath(uniName);
                         }
                     }
@@ -306,16 +274,15 @@ public final class Standard14Fonts
         return new GeneralPath();
     }
 
-    private static GlyphList getGlyphList(FontName baseName)
-    {
+    private static GlyphList getGlyphList(FontName baseName) {
         return FontName.ZAPF_DINGBATS == baseName ? GlyphList.getZapfDingbats()
                 : GlyphList.getAdobeGlyphList();
     }
+
     /**
      * Enum for the names of the 14 standard fonts.
      */
-    public enum FontName
-    {
+    public enum FontName {
         TIMES_ROMAN("Times-Roman"), //
         TIMES_BOLD("Times-Bold"), //
         TIMES_ITALIC("Times-Italic"), //
@@ -333,19 +300,16 @@ public final class Standard14Fonts
 
         private final String name;
 
-        private FontName(String name)
-        {
+        private FontName(String name) {
             this.name = name;
         }
 
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return name;
         }
     }

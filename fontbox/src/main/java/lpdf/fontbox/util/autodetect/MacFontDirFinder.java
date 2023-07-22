@@ -21,8 +21,7 @@ package lpdf.fontbox.util.autodetect;
  * Mac font directory finder. This class is based on a class provided by Apache FOP. see
  * org.apache.fop.fonts.autodetect.MacFontDirFinder
  */
-public class MacFontDirFinder extends NativeFontDirFinder
-{
+public class MacFontDirFinder extends NativeFontDirFinder {
 
     /**
      * Some guesses at possible unix font directory locations.
@@ -30,9 +29,8 @@ public class MacFontDirFinder extends NativeFontDirFinder
      * @return a array of possible font directory locations
      */
     @Override
-    protected String[] getSearchableDirectories()
-    {
-        return new String[] { System.getProperty("user.home") + "/Library/Fonts/", // user
+    protected String[] getSearchableDirectories() {
+        return new String[]{System.getProperty("user.home") + "/Library/Fonts/", // user
                 "/Library/Fonts/", // local
                 "/System/Library/Fonts/", // system
                 "/Network/Library/Fonts/" // network

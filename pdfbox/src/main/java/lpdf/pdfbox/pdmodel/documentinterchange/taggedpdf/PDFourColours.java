@@ -27,13 +27,11 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDGamma;
  *
  * @author Johannes Koch
  */
-public class PDFourColours implements COSObjectable
-{
+public class PDFourColours implements COSObjectable {
 
     private final COSArray array;
 
-    public PDFourColours()
-    {
+    public PDFourColours() {
         this.array = new COSArray();
         this.array.add(COSNull.NULL);
         this.array.add(COSNull.NULL);
@@ -41,14 +39,11 @@ public class PDFourColours implements COSObjectable
         this.array.add(COSNull.NULL);
     }
 
-    public PDFourColours(COSArray array)
-    {
+    public PDFourColours(COSArray array) {
         this.array = array;
         // ensure that array has 4 items
-        if (this.array.size() < 4)
-        {
-            for (int i = (this.array.size() - 1); i < 4; i++)
-            {
+        if (this.array.size() < 4) {
+            for (int i = (this.array.size() - 1); i < 4; i++) {
                 this.array.add(COSNull.NULL);
             }
         }
@@ -60,8 +55,7 @@ public class PDFourColours implements COSObjectable
      *
      * @return the colour for the before edge
      */
-    public PDGamma getBeforeColour()
-    {
+    public PDGamma getBeforeColour() {
         return this.getColourByIndex(0);
     }
 
@@ -70,8 +64,7 @@ public class PDFourColours implements COSObjectable
      *
      * @param colour the colour for the before edge
      */
-    public void setBeforeColour(PDGamma colour)
-    {
+    public void setBeforeColour(PDGamma colour) {
         this.setColourByIndex(0, colour);
     }
 
@@ -80,8 +73,7 @@ public class PDFourColours implements COSObjectable
      *
      * @return the colour for the after edge
      */
-    public PDGamma getAfterColour()
-    {
+    public PDGamma getAfterColour() {
         return this.getColourByIndex(1);
     }
 
@@ -90,8 +82,7 @@ public class PDFourColours implements COSObjectable
      *
      * @param colour the colour for the after edge
      */
-    public void setAfterColour(PDGamma colour)
-    {
+    public void setAfterColour(PDGamma colour) {
         this.setColourByIndex(1, colour);
     }
 
@@ -100,8 +91,7 @@ public class PDFourColours implements COSObjectable
      *
      * @return the colour for the start edge
      */
-    public PDGamma getStartColour()
-    {
+    public PDGamma getStartColour() {
         return this.getColourByIndex(2);
     }
 
@@ -110,8 +100,7 @@ public class PDFourColours implements COSObjectable
      *
      * @param colour the colour for the start edge
      */
-    public void setStartColour(PDGamma colour)
-    {
+    public void setStartColour(PDGamma colour) {
         this.setColourByIndex(2, colour);
     }
 
@@ -120,8 +109,7 @@ public class PDFourColours implements COSObjectable
      *
      * @return the colour for the end edge
      */
-    public PDGamma getEndColour()
-    {
+    public PDGamma getEndColour() {
         return this.getColourByIndex(3);
     }
 
@@ -130,8 +118,7 @@ public class PDFourColours implements COSObjectable
      *
      * @param colour the colour for the end edge
      */
-    public void setEndColour(PDGamma colour)
-    {
+    public void setEndColour(PDGamma colour) {
         this.setColourByIndex(3, colour);
     }
 
@@ -140,8 +127,7 @@ public class PDFourColours implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return this.array;
     }
 
@@ -152,12 +138,10 @@ public class PDFourColours implements COSObjectable
      * @param index edge index
      * @return the colour
      */
-    private PDGamma getColourByIndex(int index)
-    {
+    private PDGamma getColourByIndex(int index) {
         PDGamma retval = null;
         COSBase item = this.array.getObject(index);
-        if (item instanceof COSArray)
-        {
+        if (item instanceof COSArray) {
             retval = new PDGamma((COSArray) item);
         }
         return retval;
@@ -166,18 +150,14 @@ public class PDFourColours implements COSObjectable
     /**
      * Sets the colour by edge index.
      *
-     * @param index the edge index
+     * @param index  the edge index
      * @param colour the colour
      */
-    private void setColourByIndex(int index, PDGamma colour)
-    {
+    private void setColourByIndex(int index, PDGamma colour) {
         COSBase base;
-        if (colour == null)
-        {
+        if (colour == null) {
             base = COSNull.NULL;
-        }
-        else
-        {
+        } else {
             base = colour.getCOSArray();
         }
         this.array.set(index, base);

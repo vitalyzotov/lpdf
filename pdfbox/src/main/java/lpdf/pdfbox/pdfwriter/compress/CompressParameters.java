@@ -21,8 +21,7 @@ package lpdf.pdfbox.pdfwriter.compress;
  *
  * @author Christian Appl
  */
-public class CompressParameters
-{
+public class CompressParameters {
     public static final CompressParameters DEFAULT_COMPRESSION = new CompressParameters();
     public static final CompressParameters NO_COMPRESSION = new CompressParameters(0);
 
@@ -30,8 +29,7 @@ public class CompressParameters
 
     private final int objectStreamSize;
 
-    public CompressParameters()
-    {
+    public CompressParameters() {
         this(DEFAULT_OBJECT_STREAM_SIZE);
     }
 
@@ -41,12 +39,9 @@ public class CompressParameters
      * selected. A value of 0 disables the compression.
      *
      * @param objectStreamSize The number of objects, that can be contained in compressed object streams.
-     *
      */
-    public CompressParameters(int objectStreamSize)
-    {
-        if (objectStreamSize < 0)
-        {
+    public CompressParameters(int objectStreamSize) {
+        if (objectStreamSize < 0) {
             throw new IllegalArgumentException("Object stream size can't be a negative value");
         }
         this.objectStreamSize = objectStreamSize;
@@ -59,8 +54,7 @@ public class CompressParameters
      *
      * @return The number of objects, that can be contained in compressed object streams.
      */
-    public int getObjectStreamSize()
-    {
+    public int getObjectStreamSize() {
         return objectStreamSize;
     }
 
@@ -69,8 +63,7 @@ public class CompressParameters
      *
      * @return true if compression is enabled.
      */
-    public boolean isCompress()
-    {
+    public boolean isCompress() {
         return objectStreamSize > 0;
     }
 }

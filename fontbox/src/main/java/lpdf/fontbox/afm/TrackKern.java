@@ -21,8 +21,7 @@ package lpdf.fontbox.afm;
  *
  * @author Ben Litchfield
  */
-public class TrackKern
-{
+public class TrackKern {
     private final int degree;
     private final float minPointSize;
     private final float minKern;
@@ -30,8 +29,7 @@ public class TrackKern
     private final float maxKern;
 
     public TrackKern(int degree, float minPointSize, float minKern, float maxPointSize,
-            float maxKern)
-    {
+                     float maxKern) {
         this.degree = degree;
         this.minPointSize = minPointSize;
         this.minKern = minKern;
@@ -39,43 +37,48 @@ public class TrackKern
         this.maxKern = maxKern;
     }
 
-    /** Getter for property degree.
+    /**
+     * Getter for property degree.
+     *
      * @return Value of property degree.
      */
-    public int getDegree()
-    {
+    public int getDegree() {
         return degree;
     }
 
-    /** Getter for property maxKern.
+    /**
+     * Getter for property maxKern.
+     *
      * @return Value of property maxKern.
      */
-    public float getMaxKern()
-    {
+    public float getMaxKern() {
         return maxKern;
     }
 
-    /** Getter for property maxPointSize.
+    /**
+     * Getter for property maxPointSize.
+     *
      * @return Value of property maxPointSize.
      */
-    public float getMaxPointSize()
-    {
+    public float getMaxPointSize() {
         return maxPointSize;
     }
 
-    /** Getter for property minKern.
+    /**
+     * Getter for property minKern.
+     *
      * @return Value of property minKern.
      */
-    public float getMinKern()
-    {
+    public float getMinKern() {
         return minKern;
     }
 
-    /** Getter for property minPointSize.
+    /**
+     * Getter for property minPointSize.
+     *
      * @return Value of property minPointSize.
      */
-    public float getMinPointSize()
-    {
+    public float getMinPointSize() {
         return minPointSize;
     }
 }

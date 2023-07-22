@@ -26,8 +26,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public class ObjectStreamXReference extends AbstractXReference
-{
+public class ObjectStreamXReference extends AbstractXReference {
 
     private final int objectStreamIndex;
     private final COSObjectKey key;
@@ -39,13 +38,12 @@ public class ObjectStreamXReference extends AbstractXReference
      * ({@link PDFXRefStream}).
      *
      * @param objectStreamIndex The index of the {@link COSObject} in the containing object stream.
-     * @param key The {@link COSObjectKey}, that is represented by this entry.
-     * @param object The {@link COSObject}, that is represented by this entry.
-     * @param parentKey The {@link COSObjectKey} of the object stream, that is containing the object.
+     * @param key               The {@link COSObjectKey}, that is represented by this entry.
+     * @param object            The {@link COSObject}, that is represented by this entry.
+     * @param parentKey         The {@link COSObjectKey} of the object stream, that is containing the object.
      */
     public ObjectStreamXReference(int objectStreamIndex, COSObjectKey key, COSBase object,
-            COSObjectKey parentKey)
-    {
+                                  COSObjectKey parentKey) {
         super(XReferenceType.OBJECT_STREAM_ENTRY);
         this.objectStreamIndex = objectStreamIndex;
         this.key = key;
@@ -58,8 +56,7 @@ public class ObjectStreamXReference extends AbstractXReference
      *
      * @return The index of the {@link COSObject} in it's containing object stream.
      */
-    public int getObjectStreamIndex()
-    {
+    public int getObjectStreamIndex() {
         return objectStreamIndex;
     }
 
@@ -69,8 +66,7 @@ public class ObjectStreamXReference extends AbstractXReference
      * @return The {@link COSObjectKey} of the object, that is described by this crossreference stream entry.
      */
     @Override
-    public COSObjectKey getReferencedKey()
-    {
+    public COSObjectKey getReferencedKey() {
         return key;
     }
 
@@ -79,8 +75,7 @@ public class ObjectStreamXReference extends AbstractXReference
      *
      * @return The {@link COSObject}, that is described by this crossreference stream entry.
      */
-    public COSBase getObject()
-    {
+    public COSBase getObject() {
         return object;
     }
 
@@ -89,8 +84,7 @@ public class ObjectStreamXReference extends AbstractXReference
      *
      * @return The {@link COSObjectKey} of the object stream, that is containing the object.
      */
-    public COSObjectKey getParentKey()
-    {
+    public COSObjectKey getParentKey() {
         return parentKey;
     }
 
@@ -102,8 +96,7 @@ public class ObjectStreamXReference extends AbstractXReference
      * @return The value for the second column of the crossreference stream entry.
      */
     @Override
-    public long getSecondColumnValue()
-    {
+    public long getSecondColumnValue() {
         return getParentKey().getNumber();
     }
 
@@ -114,8 +107,7 @@ public class ObjectStreamXReference extends AbstractXReference
      * @return The value for the third column of the crossreference stream entry.
      */
     @Override
-    public long getThirdColumnValue()
-    {
+    public long getThirdColumnValue() {
         return getObjectStreamIndex();
     }
 
@@ -125,8 +117,7 @@ public class ObjectStreamXReference extends AbstractXReference
      * @return A string representation of this crossreference stream entry.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ObjectStreamEntry{" + " key=" + key + ", type=" + getType().getNumericValue()
                 + ", objectStreamIndex=" + objectStreamIndex + ", parent=" + parentKey + " }";
     }

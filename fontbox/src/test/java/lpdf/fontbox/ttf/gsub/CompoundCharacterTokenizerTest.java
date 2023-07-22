@@ -17,25 +17,23 @@
 
 package lpdf.fontbox.ttf.gsub;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CompoundCharacterTokenizerTest
-{
+class CompoundCharacterTokenizerTest {
 
     @Test
-    void testTokenize_happyPath_1()
-    {
+    void testTokenize_happyPath_1() {
 
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "HrkJj", "68RetP", "Yx!23uyt" })));
+                new HashSet<>(Arrays.asList(new String[]{"HrkJj", "68RetP", "Yx!23uyt"})));
         String text = "12345HrkJjxabbcc68RetPxxxcfb1245678Yx!23uyt889000";
 
         // when
@@ -48,12 +46,11 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_happyPath_2()
-    {
+    void testTokenize_happyPath_2() {
 
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "84_93", "104_82", "104_87" })));
+                new HashSet<>(Arrays.asList(new String[]{"84_93", "104_82", "104_87"})));
         String text = "84_112_93_104_82_61_96_102_93_104_87_110";
 
         // when
@@ -66,12 +63,11 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_happyPath_3()
-    {
+    void testTokenize_happyPath_3() {
 
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "67_112_96", "74_112_76" })));
+                new HashSet<>(Arrays.asList(new String[]{"67_112_96", "74_112_76"})));
         String text = "67_112_96_103_93_108_93";
 
         // when
@@ -83,12 +79,11 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_happyPath_4()
-    {
+    void testTokenize_happyPath_4() {
 
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "67_112_96", "74_112_76" })));
+                new HashSet<>(Arrays.asList(new String[]{"67_112_96", "74_112_76"})));
         String text = "94_67_112_96_112_91_103";
 
         // when
@@ -100,12 +95,11 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_happyPath_5()
-    {
+    void testTokenize_happyPath_5() {
 
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "67_112", "76_112" })));
+                new HashSet<>(Arrays.asList(new String[]{"67_112", "76_112"})));
         String text = "94_167_112_91_103";
 
         // when
@@ -117,11 +111,10 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_regexAtStart()
-    {
+    void testTokenize_regexAtStart() {
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "HrkJj", "68RetP", "Yx!23uyt" })));
+                new HashSet<>(Arrays.asList(new String[]{"HrkJj", "68RetP", "Yx!23uyt"})));
         String text = "Yx!23uyte12345HrkJjxabbcc68RetPxxxcfb1245678Yx!23uyt889000";
 
         // when
@@ -133,11 +126,10 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_regexAtEnd()
-    {
+    void testTokenize_regexAtEnd() {
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(
-                new HashSet<>(Arrays.asList(new String[] { "HrkJj", "68RetP", "Yx!23uyt" })));
+                new HashSet<>(Arrays.asList(new String[]{"HrkJj", "68RetP", "Yx!23uyt"})));
         String text = "Yx!23uyte12345HrkJjxabbcc68RetPxxxcfb1245678Yx!23uyt889000HrkJj";
 
         // when
@@ -151,11 +143,10 @@ class CompoundCharacterTokenizerTest
     }
 
     @Test
-    void testTokenize_Bangla()
-    {
+    void testTokenize_Bangla() {
         // given
         CompoundCharacterTokenizer tokenizer = new CompoundCharacterTokenizer(new HashSet<>(
-                Arrays.asList(new String[] { "\u0995\u09cd\u09b7", "\u09aa\u09c1\u09a4\u09c1" })));
+                Arrays.asList(new String[]{"\u0995\u09cd\u09b7", "\u09aa\u09c1\u09a4\u09c1"})));
         String text = "\u0986\u09ae\u09bf \u0995\u09cb\u09a8 \u09aa\u09a5\u09c7  \u0995\u09cd\u09b7\u09c0\u09b0\u09c7\u09b0 \u09b7\u09a8\u09cd\u09a1  \u09aa\u09c1\u09a4\u09c1\u09b2 \u09b0\u09c1\u09aa\u09cb  \u0997\u0999\u09cd\u0997\u09be \u098b\u09b7\u09bf";
 
         // when

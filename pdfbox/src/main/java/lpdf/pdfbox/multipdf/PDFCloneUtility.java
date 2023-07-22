@@ -16,6 +16,18 @@
  */
 package lpdf.pdfbox.multipdf;
 
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.cos.COSArray;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.cos.COSObject;
+import lpdf.pdfbox.cos.COSStream;
+import lpdf.pdfbox.pdmodel.PDDocument;
+import lpdf.pdfbox.pdmodel.common.COSObjectable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,24 +35,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.pdfbox.cos.COSArray;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.cos.COSObject;
-import lpdf.pdfbox.cos.COSStream;
-import lpdf.io.IOUtils;
-import lpdf.pdfbox.pdmodel.PDDocument;
-import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * Utility class used to clone PDF objects. It keeps track of objects it has already cloned.
- *
  */
-public class PDFCloneUtility
-{
+public class PDFCloneUtility {
     private static final Logger LOG = LoggerFactory.getLogger(PDFCloneUtility.class);
 
     private final PDDocument destination;
@@ -52,48 +51,42 @@ public class PDFCloneUtility
 
     /**
      * Creates a new instance for the given target document.
-     * 
+     *
      * @param dest the destination PDF document that will receive the clones
      */
-    PDFCloneUtility(PDDocument dest)
-    {
+    PDFCloneUtility(PDDocument dest) {
         this.destination = dest;
     }
 
     /**
      * Returns the destination PDF document this cloner instance is set up for.
-     * 
+     *
      * @return the destination PDF document
      */
-    PDDocument getDestination()
-    {
+    PDDocument getDestination() {
         return this.destination;
     }
 
     /**
      * Deep-clones the given object for inclusion into a different PDF document identified by the destination parameter.
-     * 
+     * <p>
      * Expert use only, don’t use it if you don’t know exactly what you are doing.
-     * 
+     *
      * @param base the initial object as the root of the deep-clone operation
      * @return the cloned instance of the base object
      * @throws IOException if an I/O error occurs
      */
     @SuppressWarnings("unchecked")
-    public <TCOSBase extends COSBase> TCOSBase cloneForNewDocument(TCOSBase base) throws IOException
-    {
-        if (base == null)
-        {
+    public <TCOSBase extends COSBase> TCOSBase cloneForNewDocument(TCOSBase base) throws IOException {
+        if (base == null) {
             return null;
         }
         COSBase retval = clonedVersion.get(base);
-        if (retval != null)
-        {
+        if (retval != null) {
             // we are done, it has already been converted.
             return (TCOSBase) retval;
         }
-        if (clonedValues.contains(base))
-        {
+        if (clonedValues.contains(base)) {
             // Don't clone a clone
             return base;
         }
@@ -103,82 +96,61 @@ public class PDFCloneUtility
         return (TCOSBase) retval;
     }
 
-    COSBase cloneCOSBaseForNewDocument(COSBase base) throws IOException
-    {
-        if (base instanceof COSObject)
-        {
+    COSBase cloneCOSBaseForNewDocument(COSBase base) throws IOException {
+        if (base instanceof COSObject) {
             return cloneForNewDocument(((COSObject) base).getObject());
         }
-        if (base instanceof COSArray)
-        {
+        if (base instanceof COSArray) {
             return cloneCOSArray((COSArray) base);
         }
-        if (base instanceof COSStream)
-        {
+        if (base instanceof COSStream) {
             return cloneCOSStream((COSStream) base);
         }
-        if (base instanceof COSDictionary)
-        {
+        if (base instanceof COSDictionary) {
             return cloneCOSDictionary((COSDictionary) base);
         }
         return base;
     }
 
-    private COSArray cloneCOSArray(COSArray array) throws IOException
-    {
+    private COSArray cloneCOSArray(COSArray array) throws IOException {
         COSArray newArray = new COSArray();
-        for (int i = 0; i < array.size(); i++)
-        {
+        for (int i = 0; i < array.size(); i++) {
             COSBase value = array.get(i);
-            if (hasSelfReference(array, value))
-            {
+            if (hasSelfReference(array, value)) {
                 newArray.add(newArray);
-            }
-            else
-            {
+            } else {
                 newArray.add(cloneForNewDocument(value));
             }
         }
         return newArray;
     }
 
-    private COSStream cloneCOSStream(COSStream stream) throws IOException
-    {
+    private COSStream cloneCOSStream(COSStream stream) throws IOException {
         COSStream newStream = destination.getDocument().createCOSStream();
         try (OutputStream output = newStream.createRawOutputStream();
-                InputStream input = stream.createRawInputStream())
-        {
+             InputStream input = stream.createRawInputStream()) {
             IOUtils.copy(input, output);
         }
         clonedVersion.put(stream, newStream);
-        for (Map.Entry<COSName, COSBase> entry : stream.entrySet())
-        {
+        for (Map.Entry<COSName, COSBase> entry : stream.entrySet()) {
             COSBase value = entry.getValue();
-            if (hasSelfReference(stream, value))
-            {
+            if (hasSelfReference(stream, value)) {
                 newStream.setItem(entry.getKey(), newStream);
-            }
-            else
-            {
+            } else {
                 newStream.setItem(entry.getKey(), cloneForNewDocument(value));
             }
         }
         return newStream;
     }
 
-    private COSDictionary cloneCOSDictionary(COSDictionary dictionary) throws IOException
-    {
+    private COSDictionary cloneCOSDictionary(COSDictionary dictionary) throws IOException {
         COSDictionary newDictionary = new COSDictionary();
         clonedVersion.put(dictionary, newDictionary);
-        for (Map.Entry<COSName, COSBase> entry : dictionary.entrySet())
-        {
+        for (Map.Entry<COSName, COSBase> entry : dictionary.entrySet()) {
             COSBase value = entry.getValue();
-            if (hasSelfReference(dictionary, value))
-            {
+            if (hasSelfReference(dictionary, value)) {
                 newDictionary.setItem(entry.getKey(), newDictionary);
-            }
-            else
-            {
+            } else {
                 newDictionary.setItem(entry.getKey(), cloneForNewDocument(value));
             }
         }
@@ -188,48 +160,37 @@ public class PDFCloneUtility
     /**
      * Merges two objects of the same type by deep-cloning its members. <br>
      * Base and target must be instances of the same class.
-     * 
-     * @param base the base object to be cloned
+     *
+     * @param base   the base object to be cloned
      * @param target the merge target
      * @throws IOException if an I/O error occurs
      */
-    void cloneMerge(final COSObjectable base, COSObjectable target) throws IOException
-    {
-        if (base == null || base == target)
-        {
+    void cloneMerge(final COSObjectable base, COSObjectable target) throws IOException {
+        if (base == null || base == target) {
             return;
         }
         cloneMergeCOSBase(base.getCOSObject(), target.getCOSObject());
     }
 
-    private void cloneMergeCOSBase(final COSBase source, final COSBase target) throws IOException
-    {
+    private void cloneMergeCOSBase(final COSBase source, final COSBase target) throws IOException {
         COSBase sourceBase = source instanceof COSObject ? ((COSObject) source).getObject()
                 : source;
         COSBase targetBase = target instanceof COSObject ? ((COSObject) target).getObject()
                 : target;
-        if (sourceBase instanceof COSArray && targetBase instanceof COSArray)
-        {
+        if (sourceBase instanceof COSArray && targetBase instanceof COSArray) {
             COSArray array = (COSArray) sourceBase;
-            for (int i = 0; i < array.size(); i++)
-            {
+            for (int i = 0; i < array.size(); i++) {
                 ((COSArray) targetBase).add(cloneForNewDocument(array.get(i)));
             }
-        }
-        else if (sourceBase instanceof COSDictionary && targetBase instanceof COSDictionary)
-        {
+        } else if (sourceBase instanceof COSDictionary && targetBase instanceof COSDictionary) {
             COSDictionary sourceDict = (COSDictionary) sourceBase;
             COSDictionary targetDict = (COSDictionary) targetBase;
-            for (Map.Entry<COSName, COSBase> entry : sourceDict.entrySet())
-            {
+            for (Map.Entry<COSName, COSBase> entry : sourceDict.entrySet()) {
                 COSName key = entry.getKey();
                 COSBase value = entry.getValue();
-                if (targetDict.getItem(key) != null)
-                {
+                if (targetDict.getItem(key) != null) {
                     cloneMerge(value, targetDict.getItem(key));
-                }
-                else
-                {
+                } else {
                     targetDict.setItem(key, cloneForNewDocument(value));
                 }
             }
@@ -240,15 +201,12 @@ public class PDFCloneUtility
      * Check whether an element (of an array or a dictionary) points to its parent.
      *
      * @param parent COSArray or COSDictionary
-     * @param value an element
+     * @param value  an element
      */
-    private boolean hasSelfReference(COSBase parent, COSBase value)
-    {
-        if (value instanceof COSObject)
-        {
+    private boolean hasSelfReference(COSBase parent, COSBase value) {
+        if (value instanceof COSObject) {
             COSBase actual = ((COSObject) value).getObject();
-            if (actual == parent)
-            {
+            if (actual == parent) {
                 COSObject cosObj = ((COSObject) value);
                 LOG.warn(parent.getClass().getSimpleName() + " object has a reference to itself: "
                         + cosObj.getObjectNumber() + " " + cosObj.getGenerationNumber() + " R");

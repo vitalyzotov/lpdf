@@ -23,28 +23,23 @@ package lpdf.fontbox.ttf.table.common;
  * Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public abstract class LookupSubTable
-{
+public abstract class LookupSubTable {
     private final int substFormat;
     private final CoverageTable coverageTable;
 
-    public LookupSubTable(int substFormat, CoverageTable coverageTable)
-    {
+    public LookupSubTable(int substFormat, CoverageTable coverageTable) {
         this.substFormat = substFormat;
         this.coverageTable = coverageTable;
     }
 
     public abstract int doSubstitution(int gid, int coverageIndex);
 
-    public int getSubstFormat()
-    {
+    public int getSubstFormat() {
         return substFormat;
     }
 
-    public CoverageTable getCoverageTable()
-    {
+    public CoverageTable getCoverageTable() {
         return coverageTable;
     }
 }

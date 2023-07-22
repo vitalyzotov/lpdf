@@ -21,50 +21,52 @@ package lpdf.fontbox.afm;
  *
  * @author Ben Litchfield
  */
-public class KernPair
-{
+public class KernPair {
     private final String firstKernCharacter;
     private final String secondKernCharacter;
     private final float x;
     private final float y;
 
-    public KernPair(String firstKernCharacter, String secondKernCharacter, float x, float y)
-    {
+    public KernPair(String firstKernCharacter, String secondKernCharacter, float x, float y) {
         this.firstKernCharacter = firstKernCharacter;
         this.secondKernCharacter = secondKernCharacter;
         this.x = x;
         this.y = y;
     }
 
-    /** Getter for property firstKernCharacter.
+    /**
+     * Getter for property firstKernCharacter.
+     *
      * @return Value of property firstKernCharacter.
      */
-    public String getFirstKernCharacter()
-    {
+    public String getFirstKernCharacter() {
         return firstKernCharacter;
     }
 
-    /** Getter for property secondKernCharacter.
+    /**
+     * Getter for property secondKernCharacter.
+     *
      * @return Value of property secondKernCharacter.
      */
-    public String getSecondKernCharacter()
-    {
+    public String getSecondKernCharacter() {
         return secondKernCharacter;
     }
 
-    /** Getter for property x.
+    /**
+     * Getter for property x.
+     *
      * @return Value of property x.
      */
-    public float getX()
-    {
+    public float getX() {
         return x;
     }
 
-    /** Getter for property y.
+    /**
+     * Getter for property y.
+     *
      * @return Value of property y.
      */
-    public float getY()
-    {
+    public float getY() {
         return y;
     }
 }

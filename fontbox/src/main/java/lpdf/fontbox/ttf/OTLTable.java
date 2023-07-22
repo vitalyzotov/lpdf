@@ -20,14 +20,12 @@ package lpdf.fontbox.ttf;
 /**
  * OpenType Layout (OTL) table. Uses the OpenType Layout Common Table Format.
  */
-public class OTLTable extends TTFTable
-{
+public class OTLTable extends TTFTable {
     public static final String TAG = "JSTF";
 
     // todo: this is a stub, a full implementation is needed
 
-    OTLTable()
-    {
+    OTLTable() {
         super();
     }
 }

@@ -16,34 +16,30 @@
  */
 package lpdf.pdfbox.pdmodel.common;
 
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.cos.COSStream;
+import lpdf.pdfbox.pdmodel.PDDocument;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import lpdf.pdfbox.cos.COSName;
-
-
-import lpdf.pdfbox.cos.COSStream;
-
-import lpdf.pdfbox.pdmodel.PDDocument;
 
 /**
  * This class represents metadata for various objects in a PDF document.
  *
  * @author Ben Litchfield
  */
-public class PDMetadata extends PDStream
-{
+public class PDMetadata extends PDStream {
 
     /**
      * This will create a new PDMetadata object.
      *
      * @param document The document that the stream will be part of.
      */
-    public PDMetadata( PDDocument document )
-    {
-        super( document );
-        getCOSObject().setName( COSName.TYPE, "Metadata" );
-        getCOSObject().setName( COSName.SUBTYPE, "XML" );
+    public PDMetadata(PDDocument document) {
+        super(document);
+        getCOSObject().setName(COSName.TYPE, "Metadata");
+        getCOSObject().setName(COSName.SUBTYPE, "XML");
     }
 
     /**
@@ -54,11 +50,10 @@ public class PDMetadata extends PDStream
      * @param str The stream parameter.
      * @throws IOException If there is an error creating the stream in the document.
      */
-    public PDMetadata( PDDocument doc, InputStream str) throws IOException
-    {
-        super( doc, str );
-        getCOSObject().setName( COSName.TYPE, "Metadata" );
-        getCOSObject().setName( COSName.SUBTYPE, "XML" );
+    public PDMetadata(PDDocument doc, InputStream str) throws IOException {
+        super(doc, str);
+        getCOSObject().setName(COSName.TYPE, "Metadata");
+        getCOSObject().setName(COSName.SUBTYPE, "XML");
     }
 
     /**
@@ -66,9 +61,8 @@ public class PDMetadata extends PDStream
      *
      * @param str The stream parameter.
      */
-    public PDMetadata( COSStream str )
-    {
-        super( str );
+    public PDMetadata(COSStream str) {
+        super(str);
     }
 
     /**
@@ -76,11 +70,9 @@ public class PDMetadata extends PDStream
      * To persist changes back to the PDF you must call importXMPMetadata.
      *
      * @return A stream to get the xmp data from.
-     *
      * @throws IOException If there is an error parsing the XMP data.
      */
-    public InputStream exportXMPMetadata() throws IOException
-    {
+    public InputStream exportXMPMetadata() throws IOException {
         return createInputStream();
     }
 
@@ -88,14 +80,11 @@ public class PDMetadata extends PDStream
      * Import an XMP stream into the PDF document.
      *
      * @param xmp The XMP data.
-     *
      * @throws IOException If there is an error generating the XML document.
      */
-    public void importXMPMetadata( byte[] xmp )
-        throws IOException
-    {
-        try (OutputStream os = createOutputStream())
-        {
+    public void importXMPMetadata(byte[] xmp)
+            throws IOException {
+        try (OutputStream os = createOutputStream()) {
             os.write(xmp);
         }
     }

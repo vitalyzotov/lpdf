@@ -19,18 +19,15 @@ package lpdf.pdfbox.pdmodel.encryption;
 
 
 /**
- *
  * Represents the necessary information to decrypt a document protected by
  * the standard security handler (password protection).
- *
+ * <p>
  * This is only composed of a password.
  *
  * @author Benoit Guillon
- *
  */
 
-public class StandardDecryptionMaterial extends DecryptionMaterial
-{
+public class StandardDecryptionMaterial extends DecryptionMaterial {
 
     private final String password;
 
@@ -39,8 +36,7 @@ public class StandardDecryptionMaterial extends DecryptionMaterial
      *
      * @param pwd The password.
      */
-    public StandardDecryptionMaterial(String pwd)
-    {
+    public StandardDecryptionMaterial(String pwd) {
         password = pwd;
     }
 
@@ -49,8 +45,7 @@ public class StandardDecryptionMaterial extends DecryptionMaterial
      *
      * @return The password used to decrypt the document.
      */
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 

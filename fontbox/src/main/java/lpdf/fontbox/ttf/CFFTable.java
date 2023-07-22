@@ -17,15 +17,15 @@
 
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
 import lpdf.fontbox.cff.CFFFont;
 import lpdf.fontbox.cff.CFFParser;
+
+import java.io.IOException;
 
 /**
  * PostScript font program (compact font format).
  */
-public class CFFTable extends TTFTable
-{
+public class CFFTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -33,22 +33,20 @@ public class CFFTable extends TTFTable
 
     private CFFFont cffFont;
 
-    CFFTable()
-    {
+    CFFTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws java.io.IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
-        byte[] bytes = data.read((int)getLength());
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
+        byte[] bytes = data.read((int) getLength());
 
         CFFParser parser = new CFFParser();
         cffFont = parser.parse(bytes, new CFFBytesource(ttf)).get(0);
@@ -61,26 +59,22 @@ public class CFFTable extends TTFTable
      *
      * @return the associated CFF font
      */
-    public CFFFont getFont()
-    {
+    public CFFFont getFont() {
         return cffFont;
     }
 
     /**
      * Allows bytes to be re-read later by CFFParser.
      */
-    private static class CFFBytesource implements CFFParser.ByteSource
-    {
+    private static class CFFBytesource implements CFFParser.ByteSource {
         private final TrueTypeFont ttf;
 
-        CFFBytesource(TrueTypeFont ttf)
-        {
-           this.ttf = ttf;
+        CFFBytesource(TrueTypeFont ttf) {
+            this.ttf = ttf;
         }
 
         @Override
-        public byte[] getBytes() throws IOException
-        {
+        public byte[] getBytes() throws IOException {
             return ttf.getTableBytes(ttf.getTableMap().get(CFFTable.TAG));
         }
     }

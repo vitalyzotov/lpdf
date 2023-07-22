@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -28,21 +25,22 @@ import lpdf.pdfbox.cos.COSObject;
 import lpdf.pdfbox.pdmodel.common.COSArrayList;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A node in the structure tree.
  *
  * @author Johannes Koch
  */
-public abstract class PDStructureNode implements COSObjectable
-{
+public abstract class PDStructureNode implements COSObjectable {
 
     /**
      * Constructor.
      *
      * @param type the type
      */
-    protected PDStructureNode(String type)
-    {
+    protected PDStructureNode(String type) {
         this.dictionary = new COSDictionary();
         this.dictionary.setName(COSName.TYPE, type);
     }
@@ -52,27 +50,23 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @param dictionary The existing dictionary.
      */
-    protected PDStructureNode(COSDictionary dictionary)
-    {
+    protected PDStructureNode(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
     /**
      * Creates a node in the structure tree. Can be either a structure tree root,
-     *  or a structure element.
+     * or a structure element.
      *
      * @param node the node dictionary
      * @return the structure node
      */
-    public static PDStructureNode create(COSDictionary node)
-    {
+    public static PDStructureNode create(COSDictionary node) {
         String type = node.getNameAsString(COSName.TYPE);
-        if ("StructTreeRoot".equals(type))
-        {
+        if ("StructTreeRoot".equals(type)) {
             return new PDStructureTreeRoot(node);
         }
-        if (type == null || "StructElem".equals(type))
-        {
+        if (type == null || "StructElem".equals(type)) {
             return new PDStructureElement(node);
         }
         throw new IllegalArgumentException("Dictionary must not include a Type entry with a value that is neither StructTreeRoot nor StructElem.");
@@ -85,8 +79,7 @@ public abstract class PDStructureNode implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -95,8 +88,7 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.getCOSObject().getNameAsString(COSName.TYPE);
     }
 
@@ -105,26 +97,19 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @return a list of objects for the kids, never null.
      */
-    public List<Object> getKids()
-    {
+    public List<Object> getKids() {
         List<Object> kidObjects = new ArrayList<>();
         COSBase k = this.getCOSObject().getDictionaryObject(COSName.K);
-        if (k instanceof COSArray)
-        {
-            for (COSBase kid : (COSArray) k)
-            {
+        if (k instanceof COSArray) {
+            for (COSBase kid : (COSArray) k) {
                 Object kidObject = this.createObject(kid);
-                if (kidObject != null)
-                {
+                if (kidObject != null) {
                     kidObjects.add(kidObject);
                 }
             }
-        }
-        else
-        {
+        } else {
             Object kidObject = this.createObject(k);
-            if (kidObject != null)
-            {
+            if (kidObject != null) {
                 kidObjects.add(kidObject);
             }
         }
@@ -136,10 +121,9 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @param kids the kids
      */
-    public void setKids(List<Object> kids)
-    {
+    public void setKids(List<Object> kids) {
         this.getCOSObject().setItem(COSName.K,
-            COSArrayList.converterToCOSArray(kids));
+                COSArrayList.converterToCOSArray(kids));
     }
 
     /**
@@ -147,8 +131,7 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @param structureElement the structure element
      */
-    public void appendKid(PDStructureElement structureElement)
-    {
+    public void appendKid(PDStructureElement structureElement) {
         this.appendObjectableKid(structureElement);
         structureElement.setParent(this);
     }
@@ -158,10 +141,8 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @param objectable the objectable
      */
-    protected void appendObjectableKid(COSObjectable objectable)
-    {
-        if (objectable == null)
-        {
+    protected void appendObjectableKid(COSObjectable objectable) {
+        if (objectable == null) {
             return;
         }
         this.appendKid(objectable.getCOSObject());
@@ -172,26 +153,19 @@ public abstract class PDStructureNode implements COSObjectable
      *
      * @param object the COS base
      */
-    protected void appendKid(COSBase object)
-    {
-        if (object == null)
-        {
+    protected void appendKid(COSBase object) {
+        if (object == null) {
             return;
         }
         COSBase k = this.getCOSObject().getDictionaryObject(COSName.K);
-        if (k == null)
-        {
+        if (k == null) {
             // currently no kid: set new kid as kids
             this.getCOSObject().setItem(COSName.K, object);
-        }
-        else if (k instanceof COSArray)
-        {
+        } else if (k instanceof COSArray) {
             // currently more than one kid: add new kid to existing array
             COSArray array = (COSArray) k;
             array.add(object);
-        }
-        else
-        {
+        } else {
             // currently one kid: put current and new kid into array and set array as kids
             COSArray array = new COSArray();
             array.add(k);
@@ -206,8 +180,7 @@ public abstract class PDStructureNode implements COSObjectable
      * @param newKid the structure element
      * @param refKid the reference kid
      */
-    public void insertBefore(PDStructureElement newKid, Object refKid)
-    {
+    public void insertBefore(PDStructureElement newKid, Object refKid) {
         this.insertObjectableBefore(newKid, refKid);
     }
 
@@ -217,10 +190,8 @@ public abstract class PDStructureNode implements COSObjectable
      * @param newKid the objectable
      * @param refKid the reference kid
      */
-    protected void insertObjectableBefore(COSObjectable newKid, Object refKid)
-    {
-        if (newKid == null)
-        {
+    protected void insertObjectableBefore(COSObjectable newKid, Object refKid) {
+        if (newKid == null) {
             return;
         }
         this.insertBefore(newKid.getCOSObject(), refKid);
@@ -232,38 +203,29 @@ public abstract class PDStructureNode implements COSObjectable
      * @param newKid the COS base
      * @param refKid the reference kid
      */
-    protected void insertBefore(COSBase newKid, Object refKid)
-    {
-        if (newKid == null || refKid == null)
-        {
+    protected void insertBefore(COSBase newKid, Object refKid) {
+        if (newKid == null || refKid == null) {
             return;
         }
         COSBase k = this.getCOSObject().getDictionaryObject(COSName.K);
-        if (k == null)
-        {
+        if (k == null) {
             return;
         }
         COSBase refKidBase = null;
-        if (refKid instanceof COSObjectable)
-        {
+        if (refKid instanceof COSObjectable) {
             refKidBase = ((COSObjectable) refKid).getCOSObject();
         }
-        if (k instanceof COSArray)
-        {
+        if (k instanceof COSArray) {
             COSArray array = (COSArray) k;
             int refIndex = array.indexOfObject(refKidBase);
             array.add(refIndex, newKid.getCOSObject());
-        }
-        else
-        {
+        } else {
             boolean onlyKid = k.equals(refKidBase);
-            if (!onlyKid && (k instanceof COSObject))
-            {
+            if (!onlyKid && (k instanceof COSObject)) {
                 COSBase kObj = ((COSObject) k).getObject();
                 onlyKid = kObj.equals(refKidBase);
             }
-            if (onlyKid)
-            {
+            if (onlyKid) {
                 COSArray array = new COSArray();
                 array.add(newKid);
                 array.add(refKidBase);
@@ -278,11 +240,9 @@ public abstract class PDStructureNode implements COSObjectable
      * @param structureElement the structure element
      * @return <code>true</code> if the kid was removed, <code>false</code> otherwise
      */
-    public boolean removeKid(PDStructureElement structureElement)
-    {
+    public boolean removeKid(PDStructureElement structureElement) {
         boolean removed = this.removeObjectableKid(structureElement);
-        if (removed)
-        {
+        if (removed) {
             structureElement.setParent(null);
         }
         return removed;
@@ -294,10 +254,8 @@ public abstract class PDStructureNode implements COSObjectable
      * @param objectable the objectable
      * @return <code>true</code> if the kid was removed, <code>false</code> otherwise
      */
-    protected boolean removeObjectableKid(COSObjectable objectable)
-    {
-        if (objectable == null)
-        {
+    protected boolean removeObjectableKid(COSObjectable objectable) {
+        if (objectable == null) {
             return false;
         }
         return this.removeKid(objectable.getCOSObject());
@@ -309,41 +267,31 @@ public abstract class PDStructureNode implements COSObjectable
      * @param object the COS base
      * @return <code>true</code> if the kid was removed, <code>false</code> otherwise
      */
-    protected boolean removeKid(COSBase object)
-    {
-        if (object == null)
-        {
+    protected boolean removeKid(COSBase object) {
+        if (object == null) {
             return false;
         }
         COSBase k = this.getCOSObject().getDictionaryObject(COSName.K);
-        if (k == null)
-        {
+        if (k == null) {
             // no kids: objectable is not a kid
             return false;
-        }
-        else if (k instanceof COSArray)
-        {
+        } else if (k instanceof COSArray) {
             // currently more than one kid: remove kid from existing array
             COSArray array = (COSArray) k;
             boolean removed = array.removeObject(object);
             // if now only one kid: set remaining kid as kids
-            if (array.size() == 1)
-            {
+            if (array.size() == 1) {
                 this.getCOSObject().setItem(COSName.K, array.getObject(0));
             }
             return removed;
-        }
-        else
-        {
+        } else {
             // currently one kid: if current kid equals given object, remove kids entry
             boolean onlyKid = k.equals(object);
-            if (!onlyKid && (k instanceof COSObject))
-            {
+            if (!onlyKid && (k instanceof COSObject)) {
                 COSBase kObj = ((COSObject) k).getObject();
                 onlyKid = kObj.equals(object);
             }
-            if (onlyKid)
-            {
+            if (onlyKid) {
                 this.getCOSObject().setItem(COSName.K, null);
                 return true;
             }
@@ -364,27 +312,19 @@ public abstract class PDStructureNode implements COSObjectable
      * @param kid the kid
      * @return the object
      */
-    protected Object createObject(COSBase kid)
-    {
+    protected Object createObject(COSBase kid) {
         COSDictionary kidDic = null;
-        if (kid instanceof COSDictionary)
-        {
+        if (kid instanceof COSDictionary) {
             kidDic = (COSDictionary) kid;
-        }
-        else if (kid instanceof COSObject)
-        {
+        } else if (kid instanceof COSObject) {
             COSBase base = ((COSObject) kid).getObject();
-            if (base instanceof COSDictionary)
-            {
+            if (base instanceof COSDictionary) {
                 kidDic = (COSDictionary) base;
             }
         }
-        if (kidDic != null)
-        {
+        if (kidDic != null) {
             return createObjectFromDic(kidDic);
-        }
-        else if (kid instanceof COSInteger)
-        {
+        } else if (kid instanceof COSInteger) {
             // An integer marked-content identifier denoting a marked-content sequence
             COSInteger mcid = (COSInteger) kid;
             return mcid.intValue();
@@ -392,16 +332,13 @@ public abstract class PDStructureNode implements COSObjectable
         return null;
     }
 
-    private COSObjectable createObjectFromDic(COSDictionary kidDic)
-    {
+    private COSObjectable createObjectFromDic(COSDictionary kidDic) {
         String type = kidDic.getNameAsString(COSName.TYPE);
-        if (type == null)
-        {
+        if (type == null) {
             // A structure element dictionary denoting another structure element
             return new PDStructureElement(kidDic);
         }
-        switch (type)
-        {
+        switch (type) {
             case PDStructureElement.TYPE:
                 // A structure element dictionary denoting another structure element
                 return new PDStructureElement(kidDic);

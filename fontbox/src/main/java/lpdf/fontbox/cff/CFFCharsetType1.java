@@ -24,8 +24,7 @@ import java.util.Map;
  *
  * @author Valery Bokov
  */
-class CFFCharsetType1 implements CFFCharset
-{
+class CFFCharsetType1 implements CFFCharset {
     private static final String EXCEPTION_MESSAGE = "Not a CIDFont";
 
     private final Map<Integer, Integer> sidOrCidToGid = new HashMap<>(250);
@@ -36,14 +35,12 @@ class CFFCharsetType1 implements CFFCharset
     private final Map<Integer, String> gidToName = new HashMap<>(250);
 
     @Override
-    public boolean isCIDFont()
-    {
+    public boolean isCIDFont() {
         return false;
     }
 
     @Override
-    public void addSID(int gid, int sid, String name)
-    {
+    public void addSID(int gid, int sid, String name) {
         sidOrCidToGid.put(sid, gid);
         gidToSid.put(gid, sid);
         nameToSid.put(name, sid);
@@ -51,59 +48,49 @@ class CFFCharsetType1 implements CFFCharset
     }
 
     @Override
-    public void addCID(int gid, int cid)
-    {
+    public void addCID(int gid, int cid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public int getSIDForGID(int gid)
-    {
+    public int getSIDForGID(int gid) {
         Integer sid = gidToSid.get(gid);
-        if (sid == null)
-        {
+        if (sid == null) {
             return 0;
         }
         return sid;
     }
 
     @Override
-    public int getGIDForSID(int sid)
-    {
+    public int getGIDForSID(int sid) {
         Integer gid = sidOrCidToGid.get(sid);
-        if (gid == null)
-        {
+        if (gid == null) {
             return 0;
         }
         return gid;
     }
 
     @Override
-    public int getGIDForCID(int cid)
-    {
+    public int getGIDForCID(int cid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public int getSID(String name)
-    {
+    public int getSID(String name) {
         Integer sid = nameToSid.get(name);
-        if (sid == null)
-        {
+        if (sid == null) {
             return 0;
         }
         return sid;
     }
 
     @Override
-    public String getNameForGID(int gid)
-    {
+    public String getNameForGID(int gid) {
         return gidToName.get(gid);
     }
 
     @Override
-    public int getCIDForGID(int gid)
-    {
+    public int getCIDForGID(int gid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 }

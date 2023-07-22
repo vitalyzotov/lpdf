@@ -17,19 +17,17 @@
 
 package lpdf.fontbox.ttf.model;
 
+import lpdf.fontbox.ttf.table.common.FeatureRecord;
+
 import java.util.List;
 import java.util.Set;
-
-import lpdf.fontbox.ttf.table.common.FeatureRecord;
 
 /**
  * Models a {@link FeatureRecord}
  *
  * @author Palash Ray
- *
  */
-public interface ScriptFeature
-{
+public interface ScriptFeature {
 
     String getName();
 

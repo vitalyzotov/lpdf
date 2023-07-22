@@ -26,8 +26,7 @@ import lpdf.pdfbox.pdmodel.common.PDDictionaryWrapper;
  *
  * @author Johannes Koch
  */
-public class PDUserProperty extends PDDictionaryWrapper
-{
+public class PDUserProperty extends PDDictionaryWrapper {
 
     private final PDUserAttributeObject userAttributeObject;
 
@@ -36,20 +35,18 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @param userAttributeObject the user attribute object
      */
-    public PDUserProperty(PDUserAttributeObject userAttributeObject)
-    {
+    public PDUserProperty(PDUserAttributeObject userAttributeObject) {
         this.userAttributeObject = userAttributeObject;
     }
 
     /**
      * Creates a user property with a given dictionary.
      *
-     * @param dictionary the dictionary
+     * @param dictionary          the dictionary
      * @param userAttributeObject the user attribute object
      */
     public PDUserProperty(COSDictionary dictionary,
-        PDUserAttributeObject userAttributeObject)
-    {
+                          PDUserAttributeObject userAttributeObject) {
         super(dictionary);
         this.userAttributeObject = userAttributeObject;
     }
@@ -60,8 +57,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @return the property name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.getCOSObject().getNameAsString(COSName.N);
     }
 
@@ -70,8 +66,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @param name the property name
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.potentiallyNotifyChanged(this.getName(), name);
         this.getCOSObject().setName(COSName.N, name);
     }
@@ -81,8 +76,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @return the property value
      */
-    public COSBase getValue()
-    {
+    public COSBase getValue() {
         return this.getCOSObject().getDictionaryObject(COSName.V);
     }
 
@@ -91,8 +85,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @param value the property value
      */
-    public void setValue(COSBase value)
-    {
+    public void setValue(COSBase value) {
         this.potentiallyNotifyChanged(this.getValue(), value);
         this.getCOSObject().setItem(COSName.V, value);
     }
@@ -102,8 +95,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @return the string for the property value
      */
-    public String getFormattedValue()
-    {
+    public String getFormattedValue() {
         return this.getCOSObject().getString(COSName.F);
     }
 
@@ -112,8 +104,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      *
      * @param formattedValue the string for the property value
      */
-    public void setFormattedValue(String formattedValue)
-    {
+    public void setFormattedValue(String formattedValue) {
         this.potentiallyNotifyChanged(this.getFormattedValue(), formattedValue);
         this.getCOSObject().setString(COSName.F, formattedValue);
     }
@@ -124,8 +115,7 @@ public class PDUserProperty extends PDDictionaryWrapper
      * @return <code>true</code> if the property shall be hidden,
      * <code>false</code> otherwise
      */
-    public boolean isHidden()
-    {
+    public boolean isHidden() {
         return this.getCOSObject().getBoolean(COSName.H, false);
     }
 
@@ -133,18 +123,16 @@ public class PDUserProperty extends PDDictionaryWrapper
      * Specifies whether the property shall be hidden.
      *
      * @param hidden <code>true</code> if the property shall be hidden,
-     * <code>false</code> otherwise
+     *               <code>false</code> otherwise
      */
-    public void setHidden(boolean hidden)
-    {
+    public void setHidden(boolean hidden) {
         this.potentiallyNotifyChanged(this.isHidden(), hidden);
         this.getCOSObject().setBoolean(COSName.H, hidden);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Name=" + this.getName() +
                 ", Value=" + this.getValue() +
                 ", FormattedValue=" + this.getFormattedValue() +
@@ -158,10 +146,8 @@ public class PDUserProperty extends PDDictionaryWrapper
      * @param oldEntry old entry
      * @param newEntry new entry
      */
-    private void potentiallyNotifyChanged(Object oldEntry, Object newEntry)
-    {
-        if (this.isEntryChanged(oldEntry, newEntry))
-        {
+    private void potentiallyNotifyChanged(Object oldEntry, Object newEntry) {
+        if (this.isEntryChanged(oldEntry, newEntry)) {
             this.userAttributeObject.userPropertyChanged(this);
         }
     }
@@ -174,18 +160,15 @@ public class PDUserProperty extends PDDictionaryWrapper
      * @return <code>true</code> if the entry is changed, <code>false</code>
      * otherwise
      */
-    private boolean isEntryChanged(Object oldEntry, Object newEntry)
-    {
-        if (oldEntry == null)
-        {
+    private boolean isEntryChanged(Object oldEntry, Object newEntry) {
+        if (oldEntry == null) {
             return newEntry != null;
         }
         return !oldEntry.equals(newEntry);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result
@@ -194,30 +177,22 @@ public class PDUserProperty extends PDDictionaryWrapper
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!super.equals(obj))
-        {
+        if (!super.equals(obj)) {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         PDUserProperty other = (PDUserProperty) obj;
-        if (userAttributeObject == null)
-        {
-            if (other.userAttributeObject != null)
-            {
+        if (userAttributeObject == null) {
+            if (other.userAttributeObject != null) {
                 return false;
             }
-        }
-        else if (!userAttributeObject.equals(other.userAttributeObject))
-        {
+        } else if (!userAttributeObject.equals(other.userAttributeObject)) {
             return false;
         }
         return true;

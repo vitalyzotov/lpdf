@@ -24,18 +24,16 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
 /**
  * The general property dictionaries from the build property dictionary.
  *
- * @see PDPropBuild
  * @author Thomas Chojecki
+ * @see PDPropBuild
  */
-public class PDPropBuildDataDict implements COSObjectable
-{
+public class PDPropBuildDataDict implements COSObjectable {
     private final COSDictionary dictionary;
 
     /**
      * Default constructor.
      */
-    public PDPropBuildDataDict()
-    {
+    public PDPropBuildDataDict() {
         dictionary = new COSDictionary();
         // the specification claim to use direct objects
         dictionary.setDirect(true);
@@ -46,8 +44,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param dict The signature dictionary.
      */
-    public PDPropBuildDataDict(COSDictionary dict)
-    {
+    public PDPropBuildDataDict(COSDictionary dict) {
         dictionary = dict;
         // the specification claim to use direct objects
         dictionary.setDirect(true);
@@ -59,17 +56,16 @@ public class PDPropBuildDataDict implements COSObjectable
      * @return The COS dictionary that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
     /**
      * The name of the software module that was used to create the signature.
+     *
      * @return the name of the software module
      */
-    public String getName()
-    {
+    public String getName() {
         return dictionary.getNameAsString(COSName.NAME);
     }
 
@@ -78,8 +74,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param name is the name of the software module
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         dictionary.setName(COSName.NAME, name);
     }
 
@@ -90,8 +85,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return the build date of the software module
      */
-    public String getDate()
-    {
+    public String getDate() {
         return dictionary.getString(COSName.DATE);
     }
 
@@ -100,8 +94,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param date is the build date of the software module
      */
-    public void setDate(String date)
-    {
+    public void setDate(String date) {
         dictionary.setString(COSName.DATE, date);
     }
 
@@ -116,8 +109,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param applicationVersion the application implementation version
      */
-    public void setVersion(String applicationVersion)
-    {
+    public void setVersion(String applicationVersion) {
         dictionary.setString("REx", applicationVersion);
     }
 
@@ -128,8 +120,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return the application implementation version
      */
-    public String getVersion()
-    {
+    public String getVersion() {
         return dictionary.getString("REx");
     }
 
@@ -138,8 +129,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return the revision of the software module
      */
-    public long getRevision()
-    {
+    public long getRevision() {
         return dictionary.getLong(COSName.R);
     }
 
@@ -148,8 +138,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param revision is the software module revision number
      */
-    public void setRevision(long revision)
-    {
+    public void setRevision(long revision) {
         dictionary.setLong(COSName.R, revision);
     }
 
@@ -162,8 +151,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return the revision of the software module
      */
-    public long getMinimumRevision()
-    {
+    public long getMinimumRevision() {
         return dictionary.getLong(COSName.V);
     }
 
@@ -176,8 +164,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param revision is the software module revision number
      */
-    public void setMinimumRevision(long revision)
-    {
+    public void setMinimumRevision(long revision) {
         dictionary.setLong(COSName.V, revision);
     }
 
@@ -187,8 +174,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return true if the software module or signature handler was a pre release.
      */
-    public boolean getPreRelease()
-    {
+    public boolean getPreRelease() {
         return dictionary.getBoolean(COSName.PRE_RELEASE, false);
     }
 
@@ -199,8 +185,7 @@ public class PDPropBuildDataDict implements COSObjectable
      * @param preRelease is true if the signature was created with a unrelease
      *                   software, otherwise false.
      */
-    public void setPreRelease(boolean preRelease)
-    {
+    public void setPreRelease(boolean preRelease) {
         dictionary.setBoolean(COSName.PRE_RELEASE, preRelease);
     }
 
@@ -216,8 +201,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @return the operating system id or name.
      */
-    public String getOS()
-    {
+    public String getOS() {
         final COSArray osArray = dictionary.getCOSArray(COSName.OS);
         // PDF v1.5 style
         return osArray != null ? osArray.getName(0) : dictionary.getString(COSName.OS);
@@ -230,17 +214,12 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param os is a string with the system id or name.
      */
-    public void setOS(String os)
-    {
-        if (os == null)
-        {
+    public void setOS(String os) {
+        if (os == null) {
             dictionary.removeItem(COSName.OS);
-        }
-        else
-        {
+        } else {
             COSArray osArray = dictionary.getCOSArray(COSName.OS);
-            if (osArray == null)
-            {
+            if (osArray == null) {
                 osArray = new COSArray();
                 osArray.setDirect(true);
                 dictionary.setItem(COSName.OS, osArray);
@@ -259,8 +238,7 @@ public class PDPropBuildDataDict implements COSObjectable
      * @return true if NonEFontNoWarn is set to true
      * @see #setNonEFontNoWarn(boolean)
      */
-    public boolean getNonEFontNoWarn()
-    {
+    public boolean getNonEFontNoWarn() {
         return dictionary.getBoolean(COSName.NON_EFONT_NO_WARN, true);
     }
 
@@ -268,21 +246,18 @@ public class PDPropBuildDataDict implements COSObjectable
      * If true, the reader should not display a warning about fonts not being embedded.
      *
      * @param noEmbedFontWarning true if there is a Legal dictionary in the catalog and the
-     * NonEmbeddedFonts attribute has a non-zero value
-     *
-     * Documentation says: (Optional; PDF 1.5) If there is a LegalPDF dictionary in the catalog of
-     * the PDF file and the NonEmbeddedFonts attribute in this dictionary has a non zero value, and
-     * the viewing application has a preference set to suppress the display of this warning then the
-     * value of this attribute will be set to true.
-     *
-     * @see
-     * <a href="https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/Acrobat_Signature_BuildDict.pdf#page=6">Digital
+     *                           NonEmbeddedFonts attribute has a non-zero value
+     *                           <p>
+     *                           Documentation says: (Optional; PDF 1.5) If there is a LegalPDF dictionary in the catalog of
+     *                           the PDF file and the NonEmbeddedFonts attribute in this dictionary has a non zero value, and
+     *                           the viewing application has a preference set to suppress the display of this warning then the
+     *                           value of this attribute will be set to true.
+     * @see <a href="https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/Acrobat_Signature_BuildDict.pdf#page=6">Digital
      * Signature Build Dictionary Specification</a>
      * @see #getNonEFontNoWarn()
      * @see COSName#NON_EFONT_NO_WARN
      */
-    public void setNonEFontNoWarn(boolean noEmbedFontWarning)
-    {
+    public void setNonEFontNoWarn(boolean noEmbedFontWarning) {
         dictionary.setBoolean(COSName.NON_EFONT_NO_WARN, noEmbedFontWarning);
     }
 
@@ -290,10 +265,9 @@ public class PDPropBuildDataDict implements COSObjectable
      * If true, the application was in trusted mode when signing took place.
      *
      * @return true if the application was in trusted mode while signing.
-     *              default: false
+     * default: false
      */
-    public boolean getTrustedMode()
-    {
+    public boolean getTrustedMode() {
         return dictionary.getBoolean(COSName.TRUSTED_MODE, false);
     }
 
@@ -302,8 +276,7 @@ public class PDPropBuildDataDict implements COSObjectable
      *
      * @param trustedMode true if the application is in trusted mode.
      */
-    public void setTrustedMode(boolean trustedMode)
-    {
+    public void setTrustedMode(boolean trustedMode) {
         dictionary.setBoolean(COSName.TRUSTED_MODE, trustedMode);
     }
 }

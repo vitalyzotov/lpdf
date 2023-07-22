@@ -16,44 +16,36 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
+import lpdf.pdfbox.contentstream.PDFStreamEngine;
+import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
 
 import java.io.IOException;
-
-import lpdf.pdfbox.contentstream.PDFStreamEngine;
-import lpdf.pdfbox.contentstream.operator.MissingOperandException;
+import java.util.List;
 
 /**
  * j: Set the line join style.
- *
  */
-public class SetLineJoinStyle extends OperatorProcessor
-{
-    public SetLineJoinStyle(PDFStreamEngine context)
-    {
+public class SetLineJoinStyle extends OperatorProcessor {
+    public SetLineJoinStyle(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
-        int lineJoinStyle = ((COSNumber)arguments.get( 0 )).intValue();
+        int lineJoinStyle = ((COSNumber) arguments.get(0)).intValue();
         getContext().getGraphicsState().setLineJoin(lineJoinStyle);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_LINE_JOINSTYLE;
     }
 }

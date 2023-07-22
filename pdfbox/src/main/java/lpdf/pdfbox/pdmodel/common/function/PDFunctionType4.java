@@ -30,10 +30,8 @@ import java.nio.charset.StandardCharsets;
  * This class represents a Type 4 (PostScript calculator) function in a PDF document.
  * <p>
  * See section 3.9.4 of the PDF 1.4 Reference.
- *
  */
-public class PDFunctionType4 extends PDFunction
-{
+public class PDFunctionType4 extends PDFunction {
 
     private static final Operators OPERATORS = new Operators();
 
@@ -45,9 +43,8 @@ public class PDFunctionType4 extends PDFunction
      * @param functionStream The function stream.
      * @throws IOException if an I/O error occurs while reading the function
      */
-    public PDFunctionType4(COSBase functionStream) throws IOException
-    {
-        super( functionStream );
+    public PDFunctionType4(COSBase functionStream) throws IOException {
+        super(functionStream);
         byte[] bytes = getPDStream().toByteArray();
         String string = new String(bytes, StandardCharsets.ISO_8859_1);
         this.instructions = InstructionSequenceBuilder.parse(string);
@@ -57,21 +54,18 @@ public class PDFunctionType4 extends PDFunction
      * {@inheritDoc}
      */
     @Override
-    public int getFunctionType()
-    {
+    public int getFunctionType() {
         return 4;
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
-    public float[] eval(float[] input) throws IOException
-    {
+    public float[] eval(float[] input) throws IOException {
         //Setup the input values
         ExecutionContext context = new ExecutionContext(OPERATORS);
-        for (int i = 0; i < input.length; i++)
-        {
+        for (int i = 0; i < input.length; i++) {
             PDRange domain = getDomainForInput(i);
             float value = clipToRange(input[i], domain.getMin(), domain.getMax());
             context.getStack().push(value);
@@ -83,16 +77,14 @@ public class PDFunctionType4 extends PDFunction
         //Extract the output values
         int numberOfOutputValues = getNumberOfOutputParameters();
         int numberOfActualOutputValues = context.getStack().size();
-        if (numberOfActualOutputValues < numberOfOutputValues)
-        {
+        if (numberOfActualOutputValues < numberOfOutputValues) {
             throw new IllegalStateException("The type 4 function returned "
                     + numberOfActualOutputValues
                     + " values but the Range entry indicates that "
                     + numberOfOutputValues + " values be returned.");
         }
         float[] outputValues = new float[numberOfOutputValues];
-        for (int i = numberOfOutputValues - 1; i >= 0; i--)
-        {
+        for (int i = numberOfOutputValues - 1; i >= 0; i--) {
             PDRange range = getRangeForOutput(i);
             outputValues[i] = context.popReal();
             outputValues[i] = clipToRange(outputValues[i], range.getMin(), range.getMax());

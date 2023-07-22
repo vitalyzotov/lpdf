@@ -30,8 +30,7 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
  *
  * @author Ben Litchfield
  */
-public class PDBoxStyle implements COSObjectable
-{
+public class PDBoxStyle implements COSObjectable {
     /**
      * Style for guideline.
      */
@@ -45,10 +44,8 @@ public class PDBoxStyle implements COSObjectable
 
     /**
      * Default Constructor.
-     *
      */
-    public PDBoxStyle()
-    {
+    public PDBoxStyle() {
         dictionary = new COSDictionary();
     }
 
@@ -57,8 +54,7 @@ public class PDBoxStyle implements COSObjectable
      *
      * @param dic The existing dictionary.
      */
-    public PDBoxStyle( COSDictionary dic )
-    {
+    public PDBoxStyle(COSDictionary dic) {
         dictionary = dic;
     }
 
@@ -68,8 +64,7 @@ public class PDBoxStyle implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -77,17 +72,15 @@ public class PDBoxStyle implements COSObjectable
      * Get the RGB color to be used for the guidelines.  This is guaranteed to
      * not return null. The default color is [0,0,0].
      *
-     *@return The guideline color.
+     * @return The guideline color.
      */
-    public PDColor getGuidelineColor()
-    {
+    public PDColor getGuidelineColor() {
         COSArray colorValues = dictionary.getCOSArray(COSName.C);
-        if( colorValues == null )
-        {
+        if (colorValues == null) {
             colorValues = new COSArray();
-            colorValues.add( COSInteger.ZERO );
-            colorValues.add( COSInteger.ZERO );
-            colorValues.add( COSInteger.ZERO );
+            colorValues.add(COSInteger.ZERO);
+            colorValues.add(COSInteger.ZERO);
+            colorValues.add(COSInteger.ZERO);
             dictionary.setItem(COSName.C, colorValues);
         }
         return new PDColor(colorValues.toFloatArray(), PDDeviceRGB.INSTANCE);
@@ -99,11 +92,9 @@ public class PDBoxStyle implements COSObjectable
      *
      * @param color The new colorspace value.
      */
-    public void setGuideLineColor( PDColor color )
-    {
+    public void setGuideLineColor(PDColor color) {
         COSArray values = null;
-        if( color != null )
-        {
+        if (color != null) {
             values = color.toCOSArray();
         }
         dictionary.setItem(COSName.C, values);
@@ -115,8 +106,7 @@ public class PDBoxStyle implements COSObjectable
      *
      * @return The width of the guideline.
      */
-    public float getGuidelineWidth()
-    {
+    public float getGuidelineWidth() {
         return dictionary.getFloat(COSName.W, 1);
     }
 
@@ -125,8 +115,7 @@ public class PDBoxStyle implements COSObjectable
      *
      * @param width The width in default user space units.
      */
-    public void setGuidelineWidth( float width )
-    {
+    public void setGuidelineWidth(float width) {
         dictionary.setFloat(COSName.W, width);
     }
 
@@ -137,8 +126,7 @@ public class PDBoxStyle implements COSObjectable
      * @see PDBoxStyle#GUIDELINE_STYLE_DASHED
      * @see PDBoxStyle#GUIDELINE_STYLE_SOLID
      */
-    public String getGuidelineStyle()
-    {
+    public String getGuidelineStyle() {
         return dictionary.getNameAsString(COSName.S, GUIDELINE_STYLE_SOLID);
     }
 
@@ -149,8 +137,7 @@ public class PDBoxStyle implements COSObjectable
      * @see PDBoxStyle#GUIDELINE_STYLE_DASHED
      * @see PDBoxStyle#GUIDELINE_STYLE_SOLID
      */
-    public void setGuidelineStyle( String style )
-    {
+    public void setGuidelineStyle(String style) {
         dictionary.setName(COSName.S, style);
     }
 
@@ -160,17 +147,15 @@ public class PDBoxStyle implements COSObjectable
      *
      * @return The line dash pattern.
      */
-    public PDLineDashPattern getLineDashPattern()
-    {
+    public PDLineDashPattern getLineDashPattern() {
         COSArray d = dictionary.getCOSArray(COSName.D);
-        if( d == null )
-        {
+        if (d == null) {
             d = new COSArray();
-            d.add( COSInteger.THREE );
+            d.add(COSInteger.THREE);
             dictionary.setItem(COSName.D, d);
         }
         COSArray lineArray = new COSArray();
-        lineArray.add( d );
+        lineArray.add(d);
         //dash phase is not specified and assumed to be zero.
         return new PDLineDashPattern(lineArray, 0);
     }
@@ -180,11 +165,9 @@ public class PDBoxStyle implements COSObjectable
      *
      * @param dashArray The patter for this box style.
      */
-    public void setLineDashPattern( COSArray dashArray )
-    {
+    public void setLineDashPattern(COSArray dashArray) {
         COSArray array = null;
-        if( dashArray != null )
-        {
+        if (dashArray != null) {
             array = dashArray;
         }
         dictionary.setItem(COSName.D, array);

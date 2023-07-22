@@ -16,52 +16,46 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Tc: Set character spacing.
  *
  * @author Laurent Huault
  */
-public class SetCharSpacing extends OperatorProcessor
-{
-    public SetCharSpacing(PDFStreamEngine context)
-    {
+public class SetCharSpacing extends OperatorProcessor {
+    public SetCharSpacing(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
 
         // there are some documents which are incorrectly structured, and have
         // a wrong number of arguments to this, so we will assume the last argument
         // in the list
-        Object charSpacing = arguments.get(arguments.size()-1);
-        if (charSpacing instanceof COSNumber)
-        {
-            COSNumber characterSpacing = (COSNumber)charSpacing;
+        Object charSpacing = arguments.get(arguments.size() - 1);
+        if (charSpacing instanceof COSNumber) {
+            COSNumber characterSpacing = (COSNumber) charSpacing;
             getContext().getGraphicsState().getTextState()
                     .setCharacterSpacing(characterSpacing.floatValue());
         }
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_CHAR_SPACING;
     }
 }

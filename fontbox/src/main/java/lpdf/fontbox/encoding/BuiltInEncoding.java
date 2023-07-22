@@ -23,15 +23,13 @@ import java.util.Map;
  *
  * @author John Hewson
  */
-public class BuiltInEncoding extends Encoding
-{
+public class BuiltInEncoding extends Encoding {
     /**
      * Constructor.
      *
      * @param codeToName the given code to name mapping
      */
-    public BuiltInEncoding(Map<Integer, String> codeToName)
-    {
+    public BuiltInEncoding(Map<Integer, String> codeToName) {
         codeToName.forEach(this::addCharacterEncoding);
     }
 }

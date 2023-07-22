@@ -30,16 +30,13 @@ import lpdf.pdfbox.pdmodel.documentinterchange.taggedpdf.PDTableAttributeObject;
  * An attribute object.
  *
  * @author Johannes Koch
- *
  */
-public abstract class PDAttributeObject extends PDDictionaryWrapper
-{
+public abstract class PDAttributeObject extends PDDictionaryWrapper {
 
     /**
      * Default constructor.
      */
-    public PDAttributeObject()
-    {
+    public PDAttributeObject() {
     }
 
     /**
@@ -47,8 +44,7 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      *
      * @param dictionary the dictionary
      */
-    public PDAttributeObject(COSDictionary dictionary)
-    {
+    public PDAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -58,13 +54,10 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * @param dictionary the dictionary
      * @return the attribute object
      */
-    public static PDAttributeObject create(COSDictionary dictionary)
-    {
+    public static PDAttributeObject create(COSDictionary dictionary) {
         String owner = dictionary.getNameAsString(COSName.O);
-        if (owner != null)
-        {
-            switch (owner)
-            {
+        if (owner != null) {
+            switch (owner) {
                 case PDUserAttributeObject.OWNER_USER_PROPERTIES:
                     return new PDUserAttributeObject(dictionary);
                 case PDListAttributeObject.OWNER_LIST:
@@ -97,8 +90,7 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      *
      * @return the structure element
      */
-    private PDStructureElement getStructureElement()
-    {
+    private PDStructureElement getStructureElement() {
         return this.structureElement;
     }
 
@@ -107,8 +99,7 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      *
      * @param structureElement the structure element
      */
-    protected void setStructureElement(PDStructureElement structureElement)
-    {
+    protected void setStructureElement(PDStructureElement structureElement) {
         this.structureElement = structureElement;
     }
 
@@ -117,8 +108,7 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      *
      * @return the owner of the attributes
      */
-    public String getOwner()
-    {
+    public String getOwner() {
         return this.getCOSObject().getNameAsString(COSName.O);
     }
 
@@ -127,8 +117,7 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      *
      * @param owner the owner of the attributes
      */
-    protected void setOwner(String owner)
-    {
+    protected void setOwner(String owner) {
         this.getCOSObject().setName(COSName.O, owner);
     }
 
@@ -136,10 +125,9 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * Detects whether there are no properties in the attribute object.
      *
      * @return <code>true</code> if the attribute object is empty,
-     *  <code>false</code> otherwise
+     * <code>false</code> otherwise
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         // only entry is the owner?
         return (this.getCOSObject().size() == 1) && (this.getOwner() != null);
     }
@@ -151,10 +139,8 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * @param oldBase old value
      * @param newBase new value
      */
-    protected void potentiallyNotifyChanged(COSBase oldBase, COSBase newBase)
-    {
-        if (this.isValueChanged(oldBase, newBase))
-        {
+    protected void potentiallyNotifyChanged(COSBase oldBase, COSBase newBase) {
+        if (this.isValueChanged(oldBase, newBase)) {
             this.notifyChanged();
         }
     }
@@ -167,10 +153,8 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * @return <code>true</code> if the value is changed, <code>false</code>
      * otherwise
      */
-    private boolean isValueChanged(COSBase oldValue, COSBase newValue)
-    {
-        if (oldValue == null)
-        {
+    private boolean isValueChanged(COSBase oldValue, COSBase newValue) {
+        if (oldValue == null) {
             return newValue != null;
         }
         return !oldValue.equals(newValue);
@@ -180,17 +164,14 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * Notifies the attribute object change listeners about a change in this
      * attribute object.
      */
-    protected void notifyChanged()
-    {
-        if (this.getStructureElement() != null)
-        {
+    protected void notifyChanged() {
+        if (this.getStructureElement() != null) {
             this.getStructureElement().attributeChanged(this);
         }
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "O=" + this.getOwner();
     }
 
@@ -200,13 +181,10 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * @param array the Object array
      * @return the String representation
      */
-    protected static String arrayToString(Object[] array)
-    {
+    protected static String arrayToString(Object[] array) {
         StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < array.length; i++)
-        {
-            if (i > 0)
-            {
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0) {
                 sb.append(", ");
             }
             sb.append(array[i]);
@@ -220,13 +198,10 @@ public abstract class PDAttributeObject extends PDDictionaryWrapper
      * @param array the float array
      * @return the String representation
      */
-    protected static String arrayToString(float[] array)
-    {
+    protected static String arrayToString(float[] array) {
         StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < array.length; i++)
-        {
-            if (i > 0)
-            {
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0) {
                 sb.append(", ");
             }
             sb.append(array[i]);

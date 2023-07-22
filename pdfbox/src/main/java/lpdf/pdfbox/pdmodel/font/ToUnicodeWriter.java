@@ -17,6 +17,8 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
+import lpdf.pdfbox.util.Hex;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,15 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import lpdf.pdfbox.util.Hex;
 
 /**
  * Writes ToUnicode Mapping Files.
  *
  * @author John Hewson
  */
-final class ToUnicodeWriter
-{
+final class ToUnicodeWriter {
     private final Map<Integer, String> cidToUnicode = new TreeMap<>();
     private int wMode;
 
@@ -46,8 +46,7 @@ final class ToUnicodeWriter
     /**
      * Creates a new ToUnicode CMap writer.
      */
-    ToUnicodeWriter()
-    {
+    ToUnicodeWriter() {
         this.wMode = 0;
     }
 
@@ -56,26 +55,22 @@ final class ToUnicodeWriter
      *
      * @param wMode 1 for vertical, 0 for horizontal (default)
      */
-    public void setWMode(int wMode)
-    {
+    public void setWMode(int wMode) {
         this.wMode = wMode;
     }
 
     /**
      * Adds the given CID to Unicode mapping.
      *
-     * @param cid CID
+     * @param cid  CID
      * @param text Unicode text, up to 512 bytes.
      */
-    public void add(int cid, String text)
-    {
-        if (cid < 0 || cid > 0xFFFF)
-        {
+    public void add(int cid, String text) {
+        if (cid < 0 || cid > 0xFFFF) {
             throw new IllegalArgumentException("CID is not valid");
         }
 
-        if (text == null || text.isEmpty())
-        {
+        if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("Text is null or empty");
         }
 
@@ -88,8 +83,7 @@ final class ToUnicodeWriter
      * @param out ASCII output stream
      * @throws IOException if the stream could not be written
      */
-    public void writeTo(OutputStream out) throws IOException
-    {
+    public void writeTo(OutputStream out) throws IOException {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.US_ASCII));
 
         writeLine(writer, "/CIDInit /ProcSet findresource begin");
@@ -105,8 +99,7 @@ final class ToUnicodeWriter
         writeLine(writer, "/CMapName /Adobe-Identity-UCS" + " def");
         writeLine(writer, "/CMapType 2 def\n"); // 2 = ToUnicode
 
-        if (wMode != 0)
-        {
+        if (wMode != 0) {
             writeLine(writer, "/WMode /" + wMode + " def");
         }
 
@@ -122,15 +115,11 @@ final class ToUnicodeWriter
 
         Map.Entry<Integer, String> prev = null;
 
-        for (Map.Entry<Integer, String> next : cidToUnicode.entrySet())
-        {
-            if (allowCIDToUnicodeRange(prev, next))
-            {
+        for (Map.Entry<Integer, String> next : cidToUnicode.entrySet()) {
+            if (allowCIDToUnicodeRange(prev, next)) {
                 // extend range
                 srcTo.set(srcTo.size() - 1, next.getKey());
-            }
-            else
-            {
+            } else {
                 // begin range
                 srcFrom.add(next.getKey());
                 srcTo.add(next.getKey());
@@ -141,15 +130,13 @@ final class ToUnicodeWriter
 
         // limit entries per operator
         int batchCount = (int) Math.ceil(srcFrom.size() /
-                                         (double) MAX_ENTRIES_PER_OPERATOR);
-        for (int batch = 0; batch < batchCount; batch++)
-        {
+                (double) MAX_ENTRIES_PER_OPERATOR);
+        for (int batch = 0; batch < batchCount; batch++) {
             int count = batch == batchCount - 1 ?
-                            srcFrom.size() - MAX_ENTRIES_PER_OPERATOR * batch :
-                            MAX_ENTRIES_PER_OPERATOR;
+                    srcFrom.size() - MAX_ENTRIES_PER_OPERATOR * batch :
+                    MAX_ENTRIES_PER_OPERATOR;
             writer.write(count + " beginbfrange\n");
-            for (int j = 0; j < count; j++)
-            {
+            for (int j = 0; j < count; j++) {
                 int index = batch * MAX_ENTRIES_PER_OPERATOR + j;
                 writer.write('<');
                 writer.write(Hex.getChars(srcFrom.get(index).shortValue()));
@@ -175,8 +162,7 @@ final class ToUnicodeWriter
         writer.flush();
     }
 
-    private void writeLine(BufferedWriter writer, String text) throws IOException
-    {
+    private void writeLine(BufferedWriter writer, String text) throws IOException {
         writer.write(text);
         writer.write('\n');
     }
@@ -184,10 +170,8 @@ final class ToUnicodeWriter
     // allowCIDToUnicodeRange returns true if the CID and Unicode destination string are allowed to follow one another
     // according to the Adobe 1.7 specification as described in Section 5.9, Example 5.16.
     static boolean allowCIDToUnicodeRange(Map.Entry<Integer, String> prev,
-            Map.Entry<Integer, String> next)
-    {
-        if (prev == null || next == null)
-        {
+                                          Map.Entry<Integer, String> next) {
+        if (prev == null || next == null) {
             return false;
         }
         return allowCodeRange(prev.getKey(), next.getKey())
@@ -195,10 +179,8 @@ final class ToUnicodeWriter
     }
 
     // allowCodeRange returns true if the 16-bit values are sequential and differ only in the low-order byte.
-    static boolean allowCodeRange(int prev, int next)
-    {
-        if ((prev + 1) != next)
-        {
+    static boolean allowCodeRange(int prev, int next) {
+        if ((prev + 1) != next) {
             return false;
         }
         int prevH = (prev >> 8) & 0xFF;
@@ -211,10 +193,8 @@ final class ToUnicodeWriter
 
     // allowDestinationRange returns true if the code points represented by the strings are sequential and differ
     // only in the low-order byte.
-    static boolean allowDestinationRange(String prev, String next)
-    {
-        if (prev.isEmpty() || next.isEmpty())
-        {
+    static boolean allowDestinationRange(String prev, String next) {
+        if (prev.isEmpty() || next.isEmpty()) {
             return false;
         }
         int prevCode = prev.codePointAt(0);

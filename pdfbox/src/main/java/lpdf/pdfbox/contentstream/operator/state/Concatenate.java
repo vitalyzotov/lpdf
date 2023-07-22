@@ -16,40 +16,34 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.util.List;
-import java.io.IOException;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
-import lpdf.pdfbox.util.Matrix;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+import lpdf.pdfbox.util.Matrix;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * cm: Concatenate matrix to current transformation matrix.
  *
  * @author Laurent Huault
  */
-public class Concatenate extends OperatorProcessor
-{
-    public Concatenate(PDFStreamEngine context)
-    {
+public class Concatenate extends OperatorProcessor {
+    public Concatenate(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.size() < 6)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.size() < 6) {
             throw new MissingOperandException(operator, arguments);
         }
-        if (!checkArrayTypesClass(arguments, COSNumber.class))
-        {
+        if (!checkArrayTypesClass(arguments, COSNumber.class)) {
             return;
         }
 
@@ -62,14 +56,13 @@ public class Concatenate extends OperatorProcessor
         COSNumber f = (COSNumber) arguments.get(5);
 
         Matrix matrix = new Matrix(a.floatValue(), b.floatValue(), c.floatValue(),
-                                   d.floatValue(), e.floatValue(), f.floatValue());
+                d.floatValue(), e.floatValue(), f.floatValue());
 
         getContext().getGraphicsState().getCurrentTransformationMatrix().concatenate(matrix);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CONCAT;
     }
 }

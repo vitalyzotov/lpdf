@@ -16,18 +16,17 @@
  */
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * A 'kern' table in a true type font.
  *
  * @author Glenn Adams
  */
-public class KerningTable extends TTFTable
-{
+public class KerningTable extends TTFTable {
 
     private static final Logger LOG = LoggerFactory.getLogger(KerningTable.class);
 
@@ -38,44 +37,34 @@ public class KerningTable extends TTFTable
 
     private KerningSubtable[] subtables;
 
-    KerningTable()
-    {
+    KerningTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         int version = data.readUnsignedShort();
-        if (version != 0)
-        {
+        if (version != 0) {
             version = (version << 16) | data.readUnsignedShort();
         }
         int numSubtables = 0;
-        if (version == 0)
-        {
+        if (version == 0) {
             numSubtables = data.readUnsignedShort();
-        }
-        else if (version == 1)
-        {
+        } else if (version == 1) {
             numSubtables = (int) data.readUnsignedInt();
-        }
-        else
-        {
+        } else {
             LOG.debug("Skipped kerning table due to an unsupported kerning table version: " + version);
         }
-        if (numSubtables > 0)
-        {
+        if (numSubtables > 0) {
             subtables = new KerningSubtable[numSubtables];
-            for (int i = 0; i < numSubtables; ++i)
-            {
+            for (int i = 0; i < numSubtables; ++i) {
                 KerningSubtable subtable = new KerningSubtable();
                 subtable.read(data, version);
                 subtables[i] = subtable;
@@ -89,8 +78,7 @@ public class KerningTable extends TTFTable
      *
      * @return first matching subtable or null if none found
      */
-    public KerningSubtable getHorizontalKerningSubtable()
-    {
+    public KerningSubtable getHorizontalKerningSubtable() {
         return getHorizontalKerningSubtable(false);
     }
 
@@ -100,14 +88,10 @@ public class KerningTable extends TTFTable
      * @param cross true if requesting cross stream horizontal kerning
      * @return first matching subtable or null if none found
      */
-    public KerningSubtable getHorizontalKerningSubtable(boolean cross)
-    {
-        if (subtables != null)
-        {
-            for (KerningSubtable s : subtables)
-            {
-                if (s.isHorizontalKerning(cross))
-                {
+    public KerningSubtable getHorizontalKerningSubtable(boolean cross) {
+        if (subtables != null) {
+            for (KerningSubtable s : subtables) {
+                if (s.isHorizontalKerning(cross)) {
                     return s;
                 }
             }

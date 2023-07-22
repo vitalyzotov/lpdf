@@ -26,8 +26,7 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Johannes Koch
  */
-public class PDMarkedContentReference implements COSObjectable
-{
+public class PDMarkedContentReference implements COSObjectable {
     public static final String TYPE = "MCR";
 
     private final COSDictionary dictionary;
@@ -35,8 +34,7 @@ public class PDMarkedContentReference implements COSObjectable
     /**
      * Default constructor
      */
-    public PDMarkedContentReference()
-    {
+    public PDMarkedContentReference() {
         this.dictionary = new COSDictionary();
         this.dictionary.setName(COSName.TYPE, TYPE);
     }
@@ -46,8 +44,7 @@ public class PDMarkedContentReference implements COSObjectable
      *
      * @param dictionary the page dictionary
      */
-    public PDMarkedContentReference(COSDictionary dictionary)
-    {
+    public PDMarkedContentReference(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
@@ -55,8 +52,7 @@ public class PDMarkedContentReference implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return this.dictionary;
     }
 
@@ -65,8 +61,7 @@ public class PDMarkedContentReference implements COSObjectable
      *
      * @return the page
      */
-    public PDPage getPage()
-    {
+    public PDPage getPage() {
         COSDictionary pg = getCOSObject().getCOSDictionary(COSName.PG);
         return pg != null ? new PDPage(pg) : null;
     }
@@ -76,8 +71,7 @@ public class PDMarkedContentReference implements COSObjectable
      *
      * @param page the page
      */
-    public void setPage(PDPage page)
-    {
+    public void setPage(PDPage page) {
         this.getCOSObject().setItem(COSName.PG, page);
     }
 
@@ -86,8 +80,7 @@ public class PDMarkedContentReference implements COSObjectable
      *
      * @return the marked content identifier
      */
-    public int getMCID()
-    {
+    public int getMCID() {
         return this.getCOSObject().getInt(COSName.MCID);
     }
 
@@ -96,15 +89,13 @@ public class PDMarkedContentReference implements COSObjectable
      *
      * @param mcid the marked content identifier
      */
-    public void setMCID(int mcid)
-    {
+    public void setMCID(int mcid) {
         this.getCOSObject().setInt(COSName.MCID, mcid);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "mcid=" + this.getMCID();
     }
 

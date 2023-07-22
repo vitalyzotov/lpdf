@@ -15,22 +15,25 @@
  * limitations under the License.
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
-import java.io.IOException;
 
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.graphics.pattern.PDAbstractPattern;
 
+import java.io.IOException;
+
 /**
  * A Pattern color space is either a Tiling pattern or a Shading pattern.
+ *
  * @author John Hewson
  * @author Ben Litchfield
  */
-public final class PDPattern extends PDSpecialColorSpace
-{
-    /** A pattern which leaves no marks on the page. */
-    private static final PDColor EMPTY_PATTERN = new PDColor(new float[] { }, null);
+public final class PDPattern extends PDSpecialColorSpace {
+    /**
+     * A pattern which leaves no marks on the page.
+     */
+    private static final PDColor EMPTY_PATTERN = new PDColor(new float[]{}, null);
 
     private final PDResources resources;
     private PDColorSpace underlyingColorSpace;
@@ -40,8 +43,7 @@ public final class PDPattern extends PDSpecialColorSpace
      *
      * @param resources The current resources.
      */
-    public PDPattern(PDResources resources)
-    {
+    public PDPattern(PDResources resources) {
         this.resources = resources;
         array = new COSArray();
         array.add(COSName.PATTERN);
@@ -50,11 +52,10 @@ public final class PDPattern extends PDSpecialColorSpace
     /**
      * Creates a new uncolored tiling pattern color space.
      *
-     * @param resources The current resources.
+     * @param resources  The current resources.
      * @param colorSpace The underlying color space.
      */
-    public PDPattern(PDResources resources, PDColorSpace colorSpace)
-    {
+    public PDPattern(PDResources resources, PDColorSpace colorSpace) {
         this.resources = resources;
         this.underlyingColorSpace = colorSpace;
         array = new COSArray();
@@ -63,26 +64,22 @@ public final class PDPattern extends PDSpecialColorSpace
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.PATTERN.getName();
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
+    public float[] getDefaultDecode(int bitsPerComponent) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return EMPTY_PATTERN;
     }
 
@@ -93,15 +90,11 @@ public final class PDPattern extends PDSpecialColorSpace
      * @return pattern for the given color
      * @throws java.io.IOException if the pattern name was not found.
      */
-    public PDAbstractPattern getPattern(PDColor color) throws IOException
-    {
+    public PDAbstractPattern getPattern(PDColor color) throws IOException {
         PDAbstractPattern pattern = resources.getPattern(color.getPatternName());
-        if (pattern == null)
-        {
+        if (pattern == null) {
             throw new IOException("pattern " + color.getPatternName() + " was not found");
-        }
-        else
-        {
+        } else {
             return pattern;
         }
     }
@@ -111,14 +104,12 @@ public final class PDPattern extends PDSpecialColorSpace
      *
      * @return the underlying color space or null
      */
-    public PDColorSpace getUnderlyingColorSpace()
-    {
+    public PDColorSpace getUnderlyingColorSpace() {
         return underlyingColorSpace;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Pattern";
     }
 }

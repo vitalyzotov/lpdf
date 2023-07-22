@@ -16,66 +16,55 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-
-import lpdf.pdfbox.Loader;
 import lpdf.io.RandomAccessReadBuffer;
-
+import lpdf.pdfbox.Loader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author Andrea Vacondio
- *
  */
-class TestPDPageTree
-{
+class TestPDPageTree {
     private PDDocument doc;
 
     @AfterEach
-    public void tearDown() throws IOException
-    {
-        if (doc != null)
-        {
+    public void tearDown() throws IOException {
+        if (doc != null) {
             doc.close();
         }
     }
 
     @Test
-    void positiveSingleLevel() throws IOException
-    {
+    void positiveSingleLevel() throws IOException {
         doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
                 TestPDPageTree.class.getResourceAsStream("with_outline.pdf")));
-        for (int i = 0; i < doc.getNumberOfPages(); i++)
-        {
+        for (int i = 0; i < doc.getNumberOfPages(); i++) {
             assertEquals(i, doc.getPages().indexOf(doc.getPage(i)));
         }
     }
 
     @Test
-    void positiveMultipleLevel() throws IOException
-    {
+    void positiveMultipleLevel() throws IOException {
         doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
                 TestPDPageTree.class.getResourceAsStream("page_tree_multiple_levels.pdf")));
-        for (int i = 0; i < doc.getNumberOfPages(); i++)
-        {
+        for (int i = 0; i < doc.getNumberOfPages(); i++) {
             assertEquals(i, doc.getPages().indexOf(doc.getPage(i)));
         }
     }
 
     @Test
-    void negative() throws IOException
-    {
+    void negative() throws IOException {
         doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
                 TestPDPageTree.class.getResourceAsStream("with_outline.pdf")));
         assertEquals(-1, doc.getPages().indexOf(new PDPage()));
     }
 
     @Test
-    void testInsertBeforeBlankPage() throws Exception
-    {
+    void testInsertBeforeBlankPage() throws Exception {
         try (PDDocument document = new PDDocument()) {
             PDPage pageOne = new PDPage();
             PDPage pageTwo = new PDPage();
@@ -87,14 +76,13 @@ class TestPDPageTree
 
             assertEquals(0, (document.getPages().indexOf(pageOne)),
                     "Page one should be placed at index 0.");
-            assertEquals(2,(document.getPages().indexOf(pageTwo)),"Page two should be placed at index 2.");
-            assertEquals(1,(document.getPages().indexOf(pageThree)),"Page three should be placed at index 1.");
+            assertEquals(2, (document.getPages().indexOf(pageTwo)), "Page two should be placed at index 2.");
+            assertEquals(1, (document.getPages().indexOf(pageThree)), "Page three should be placed at index 1.");
         }
     }
 
     @Test
-    void testInsertAfterBlankPage() throws Exception
-    {
+    void testInsertAfterBlankPage() throws Exception {
         try (PDDocument document = new PDDocument()) {
             PDPage pageOne = new PDPage();
             PDPage pageTwo = new PDPage();

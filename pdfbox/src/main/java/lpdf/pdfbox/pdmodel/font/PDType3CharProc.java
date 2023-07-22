@@ -17,12 +17,8 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lpdf.io.RandomAccessInputStream;
+import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.contentstream.PDContentStream;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.cos.COSBase;
@@ -30,66 +26,62 @@ import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.cos.COSStream;
-import lpdf.io.RandomAccessInputStream;
-import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.pdfparser.PDFStreamParser;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
 import lpdf.pdfbox.pdmodel.common.PDStream;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Type 3 character procedure. This is a standalone PDF content stream.
  *
  * @author John Hewson
  */
-public final class PDType3CharProc implements COSObjectable, PDContentStream
-{
+public final class PDType3CharProc implements COSObjectable, PDContentStream {
     private static final Logger LOG = LoggerFactory.getLogger(PDType3CharProc.class);
 
     private final PDType3Font font;
     private final COSStream charStream;
 
-    public PDType3CharProc(PDType3Font font, COSStream charStream)
-    {
+    public PDType3CharProc(PDType3Font font, COSStream charStream) {
         this.font = font;
         this.charStream = charStream;
     }
 
     @Override
-    public COSStream getCOSObject()
-    {
+    public COSStream getCOSObject() {
         return charStream;
     }
 
-    public PDType3Font getFont()
-    {
+    public PDType3Font getFont() {
         return font;
     }
-    
-    public PDStream getContentStream()
-    {
+
+    public PDStream getContentStream() {
         return new PDStream(charStream);
     }
 
     @Override
-    public InputStream getContents() throws IOException
-    {
+    public InputStream getContents() throws IOException {
         return new RandomAccessInputStream(getContentsForRandomAccess());
     }
 
     @Override
-    public RandomAccessRead getContentsForRandomAccess() throws IOException
-    {
+    public RandomAccessRead getContentsForRandomAccess() throws IOException {
         return charStream.createView();
     }
 
     @Override
-    public PDResources getResources()
-    {
-        if (charStream.containsKey(COSName.RESOURCES))
-        {
+    public PDResources getResources() {
+        if (charStream.containsKey(COSName.RESOURCES)) {
             // PDFBOX-5294
             LOG.warn("Using resources dictionary found in charproc entry");
             LOG.warn("This should have been in the font or in the page dictionary");
@@ -99,8 +91,7 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
     }
 
     @Override
-    public PDRectangle getBBox()
-    {
+    public PDRectangle getBBox() {
         return font.getFontBBox();
     }
 
@@ -111,21 +102,15 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
      * @return the bounding box of this glyph, or null if the first operator is not d1.
      * @throws IOException If an io error occurs while parsing the stream.
      */
-    public PDRectangle getGlyphBBox() throws IOException
-    {
+    public PDRectangle getGlyphBBox() throws IOException {
         List<COSBase> arguments = new ArrayList<>();
         PDFStreamParser parser = new PDFStreamParser(this);
         Object token = parser.parseNextToken();
-        while (token != null)
-        {
-            if (token instanceof Operator)
-            {
-                if (((Operator) token).getName().equals("d1") && arguments.size() == 6)
-                {
-                    for (int i = 0; i < 6; ++i)
-                    {
-                        if (!(arguments.get(i) instanceof COSNumber))
-                        {
+        while (token != null) {
+            if (token instanceof Operator) {
+                if (((Operator) token).getName().equals("d1") && arguments.size() == 6) {
+                    for (int i = 0; i < 6; ++i) {
+                        if (!(arguments.get(i) instanceof COSNumber)) {
                             return null;
                         }
                     }
@@ -136,14 +121,10 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
                             y,
                             ((COSNumber) arguments.get(4)).floatValue() - x,
                             ((COSNumber) arguments.get(5)).floatValue() - y);
-                }
-                else
-                {
+                } else {
                     return null;
                 }
-            }
-            else
-            {
+            } else {
                 arguments.add((COSBase) token);
             }
             token = parser.parseNextToken();
@@ -152,8 +133,7 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
     }
 
     @Override
-    public Matrix getMatrix()
-    {
+    public Matrix getMatrix() {
         return font.getFontMatrix();
     }
 
@@ -162,21 +142,16 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
      *
      * @return the glyph width.
      * @throws IOException if the stream could not be read, or did not have d0 or d1 as first
-     * operator, or if their first argument was not a number.
+     *                     operator, or if their first argument was not a number.
      */
-    public float getWidth() throws IOException
-    {
+    public float getWidth() throws IOException {
         List<COSBase> arguments = new ArrayList<>();
         PDFStreamParser parser = new PDFStreamParser(this);
         Object token = parser.parseNextToken();
-        while (token != null)
-        {
-            if (token instanceof Operator)
-            {
+        while (token != null) {
+            if (token instanceof Operator) {
                 return parseWidth((Operator) token, arguments);
-            }
-            else
-            {
+            } else {
                 arguments.add((COSBase) token);
             }
             token = parser.parseNextToken();
@@ -184,19 +159,14 @@ public final class PDType3CharProc implements COSObjectable, PDContentStream
         throw new IOException("Unexpected end of stream");
     }
 
-    private float parseWidth(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (operator.getName().equals("d0") || operator.getName().equals("d1"))
-        {
+    private float parseWidth(Operator operator, List<COSBase> arguments) throws IOException {
+        if (operator.getName().equals("d0") || operator.getName().equals("d1")) {
             COSBase obj = arguments.get(0);
-            if (obj instanceof COSNumber)
-            {
+            if (obj instanceof COSNumber) {
                 return ((COSNumber) obj).floatValue();
             }
             throw new IOException("Unexpected argument type: " + obj.getClass().getName());
-        }
-        else
-        {
+        } else {
             throw new IOException("First operator must be d0 or d1");
         }
     }

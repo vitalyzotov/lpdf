@@ -25,14 +25,13 @@ import lpdf.pdfbox.cos.COSStream;
  *
  * @author John Hewson
  */
-public class PDPostScriptXObject extends PDXObject
-{
+public class PDPostScriptXObject extends PDXObject {
     /**
      * Creates a PostScript XObject.
+     *
      * @param stream The XObject stream
      */
-    public PDPostScriptXObject(COSStream stream)
-    {
+    public PDPostScriptXObject(COSStream stream) {
         super(stream, COSName.PS);
     }
 }

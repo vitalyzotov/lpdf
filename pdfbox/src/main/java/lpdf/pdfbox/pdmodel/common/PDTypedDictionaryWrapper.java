@@ -23,18 +23,15 @@ import lpdf.pdfbox.cos.COSName;
  * A wrapper for a COS dictionary including Type information.
  *
  * @author Johannes Koch
- *
  */
-public class PDTypedDictionaryWrapper extends PDDictionaryWrapper
-{
+public class PDTypedDictionaryWrapper extends PDDictionaryWrapper {
 
     /**
      * Creates a new instance with a given type.
      *
      * @param type the type (Type)
      */
-    public PDTypedDictionaryWrapper(String type)
-    {
+    public PDTypedDictionaryWrapper(String type) {
         super();
         this.getCOSObject().setName(COSName.TYPE, type);
     }
@@ -44,8 +41,7 @@ public class PDTypedDictionaryWrapper extends PDDictionaryWrapper
      *
      * @param dictionary the dictionary
      */
-    public PDTypedDictionaryWrapper(COSDictionary dictionary)
-    {
+    public PDTypedDictionaryWrapper(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -55,8 +51,7 @@ public class PDTypedDictionaryWrapper extends PDDictionaryWrapper
      *
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.getCOSObject().getNameAsString(COSName.TYPE);
     }
 

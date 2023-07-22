@@ -17,34 +17,29 @@
 
 package lpdf.pdfbox.pdfparser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDDocumentInformation;
 import lpdf.pdfbox.util.DateConverter;
 import org.junit.jupiter.api.Test;
 
-class TestPDFParser
-{
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class TestPDFParser {
     private static final File TARGETPDFDIR = new File("target/pdfs");
 
     @Test
-    void testPDFParserMissingCatalog() throws URISyntaxException
-    {
+    void testPDFParserMissingCatalog() throws URISyntaxException {
         // PDFBOX-3060
-        try
-        {
+        try {
             Loader.loadPDF(new File(TestPDFParser.class.getResource("MissingCatalog.pdf").toURI()))
-                .close();
-        }
-        catch (Exception exception)
-        {
+                    .close();
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -57,11 +52,9 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3208() throws IOException
-    {
+    void testPDFBox3208() throws IOException {
         try (PDDocument doc = Loader
-                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3208-L33MUTT2SVCWGCS6UIYL5TH3PNPXHIS6.pdf")))
-        {
+                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3208-L33MUTT2SVCWGCS6UIYL5TH3PNPXHIS6.pdf"))) {
             PDDocumentInformation di = doc.getDocumentInformation();
             assertEquals("Liquent Enterprise Services", di.getAuthor());
             assertEquals("Liquent services server", di.getCreator());
@@ -81,10 +74,8 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3940() throws IOException
-    {
-        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-3940-079977.pdf")))
-        {
+    void testPDFBox3940() throws IOException {
+        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-3940-079977.pdf"))) {
             PDDocumentInformation di = doc.getDocumentInformation();
             assertEquals("Unknown", di.getAuthor());
             assertEquals("C:REGULA~1IREGSFR_EQ_EM.WP", di.getCreator());
@@ -100,16 +91,12 @@ class TestPDFParser
      * PDFBOX-3783: test parsing of file with trash after %%EOF.
      */
     @Test
-    void testPDFBox3783()
-    {
-        try
-        {
+    void testPDFBox3783() {
+        try {
             Loader.loadPDF(
-                    new File(TARGETPDFDIR, "PDFBOX-3783-72GLBIGUC6LB46ELZFBARRJTLN4RBSQM.pdf"))
+                            new File(TARGETPDFDIR, "PDFBOX-3783-72GLBIGUC6LB46ELZFBARRJTLN4RBSQM.pdf"))
                     .close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected IOException");
         }
 
@@ -122,10 +109,8 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3785() throws IOException
-    {
-        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-3785-202097.pdf")))
-        {
+    void testPDFBox3785() throws IOException {
+        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-3785-202097.pdf"))) {
             assertEquals(11, doc.getNumberOfPages());
         }
     }
@@ -134,14 +119,10 @@ class TestPDFParser
      * PDFBOX-3947: test parsing of file with broken object stream.
      */
     @Test
-    void testPDFBox3947()
-    {
-        try
-        {
+    void testPDFBox3947() {
+        try {
             Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-3947-670064.pdf")).close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -150,16 +131,12 @@ class TestPDFParser
      * PDFBOX-3948: test parsing of file with object stream containing some unexpected newlines.
      */
     @Test
-    void testPDFBox3948()
-    {
-        try
-        {
+    void testPDFBox3948() {
+        try {
             Loader.loadPDF(
-                    new File(TARGETPDFDIR, "PDFBOX-3948-EUWO6SQS5TM4VGOMRD3FLXZHU35V2CP2.pdf"))
+                            new File(TARGETPDFDIR, "PDFBOX-3948-EUWO6SQS5TM4VGOMRD3FLXZHU35V2CP2.pdf"))
                     .close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -168,16 +145,12 @@ class TestPDFParser
      * PDFBOX-3949: test parsing of file with incomplete object stream.
      */
     @Test
-    void testPDFBox3949()
-    {
-        try
-        {
+    void testPDFBox3949() {
+        try {
             Loader.loadPDF(
-                    new File(TARGETPDFDIR, "PDFBOX-3949-MKFYUGZWS3OPXLLVU2Z4LWCTVA5WNOGF.pdf"))
+                            new File(TARGETPDFDIR, "PDFBOX-3949-MKFYUGZWS3OPXLLVU2Z4LWCTVA5WNOGF.pdf"))
                     .close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -189,11 +162,9 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3951() throws IOException
-    {
+    void testPDFBox3951() throws IOException {
         try (PDDocument doc = Loader
-                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3951-FIHUZWDDL2VGPOE34N6YHWSIGSH5LVGZ.pdf")))
-        {
+                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3951-FIHUZWDDL2VGPOE34N6YHWSIGSH5LVGZ.pdf"))) {
             assertEquals(143, doc.getNumberOfPages());
         }
     }
@@ -204,11 +175,9 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3964() throws IOException
-    {
+    void testPDFBox3964() throws IOException {
         try (PDDocument doc = Loader
-                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3964-c687766d68ac766be3f02aaec5e0d713_2.pdf")))
-        {
+                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3964-c687766d68ac766be3f02aaec5e0d713_2.pdf"))) {
             assertEquals(10, doc.getNumberOfPages());
         }
     }
@@ -220,11 +189,9 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox3977() throws IOException
-    {
+    void testPDFBox3977() throws IOException {
         try (PDDocument doc = Loader
-                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3977-63NGFQRI44HQNPIPEJH5W2TBM6DJZWMI.pdf")))
-        {
+                .loadPDF(new File(TARGETPDFDIR, "PDFBOX-3977-63NGFQRI44HQNPIPEJH5W2TBM6DJZWMI.pdf"))) {
             PDDocumentInformation di = doc.getDocumentInformation();
             assertEquals("QuarkXPress(tm) 6.52", di.getCreator());
             assertEquals("Acrobat Distiller 7.0 pour Macintosh", di.getProducer());
@@ -238,14 +205,10 @@ class TestPDFParser
      * Test parsing the "genko_oc_shiryo1.pdf" file, which is susceptible to regression.
      */
     @Test
-    void testParseGenko()
-    {
-        try
-        {
+    void testParseGenko() {
+        try {
             Loader.loadPDF(new File(TARGETPDFDIR, "genko_oc_shiryo1.pdf")).close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -255,14 +218,10 @@ class TestPDFParser
      * ArrayIndexOutOfBoundsException before the bug was fixed.
      */
     @Test
-    void testPDFBox4338()
-    {
-        try
-        {
+    void testPDFBox4338() {
+        try {
             Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4338.pdf")).close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -272,14 +231,10 @@ class TestPDFParser
      * NullPointerException before the bug was fixed.
      */
     @Test
-    void testPDFBox4339()
-    {
-        try
-        {
+    void testPDFBox4339() {
+        try {
             Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4339.pdf")).close();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             fail("Unexpected Exception");
         }
     }
@@ -290,10 +245,8 @@ class TestPDFParser
      * @throws IOException
      */
     @Test
-    void testPDFBox4490() throws IOException
-    {
-        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4490.pdf")))
-        {
+    void testPDFBox4490() throws IOException {
+        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4490.pdf"))) {
             assertEquals(3, doc.getNumberOfPages());
         }
     }

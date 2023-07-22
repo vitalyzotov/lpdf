@@ -17,24 +17,22 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author ryanjackson-wf
  */
-class TestToUnicodeWriter
-{
+class TestToUnicodeWriter {
     @Test
-    void testCMapLigatures() throws IOException
-    {
+    void testCMapLigatures() throws IOException {
         ToUnicodeWriter toUnicodeWriter = new ToUnicodeWriter();
 
         toUnicodeWriter.add(0x400, "a");
@@ -53,8 +51,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testCMapCIDOverflow() throws IOException
-    {
+    void testCMapCIDOverflow() throws IOException {
         ToUnicodeWriter toUnicodeWriter = new ToUnicodeWriter();
 
         toUnicodeWriter.add(0x3ff, "6");
@@ -70,8 +67,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testCMapStringOverflow() throws IOException
-    {
+    void testCMapStringOverflow() throws IOException {
         ToUnicodeWriter toUnicodeWriter = new ToUnicodeWriter();
 
         StringBuilder string1 = new StringBuilder();
@@ -91,15 +87,14 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testCMapSurrogates() throws IOException
-    {
+    void testCMapSurrogates() throws IOException {
         ToUnicodeWriter toUnicodeWriter = new ToUnicodeWriter();
 
-        toUnicodeWriter.add(0x300, new String(new int[] { 0x2F874 }, 0, 1));
-        toUnicodeWriter.add(0x301, new String(new int[] { 0x2F876 }, 0, 1));
-        toUnicodeWriter.add(0x304, new String(new int[] { 0x2F884 }, 0, 1));
-        toUnicodeWriter.add(0x305, new String(new int[] { 0x2F885 }, 0, 1));
-        toUnicodeWriter.add(0x306, new String(new int[] { 0x2F886 }, 0, 1));
+        toUnicodeWriter.add(0x300, new String(new int[]{0x2F874}, 0, 1));
+        toUnicodeWriter.add(0x301, new String(new int[]{0x2F876}, 0, 1));
+        toUnicodeWriter.add(0x304, new String(new int[]{0x2F884}, 0, 1));
+        toUnicodeWriter.add(0x305, new String(new int[]{0x2F885}, 0, 1));
+        toUnicodeWriter.add(0x306, new String(new int[]{0x2F886}, 0, 1));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         toUnicodeWriter.writeTo(baos);
@@ -112,8 +107,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testAllowCIDToUnicodeRange()
-    {
+    void testAllowCIDToUnicodeRange() {
         Map.Entry<Integer, String> six = new AbstractMap.SimpleEntry<Integer, String>(0x03FF, "6");
         Map.Entry<Integer, String> seven = new AbstractMap.SimpleEntry<Integer, String>(0x0400,
                 "7");
@@ -127,8 +121,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testAllowCodeRange()
-    {
+    void testAllowCodeRange() {
         // Denied progressions (negative)
         assertFalse(ToUnicodeWriter.allowCodeRange(0x000F, 0x0007));
         assertFalse(ToUnicodeWriter.allowCodeRange(0x00FF, 0x0000));
@@ -171,8 +164,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testAllowDestinationRange()
-    {
+    void testAllowDestinationRange() {
         // Denied (bogus)
         assertFalse(ToUnicodeWriter.allowDestinationRange("", ""));
         assertFalse(ToUnicodeWriter.allowDestinationRange("0", ""));
@@ -199,8 +191,7 @@ class TestToUnicodeWriter
     }
 
     @Test
-    void testAllowDestinationRangeSurrogates()
-    {
+    void testAllowDestinationRangeSurrogates() {
         // Check surrogates
         StringBuilder endOfBMP = new StringBuilder();
         endOfBMP.appendCodePoint(0xFFFF);

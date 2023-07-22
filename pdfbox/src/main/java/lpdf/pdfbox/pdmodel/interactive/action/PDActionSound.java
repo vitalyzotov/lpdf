@@ -27,8 +27,7 @@ import lpdf.pdfbox.cos.COSStream;
  * @author Timur Kamalov
  * @author Tilman Hausherr
  */
-public class PDActionSound extends PDAction
-{
+public class PDActionSound extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -38,8 +37,7 @@ public class PDActionSound extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionSound()
-    {
+    public PDActionSound() {
         setSubType(SUB_TYPE);
     }
 
@@ -48,8 +46,7 @@ public class PDActionSound extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionSound(COSDictionary a)
-    {
+    public PDActionSound(COSDictionary a) {
         super(a);
     }
 
@@ -58,8 +55,7 @@ public class PDActionSound extends PDAction
      *
      * @param sound the sound object defining the sound that shall be played.
      */
-    public void setSound(COSStream sound)
-    {
+    public void setSound(COSStream sound) {
         action.setItem(COSName.SOUND, sound);
     }
 
@@ -68,8 +64,7 @@ public class PDActionSound extends PDAction
      *
      * @return The sound object defining the sound that shall be played.
      */
-    public COSStream getSound()
-    {
+    public COSStream getSound() {
         return action.getCOSStream(COSName.SOUND);
     }
 
@@ -77,13 +72,10 @@ public class PDActionSound extends PDAction
      * Gets the volume at which to play the sound, in the range −1.0 to 1.0.
      *
      * @param volume The volume at which to play the sound, in the range −1.0 to 1.0.
-     *
      * @throws IllegalArgumentException if the volume parameter is outside of the range −1.0 to 1.0.
      */
-    public void setVolume(float volume)
-    {
-        if (volume < -1 || volume > 1)
-        {
+    public void setVolume(float volume) {
+        if (volume < -1 || volume > 1) {
             throw new IllegalArgumentException("volume outside of the range −1.0 to 1.0");
         }
         action.setFloat(COSName.VOLUME, volume);
@@ -94,8 +86,7 @@ public class PDActionSound extends PDAction
      *
      * @return The volume at which to play the sound, in the range −1.0 to 1.0. Default value: 1.0.
      */
-    public float getVolume()
-    {
+    public float getVolume() {
         float volume = action.getFloat(COSName.VOLUME, 1f);
         return volume < -1 || volume > 1 ? 1 : volume;
     }
@@ -107,8 +98,7 @@ public class PDActionSound extends PDAction
      *
      * @param synchronous Whether to play the sound synchronously (true) or asynchronously (false).
      */
-    public void setSynchronous(boolean synchronous)
-    {
+    public void setSynchronous(boolean synchronous) {
         action.setBoolean(COSName.SYNCHRONOUS, synchronous);
     }
 
@@ -120,8 +110,7 @@ public class PDActionSound extends PDAction
      * @return Whether to play the sound synchronously (true) or asynchronously (false, also the
      * default).
      */
-    public boolean getSynchronous()
-    {
+    public boolean getSynchronous() {
         return action.getBoolean(COSName.SYNCHRONOUS, false);
     }
 
@@ -130,8 +119,7 @@ public class PDActionSound extends PDAction
      *
      * @param repeat Whether to repeat the sound indefinitely.
      */
-    public void setRepeat(boolean repeat)
-    {
+    public void setRepeat(boolean repeat) {
         action.setBoolean(COSName.REPEAT, repeat);
     }
 
@@ -140,8 +128,7 @@ public class PDActionSound extends PDAction
      *
      * @return Whether to repeat the sound indefinitely (default: false).
      */
-    public boolean getRepeat()
-    {
+    public boolean getRepeat() {
         return action.getBoolean(COSName.REPEAT, false);
     }
 
@@ -151,10 +138,9 @@ public class PDActionSound extends PDAction
      * can be used to stop a repeating sound (see Repeat). Default value: false.
      *
      * @param mix whether to mix this sound with any other sound already playing.
-     * (false).
+     *            (false).
      */
-    public void setMix(boolean mix)
-    {
+    public void setMix(boolean mix) {
         action.setBoolean(COSName.MIX, mix);
     }
 
@@ -165,8 +151,7 @@ public class PDActionSound extends PDAction
      *
      * @return whether to mix this sound with any other sound already playing (default: false).
      */
-    public boolean getMix()
-    {
+    public boolean getMix() {
         return action.getBoolean(COSName.MIX, false);
     }
 }

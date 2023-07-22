@@ -23,32 +23,26 @@ package lpdf.fontbox.ttf.table.common;
  * lookups</a> in the Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class FeatureRecord
-{
+public class FeatureRecord {
     private final String featureTag;
     private final FeatureTable featureTable;
 
-    public FeatureRecord(String featureTag, FeatureTable featureTable)
-    {
+    public FeatureRecord(String featureTag, FeatureTable featureTable) {
         this.featureTag = featureTag;
         this.featureTable = featureTable;
     }
 
-    public String getFeatureTag()
-    {
+    public String getFeatureTag() {
         return featureTag;
     }
 
-    public FeatureTable getFeatureTable()
-    {
+    public FeatureTable getFeatureTable() {
         return featureTable;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("FeatureRecord[featureTag=%s]", featureTag);
     }
 }

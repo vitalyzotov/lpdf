@@ -19,26 +19,23 @@ package lpdf.pdfbox.pdmodel.common;
 /**
  * Immutable class for constant sizes.
  */
-public final class PDImmutableRectangle extends PDRectangle
-{
+public final class PDImmutableRectangle extends PDRectangle {
 
     /**
      * Constructor for immutable rectangle.
      *
-     * @param width The width of the rectangle.
+     * @param width  The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    public PDImmutableRectangle(float width, float height)
-    {
+    public PDImmutableRectangle(float width, float height) {
         super(width, height);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setUpperRightY(float value)
-    {
+    public void setUpperRightY(float value) {
         throw new UnsupportedOperationException("Immutable class");
     }
 
@@ -46,8 +43,7 @@ public final class PDImmutableRectangle extends PDRectangle
      * {@inheritDoc}
      */
     @Override
-    public void setUpperRightX(float value)
-    {
+    public void setUpperRightX(float value) {
         throw new UnsupportedOperationException("Immutable class");
     }
 
@@ -55,8 +51,7 @@ public final class PDImmutableRectangle extends PDRectangle
      * {@inheritDoc}
      */
     @Override
-    public void setLowerLeftY(float value)
-    {
+    public void setLowerLeftY(float value) {
         throw new UnsupportedOperationException("Immutable class");
     }
 
@@ -64,8 +59,7 @@ public final class PDImmutableRectangle extends PDRectangle
      * {@inheritDoc}
      */
     @Override
-    public void setLowerLeftX(float value)
-    {
+    public void setLowerLeftX(float value) {
         throw new UnsupportedOperationException("Immutable class");
-    }    
+    }
 }

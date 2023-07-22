@@ -27,8 +27,7 @@ import lpdf.pdfbox.cos.COSString;
  *
  * @author Michael Schwarzenberger
  */
-public class PDActionJavaScript extends PDAction
-{
+public class PDActionJavaScript extends PDAction {
     /**
      * This type of action this object represents.
      */
@@ -37,9 +36,8 @@ public class PDActionJavaScript extends PDAction
     /**
      * Constructor #1.
      */
-    public PDActionJavaScript()
-    {
-        setSubType( SUB_TYPE );
+    public PDActionJavaScript() {
+        setSubType(SUB_TYPE);
     }
 
     /**
@@ -47,8 +45,7 @@ public class PDActionJavaScript extends PDAction
      *
      * @param js Some javascript code.
      */
-    public PDActionJavaScript( String js )
-    {
+    public PDActionJavaScript(String js) {
         this();
         setAction(js);
     }
@@ -56,37 +53,29 @@ public class PDActionJavaScript extends PDAction
     /**
      * Constructor #2.
      *
-     *  @param a The action dictionary.
+     * @param a The action dictionary.
      */
-    public PDActionJavaScript(COSDictionary a)
-    {
+    public PDActionJavaScript(COSDictionary a) {
         super(a);
     }
 
     /**
      * @param sAction The JavaScript.
      */
-    public final void setAction(String sAction)
-    {
+    public final void setAction(String sAction) {
         action.setString(COSName.JS, sAction);
     }
 
     /**
      * @return The Javascript Code.
      */
-    public String getAction()
-    {
-        COSBase base = action.getDictionaryObject( COSName.JS );
-        if (base instanceof COSString)
-        {
-            return ((COSString)base).getString();
-        }
-        else if (base instanceof COSStream)
-        {
-            return ((COSStream)base).toTextString();
-        }
-        else
-        {
+    public String getAction() {
+        COSBase base = action.getDictionaryObject(COSName.JS);
+        if (base instanceof COSString) {
+            return ((COSString) base).getString();
+        } else if (base instanceof COSStream) {
+            return ((COSStream) base).toTextString();
+        } else {
             return null;
         }
     }

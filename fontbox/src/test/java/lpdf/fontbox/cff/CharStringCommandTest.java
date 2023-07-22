@@ -17,20 +17,18 @@
 
 package lpdf.fontbox.cff;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import lpdf.fontbox.cff.CharStringCommand.Key;
 import lpdf.fontbox.cff.CharStringCommand.Type1KeyWord;
 import lpdf.fontbox.cff.CharStringCommand.Type2KeyWord;
 import org.junit.jupiter.api.Test;
 
-class CharStringCommandTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+class CharStringCommandTest {
 
     @Test
-    void testKey()
-    {
+    void testKey() {
         assertEquals(Key.HSTEM, Key.valueOfKey(1));
         assertEquals(Key.ESCAPE, Key.valueOfKey(12));
         assertEquals(Key.DOTSECTION, Key.valueOfKey(12, 0));
@@ -39,8 +37,7 @@ class CharStringCommandTest
     }
 
     @Test
-    void testCharStringCommand()
-    {
+    void testCharStringCommand() {
         CharStringCommand charStringCommand1 = CharStringCommand.getInstance(1);
         assertEquals(Type1KeyWord.HSTEM, charStringCommand1.getType1KeyWord());
         assertEquals(Type2KeyWord.HSTEM, charStringCommand1.getType2KeyWord());
@@ -51,7 +48,7 @@ class CharStringCommandTest
         assertNull(charStringCommand12_0.getType2KeyWord());
         assertEquals("DOTSECTION|", charStringCommand12_0.toString());
 
-        int[] values12_3 = new int[] { 12, 3 };
+        int[] values12_3 = new int[]{12, 3};
         CharStringCommand charStringCommand12_3 = CharStringCommand.getInstance(values12_3);
         assertNull(charStringCommand12_3.getType1KeyWord());
         assertEquals(Type2KeyWord.AND, charStringCommand12_3.getType2KeyWord());
@@ -60,8 +57,7 @@ class CharStringCommandTest
     }
 
     @Test
-    void testUnknownCharStringCommand()
-    {
+    void testUnknownCharStringCommand() {
         CharStringCommand charStringCommandUnknown = CharStringCommand.getInstance(99);
         assertEquals("unknown command|", charStringCommandUnknown.toString());
     }

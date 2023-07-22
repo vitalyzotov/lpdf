@@ -23,14 +23,11 @@ package lpdf.fontbox.ttf.table.common;
  * Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public abstract class CoverageTable
-{
+public abstract class CoverageTable {
     private final int coverageFormat;
 
-    public CoverageTable(int coverageFormat)
-    {
+    public CoverageTable(int coverageFormat) {
         this.coverageFormat = coverageFormat;
     }
 
@@ -40,8 +37,7 @@ public abstract class CoverageTable
 
     public abstract int getSize();
 
-    public int getCoverageFormat()
-    {
+    public int getCoverageFormat() {
         return coverageFormat;
     }
 

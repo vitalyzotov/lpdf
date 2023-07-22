@@ -16,25 +16,24 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import java.io.IOException;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.pdmodel.common.PDNameTreeNode;
 import lpdf.pdfbox.pdmodel.interactive.action.PDActionFactory;
 import lpdf.pdfbox.pdmodel.interactive.action.PDActionJavaScript;
 
+import java.io.IOException;
+
 /**
  * This class holds all of the name trees that are available at the document level.
  *
  * @author Ben Litchfield
  */
-public class PDJavascriptNameTreeNode extends PDNameTreeNode<PDActionJavaScript>
-{
+public class PDJavascriptNameTreeNode extends PDNameTreeNode<PDActionJavaScript> {
     /**
      * Constructor.
      */
-    public PDJavascriptNameTreeNode()
-    {
+    public PDJavascriptNameTreeNode() {
         super();
     }
 
@@ -43,24 +42,20 @@ public class PDJavascriptNameTreeNode extends PDNameTreeNode<PDActionJavaScript>
      *
      * @param dic The COS dictionary.
      */
-    public PDJavascriptNameTreeNode( COSDictionary dic )
-    {
+    public PDJavascriptNameTreeNode(COSDictionary dic) {
         super(dic);
     }
 
     @Override
-    protected PDActionJavaScript convertCOSToPD( COSBase base ) throws IOException
-    {
-        if (!(base instanceof COSDictionary))
-        {
-            throw new IOException( "Error creating Javascript object, expected a COSDictionary and not " + base);
+    protected PDActionJavaScript convertCOSToPD(COSBase base) throws IOException {
+        if (!(base instanceof COSDictionary)) {
+            throw new IOException("Error creating Javascript object, expected a COSDictionary and not " + base);
         }
-        return (PDActionJavaScript)PDActionFactory.createAction((COSDictionary) base);
+        return (PDActionJavaScript) PDActionFactory.createAction((COSDictionary) base);
     }
 
     @Override
-    protected PDNameTreeNode<PDActionJavaScript> createChildNode( COSDictionary dic )
-    {
+    protected PDNameTreeNode<PDActionJavaScript> createChildNode(COSDictionary dic) {
         return new PDJavascriptNameTreeNode(dic);
     }
 }

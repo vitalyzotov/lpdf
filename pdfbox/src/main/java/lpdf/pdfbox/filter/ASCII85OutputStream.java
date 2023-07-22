@@ -24,10 +24,8 @@ import java.io.OutputStream;
  * This class represents an ASCII85 output stream.
  *
  * @author Ben Litchfield
- *
  */
-final class ASCII85OutputStream extends FilterOutputStream
-{
+final class ASCII85OutputStream extends FilterOutputStream {
 
     private int lineBreak;
     private int count;
@@ -51,8 +49,7 @@ final class ASCII85OutputStream extends FilterOutputStream
      *
      * @param out The output stream to write to.
      */
-    ASCII85OutputStream(OutputStream out)
-    {
+    ASCII85OutputStream(OutputStream out) {
         super(out);
         lineBreak = 36 * 2;
         maxline = 36 * 2;
@@ -68,10 +65,8 @@ final class ASCII85OutputStream extends FilterOutputStream
      *
      * @param term The terminating character.
      */
-    public void setTerminator(char term)
-    {
-        if (term < 118 || term > 126 || term == Z)
-        {
+    public void setTerminator(char term) {
+        if (term < 118 || term > 126 || term == Z) {
             throw new IllegalArgumentException("Terminator must be 118-126 excluding z");
         }
         terminator = term;
@@ -82,8 +77,7 @@ final class ASCII85OutputStream extends FilterOutputStream
      *
      * @return The terminating character.
      */
-    public char getTerminator()
-    {
+    public char getTerminator() {
         return terminator;
     }
 
@@ -92,10 +86,8 @@ final class ASCII85OutputStream extends FilterOutputStream
      *
      * @param l The length of the line to use.
      */
-    public void setLineLength(int l)
-    {
-        if (lineBreak > l)
-        {
+    public void setLineLength(int l) {
+        if (lineBreak > l) {
             lineBreak = l;
         }
         maxline = l;
@@ -106,20 +98,17 @@ final class ASCII85OutputStream extends FilterOutputStream
      *
      * @return The line length attribute.
      */
-    public int getLineLength()
-    {
+    public int getLineLength() {
         return maxline;
     }
 
     /**
      * This will transform the next four ascii bytes.
      */
-    private void transformASCII85()
-    {
+    private void transformASCII85() {
         long word = ((((indata[0] << 8) | (indata[1] & 0xFF)) << 16) | ((indata[2] & 0xFF) << 8) | (indata[3] & 0xFF)) & 0xFFFFFFFFL;
 
-        if (word == 0)
-        {
+        if (word == 0) {
             outdata[0] = (byte) Z;
             outdata[1] = 0;
             return;
@@ -147,28 +136,22 @@ final class ASCII85OutputStream extends FilterOutputStream
      * This will write a single byte.
      *
      * @param b The byte to write.
-     *
      * @throws IOException If there is an error writing to the stream.
      */
     @Override
-    public void write(int b) throws IOException
-    {
+    public void write(int b) throws IOException {
         flushed = false;
         indata[count++] = (byte) b;
-        if (count < 4)
-        {
+        if (count < 4) {
             return;
         }
         transformASCII85();
-        for (int i = 0; i < 5; i++)
-        {
-            if (outdata[i] == 0)
-            {
+        for (int i = 0; i < 5; i++) {
+            if (outdata[i] == 0) {
                 break;
             }
             out.write(outdata[i]);
-            if (--lineBreak == 0)
-            {
+            if (--lineBreak == 0) {
                 out.write(NEWLINE);
                 lineBreak = maxline;
             }
@@ -182,38 +165,30 @@ final class ASCII85OutputStream extends FilterOutputStream
      * @throws IOException If there is an error writing the data to the stream.
      */
     @Override
-    public void flush() throws IOException
-    {
-        if (flushed)
-        {
+    public void flush() throws IOException {
+        if (flushed) {
             return;
         }
-        if (count > 0)
-        {
-            for (int i = count; i < 4; i++)
-            {
+        if (count > 0) {
+            for (int i = count; i < 4; i++) {
                 indata[i] = 0;
             }
             transformASCII85();
-            if (outdata[0] == Z)
-            {
+            if (outdata[0] == Z) {
                 for (int i = 0; i < 5; i++) // expand 'z',
                 {
                     outdata[i] = (byte) OFFSET;
                 }
             }
-            for (int i = 0; i < count + 1; i++)
-            {
+            for (int i = 0; i < count + 1; i++) {
                 out.write(outdata[i]);
-                if (--lineBreak == 0)
-                {
+                if (--lineBreak == 0) {
                     out.write(NEWLINE);
                     lineBreak = maxline;
                 }
             }
         }
-        if (--lineBreak == 0)
-        {
+        if (--lineBreak == 0) {
             out.write(NEWLINE);
         }
         out.write(terminator);
@@ -231,15 +206,11 @@ final class ASCII85OutputStream extends FilterOutputStream
      * @throws IOException If there is an error closing the wrapped stream.
      */
     @Override
-    public void close() throws IOException
-    {
-        try
-        {
+    public void close() throws IOException {
+        try {
             flush();
             super.close();
-        }
-        finally
-        {
+        } finally {
             indata = outdata = null;
         }
     }

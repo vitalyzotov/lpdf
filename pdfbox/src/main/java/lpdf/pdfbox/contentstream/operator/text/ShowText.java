@@ -16,46 +16,39 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSString;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSString;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Tj: Show text.
  *
  * @author Laurent Huault
  */
-public class ShowText extends OperatorProcessor
-{
-    public ShowText(PDFStreamEngine context)
-    {
+public class ShowText extends OperatorProcessor {
+    public ShowText(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             // ignore ( )Tj
             return;
         }
         COSBase base = arguments.get(0);
-        if (!(base instanceof COSString))
-        {
+        if (!(base instanceof COSString)) {
             // ignore
             return;
         }
         PDFStreamEngine context = getContext();
-        if (context.getTextMatrix() == null)
-        {
+        if (context.getTextMatrix() == null) {
             // ignore: outside of BT...ET
             return;
         }
@@ -64,8 +57,7 @@ public class ShowText extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SHOW_TEXT;
     }
 }

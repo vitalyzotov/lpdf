@@ -16,18 +16,16 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.TrueTypeFont;
+import lpdf.io.IOUtils;
+import lpdf.io.RandomAccessRead;
+import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSDocument;
 import lpdf.pdfbox.cos.COSInteger;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSObjectKey;
-import lpdf.io.IOUtils;
-import lpdf.io.RandomAccessRead;
-import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import lpdf.pdfbox.pdfwriter.COSWriter;
 import lpdf.pdfbox.pdfwriter.compress.CompressParameters;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
@@ -41,6 +39,8 @@ import lpdf.pdfbox.pdmodel.font.PDFont;
 import lpdf.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import lpdf.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
 import lpdf.pdfbox.pdmodel.interactive.digitalsignature.SigningSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
@@ -59,8 +59,7 @@ import java.util.Set;
  *
  * @author Ben Litchfield
  */
-public class PDDocument implements Closeable
-{
+public class PDDocument implements Closeable {
     /**
      * For signing: large reserve byte range used as placeholder in the saved PDF until the actual
      * length of the PDF is known. You'll need to fetch (with
@@ -69,7 +68,7 @@ public class PDDocument implements Closeable
      * {@link #saveIncrementalForExternalSigning(java.io.OutputStream) saveIncrementalForExternalSigning()}
      * twice.
      */
-    private static final int[] RESERVE_BYTE_RANGE = new int[] { 0, 1000000000, 1000000000, 1000000000 };
+    private static final int[] RESERVE_BYTE_RANGE = new int[]{0, 1000000000, 1000000000, 1000000000};
 
     private static final Logger LOG = LoggerFactory.getLogger(PDDocument.class);
 
@@ -118,8 +117,7 @@ public class PDDocument implements Closeable
      * Creates an empty PDF document.
      * You need to add at least one page for the document to be valid.
      */
-    public PDDocument()
-    {
+    public PDDocument() {
         this(IOUtils.createMemoryOnlyStreamCache());
     }
 
@@ -128,8 +126,7 @@ public class PDDocument implements Closeable
      *
      * @param streamCacheCreateFunction a function to create an instance of a stream cache for buffering PDF streams
      */
-    public PDDocument(StreamCacheCreateFunction streamCacheCreateFunction)
-    {
+    public PDDocument(StreamCacheCreateFunction streamCacheCreateFunction) {
         document = new COSDocument(streamCacheCreateFunction);
         document.getDocumentState().setParsing(false);
         pdfSource = null;
@@ -158,32 +155,28 @@ public class PDDocument implements Closeable
      *
      * @param doc The COSDocument that this document wraps.
      */
-    public PDDocument(COSDocument doc)
-    {
+    public PDDocument(COSDocument doc) {
         this(doc, null);
     }
 
     /**
      * Constructor that uses an existing document. The COSDocument that is passed in must be valid.
      *
-     * @param doc The COSDocument that this document wraps.
+     * @param doc    The COSDocument that this document wraps.
      * @param source input representing the pdf
      */
-    public PDDocument(COSDocument doc, RandomAccessRead source)
-    {
+    public PDDocument(COSDocument doc, RandomAccessRead source) {
         this(doc, source, null);
     }
 
     /**
      * Constructor that uses an existing document. The COSDocument that is passed in must be valid.
      *
-     * @param doc The COSDocument that this document wraps.
-     * @param source input representing the pdf
+     * @param doc        The COSDocument that this document wraps.
+     * @param source     input representing the pdf
      * @param permission he access permissions of the pdf
-     *
      */
-    public PDDocument(COSDocument doc, RandomAccessRead source, AccessPermission permission)
-    {
+    public PDDocument(COSDocument doc, RandomAccessRead source, AccessPermission permission) {
         document = doc;
         document.getDocumentState().setParsing(false);
         pdfSource = source;
@@ -196,8 +189,7 @@ public class PDDocument implements Closeable
      *
      * @param page The page to add to the document.
      */
-    public void addPage(PDPage page)
-    {
+    public void addPage(PDPage page) {
         getPages().add(page);
     }
 
@@ -207,8 +199,7 @@ public class PDDocument implements Closeable
      *
      * @param page The page to remove from the document.
      */
-    public void removePage(PDPage page)
-    {
+    public void removePage(PDPage page) {
         getPages().remove(page);
     }
 
@@ -217,8 +208,7 @@ public class PDDocument implements Closeable
      *
      * @param pageNumber 0 based index to page number.
      */
-    public void removePage(int pageNumber)
-    {
+    public void removePage(int pageNumber) {
         getPages().remove(pageNumber);
     }
 
@@ -244,11 +234,9 @@ public class PDDocument implements Closeable
      *
      * @param page The page to import.
      * @return The page that was imported.
-     *
      * @throws IOException If there is an error copying the page.
      */
-    public PDPage importPage(PDPage page) throws IOException
-    {
+    public PDPage importPage(PDPage page) throws IOException {
         PDPage importedPage = new PDPage(new COSDictionary(page.getCOSObject()), resourceCache);
         importedPage.getCOSObject().removeItem(COSName.PARENT);
         PDStream dest = new PDStream(this, page.getContents(), COSName.FLATE_DECODE);
@@ -258,8 +246,7 @@ public class PDDocument implements Closeable
         importedPage.setCropBox(new PDRectangle(page.getCropBox().getCOSArray()));
         importedPage.setMediaBox(new PDRectangle(page.getMediaBox().getCOSArray()));
         importedPage.setRotation(page.getRotation());
-        if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES))
-        {
+        if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES)) {
             LOG.warn("inherited resources of source document are not imported to destination page");
             LOG.warn("call importedPage.setResources(page.getResources()) to do this");
         }
@@ -271,8 +258,7 @@ public class PDDocument implements Closeable
      *
      * @param importedPage the imported page.
      */
-    private void setHighestImportedObjectNumber(PDPage importedPage)
-    {
+    private void setHighestImportedObjectNumber(PDPage importedPage) {
         List<COSObjectKey> indirectObjectKeys = new ArrayList<>();
         importedPage.getCOSObject().getIndirectObjectKeys(indirectObjectKeys);
         long highestImportedNumber = indirectObjectKeys.stream().map(COSObjectKey::getNumber)
@@ -287,8 +273,7 @@ public class PDDocument implements Closeable
      *
      * @return The document that this layer sits on top of.
      */
-    public COSDocument getDocument()
-    {
+    public COSDocument getDocument() {
         return document;
     }
 
@@ -302,14 +287,11 @@ public class PDDocument implements Closeable
      *
      * @return The documents /Info dictionary, never null.
      */
-    public PDDocumentInformation getDocumentInformation()
-    {
-        if (documentInformation == null)
-        {
+    public PDDocumentInformation getDocumentInformation() {
+        if (documentInformation == null) {
             COSDictionary trailer = document.getTrailer();
             COSDictionary infoDic = trailer.getCOSDictionary(COSName.INFO);
-            if (infoDic == null)
-            {
+            if (infoDic == null) {
                 infoDic = new COSDictionary();
                 trailer.setItem(COSName.INFO, infoDic);
             }
@@ -327,8 +309,7 @@ public class PDDocument implements Closeable
      *
      * @param info The updated document information.
      */
-    public void setDocumentInformation(PDDocumentInformation info)
-    {
+    public void setDocumentInformation(PDDocumentInformation info) {
         documentInformation = info;
         document.getTrailer().setItem(COSName.INFO, info.getCOSObject());
     }
@@ -338,18 +319,13 @@ public class PDDocument implements Closeable
      *
      * @return The documents /Root dictionary
      */
-    public PDDocumentCatalog getDocumentCatalog()
-    {
-        if (documentCatalog == null)
-        {
+    public PDDocumentCatalog getDocumentCatalog() {
+        if (documentCatalog == null) {
             COSDictionary trailer = document.getTrailer();
             COSDictionary dictionary = trailer.getCOSDictionary(COSName.ROOT);
-            if (dictionary != null)
-            {
+            if (dictionary != null) {
                 documentCatalog = new PDDocumentCatalog(this, dictionary);
-            }
-            else
-            {
+            } else {
                 documentCatalog = new PDDocumentCatalog(this);
             }
         }
@@ -361,8 +337,7 @@ public class PDDocument implements Closeable
      *
      * @return true If this document is encrypted.
      */
-    public boolean isEncrypted()
-    {
+    public boolean isEncrypted() {
         return document.isEncrypted();
     }
 
@@ -374,10 +349,8 @@ public class PDDocument implements Closeable
      *
      * @return The encryption dictionary(most likely a PDStandardEncryption object)
      */
-    public PDEncryption getEncryption()
-    {
-        if (encryption == null && isEncrypted())
-        {
+    public PDEncryption getEncryption() {
+        if (encryption == null && isEncrypted()) {
             encryption = new PDEncryption(document.getEncryptionDictionary());
         }
         return encryption;
@@ -388,8 +361,7 @@ public class PDDocument implements Closeable
      *
      * @param encryption The encryption dictionary(most likely a PDStandardEncryption object)
      */
-    public void setEncryptionDictionary(PDEncryption encryption)
-    {
+    public void setEncryptionDictionary(PDEncryption encryption) {
         this.encryption = encryption;
     }
 
@@ -400,16 +372,14 @@ public class PDDocument implements Closeable
      *
      * @param ttf the TrueTypeFont to be registered
      */
-    public void registerTrueTypeFontForClosing(TrueTypeFont ttf)
-    {
+    public void registerTrueTypeFontForClosing(TrueTypeFont ttf) {
         fontsToClose.add(ttf);
     }
 
     /**
      * Returns the list of fonts which will be subset before the document is saved.
      */
-    Set<PDFont> getFontsToSubset()
-    {
+    Set<PDFont> getFontsToSubset() {
         return fontsToSubset;
     }
 
@@ -422,11 +392,9 @@ public class PDDocument implements Closeable
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
      * @param fileName The file to save as.
-     *
      * @throws IOException if the output could not be written
      */
-    public void save(String fileName) throws IOException
-    {
+    public void save(String fileName) throws IOException {
         save(new File(fileName));
     }
 
@@ -439,11 +407,9 @@ public class PDDocument implements Closeable
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
      * @param file The file to save as.
-     *
      * @throws IOException if the output could not be written
      */
-    public void save(File file) throws IOException
-    {
+    public void save(File file) throws IOException {
         save(file, CompressParameters.DEFAULT_COMPRESSION);
     }
 
@@ -456,12 +422,10 @@ public class PDDocument implements Closeable
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
      * @param output The stream to write to. It is recommended to wrap it in a {@link java.io.BufferedOutputStream},
-     * unless it is already buffered.
-     *
+     *               unless it is already buffered.
      * @throws IOException if the output could not be written
      */
-    public void save(OutputStream output) throws IOException
-    {
+    public void save(OutputStream output) throws IOException {
         save(output, CompressParameters.DEFAULT_COMPRESSION);
     }
 
@@ -473,21 +437,18 @@ public class PDDocument implements Closeable
      * If encryption has been activated (with {@link #protect(lpdf.pdfbox.pdmodel.encryption.ProtectionPolicy)
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
-     * @param file The file to save as.
+     * @param file               The file to save as.
      * @param compressParameters The parameters for the document's compression.
      * @throws IOException if the output could not be written
      */
-    public void save(File file, CompressParameters compressParameters) throws IOException
-    {
-        if (file.exists())
-        {
+    public void save(File file, CompressParameters compressParameters) throws IOException {
+        if (file.exists()) {
             LOG.warn(
                     "You are overwriting the existing file " + file.getName()
                             + ", this will produce a corrupted file if you're also reading from it");
         }
         try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(
-                new FileOutputStream(file)))
-        {
+                new FileOutputStream(file))) {
             save(bufferedOutputStream, compressParameters);
         }
     }
@@ -500,13 +461,11 @@ public class PDDocument implements Closeable
      * If encryption has been activated (with {@link #protect(lpdf.pdfbox.pdmodel.encryption.ProtectionPolicy)
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
-     * @param fileName The file to save as.
+     * @param fileName           The file to save as.
      * @param compressParameters The parameters for the document's compression.
-     *
      * @throws IOException if the output could not be written
      */
-    public void save(String fileName, CompressParameters compressParameters) throws IOException
-    {
+    public void save(String fileName, CompressParameters compressParameters) throws IOException {
         save(new File(fileName), compressParameters);
     }
 
@@ -518,16 +477,14 @@ public class PDDocument implements Closeable
      * If encryption has been activated (with {@link #protect(lpdf.pdfbox.pdmodel.encryption.ProtectionPolicy)
      * protect(ProtectionPolicy)}), do not use the document after saving because the contents are now encrypted.
      *
-     * @param output The stream to write to. It is recommended to wrap it in a {@link java.io.BufferedOutputStream},
-     * unless it is already buffered.
+     * @param output             The stream to write to. It is recommended to wrap it in a {@link java.io.BufferedOutputStream},
+     *                           unless it is already buffered.
      * @param compressParameters The parameters for the document's compression.
      * @throws IOException if the output could not be written
      */
     public void save(OutputStream output, CompressParameters compressParameters)
-            throws IOException
-    {
-        if (document.isClosed())
-        {
+            throws IOException {
+        if (document.isClosed()) {
             throw new IOException("Cannot save a document which has been closed");
         }
 
@@ -541,16 +498,13 @@ public class PDDocument implements Closeable
         writer.write(this);
     }
 
-    private void subsetDesignatedFonts() throws IOException
-    {
+    private void subsetDesignatedFonts() throws IOException {
         // subset designated fonts
-        for (PDFont font : fontsToSubset)
-        {
+        for (PDFont font : fontsToSubset) {
             font.subset();
         }
         fontsToSubset.clear();
     }
-
 
 
     /**
@@ -573,8 +527,7 @@ public class PDDocument implements Closeable
      *
      * @return the page tree
      */
-    public PDPageTree getPages()
-    {
+    public PDPageTree getPages() {
         return getDocumentCatalog().getPages();
     }
 
@@ -583,8 +536,7 @@ public class PDDocument implements Closeable
      *
      * @return The total number of pages in the PDF document.
      */
-    public int getNumberOfPages()
-    {
+    public int getNumberOfPages() {
         return getDocumentCatalog().getPages().getCount();
     }
 
@@ -594,11 +546,9 @@ public class PDDocument implements Closeable
      * @throws IOException If there is an error releasing resources.
      */
     @Override
-    public void close() throws IOException
-    {
-        if (!document.isClosed())
-        {
-             // Make sure that:
+    public void close() throws IOException {
+        if (!document.isClosed()) {
+            // Make sure that:
             // - first Exception is kept
             // - all IO resources are closed
             // - there's a way to see which errors occurred
@@ -606,8 +556,7 @@ public class PDDocument implements Closeable
             IOException firstException = null;
 
             // close resources and COSWriter
-            if (signingSupport != null)
-            {
+            if (signingSupport != null) {
                 firstException = IOUtils.closeAndLogException(signingSupport, LOG, "SigningSupport", firstException);
             }
 
@@ -615,20 +564,17 @@ public class PDDocument implements Closeable
             firstException = IOUtils.closeAndLogException(document, LOG, "COSDocument", firstException);
 
             // close the source PDF stream, if we read from one
-            if (pdfSource != null)
-            {
+            if (pdfSource != null) {
                 firstException = IOUtils.closeAndLogException(pdfSource, LOG, "RandomAccessRead pdfSource", firstException);
             }
 
             // close fonts
-            for (TrueTypeFont ttf : fontsToClose)
-            {
+            for (TrueTypeFont ttf : fontsToClose) {
                 firstException = IOUtils.closeAndLogException(ttf, LOG, "TrueTypeFont", firstException);
             }
 
             // rethrow first exception to keep method contract
-            if (firstException != null)
-            {
+            if (firstException != null) {
                 throw firstException;
             }
         }
@@ -642,30 +588,25 @@ public class PDDocument implements Closeable
      * <p>
      * Do not use the document after saving, because the structures are encrypted.
      *
-     * @see lpdf.pdfbox.pdmodel.encryption.StandardProtectionPolicy
-     * @see lpdf.pdfbox.pdmodel.encryption.PublicKeyProtectionPolicy
-     *
      * @param policy The protection policy.
      * @throws IOException if there isn't any suitable security handler.
+     * @see lpdf.pdfbox.pdmodel.encryption.StandardProtectionPolicy
+     * @see lpdf.pdfbox.pdmodel.encryption.PublicKeyProtectionPolicy
      */
-    public void protect(ProtectionPolicy policy) throws IOException
-    {
-        if (isAllSecurityToBeRemoved())
-        {
+    public void protect(ProtectionPolicy policy) throws IOException {
+        if (isAllSecurityToBeRemoved()) {
             LOG.warn("do not call setAllSecurityToBeRemoved(true) before calling protect(), "
                     + "as protect() implies setAllSecurityToBeRemoved(false)");
             setAllSecurityToBeRemoved(false);
         }
 
-        if (!isEncrypted())
-        {
+        if (!isEncrypted()) {
             encryption = new PDEncryption();
         }
 
         SecurityHandler<ProtectionPolicy> securityHandler =
                 SecurityHandlerFactory.INSTANCE.newSecurityHandlerForPolicy(policy);
-        if (securityHandler == null)
-        {
+        if (securityHandler == null) {
             throw new IOException("No security handler for policy " + policy);
         }
 
@@ -680,10 +621,8 @@ public class PDDocument implements Closeable
      *
      * @return the access permissions for the current user on the document.
      */
-    public AccessPermission getCurrentAccessPermission()
-    {
-        if (accessPermission == null)
-        {
+    public AccessPermission getCurrentAccessPermission() {
+        if (accessPermission == null) {
             accessPermission = AccessPermission.getOwnerAccessPermission();
         }
         return accessPermission;
@@ -694,8 +633,7 @@ public class PDDocument implements Closeable
      *
      * @return returns true if all security shall be removed otherwise false
      */
-    public boolean isAllSecurityToBeRemoved()
-    {
+    public boolean isAllSecurityToBeRemoved() {
         return allSecurityToBeRemoved;
     }
 
@@ -704,8 +642,7 @@ public class PDDocument implements Closeable
      *
      * @param removeAllSecurity remove all security if set to true
      */
-    public void setAllSecurityToBeRemoved(boolean removeAllSecurity)
-    {
+    public void setAllSecurityToBeRemoved(boolean removeAllSecurity) {
         allSecurityToBeRemoved = removeAllSecurity;
     }
 
@@ -714,8 +651,7 @@ public class PDDocument implements Closeable
      *
      * @return the document ID
      */
-    public Long getDocumentId()
-    {
+    public Long getDocumentId() {
         return documentId;
     }
 
@@ -724,8 +660,7 @@ public class PDDocument implements Closeable
      *
      * @param docId the new document ID
      */
-    public void setDocumentId(Long docId)
-    {
+    public void setDocumentId(Long docId) {
         documentId = docId;
     }
 
@@ -734,30 +669,22 @@ public class PDDocument implements Closeable
      *
      * @return the PDF version (e.g. 1.4f)
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         float headerVersionFloat = getDocument().getVersion();
         // there may be a second version information in the document catalog starting with 1.4
-        if (headerVersionFloat >= 1.4f)
-        {
+        if (headerVersionFloat >= 1.4f) {
             String catalogVersion = getDocumentCatalog().getVersion();
             float catalogVersionFloat = -1;
-            if (catalogVersion != null)
-            {
-                try
-                {
+            if (catalogVersion != null) {
+                try {
                     catalogVersionFloat = Float.parseFloat(catalogVersion);
-                }
-                catch(NumberFormatException exception)
-                {
+                } catch (NumberFormatException exception) {
                     LOG.error("Can't extract the version number of the document catalog.", exception);
                 }
             }
             // the most recent version is the correct one
             return Math.max(catalogVersionFloat, headerVersionFloat);
-        }
-        else
-        {
+        } else {
             return headerVersionFloat;
         }
     }
@@ -766,29 +693,22 @@ public class PDDocument implements Closeable
      * Sets the PDF specification version for this document.
      *
      * @param newVersion the new PDF version (e.g. 1.4f)
-     *
      */
-    public void setVersion(float newVersion)
-    {
+    public void setVersion(float newVersion) {
         float currentVersion = getVersion();
         // nothing to do?
-        if (Float.compare(newVersion,currentVersion) == 0)
-        {
+        if (Float.compare(newVersion, currentVersion) == 0) {
             return;
         }
         // the version can't be downgraded
-        if (newVersion < currentVersion)
-        {
+        if (newVersion < currentVersion) {
             LOG.error("It's not allowed to downgrade the version of a pdf.");
             return;
         }
         // update the catalog version if the document version is >= 1.4
-        if (getDocument().getVersion() >= 1.4f)
-        {
+        if (getDocument().getVersion() >= 1.4f) {
             getDocumentCatalog().setVersion(Float.toString(newVersion));
-        }
-        else
-        {
+        } else {
             // versions < 1.4f have a version header only
             getDocument().setVersion(newVersion);
         }
@@ -799,8 +719,7 @@ public class PDDocument implements Closeable
      *
      * @return the resource cache of the document
      */
-    public ResourceCache getResourceCache()
-    {
+    public ResourceCache getResourceCache() {
         return resourceCache;
     }
 
@@ -809,8 +728,7 @@ public class PDDocument implements Closeable
      *
      * @param resourceCache A resource cache, or null.
      */
-    public void setResourceCache(ResourceCache resourceCache)
-    {
+    public void setResourceCache(ResourceCache resourceCache) {
         this.resourceCache = resourceCache;
     }
 }

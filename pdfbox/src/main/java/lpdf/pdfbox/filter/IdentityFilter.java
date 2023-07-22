@@ -16,11 +16,12 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.cos.COSDictionary;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.io.IOUtils;
 
 /**
  * The IdentityFilter filter passes the data through without any modifications.
@@ -28,13 +29,11 @@ import lpdf.io.IOUtils;
  *
  * @author Adam Nichols
  */
-final class IdentityFilter extends Filter
-{
+final class IdentityFilter extends Filter {
     @Override
     public DecodeResult decode(InputStream encoded, OutputStream decoded,
-                                         COSDictionary parameters, int index)
-        throws IOException
-    {
+                               COSDictionary parameters, int index)
+            throws IOException {
         IOUtils.copy(encoded, decoded);
         decoded.flush();
         return new DecodeResult(parameters);
@@ -42,8 +41,7 @@ final class IdentityFilter extends Filter
 
     @Override
     protected void encode(InputStream input, OutputStream encoded, COSDictionary parameters)
-        throws IOException
-    {
+            throws IOException {
         IOUtils.copy(input, encoded);
         encoded.flush();
     }

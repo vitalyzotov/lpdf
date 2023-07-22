@@ -23,8 +23,7 @@ import lpdf.harmony.awt.geom.Point2D;
  *
  * @author Shaola Ren
  */
-class CoordinateColorPair
-{
+class CoordinateColorPair {
     final Point2D coordinate;
     final float[] color;
 
@@ -34,8 +33,7 @@ class CoordinateColorPair
      * @param p point
      * @param c color
      */
-    CoordinateColorPair(Point2D p, float[] c)
-    {
+    CoordinateColorPair(Point2D p, float[] c) {
         coordinate = p;
         color = c.clone();
     }

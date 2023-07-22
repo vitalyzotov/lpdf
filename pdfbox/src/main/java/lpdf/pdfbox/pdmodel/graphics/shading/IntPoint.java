@@ -18,7 +18,6 @@ package lpdf.pdfbox.pdmodel.graphics.shading;
 
 import lpdf.harmony.awt.Point;
 import lpdf.harmony.awt.geom.Point2D;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,36 +30,28 @@ import org.slf4j.LoggerFactory;
  *
  * @author Tilman Hausherr
  */
-class IntPoint extends Point
-{
+class IntPoint extends Point {
     private static final Logger LOG = LoggerFactory.getLogger(IntPoint.class);
 
-    IntPoint(int x, int y)
-    {
+    IntPoint(int x, int y) {
         super(x, y);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return 89 * (623 + this.x) + this.y;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            if (obj instanceof Point2D)
-            {
+        if (getClass() != obj.getClass()) {
+            if (obj instanceof Point2D) {
                 // hitting this branch means that the warning on top of the class wasn't read
                 LOG.error("IntPoint should not be used together with its base class");
             }

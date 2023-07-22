@@ -22,8 +22,7 @@ package lpdf.pdfbox.pdmodel.font;
  *
  * @author John Hewson
  */
-public class PDPanoseClassification
-{
+public class PDPanoseClassification {
 
     /**
      * Length.
@@ -32,78 +31,65 @@ public class PDPanoseClassification
 
     private final byte[] bytes;
 
-    public PDPanoseClassification(byte[] bytes)
-    {
+    public PDPanoseClassification(byte[] bytes) {
         this.bytes = bytes;
     }
 
-    public int getFamilyKind()
-    {
+    public int getFamilyKind() {
         return bytes[0];
     }
 
-    public int getSerifStyle()
-    {
+    public int getSerifStyle() {
         return bytes[1];
     }
 
-    public int getWeight()
-    {
+    public int getWeight() {
         return bytes[2];
     }
 
-    public int getProportion()
-    {
+    public int getProportion() {
         return bytes[3];
     }
 
-    public int getContrast()
-    {
+    public int getContrast() {
         return bytes[4];
     }
 
-    public int getStrokeVariation()
-    {
+    public int getStrokeVariation() {
         return bytes[5];
     }
 
-    public int getArmStyle()
-    {
+    public int getArmStyle() {
         return bytes[6];
     }
 
-    public int getLetterform()
-    {
+    public int getLetterform() {
         return bytes[7];
     }
 
-    public int getMidline()
-    {
+    public int getMidline() {
         return bytes[8];
     }
 
-    public int getXHeight()
-    {
+    public int getXHeight() {
         return bytes[9];
     }
 
-    public byte[] getBytes()
-    {
+    public byte[] getBytes() {
         return bytes;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "{ FamilyKind = " + getFamilyKind() + ", " +
-                 "SerifStyle = " + getSerifStyle() + ", " +
-                 "Weight = " + getWeight() + ", " +
-                 "Proportion = " + getProportion() + ", " +
-                 "Contrast = " + getContrast() + ", " +
-                 "StrokeVariation = " + getStrokeVariation() + ", " +
-                 "ArmStyle = " + getArmStyle() + ", " +
-                 "Letterform = " + getLetterform() + ", " +
-                 "Midline = " + getMidline() + ", " +
-                 "XHeight = " + getXHeight() + "}";
+                "SerifStyle = " + getSerifStyle() + ", " +
+                "Weight = " + getWeight() + ", " +
+                "Proportion = " + getProportion() + ", " +
+                "Contrast = " + getContrast() + ", " +
+                "StrokeVariation = " + getStrokeVariation() + ", " +
+                "ArmStyle = " + getArmStyle() + ", " +
+                "Letterform = " + getLetterform() + ", " +
+                "Midline = " + getMidline() + ", " +
+                "XHeight = " + getXHeight() + "}";
     }
 }

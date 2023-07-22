@@ -25,16 +25,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDMarkInfo implements COSObjectable
-{
+public class PDMarkInfo implements COSObjectable {
     private final COSDictionary dictionary;
 
     /**
      * Default Constructor.
-     *
      */
-    public PDMarkInfo()
-    {
+    public PDMarkInfo() {
         dictionary = new COSDictionary();
     }
 
@@ -43,8 +40,7 @@ public class PDMarkInfo implements COSObjectable
      *
      * @param dic The existing dictionary.
      */
-    public PDMarkInfo( COSDictionary dic )
-    {
+    public PDMarkInfo(COSDictionary dic) {
         dictionary = dic;
     }
 
@@ -54,8 +50,7 @@ public class PDMarkInfo implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -64,9 +59,8 @@ public class PDMarkInfo implements COSObjectable
      *
      * @return true If this is a tagged PDF.
      */
-    public boolean isMarked()
-    {
-        return dictionary.getBoolean( "Marked", false );
+    public boolean isMarked() {
+        return dictionary.getBoolean("Marked", false);
     }
 
     /**
@@ -74,9 +68,8 @@ public class PDMarkInfo implements COSObjectable
      *
      * @param value The new marked value.
      */
-    public void setMarked( boolean value )
-    {
-        dictionary.setBoolean( "Marked", value );
+    public void setMarked(boolean value) {
+        dictionary.setBoolean("Marked", value);
     }
 
     /**
@@ -84,9 +77,8 @@ public class PDMarkInfo implements COSObjectable
      *
      * @return A boolean telling if the structure elements use user properties.
      */
-    public boolean usesUserProperties()
-    {
-        return dictionary.getBoolean( "UserProperties", false );
+    public boolean usesUserProperties() {
+        return dictionary.getBoolean("UserProperties", false);
     }
 
     /**
@@ -94,9 +86,8 @@ public class PDMarkInfo implements COSObjectable
      *
      * @param userProps The new value for this property.
      */
-    public void setUserProperties( boolean userProps )
-    {
-        dictionary.setBoolean( "UserProperties", userProps );
+    public void setUserProperties(boolean userProps) {
+        dictionary.setBoolean("UserProperties", userProps);
     }
 
     /**
@@ -105,9 +96,8 @@ public class PDMarkInfo implements COSObjectable
      *
      * @return true if the suspect flag has been set.
      */
-    public boolean isSuspect()
-    {
-        return dictionary.getBoolean( "Suspects", false );
+    public boolean isSuspect() {
+        return dictionary.getBoolean("Suspects", false);
     }
 
     /**
@@ -117,8 +107,7 @@ public class PDMarkInfo implements COSObjectable
      *
      * @param suspect The new "Suspects" value.
      */
-    public void setSuspect( boolean suspect )
-    {
-        dictionary.setBoolean( "Suspects", false );
+    public void setSuspect(boolean suspect) {
+        dictionary.setBoolean("Suspects", false);
     }
 }

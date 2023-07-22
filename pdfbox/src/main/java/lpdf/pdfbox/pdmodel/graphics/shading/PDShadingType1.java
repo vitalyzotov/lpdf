@@ -16,13 +16,12 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
+import lpdf.harmony.awt.geom.AffineTransform;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.util.Matrix;
-
-import lpdf.harmony.awt.geom.AffineTransform;
 
 /**
  * Resources for a function based shading.

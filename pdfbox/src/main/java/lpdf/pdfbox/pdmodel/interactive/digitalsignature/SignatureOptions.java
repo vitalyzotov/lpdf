@@ -16,22 +16,21 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.digitalsignature;
 
+import lpdf.io.RandomAccessRead;
+import lpdf.io.RandomAccessReadBuffer;
+import lpdf.io.RandomAccessReadBufferedFile;
+import lpdf.pdfbox.cos.COSDocument;
+import lpdf.pdfbox.pdfparser.PDFParser;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import lpdf.pdfbox.cos.COSDocument;
-import lpdf.io.RandomAccessReadBuffer;
-import lpdf.io.RandomAccessReadBufferedFile;
-import lpdf.io.RandomAccessRead;
-import lpdf.pdfbox.pdfparser.PDFParser;
-
 /**
  * This contains the visual signature as a COSDocument, its preferred size and the page.
  */
-public class SignatureOptions implements Closeable
-{
+public class SignatureOptions implements Closeable {
     private COSDocument visualSignature;
     private int preferredSignatureSize;
     private int pageNo;
@@ -45,8 +44,7 @@ public class SignatureOptions implements Closeable
     /**
      * Creates the default signature options.
      */
-    public SignatureOptions()
-    {
+    public SignatureOptions() {
         pageNo = 0;
     }
 
@@ -55,8 +53,7 @@ public class SignatureOptions implements Closeable
      *
      * @param pageNo the page number
      */
-    public void setPage(int pageNo)
-    {
+    public void setPage(int pageNo) {
         this.pageNo = pageNo;
     }
 
@@ -65,8 +62,7 @@ public class SignatureOptions implements Closeable
      *
      * @return the page number
      */
-    public int getPage()
-    {
+    public int getPage() {
         return pageNo;
     }
 
@@ -76,8 +72,7 @@ public class SignatureOptions implements Closeable
      * @param file the file containing the visual signature
      * @throws IOException when something went wrong during parsing
      */
-    public void setVisualSignature(File file) throws IOException
-    {
+    public void setVisualSignature(File file) throws IOException {
         initFromRandomAccessRead(new RandomAccessReadBufferedFile(file));
     }
 
@@ -87,13 +82,11 @@ public class SignatureOptions implements Closeable
      * @param is the input stream containing the visual signature
      * @throws IOException when something went wrong during parsing
      */
-    public void setVisualSignature(InputStream is) throws IOException
-    {
+    public void setVisualSignature(InputStream is) throws IOException {
         initFromRandomAccessRead(new RandomAccessReadBuffer(is));
     }
 
-    private void initFromRandomAccessRead(RandomAccessRead rar) throws IOException
-    {
+    private void initFromRandomAccessRead(RandomAccessRead rar) throws IOException {
         pdfSource = rar;
         PDFParser parser = new PDFParser(pdfSource);
         visualSignature = parser.parse().getDocument();
@@ -104,8 +97,7 @@ public class SignatureOptions implements Closeable
      *
      * @return the visual signature
      */
-    public COSDocument getVisualSignature()
-    {
+    public COSDocument getVisualSignature() {
         return visualSignature;
     }
 
@@ -114,8 +106,7 @@ public class SignatureOptions implements Closeable
      *
      * @return the preferred size of the signature in bytes.
      */
-    public int getPreferredSignatureSize()
-    {
+    public int getPreferredSignatureSize() {
         return preferredSignatureSize;
     }
 
@@ -124,10 +115,8 @@ public class SignatureOptions implements Closeable
      *
      * @param size the size of the signature in bytes. Only values above 0 will be considered.
      */
-    public void setPreferredSignatureSize(int size)
-    {
-        if (size > 0)
-        {
+    public void setPreferredSignatureSize(int size) {
+        if (size > 0) {
             preferredSignatureSize = size;
         }
     }
@@ -140,19 +129,13 @@ public class SignatureOptions implements Closeable
      * @throws IOException if the document could not be closed
      */
     @Override
-    public void close() throws IOException
-    {
-        try
-        {
-            if (visualSignature != null)
-            {
+    public void close() throws IOException {
+        try {
+            if (visualSignature != null) {
                 visualSignature.close();
             }
-        }
-        finally
-        {
-            if (pdfSource != null)
-            {
+        } finally {
+            if (pdfSource != null) {
                 pdfSource.close();
             }
         }

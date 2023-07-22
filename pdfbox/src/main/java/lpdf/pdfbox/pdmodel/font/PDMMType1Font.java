@@ -25,17 +25,14 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class PDMMType1Font extends PDType1Font
-{
+public class PDMMType1Font extends PDType1Font {
     /**
      * Creates an MMType1Font from a Font dictionary in a PDF.
      *
      * @param fontDictionary font dictionary
-     * 
      * @throws IOException if the font could not be read
      */
-    public PDMMType1Font(COSDictionary fontDictionary) throws IOException
-    {
+    public PDMMType1Font(COSDictionary fontDictionary) throws IOException {
         super(fontDictionary);
     }
 }

@@ -28,8 +28,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public class NormalXReference extends AbstractXReference
-{
+public class NormalXReference extends AbstractXReference {
 
     private final long byteOffset;
     private final COSObjectKey key;
@@ -41,22 +40,18 @@ public class NormalXReference extends AbstractXReference
      * ({@link PDFXRefStream}).
      *
      * @param byteOffset The byte offset of the {@link COSObject} in the PDF file.
-     * @param key The {@link COSObjectKey}, that is represented by this entry.
-     * @param object The {@link COSObject}, that is represented by this entry.
+     * @param key        The {@link COSObjectKey}, that is represented by this entry.
+     * @param object     The {@link COSObject}, that is represented by this entry.
      */
-    public NormalXReference(long byteOffset, COSObjectKey key, COSBase object)
-    {
+    public NormalXReference(long byteOffset, COSObjectKey key, COSBase object) {
         super(XReferenceType.NORMAL);
         this.byteOffset = byteOffset;
         this.key = key;
         this.object = object;
         COSBase base = object instanceof COSObject ? ((COSObject) object).getObject() : object;
-        if (base instanceof COSStream)
-        {
+        if (base instanceof COSStream) {
             objectStream = COSName.OBJ_STM.equals(((COSStream) base).getCOSName(COSName.TYPE));
-        }
-        else
-        {
+        } else {
             objectStream = false;
         }
     }
@@ -66,8 +61,7 @@ public class NormalXReference extends AbstractXReference
      *
      * @return The byte offset of the {@link COSObject} in the PDF file.
      */
-    public long getByteOffset()
-    {
+    public long getByteOffset() {
         return byteOffset;
     }
 
@@ -77,8 +71,7 @@ public class NormalXReference extends AbstractXReference
      * @return The {@link COSObjectKey} of the object, that is described by this crossreference stream entry.
      */
     @Override
-    public COSObjectKey getReferencedKey()
-    {
+    public COSObjectKey getReferencedKey() {
         return key;
     }
 
@@ -87,8 +80,7 @@ public class NormalXReference extends AbstractXReference
      *
      * @return The {@link COSObject}, that is described by this crossreference stream entry.
      */
-    public COSBase getObject()
-    {
+    public COSBase getObject() {
         return object;
     }
 
@@ -97,8 +89,7 @@ public class NormalXReference extends AbstractXReference
      *
      * @return True, if the referenced object is an object stream.
      */
-    public boolean isObjectStream()
-    {
+    public boolean isObjectStream() {
         return objectStream;
     }
 
@@ -109,8 +100,7 @@ public class NormalXReference extends AbstractXReference
      * @return The value for the second column of the crossreference stream entry.
      */
     @Override
-    public long getSecondColumnValue()
-    {
+    public long getSecondColumnValue() {
         return getByteOffset();
     }
 
@@ -121,8 +111,7 @@ public class NormalXReference extends AbstractXReference
      * @return The value for the third column of the crossreference stream entry.
      */
     @Override
-    public long getThirdColumnValue()
-    {
+    public long getThirdColumnValue() {
         return getReferencedKey().getGeneration();
     }
 
@@ -132,8 +121,7 @@ public class NormalXReference extends AbstractXReference
      * @return A string representation of this crossreference stream entry.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return (isObjectStream() ? "ObjectStreamParent{" : "NormalReference{") + " key=" + key
                 + ", type=" + getType().getNumericValue() + ", byteOffset=" + byteOffset + " }";
     }

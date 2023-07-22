@@ -19,30 +19,28 @@ package lpdf.pdfbox.pdmodel.common.function.type4;
 /**
  * Parser for PDF Type 4 functions. This implements a small subset of the PostScript
  * language but is no full PostScript interpreter.
- *
  */
-public final class Parser
-{
+public final class Parser {
 
-    /** Used to indicate the parsers current state. */
-    private enum State
-    {
+    /**
+     * Used to indicate the parsers current state.
+     */
+    private enum State {
         NEWLINE, WHITESPACE, COMMENT, TOKEN
     }
 
-    private Parser()
-    {
+    private Parser() {
         //nop
     }
 
     /**
      * Parses a Type 4 function and sends the syntactic elements to the given
      * syntax handler.
-     * @param input the text source
+     *
+     * @param input   the text source
      * @param handler the syntax handler
      */
-    public static void parse(CharSequence input, SyntaxHandler handler)
-    {
+    public static void parse(CharSequence input, SyntaxHandler handler) {
         Tokenizer tokenizer = new Tokenizer(input, handler);
         tokenizer.tokenize();
     }
@@ -51,17 +49,18 @@ public final class Parser
      * This interface defines all possible syntactic elements of a Type 4 function.
      * It is called by the parser as the function is interpreted.
      */
-    public interface SyntaxHandler
-    {
+    public interface SyntaxHandler {
 
         /**
          * Indicates that a new line starts.
+         *
          * @param text the new line character (CR, LF, CR/LF or FF)
          */
         void newLine(CharSequence text);
 
         /**
          * Called when whitespace characters are encountered.
+         *
          * @param text the whitespace text
          */
         void whitespace(CharSequence text);
@@ -69,12 +68,14 @@ public final class Parser
         /**
          * Called when a token is encountered. No distinction between operators and values
          * is done here.
+         *
          * @param text the token text
          */
         void token(CharSequence text);
 
         /**
          * Called for a comment.
+         *
          * @param text the comment
          */
         void comment(CharSequence text);
@@ -83,27 +84,29 @@ public final class Parser
     /**
      * Abstract base class for a {@link SyntaxHandler}.
      */
-    public abstract static class AbstractSyntaxHandler implements SyntaxHandler
-    {
+    public abstract static class AbstractSyntaxHandler implements SyntaxHandler {
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public void comment(CharSequence text)
-        {
+        public void comment(CharSequence text) {
             //nop
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public void newLine(CharSequence text)
-        {
+        public void newLine(CharSequence text) {
             //nop
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public void whitespace(CharSequence text)
-        {
+        public void whitespace(CharSequence text) {
             //nop
         }
 
@@ -112,8 +115,7 @@ public final class Parser
     /**
      * Tokenizer for Type 4 functions.
      */
-    private static final class Tokenizer
-    {
+    private static final class Tokenizer {
 
         private static final char NUL = '\u0000'; //NUL
         private static final char EOT = '\u0004'; //END OF TRANSMISSION
@@ -129,101 +131,83 @@ public final class Parser
         private State state = State.WHITESPACE;
         private final StringBuilder buffer = new StringBuilder();
 
-        private Tokenizer(CharSequence text, SyntaxHandler syntaxHandler)
-        {
+        private Tokenizer(CharSequence text, SyntaxHandler syntaxHandler) {
             this.input = text;
             this.handler = syntaxHandler;
         }
 
-        private boolean hasMore()
-        {
+        private boolean hasMore() {
             return index < input.length();
         }
 
-        private char currentChar()
-        {
+        private char currentChar() {
             return input.charAt(index);
         }
 
-        private char nextChar()
-        {
+        private char nextChar() {
             index++;
-            if (!hasMore())
-            {
+            if (!hasMore()) {
                 return EOT;
-            }
-            else
-            {
+            } else {
                 return currentChar();
             }
         }
 
-        private char peek()
-        {
-            if (index < input.length() - 1)
-            {
+        private char peek() {
+            if (index < input.length() - 1) {
                 return input.charAt(index + 1);
-            }
-            else
-            {
+            } else {
                 return EOT;
             }
         }
 
-        private State nextState()
-        {
+        private State nextState() {
             char ch = currentChar();
-            switch (ch)
-            {
-            case CR:
-            case LF:
-            case FF: //FF
-                state = State.NEWLINE;
-                break;
-            case NUL:
-            case TAB:
-            case SPACE:
-                state = State.WHITESPACE;
-                break;
-            case '%':
-                state = State.COMMENT;
-                break;
-            default:
-                state = State.TOKEN;
+            switch (ch) {
+                case CR:
+                case LF:
+                case FF: //FF
+                    state = State.NEWLINE;
+                    break;
+                case NUL:
+                case TAB:
+                case SPACE:
+                    state = State.WHITESPACE;
+                    break;
+                case '%':
+                    state = State.COMMENT;
+                    break;
+                default:
+                    state = State.TOKEN;
             }
             return state;
         }
 
-        private void tokenize()
-        {
-            while (hasMore())
-            {
+        private void tokenize() {
+            while (hasMore()) {
                 buffer.setLength(0);
                 nextState();
-                switch (state)
-                {
-                case NEWLINE:
-                    scanNewLine();
-                    break;
-                case WHITESPACE:
-                    scanWhitespace();
-                    break;
-                case COMMENT:
-                    scanComment();
-                    break;
-                default:
-                    scanToken();
+                switch (state) {
+                    case NEWLINE:
+                        scanNewLine();
+                        break;
+                    case WHITESPACE:
+                        scanWhitespace();
+                        break;
+                    case COMMENT:
+                        scanComment();
+                        break;
+                    default:
+                        scanToken();
                 }
             }
         }
 
-        private void scanNewLine()
-        {
+        private void scanNewLine() {
             assert state == State.NEWLINE;
             char ch = currentChar();
             buffer.append(ch);
-            if (ch == CR && peek() == LF)
-            {
+            if (ch == CR && peek() == LF) {
                 //CRLF is treated as one newline
                 buffer.append(nextChar());
             }
@@ -231,83 +215,73 @@ public final class Parser
             nextChar();
         }
 
-        private void scanWhitespace()
-        {
+        private void scanWhitespace() {
             assert state == State.WHITESPACE;
             buffer.append(currentChar());
             loop:
-            while (hasMore())
-            {
+            while (hasMore()) {
                 char ch = nextChar();
-                switch (ch)
-                {
-                case NUL:
-                case TAB:
-                case SPACE:
-                    buffer.append(ch);
-                    break;
-                default:
-                    break loop;
+                switch (ch) {
+                    case NUL:
+                    case TAB:
+                    case SPACE:
+                        buffer.append(ch);
+                        break;
+                    default:
+                        break loop;
                 }
             }
             handler.whitespace(buffer);
         }
 
-        private void scanComment()
-        {
+        private void scanComment() {
             assert state == State.COMMENT;
             buffer.append(currentChar());
             loop:
-            while (hasMore())
-            {
+            while (hasMore()) {
                 char ch = nextChar();
-                switch (ch)
-                {
-                case CR:
-                case LF:
-                case FF:
-                    break loop;
-                default:
-                    buffer.append(ch);
+                switch (ch) {
+                    case CR:
+                    case LF:
+                    case FF:
+                        break loop;
+                    default:
+                        buffer.append(ch);
                 }
             }
             //EOF reached
             handler.comment(buffer);
         }
 
-        private void scanToken()
-        {
+        private void scanToken() {
             assert state == State.TOKEN;
             char ch = currentChar();
             buffer.append(ch);
-            switch (ch)
-            {
-            case '{':
-            case '}':
-                handler.token(buffer);
-                nextChar();
-                return;
-            default:
-                //continue
-            }
-            loop:
-            while (hasMore())
-            {
-                ch = nextChar();
-                switch (ch)
-                {
-                case NUL:
-                case TAB:
-                case SPACE:
-                case CR:
-                case LF:
-                case FF:
-                case EOT:
+            switch (ch) {
                 case '{':
                 case '}':
-                    break loop;
+                    handler.token(buffer);
+                    nextChar();
+                    return;
                 default:
-                    buffer.append(ch);
+                    //continue
+            }
+            loop:
+            while (hasMore()) {
+                ch = nextChar();
+                switch (ch) {
+                    case NUL:
+                    case TAB:
+                    case SPACE:
+                    case CR:
+                    case LF:
+                    case FF:
+                    case EOT:
+                    case '{':
+                    case '}':
+                        break loop;
+                    default:
+                        buffer.append(ch);
                 }
             }
             //EOF reached

@@ -16,10 +16,10 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.io.IOUtils;
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-import lpdf.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

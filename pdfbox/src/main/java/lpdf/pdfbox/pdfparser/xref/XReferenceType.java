@@ -24,8 +24,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public enum XReferenceType
-{
+public enum XReferenceType {
 
     FREE(0), NORMAL(1), OBJECT_STREAM_ENTRY(2);
 
@@ -36,8 +35,7 @@ public enum XReferenceType
      *
      * @param numericValue The numeric representation of this type.
      */
-    XReferenceType(int numericValue)
-    {
+    XReferenceType(int numericValue) {
         this.numericValue = numericValue;
     }
 
@@ -46,8 +44,7 @@ public enum XReferenceType
      *
      * @return The numeric representation of this type.
      */
-    public int getNumericValue()
-    {
+    public int getNumericValue() {
         return numericValue;
     }
 }

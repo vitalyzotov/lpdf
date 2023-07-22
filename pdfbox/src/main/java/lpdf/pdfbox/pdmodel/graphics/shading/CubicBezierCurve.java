@@ -23,8 +23,7 @@ import lpdf.harmony.awt.geom.Point2D;
  *
  * @author Shaola Ren
  */
-class CubicBezierCurve
-{
+class CubicBezierCurve {
     private final Point2D[] controlPoints;
     private final int level;
     private final Point2D[] curve;
@@ -33,12 +32,11 @@ class CubicBezierCurve
      * Constructor of CubicBezierCurve
      *
      * @param ctrlPnts 4 control points [p0, p1, p2, p3]
-     * @param l dividing level, if l = 0, one cubic Bezier curve is divided
-     * into 2^0 = 1 segments, if l = n, one cubic Bezier curve is divided into
-     * 2^n segments
+     * @param l        dividing level, if l = 0, one cubic Bezier curve is divided
+     *                 into 2^0 = 1 segments, if l = n, one cubic Bezier curve is divided into
+     *                 2^n segments
      */
-    CubicBezierCurve(Point2D[] ctrlPnts, int l)
-    {
+    CubicBezierCurve(Point2D[] ctrlPnts, int l) {
         controlPoints = ctrlPnts.clone();
         level = l;
         curve = getPoints(level);
@@ -49,24 +47,20 @@ class CubicBezierCurve
      *
      * @return level
      */
-    int getLevel()
-    {
+    int getLevel() {
         return level;
     }
 
     // calculate sampled points on the cubic Bezier curve defined by the 4 given control points
-    private Point2D[] getPoints(int l)
-    {
-        if (l < 0)
-        {
+    private Point2D[] getPoints(int l) {
+        if (l < 0) {
             l = 0;
         }
         int sz = (1 << l) + 1;
         Point2D[] res = new Point2D[sz];
         double step = (double) 1 / (sz - 1);
         double t = -step;
-        for (int i = 0; i < sz; i++)
-        {
+        for (int i = 0; i < sz; i++) {
             t += step;
             double tmpX = (1 - t) * (1 - t) * (1 - t) * controlPoints[0].getX()
                     + 3 * t * (1 - t) * (1 - t) * controlPoints[1].getX()
@@ -86,19 +80,15 @@ class CubicBezierCurve
      *
      * @return sampled points
      */
-    Point2D[] getCubicBezierCurve()
-    {
+    Point2D[] getCubicBezierCurve() {
         return curve;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Point2D p : controlPoints)
-        {
-            if (sb.length() > 0)
-            {
+        for (Point2D p : controlPoints) {
+            if (sb.length() > 0) {
                 sb.append(' ');
             }
             sb.append(p);

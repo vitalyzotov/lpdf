@@ -25,16 +25,13 @@ import lpdf.pdfbox.contentstream.operator.OperatorName;
  *
  * @author John Hewson
  */
-public final class LegacyFillNonZeroRule extends FillNonZeroRule
-{
-    public LegacyFillNonZeroRule(PDFGraphicsStreamEngine context)
-    {
+public final class LegacyFillNonZeroRule extends FillNonZeroRule {
+    public LegacyFillNonZeroRule(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.LEGACY_FILL_NON_ZERO;
     }
 }

@@ -23,43 +23,35 @@ import java.util.Set;
  * Model for data from the GSUB tables
  *
  * @author Palash Ray
- *
  */
-public interface GsubData
-{
+public interface GsubData {
     /**
      * To be used when there is no GSUB data available
      */
-    GsubData NO_DATA_FOUND = new GsubData()
-    {
+    GsubData NO_DATA_FOUND = new GsubData() {
 
         @Override
-        public boolean isFeatureSupported(String featureName)
-        {
+        public boolean isFeatureSupported(String featureName) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public Language getLanguage()
-        {
+        public Language getLanguage() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ScriptFeature getFeature(String featureName)
-        {
+        public ScriptFeature getFeature(String featureName) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public String getActiveScriptName()
-        {
+        public String getActiveScriptName() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public Set<String> getSupportedFeatures()
-        {
+        public Set<String> getSupportedFeatures() {
             throw new UnsupportedOperationException();
         }
     };

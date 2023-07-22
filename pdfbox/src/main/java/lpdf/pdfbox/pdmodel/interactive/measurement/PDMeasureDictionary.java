@@ -22,10 +22,8 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * This class represents a measure dictionary.
- *
  */
-public class PDMeasureDictionary implements COSObjectable
-{
+public class PDMeasureDictionary implements COSObjectable {
     /**
      * The type of the dictionary.
      */
@@ -36,8 +34,7 @@ public class PDMeasureDictionary implements COSObjectable
     /**
      * Constructor.
      */
-    protected PDMeasureDictionary()
-    {
+    protected PDMeasureDictionary() {
         this.measureDictionary = new COSDictionary();
         this.getCOSObject().setName(COSName.TYPE, TYPE);
     }
@@ -47,8 +44,7 @@ public class PDMeasureDictionary implements COSObjectable
      *
      * @param dictionary the corresponding dictionary
      */
-    public PDMeasureDictionary(COSDictionary dictionary)
-    {
+    public PDMeasureDictionary(COSDictionary dictionary) {
         this.measureDictionary = dictionary;
     }
 
@@ -58,8 +54,7 @@ public class PDMeasureDictionary implements COSObjectable
      * @return the measure dictionary
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return this.measureDictionary;
     }
 
@@ -69,28 +64,27 @@ public class PDMeasureDictionary implements COSObjectable
      *
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return TYPE;
     }
 
     /**
      * returns the subtype of the measure dictionary.
+     *
      * @return the subtype of the measure data dictionary
      */
 
-    public String getSubtype()
-    {
+    public String getSubtype() {
         return this.getCOSObject().getNameAsString(COSName.SUBTYPE,
                 PDRectlinearMeasureDictionary.SUBTYPE);
     }
 
     /**
      * This will set the subtype of the measure dictionary.
+     *
      * @param subtype the subtype of the measure dictionary
      */
-    protected void setSubtype(String subtype)
-    {
+    protected void setSubtype(String subtype) {
         this.getCOSObject().setName(COSName.SUBTYPE, subtype);
     }
 

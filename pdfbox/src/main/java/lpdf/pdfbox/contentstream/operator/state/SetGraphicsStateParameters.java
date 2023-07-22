@@ -16,44 +16,39 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import lpdf.pdfbox.contentstream.PDFStreamEngine;
+import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
-import lpdf.pdfbox.contentstream.PDFStreamEngine;
-import lpdf.pdfbox.contentstream.operator.MissingOperandException;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * gs: Set parameters from graphics state parameter dictionary.
  *
  * @author Ben Litchfield
  */
-public class SetGraphicsStateParameters extends OperatorProcessor
-{
+public class SetGraphicsStateParameters extends OperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(SetGraphicsStateParameters.class);
 
-    public SetGraphicsStateParameters(PDFStreamEngine context)
-    {
+    public SetGraphicsStateParameters(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
         COSBase base0 = arguments.get(0);
-        if (!(base0 instanceof COSName))
-        {
+        if (!(base0 instanceof COSName)) {
             return;
         }
 
@@ -61,17 +56,15 @@ public class SetGraphicsStateParameters extends OperatorProcessor
         COSName graphicsName = (COSName) base0;
         PDFStreamEngine context = getContext();
         PDExtendedGraphicsState gs = context.getResources().getExtGState(graphicsName);
-        if (gs == null)
-        {
+        if (gs == null) {
             LOG.error("name for 'gs' operator not found in resources: /" + graphicsName.getName());
             return;
         }
-        gs.copyIntoGraphicsState( context.getGraphicsState() );
+        gs.copyIntoGraphicsState(context.getGraphicsState());
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_GRAPHICS_STATE_PARAMS;
     }
 }

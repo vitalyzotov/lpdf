@@ -17,26 +17,23 @@
 
 package lpdf.pdfbox.pdmodel.graphics.color;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * Test for power user creation of a custom default CMYK color space.
  *
  * @author John Hewson
  */
-class PDDeviceCMYKTest
-{
+class PDDeviceCMYKTest {
     @Test
-    void testCMYK() throws IOException
-    {
+    void testCMYK() throws IOException {
         PDDeviceCMYK.INSTANCE = new CustomDeviceCMYK();
     }
 
-    private static class CustomDeviceCMYK extends PDDeviceCMYK
-    {
-        protected CustomDeviceCMYK() throws IOException
-        {
+    private static class CustomDeviceCMYK extends PDDeviceCMYK {
+        protected CustomDeviceCMYK() throws IOException {
         }
     }
 }

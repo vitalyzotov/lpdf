@@ -23,10 +23,8 @@ import java.util.List;
  * This class splits an array of GlyphIds with a prospective match.
  *
  * @author Palash Ray
- *
  */
-public interface GlyphArraySplitter
-{
+public interface GlyphArraySplitter {
 
     List<List<Integer>> split(List<Integer> glyphIds);
 

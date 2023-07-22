@@ -15,11 +15,12 @@
  */
 package lpdf.pdfbox.pdfparser;
 
-import java.io.IOException;
-import java.util.List;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Tilman Hausherr
  */
-class PDFStreamParserTest
-{
+class PDFStreamParserTest {
 
     /**
      * Tests for inline images, whether the EI is correctly identified as
@@ -40,8 +40,7 @@ class PDFStreamParserTest
      * @throws IOException
      */
     @Test
-    void testInlineImages() throws IOException
-    {
+    void testInlineImages() throws IOException {
         testInlineImage2ops("ID\n12345EI Q", "12345", "Q");
         testInlineImage2ops("ID\n12345EI EMC", "12345", "EMC");
         testInlineImage2ops("ID\n12345EI Q ", "12345", "Q");
@@ -90,8 +89,7 @@ class PDFStreamParserTest
     }
 
     // checks whether there are two operators, one inline image and the named operator
-    private void testInlineImage2ops(String s, String imageDataString, String opName) throws IOException
-    {
+    private void testInlineImage2ops(String s, String imageDataString, String opName) throws IOException {
         List<Object> tokens = parseTokenString(s);
 
         assertEquals(2, tokens.size());
@@ -104,8 +102,7 @@ class PDFStreamParserTest
     }
 
     // checks whether there is one operator, one inline image
-    private void testInlineImage1op(String s, String imageDataString) throws IOException
-    {
+    private void testInlineImage1op(String s, String imageDataString) throws IOException {
         List<Object> tokens = parseTokenString(s);
 
         assertEquals(1, tokens.size());
@@ -116,8 +113,7 @@ class PDFStreamParserTest
     }
 
     // parse string and return list of tokens
-    private List<Object> parseTokenString(String s) throws IOException
-    {
+    private List<Object> parseTokenString(String s) throws IOException {
         PDFStreamParser pdfStreamParser = new PDFStreamParser(s.getBytes());
         return pdfStreamParser.parse();
     }

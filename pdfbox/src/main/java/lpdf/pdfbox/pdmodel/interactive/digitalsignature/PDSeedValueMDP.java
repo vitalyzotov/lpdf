@@ -25,15 +25,13 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author Thomas Chojecki
  */
-public class PDSeedValueMDP
-{
+public class PDSeedValueMDP {
     private final COSDictionary dictionary;
 
     /**
      * Default constructor.
      */
-    public PDSeedValueMDP()
-    {
+    public PDSeedValueMDP() {
         dictionary = new COSDictionary();
         dictionary.setDirect(true);
     }
@@ -43,8 +41,7 @@ public class PDSeedValueMDP
      *
      * @param dict The signature dictionary.
      */
-    public PDSeedValueMDP(COSDictionary dict)
-    {
+    public PDSeedValueMDP(COSDictionary dict) {
         dictionary = dict;
         dictionary.setDirect(true);
     }
@@ -54,8 +51,7 @@ public class PDSeedValueMDP
      *
      * @return The COS dictionary that matches this Java object.
      */
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -64,8 +60,7 @@ public class PDSeedValueMDP
      *
      * @return the P value
      */
-    public int getP()
-    {
+    public int getP() {
         return dictionary.getInt(COSName.P);
     }
 
@@ -74,10 +69,8 @@ public class PDSeedValueMDP
      *
      * @param p the value to be set as P
      */
-    public void setP(int p)
-    {
-        if (p < 0 || p > 3)
-        {
+    public void setP(int p) {
+        if (p < 0 || p > 3) {
             throw new IllegalArgumentException("Only values between 0 and 3 nare allowed.");
         }
         dictionary.setInt(COSName.P, p);

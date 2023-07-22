@@ -23,32 +23,26 @@ package lpdf.fontbox.ttf.table.common;
  * in the Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class LookupListTable
-{
+public class LookupListTable {
     private final int lookupCount;
     private final LookupTable[] lookups;
 
-    public LookupListTable(int lookupCount, LookupTable[] lookups)
-    {
+    public LookupListTable(int lookupCount, LookupTable[] lookups) {
         this.lookupCount = lookupCount;
         this.lookups = lookups;
     }
 
-    public int getLookupCount()
-    {
+    public int getLookupCount() {
         return lookupCount;
     }
 
-    public LookupTable[] getLookups()
-    {
+    public LookupTable[] getLookups() {
         return lookups;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("%s[lookupCount=%d]", LookupListTable.class.getSimpleName(),
                 lookupCount);
     }

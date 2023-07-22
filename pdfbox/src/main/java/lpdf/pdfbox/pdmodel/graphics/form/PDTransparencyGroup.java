@@ -27,14 +27,13 @@ import lpdf.pdfbox.pdmodel.common.PDStream;
  *
  * @author John Hewson
  */
-public class PDTransparencyGroup extends PDFormXObject
-{
+public class PDTransparencyGroup extends PDFormXObject {
     /**
      * Creates a Transparency Group for reading.
+     *
      * @param stream The XObject stream
      */
-    public PDTransparencyGroup(PDStream stream)
-    {
+    public PDTransparencyGroup(PDStream stream) {
         super(stream);
     }
 
@@ -42,19 +41,18 @@ public class PDTransparencyGroup extends PDFormXObject
      * Creates a Transparency Group for reading.
      *
      * @param stream The XObject stream
-     * @param cache the cache to be used for the resources
+     * @param cache  the cache to be used for the resources
      */
-    public PDTransparencyGroup(COSStream stream, ResourceCache cache)
-    {
+    public PDTransparencyGroup(COSStream stream, ResourceCache cache) {
         super(stream, cache);
     }
 
     /**
      * Creates a Transparency Group for writing, in the given document.
+     *
      * @param document The current document
      */
-    public PDTransparencyGroup(PDDocument document)
-    {
+    public PDTransparencyGroup(PDDocument document) {
         super(document);
         // todo: set mandatory fields
     }

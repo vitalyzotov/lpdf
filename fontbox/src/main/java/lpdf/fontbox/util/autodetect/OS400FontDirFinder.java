@@ -19,13 +19,11 @@ package lpdf.fontbox.util.autodetect;
 /**
  * Font finder for OS/400 systems.
  */
-public class OS400FontDirFinder extends NativeFontDirFinder
-{
+public class OS400FontDirFinder extends NativeFontDirFinder {
     @Override
-    protected String[] getSearchableDirectories()
-    {
-        return new String[] { System.getProperty("user.home") + "/.fonts", // user
-            "/QIBM/ProdData/OS400/Fonts"
+    protected String[] getSearchableDirectories() {
+        return new String[]{System.getProperty("user.home") + "/.fonts", // user
+                "/QIBM/ProdData/OS400/Fonts"
         };
     }
 }

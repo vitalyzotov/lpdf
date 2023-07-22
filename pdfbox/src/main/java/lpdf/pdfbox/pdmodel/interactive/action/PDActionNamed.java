@@ -21,8 +21,7 @@ import lpdf.pdfbox.cos.COSDictionary;
 /**
  * This represents a named action in a PDF document.
  */
-public class PDActionNamed extends PDAction
-{
+public class PDActionNamed extends PDAction {
     /**
      * This type of action this object represents.
      */
@@ -31,8 +30,7 @@ public class PDActionNamed extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionNamed()
-    {
+    public PDActionNamed() {
         setSubType(SUB_TYPE);
     }
 
@@ -41,8 +39,7 @@ public class PDActionNamed extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionNamed(COSDictionary a)
-    {
+    public PDActionNamed(COSDictionary a) {
         super(a);
     }
 
@@ -51,8 +48,7 @@ public class PDActionNamed extends PDAction
      *
      * @return The name of the action to be performed.
      */
-    public String getN()
-    {
+    public String getN() {
         return action.getNameAsString("N");
     }
 
@@ -61,8 +57,7 @@ public class PDActionNamed extends PDAction
      *
      * @param name The name of the action to be performed.
      */
-    public void setN(String name)
-    {
+    public void setN(String name) {
         action.setName("N", name);
     }
 }

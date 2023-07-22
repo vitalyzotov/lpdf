@@ -16,6 +16,8 @@
  */
 package lpdf.pdfbox.cos;
 
+import lpdf.pdfbox.pdmodel.common.COSObjectable;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,23 +26,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import lpdf.pdfbox.pdmodel.common.COSObjectable;
-
 /**
  * An array of PDFBase objects as part of the PDF document.
  *
  * @author Ben Litchfield
  */
-public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInfo
-{
+public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInfo {
     private final List<COSBase> objects = new ArrayList<>();
     private final COSUpdateState updateState;
 
     /**
      * Constructor.
      */
-    public COSArray()
-    {
+    public COSArray() {
         updateState = new COSUpdateState(this);
     }
 
@@ -49,15 +47,13 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param cosObjectables the initial list of COSObjectables
      */
-    public COSArray(List<? extends COSObjectable> cosObjectables)
-    {
-        if (cosObjectables == null)
-        {
+    public COSArray(List<? extends COSObjectable> cosObjectables) {
+        if (cosObjectables == null) {
             throw new IllegalArgumentException("List of COSObjectables cannot be null");
         }
         updateState = new COSUpdateState(this);
         cosObjectables.forEach(cosObjectable ->
-            objects.add(cosObjectable != null ? cosObjectable.getCOSObject() : null));
+                objects.add(cosObjectable != null ? cosObjectable.getCOSObject() : null));
     }
 
     /**
@@ -65,9 +61,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param object The object to add to the array.
      */
-    public void add( COSBase object )
-    {
-        objects.add( object );
+    public void add(COSBase object) {
+        objects.add(object);
         getUpdateState().update(object);
     }
 
@@ -76,9 +71,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param object The object to add to the array.
      */
-    public void add( COSObjectable object )
-    {
-        objects.add( object.getCOSObject() );
+    public void add(COSObjectable object) {
+        objects.add(object.getCOSObject());
         getUpdateState().update(object.getCOSObject());
     }
 
@@ -86,20 +80,18 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * Add the specified object at the ith location and push the rest to the
      * right.
      *
-     * @param i The index to add at.
+     * @param i      The index to add at.
      * @param object The object to add at that index.
      */
-    public void add( int i, COSBase object)
-    {
-        objects.add( i, object );
+    public void add(int i, COSBase object) {
+        objects.add(i, object);
         getUpdateState().update(object);
     }
 
     /**
      * This will remove all of the objects in the collection.
      */
-    public void clear()
-    {
+    public void clear() {
         objects.clear();
         getUpdateState().update();
     }
@@ -109,9 +101,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param objectsList The list of objects to remove from the collection.
      */
-    public void removeAll( Collection<COSBase> objectsList )
-    {
-        objects.removeAll( objectsList );
+    public void removeAll(Collection<COSBase> objectsList) {
+        objects.removeAll(objectsList);
         getUpdateState().update();
     }
 
@@ -120,10 +111,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param objectsList The list of objects to retain from the collection.
      */
-    public void retainAll( Collection<COSBase> objectsList )
-    {
-        if (objects.retainAll(objectsList))
-        {
+    public void retainAll(Collection<COSBase> objectsList) {
+        if (objects.retainAll(objectsList)) {
             getUpdateState().update();
         }
     }
@@ -133,10 +122,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param objectsList The object to add to the array.
      */
-    public void addAll( Collection<COSBase> objectsList )
-    {
-        if (objects.addAll(objectsList))
-        {
+    public void addAll(Collection<COSBase> objectsList) {
+        if (objects.addAll(objectsList)) {
             getUpdateState().update(objectsList);
         }
     }
@@ -146,12 +133,9 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param objectList The list of objects to add.
      */
-    public void addAll( COSArray objectList )
-    {
-        if( objectList != null )
-        {
-            if (objects.addAll(objectList.objects))
-            {
+    public void addAll(COSArray objectList) {
+        if (objectList != null) {
+            if (objects.addAll(objectList.objects)) {
                 getUpdateState().update(objectList);
             }
         }
@@ -161,13 +145,11 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * Add the specified object at the ith location and push the rest to the
      * right.
      *
-     * @param i The index to add at.
+     * @param i          The index to add at.
      * @param objectList The object to add at that index.
      */
-    public void addAll( int i, Collection<COSBase> objectList )
-    {
-        if (objects.addAll(i, objectList))
-        {
+    public void addAll(int i, Collection<COSBase> objectList) {
+        if (objects.addAll(i, objectList)) {
             getUpdateState().update(objectList);
         }
     }
@@ -175,41 +157,37 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
     /**
      * This will set an object at a specific index.
      *
-     * @param index zero based index into array.
+     * @param index  zero based index into array.
      * @param object The object to set.
      */
-    public void set( int index, COSBase object )
-    {
-        objects.set( index, object );
+    public void set(int index, COSBase object) {
+        objects.set(index, object);
         getUpdateState().update(object);
     }
 
     /**
      * This will set an object at a specific index.
      *
-     * @param index zero based index into array.
+     * @param index  zero based index into array.
      * @param intVal The object to set.
      */
-    public void set( int index, int intVal )
-    {
-        objects.set( index, COSInteger.get(intVal));
+    public void set(int index, int intVal) {
+        objects.set(index, COSInteger.get(intVal));
         getUpdateState().update();
     }
 
     /**
      * This will set an object at a specific index.
      *
-     * @param index zero based index into array.
+     * @param index  zero based index into array.
      * @param object The object to set.
      */
-    public void set( int index, COSObjectable object )
-    {
+    public void set(int index, COSObjectable object) {
         COSBase base = null;
-        if( object != null )
-        {
+        if (object != null) {
             base = object.getCOSObject();
         }
-        objects.set( index, base );
+        objects.set(index, base);
         getUpdateState().update(base);
     }
 
@@ -218,18 +196,14 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * If the object is COSNull then null will be returned.
      *
      * @param index The index into the array to get the object.
-     *
      * @return The object at the requested index.
      */
-    public COSBase getObject( int index )
-    {
-        COSBase obj = objects.get( index );
-        if( obj instanceof COSObject )
-        {
-            obj = ((COSObject)obj).getObject();
+    public COSBase getObject(int index) {
+        COSBase obj = objects.get(index);
+        if (obj instanceof COSObject) {
+            obj = ((COSObject) obj).getObject();
         }
-        if (obj instanceof COSNull)
-        {
+        if (obj instanceof COSNull) {
             obj = null;
         }
         return obj;
@@ -240,42 +214,35 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * the COS object.
      *
      * @param index The index into the array to get the object.
-     *
      * @return The object at the requested index.
      */
-    public COSBase get( int index )
-    {
-        return objects.get( index );
+    public COSBase get(int index) {
+        return objects.get(index);
     }
 
     /**
      * Get the value of the array as an integer.
      *
      * @param index The index into the list.
-     *
      * @return The value at that index or -1 if does not exist.
      */
-    public int getInt( int index )
-    {
-        return getInt( index, -1 );
+    public int getInt(int index) {
+        return getInt(index, -1);
     }
 
     /**
      * Get the value of the array as an integer, return the default if it does not exist.
      *
-     * @param index The value of the array.
+     * @param index        The value of the array.
      * @param defaultValue The value to return if the value is null.
      * @return The value at the index or the defaultValue.
      */
-    public int getInt( int index, int defaultValue )
-    {
+    public int getInt(int index, int defaultValue) {
         int retval = defaultValue;
-        if ( index < size() )
-        {
-            Object obj = objects.get( index );
-            if( obj instanceof COSNumber )
-            {
-                retval = ((COSNumber)obj).intValue();
+        if (index < size()) {
+            Object obj = objects.get(index);
+            if (obj instanceof COSNumber) {
+                retval = ((COSNumber) obj).intValue();
             }
         }
         return retval;
@@ -287,19 +254,18 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @param index The index into the array.
      * @param value The value to set.
      */
-    public void setInt( int index, int value )
-    {
-        set( index, COSInteger.get( value ) );
+    public void setInt(int index, int value) {
+        set(index, COSInteger.get(value));
     }
 
     /**
      * Set the value in the array as a name.
+     *
      * @param index The index into the array.
-     * @param name The name to set in the array.
+     * @param name  The name to set in the array.
      */
-    public void setName( int index, String name )
-    {
-        set( index, COSName.getPDFName( name ) );
+    public void setName(int index, String name) {
+        set(index, COSName.getPDFName(name));
     }
 
     /**
@@ -308,26 +274,23 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @param index The index into the array.
      * @return The name converted to a string or null if it does not exist.
      */
-    public String getName( int index )
-    {
-        return getName( index, null );
+    public String getName(int index) {
+        return getName(index, null);
     }
 
     /**
      * Get an entry in the array that is expected to be a COSName.
-     * @param index The index into the array.
+     *
+     * @param index        The index into the array.
      * @param defaultValue The value to return if it is null.
      * @return The value at the index or defaultValue if none is found.
      */
-    public String getName( int index, String defaultValue )
-    {
+    public String getName(int index, String defaultValue) {
         String retval = defaultValue;
-        if( index < size() )
-        {
-            Object obj = objects.get( index );
-            if( obj instanceof COSName )
-            {
-                retval = ((COSName)obj).getName();
+        if (index < size()) {
+            Object obj = objects.get(index);
+            if (obj instanceof COSName) {
+                retval = ((COSName) obj).getName();
             }
         }
         return retval;
@@ -335,18 +298,15 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
 
     /**
      * Set the value in the array as a string.
-     * @param index The index into the array.
+     *
+     * @param index  The index into the array.
      * @param string The string to set in the array.
      */
-    public void setString( int index, String string )
-    {
-        if ( string != null )
-        {
-            set( index, new COSString( string ) );
-        }
-        else
-        {
-            set( index, null );
+    public void setString(int index, String string) {
+        if (string != null) {
+            set(index, new COSString(string));
+        } else {
+            set(index, null);
         }
     }
 
@@ -356,26 +316,23 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @param index The index into the array.
      * @return The string or null if it does not exist.
      */
-    public String getString( int index )
-    {
-        return getString( index, null );
+    public String getString(int index) {
+        return getString(index, null);
     }
 
     /**
      * Get an entry in the array that is expected to be a COSName.
-     * @param index The index into the array.
+     *
+     * @param index        The index into the array.
      * @param defaultValue The value to return if it is null.
      * @return The value at the index or defaultValue if none is found.
      */
-    public String getString( int index, String defaultValue )
-    {
+    public String getString(int index, String defaultValue) {
         String retval = defaultValue;
-        if( index < size() )
-        {
-            Object obj = objects.get( index );
-            if( obj instanceof COSString )
-            {
-                retval = ((COSString)obj).getString();
+        if (index < size()) {
+            Object obj = objects.get(index);
+            if (obj instanceof COSString) {
+                retval = ((COSString) obj).getString();
             }
         }
         return retval;
@@ -386,8 +343,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return The number of elements in the array.
      */
-    public int size()
-    {
+    public int size() {
         return objects.size();
     }
 
@@ -395,12 +351,10 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * This will remove an element from the array.
      *
      * @param i The index of the object to remove.
-     *
      * @return The object that was removed.
      */
-    public COSBase remove( int i )
-    {
-        COSBase removedEntry = objects.remove( i );
+    public COSBase remove(int i) {
+        COSBase removedEntry = objects.remove(i);
         getUpdateState().update();
         return removedEntry;
     }
@@ -409,15 +363,12 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * This will remove an element from the array.
      *
      * @param o The object to remove.
-     *
      * @return <code>true</code> if the object was removed, <code>false</code>
-     *  otherwise
+     * otherwise
      */
-    public boolean remove( COSBase o )
-    {
+    public boolean remove(COSBase o) {
         boolean removed = objects.remove(o);
-        if (removed)
-        {
+        if (removed) {
             getUpdateState().update();
         }
         return removed;
@@ -429,21 +380,16 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param o The object to remove.
      * @return <code>true</code> if the object was removed, <code>false</code>
-     *  otherwise
+     * otherwise
      */
-    public boolean removeObject(COSBase o)
-    {
+    public boolean removeObject(COSBase o) {
         boolean removed = this.remove(o);
-        if (!removed)
-        {
-            for (int i = 0; i < this.size(); i++)
-            {
+        if (!removed) {
+            for (int i = 0; i < this.size(); i++) {
                 COSBase entry = this.get(i);
-                if (entry instanceof COSObject)
-                {
+                if (entry instanceof COSObject) {
                     COSObject objEntry = (COSObject) entry;
-                    if (objEntry.getObject().equals(o))
-                    {
+                    if (objEntry.getObject().equals(o)) {
                         return this.remove(entry);
                     }
                 }
@@ -456,8 +402,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "COSArray{" + objects + "}";
     }
 
@@ -467,8 +412,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @return an iterator over the array elements
      */
     @Override
-    public Iterator<COSBase> iterator()
-    {
+    public Iterator<COSBase> iterator() {
         return objects.iterator();
     }
 
@@ -478,20 +422,14 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @param object The object to search for.
      * @return The index of the object or -1.
      */
-    public int indexOf(COSBase object)
-    {
-        for (int i = 0; i < size(); i++)
-        {
+    public int indexOf(COSBase object) {
+        for (int i = 0; i < size(); i++) {
             COSBase item = get(i);
-            if (item == null)
-            {
-                if (object == null)
-                {
+            if (item == null) {
+                if (object == null) {
                     return i;
                 }
-            }
-            else if (item.equals(object))
-            {
+            } else if (item.equals(object)) {
                 return i;
             }
         }
@@ -505,21 +443,15 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @param object The object to search for.
      * @return The index of the object or -1.
      */
-    public int indexOfObject(COSBase object)
-    {
-        for (int i = 0; i < this.size(); i++)
-        {
+    public int indexOfObject(COSBase object) {
+        for (int i = 0; i < this.size(); i++) {
             COSBase item = this.get(i);
-            if (item == null)
-            {
-                if (item == object)
-                {
+            if (item == null) {
+                if (item == object) {
                     return i;
                 }
-            }
-            else if (item.equals(object)
-                    || item instanceof COSObject && ((COSObject) item).getObject().equals(object))
-            {
+            } else if (item.equals(object)
+                    || item instanceof COSObject && ((COSObject) item).getObject().equals(object)) {
                 return i;
             }
         }
@@ -533,9 +465,8 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param size The desired size of the array.
      */
-    public void growToSize( int size )
-    {
-        growToSize( size, null );
+    public void growToSize(int size) {
+        growToSize(size, null);
     }
 
     /**
@@ -543,14 +474,12 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * as large as the parameter.  If the array is already larger than the
      * parameter then nothing is done.
      *
-     * @param size The desired size of the array.
+     * @param size   The desired size of the array.
      * @param object The object to fill the array with.
      */
-    public void growToSize( int size, COSBase object )
-    {
-        while( size() < size )
-        {
-            add( object );
+    public void growToSize(int size, COSBase object) {
+        while (size() < size) {
+            add(object);
             getUpdateState().update(object);
         }
         getUpdateState().update();
@@ -563,8 +492,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @throws IOException If an error occurs while visiting this object.
      */
     @Override
-    public void accept(ICOSVisitor visitor) throws IOException
-    {
+    public void accept(ICOSVisitor visitor) throws IOException {
         visitor.visitFromArray(this);
     }
 
@@ -573,11 +501,9 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return This COSArray as an array of float numbers.
      */
-    public float[] toFloatArray()
-    {
+    public float[] toFloatArray() {
         float[] retval = new float[size()];
-        for (int i = 0; i < retval.length; i++)
-        {
+        for (int i = 0; i < retval.length; i++) {
             COSBase base = getObject(i);
             retval[i] = base instanceof COSNumber ? ((COSNumber) base).floatValue() : 0;
         }
@@ -589,22 +515,19 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @param value The new value of the float array.
      */
-    public void setFloatArray( float[] value )
-    {
+    public void setFloatArray(float[] value) {
         this.clear();
-        for (float aValue : value)
-        {
+        for (float aValue : value) {
             add(new COSFloat(aValue));
         }
     }
 
     /**
-     *  Return contents of COSArray as a Java List.
+     * Return contents of COSArray as a Java List.
      *
-     *  @return the COSArray as List
+     * @return the COSArray as List
      */
-    public List<? extends COSBase> toList()
-    {
+    public List<? extends COSBase> toList() {
         return new ArrayList<>(objects);
     }
 
@@ -613,8 +536,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return the list of names of the COSArray of COSNames
      */
-    public List<String> toCOSNameStringList()
-    {
+    public List<String> toCOSNameStringList() {
         return StreamSupport.stream(objects.spliterator(), false) //
                 .map(o -> ((COSName) o).getName()) //
                 .collect(Collectors.toList());
@@ -625,8 +547,7 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return the list of names of the COSArray of COSStrings
      */
-    public List<String> toCOSStringStringList()
-    {
+    public List<String> toCOSStringStringList() {
         return StreamSupport.stream(objects.spliterator(), false) //
                 .map(o -> ((COSString) o).getString()) //
                 .collect(Collectors.toList());
@@ -637,18 +558,13 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return the list of float values of the COSArray of COSNumbers
      */
-    public List<Float> toCOSNumberFloatList()
-    {
+    public List<Float> toCOSNumberFloatList() {
         List<Float> numbers = new ArrayList<>(size());
-        for (int i = 0; i < size(); i++)
-        {
+        for (int i = 0; i < size(); i++) {
             COSBase num = getObject(i);
-            if (num instanceof COSNumber)
-            {
+            if (num instanceof COSNumber) {
                 numbers.add(((COSNumber) num).floatValue());
-            }
-            else
-            {
+            } else {
                 numbers.add(null);
             }
         }
@@ -660,18 +576,13 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      *
      * @return the list of int values of the COSArray of COSNumbers
      */
-    public List<Integer> toCOSNumberIntegerList()
-    {
+    public List<Integer> toCOSNumberIntegerList() {
         List<Integer> numbers = new ArrayList<>(size());
-        for (int i = 0; i < size(); i++)
-        {
+        for (int i = 0; i < size(); i++) {
             COSBase num = getObject(i);
-            if (num instanceof COSNumber)
-            {
+            if (num instanceof COSNumber) {
                 numbers.add(((COSNumber) num).intValue());
-            }
-            else
-            {
+            } else {
                 numbers.add(null);
             }
         }
@@ -682,11 +593,9 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * This will take a list of integer objects and return a COSArray of COSInteger objects.
      *
      * @param integer A list of integers
-     *
      * @return An array of COSInteger objects
      */
-    public static COSArray ofCOSIntegers(List<Integer> integer)
-    {
+    public static COSArray ofCOSIntegers(List<Integer> integer) {
         COSArray retval = new COSArray();
         integer.forEach(s -> retval.add(COSInteger.get(s.longValue())));
         return retval;
@@ -696,11 +605,9 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * This will take a list of string objects and return a COSArray of COSName objects.
      *
      * @param strings A list of strings
-     *
      * @return An array of COSName objects
      */
-    public static COSArray ofCOSNames(List<String> strings)
-    {
+    public static COSArray ofCOSNames(List<String> strings) {
         COSArray retval = new COSArray();
         strings.forEach(s -> retval.add(COSName.getPDFName(s)));
         return retval;
@@ -710,11 +617,9 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * This will take a list of string objects and return a COSArray of COSName objects.
      *
      * @param strings A list of strings
-     *
      * @return An array of COSName objects
      */
-    public static COSArray ofCOSStrings(List<String> strings)
-    {
+    public static COSArray ofCOSStrings(List<String> strings) {
         COSArray retval = new COSArray();
         strings.forEach(s -> retval.add(new COSString(s)));
         return retval;
@@ -727,69 +632,51 @@ public class COSArray extends COSBase implements Iterable<COSBase>, COSUpdateInf
      * @see COSUpdateState
      */
     @Override
-    public COSUpdateState getUpdateState()
-    {
+    public COSUpdateState getUpdateState() {
         return updateState;
     }
 
     /**
      * Collects all indirect objects numbers within this COSArray and all included dictionaries. It is used to avoid
      * mixed up object numbers when importing an existing page to another pdf.
-     *
+     * <p>
      * Expert use only. You might run into an endless recursion if choosing a wrong starting point.
      *
      * @param indirectObjects a list of already found indirect objects.
-     *
      */
-    public void getIndirectObjectKeys(List<COSObjectKey> indirectObjects)
-    {
-        if (indirectObjects == null)
-        {
+    public void getIndirectObjectKeys(List<COSObjectKey> indirectObjects) {
+        if (indirectObjects == null) {
             return;
         }
         COSObjectKey key = getKey();
-        if (key != null)
-        {
+        if (key != null) {
             // avoid endless recursions
-            if (indirectObjects.contains(key))
-            {
+            if (indirectObjects.contains(key)) {
                 return;
-            }
-            else
-            {
+            } else {
                 indirectObjects.add(key);
             }
         }
 
-        for (COSBase cosBase : objects)
-        {
+        for (COSBase cosBase : objects) {
             COSObjectKey cosBaseKey = cosBase.getKey();
-            if (cosBaseKey != null && indirectObjects.contains(cosBaseKey))
-            {
+            if (cosBaseKey != null && indirectObjects.contains(cosBaseKey)) {
                 continue;
             }
-            if (cosBase instanceof COSObject)
-            {
+            if (cosBase instanceof COSObject) {
                 // dereference object
                 COSBase referencedObject = ((COSObject) cosBase).getObject();
-                if (referencedObject instanceof COSDictionary)
-                {
+                if (referencedObject instanceof COSDictionary) {
                     // descend to included dictionary to collect all included indirect objects
                     ((COSDictionary) referencedObject).getIndirectObjectKeys(indirectObjects);
-                }
-                else if (referencedObject instanceof COSArray)
-                {
+                } else if (referencedObject instanceof COSArray) {
                     // descend to included array to collect all included indirect objects
                     ((COSArray) referencedObject).getIndirectObjectKeys(indirectObjects);
                 }
-            }
-            else if (cosBase instanceof COSDictionary)
-            {
+            } else if (cosBase instanceof COSDictionary) {
                 // descend to included dictionary to collect all included indirect objects
                 ((COSDictionary) cosBase).getIndirectObjectKeys(indirectObjects);
-            }
-            else if (cosBase instanceof COSArray)
-            {
+            } else if (cosBase instanceof COSArray) {
                 // descend to included array to collect all included indirect objects
                 ((COSArray) cosBase).getIndirectObjectKeys(indirectObjects);
             }

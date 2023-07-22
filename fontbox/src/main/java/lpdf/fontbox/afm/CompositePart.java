@@ -21,40 +21,41 @@ package lpdf.fontbox.afm;
  *
  * @author Ben Litchfield
  */
-public class CompositePart
-{
+public class CompositePart {
     private final String name;
     private final int xDisplacement;
     private final int yDisplacement;
 
-    public CompositePart(String name, int xDisplacement, int yDisplacement)
-    {
+    public CompositePart(String name, int xDisplacement, int yDisplacement) {
         this.name = name;
         this.xDisplacement = xDisplacement;
         this.yDisplacement = yDisplacement;
     }
 
-    /** Getter for property name.
+    /**
+     * Getter for property name.
+     *
      * @return Value of property name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    /** Getter for property xDisplacement.
+    /**
+     * Getter for property xDisplacement.
+     *
      * @return Value of property xDisplacement.
      */
-    public int getXDisplacement()
-    {
+    public int getXDisplacement() {
         return xDisplacement;
     }
 
-    /** Getter for property yDisplacement.
+    /**
+     * Getter for property yDisplacement.
+     *
      * @return Value of property yDisplacement.
      */
-    public int getYDisplacement()
-    {
+    public int getYDisplacement() {
         return yDisplacement;
     }
 }

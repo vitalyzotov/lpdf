@@ -20,26 +20,23 @@
 
 package lpdf.pdfbox.pdmodel.graphics;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSInteger;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- *
  * @author Tilman Hausherr
  */
-class PDLineDashPatternTest
-{
+class PDLineDashPatternTest {
 
     /**
      * Test of getCOSObject method, of class PDLineDashPattern.
      */
     @Test
-    void testGetCOSObject()
-    {
+    void testGetCOSObject() {
         COSArray ar = new COSArray();
         ar.add(COSInteger.ONE);
         ar.add(COSInteger.TWO);

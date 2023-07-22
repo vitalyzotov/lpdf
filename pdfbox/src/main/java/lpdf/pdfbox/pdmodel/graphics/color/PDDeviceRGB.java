@@ -17,8 +17,6 @@
 package lpdf.pdfbox.pdmodel.graphics.color;
 
 
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSName;
 
 /**
@@ -28,20 +26,19 @@ import lpdf.pdfbox.cos.COSName;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public final class PDDeviceRGB extends PDDeviceColorSpace
-{
-    /**  This is the single instance of this class. */
+public final class PDDeviceRGB extends PDDeviceColorSpace {
+    /**
+     * This is the single instance of this class.
+     */
     public static final PDDeviceRGB INSTANCE = new PDDeviceRGB();
 
-    private final PDColor initialColor = new PDColor(new float[] { 0, 0, 0 }, this);
+    private final PDColor initialColor = new PDColor(new float[]{0, 0, 0}, this);
 
-    private PDDeviceRGB()
-    {
+    private PDDeviceRGB() {
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.DEVICERGB.getName();
     }
 
@@ -49,23 +46,19 @@ public final class PDDeviceRGB extends PDDeviceColorSpace
      * {@inheritDoc}
      */
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 3;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1, 0, 1, 0, 1 };
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1, 0, 1, 0, 1};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return initialColor;
     }
-
 
 
 }

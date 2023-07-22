@@ -17,20 +17,20 @@
 
 package lpdf.pdfbox.contentstream;
 
-import java.io.IOException;
-import java.io.InputStream;
 import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
 import lpdf.pdfbox.util.Matrix;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A content stream.
  *
  * @author John Hewson
  */
-public interface PDContentStream
-{
+public interface PDContentStream {
     /**
      * Returns this stream's content, if any.
      *
@@ -58,7 +58,6 @@ public interface PDContentStream
      * Returns the bounding box of the contents.
      *
      * @return the bounding box of the content stream or null
-     *
      */
     PDRectangle getBBox();
 

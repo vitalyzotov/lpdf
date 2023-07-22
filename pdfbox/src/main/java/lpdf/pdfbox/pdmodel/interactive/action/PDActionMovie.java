@@ -22,8 +22,7 @@ import lpdf.pdfbox.cos.COSDictionary;
 /**
  * @author Timur Kamalov
  */
-public class PDActionMovie extends PDAction
-{
+public class PDActionMovie extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -33,8 +32,7 @@ public class PDActionMovie extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionMovie()
-    {
+    public PDActionMovie() {
         setSubType(SUB_TYPE);
     }
 
@@ -43,8 +41,7 @@ public class PDActionMovie extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionMovie(COSDictionary a)
-    {
+    public PDActionMovie(COSDictionary a) {
         super(a);
     }
 }

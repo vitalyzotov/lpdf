@@ -23,15 +23,12 @@ import lpdf.pdfbox.cos.COSName;
  * This class will take a dictionary and determine which type of action to create.
  *
  * @author Ben Litchfield
- *
  */
-public final class PDActionFactory
-{
+public final class PDActionFactory {
     /**
      * Utility Class.
      */
-    private PDActionFactory()
-    {
+    private PDActionFactory() {
         //utility class
     }
 
@@ -40,19 +37,14 @@ public final class PDActionFactory
      * in the dictionary.
      *
      * @param action An action dictionary.
-     *
      * @return An action of the correct type.
      */
-    public static PDAction createAction( COSDictionary action )
-    {
+    public static PDAction createAction(COSDictionary action) {
         PDAction retval = null;
-        if( action != null)
-        {
+        if (action != null) {
             String type = action.getNameAsString(COSName.S);
-            if (type != null)
-            {
-                switch (type)
-                {
+            if (type != null) {
+                switch (type) {
                     case PDActionJavaScript.SUB_TYPE:
                         retval = new PDActionJavaScript(action);
                         break;

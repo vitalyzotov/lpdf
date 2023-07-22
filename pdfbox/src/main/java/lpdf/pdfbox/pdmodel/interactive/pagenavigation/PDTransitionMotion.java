@@ -21,10 +21,8 @@ package lpdf.pdfbox.pdmodel.interactive.pagenavigation;
  * {@link PDTransitionStyle#Blinds} and {@link PDTransitionStyle#Fly}.
  *
  * @author Andrea Vacondio
- *
  */
-public enum PDTransitionMotion
-{
+public enum PDTransitionMotion {
     /**
      * Inward from the edges of the page
      */

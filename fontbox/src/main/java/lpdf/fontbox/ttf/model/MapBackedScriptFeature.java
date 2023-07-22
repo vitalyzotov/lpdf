@@ -22,47 +22,38 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * A {@link Map} based simple implementation of the {@link ScriptFeature}
  *
  * @author Palash Ray
- *
  */
-public class MapBackedScriptFeature implements ScriptFeature
-{
+public class MapBackedScriptFeature implements ScriptFeature {
 
     private final String name;
     private final Map<List<Integer>, Integer> featureMap;
 
-    public MapBackedScriptFeature(String name, Map<List<Integer>, Integer> featureMap)
-    {
+    public MapBackedScriptFeature(String name, Map<List<Integer>, Integer> featureMap) {
         this.name = name;
         this.featureMap = featureMap;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public Set<List<Integer>> getAllGlyphIdsForSubstitution()
-    {
+    public Set<List<Integer>> getAllGlyphIdsForSubstitution() {
         return featureMap.keySet();
     }
 
     @Override
-    public boolean canReplaceGlyphs(List<Integer> glyphIds)
-    {
+    public boolean canReplaceGlyphs(List<Integer> glyphIds) {
         return featureMap.containsKey(glyphIds);
     }
 
     @Override
-    public Integer getReplacementForGlyphs(List<Integer> glyphIds)
-    {
-        if (!canReplaceGlyphs(glyphIds))
-        {
+    public Integer getReplacementForGlyphs(List<Integer> glyphIds) {
+        if (!canReplaceGlyphs(glyphIds)) {
             throw new UnsupportedOperationException(
                     "The glyphs " + glyphIds + " cannot be replaced");
         }
@@ -70,8 +61,7 @@ public class MapBackedScriptFeature implements ScriptFeature
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((featureMap == null) ? 0 : featureMap.hashCode());
@@ -80,41 +70,29 @@ public class MapBackedScriptFeature implements ScriptFeature
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         MapBackedScriptFeature other = (MapBackedScriptFeature) obj;
-        if (featureMap == null)
-        {
-            if (other.featureMap != null)
-            {
+        if (featureMap == null) {
+            if (other.featureMap != null) {
                 return false;
             }
-        }
-        else if (!featureMap.equals(other.featureMap))
-        {
+        } else if (!featureMap.equals(other.featureMap)) {
             return false;
         }
-        if (name == null)
-        {
-            if (other.name != null)
-            {
+        if (name == null) {
+            if (other.name != null) {
                 return false;
             }
-        }
-        else if (!name.equals(other.name))
-        {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;

@@ -18,68 +18,56 @@ package lpdf.fontbox.cff;
 
 /**
  * Class representing an embedded CFF charset.
- *
  */
-class EmbeddedCharset implements CFFCharset
-{
+class EmbeddedCharset implements CFFCharset {
     private final CFFCharset charset;
 
-    EmbeddedCharset(boolean isCIDFont)
-    {
+    EmbeddedCharset(boolean isCIDFont) {
         charset = isCIDFont ? new CFFCharsetCID() : new CFFCharsetType1();
     }
 
     @Override
-    public int getCIDForGID(int gid)
-    {
+    public int getCIDForGID(int gid) {
         return charset.getCIDForGID(gid);
     }
 
     @Override
-    public boolean isCIDFont()
-    {
+    public boolean isCIDFont() {
         return charset.isCIDFont();
     }
 
     @Override
-    public void addSID(int gid, int sid, String name)
-    {
+    public void addSID(int gid, int sid, String name) {
         charset.addSID(gid, sid, name);
     }
 
     @Override
-    public void addCID(int gid, int cid)
-    {
+    public void addCID(int gid, int cid) {
         charset.addCID(gid, cid);
     }
 
     @Override
-    public int getSIDForGID(int sid)
-    {
+    public int getSIDForGID(int sid) {
         return charset.getSIDForGID(sid);
     }
 
     @Override
-    public int getGIDForSID(int sid)
-    {
+    public int getGIDForSID(int sid) {
         return charset.getGIDForSID(sid);
     }
 
     @Override
-    public int getGIDForCID(int cid)
-    {
+    public int getGIDForCID(int cid) {
         return charset.getGIDForCID(cid);
     }
 
     @Override
-    public int getSID(String name)
-    {
+    public int getSID(String name) {
         return charset.getSID(name);
     }
 
     @Override
-    public String getNameForGID(int gid)
-    {
+    public String getNameForGID(int gid) {
         return charset.getNameForGID(gid);
     }
 }

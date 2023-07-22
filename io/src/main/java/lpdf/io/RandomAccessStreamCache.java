@@ -20,14 +20,11 @@ import java.io.IOException;
 
 /**
  * An interface describing a StreamCache to be used when creating/writing streams of a PDF.
- *
  */
-public interface RandomAccessStreamCache extends Closeable
-{
+public interface RandomAccessStreamCache extends Closeable {
 
     @FunctionalInterface
-    public interface StreamCacheCreateFunction
-    {
+    public interface StreamCacheCreateFunction {
         /**
          * Creates an instance of a RandomAccessStreamCache.
          *

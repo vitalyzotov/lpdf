@@ -26,12 +26,10 @@ import lpdf.fontbox.ttf.OpenTypeFont;
  *
  * @author John Hewson
  */
-public final class CIDFontMapping extends FontMapping<OpenTypeFont>
-{
+public final class CIDFontMapping extends FontMapping<OpenTypeFont> {
     private final FontBoxFont ttf;
 
-    public CIDFontMapping(OpenTypeFont font, FontBoxFont fontBoxFont, boolean isFallback)
-    {
+    public CIDFontMapping(OpenTypeFont font, FontBoxFont fontBoxFont, boolean isFallback) {
         super(font, isFallback);
         this.ttf = fontBoxFont;
     }
@@ -41,8 +39,7 @@ public final class CIDFontMapping extends FontMapping<OpenTypeFont>
      *
      * @return the mapped TrueType font or null
      */
-    public FontBoxFont getTrueTypeFont()
-    {
+    public FontBoxFont getTrueTypeFont() {
         return ttf;
     }
 
@@ -51,8 +48,7 @@ public final class CIDFontMapping extends FontMapping<OpenTypeFont>
      *
      * @return true if the mapped font is a CID font
      */
-    public boolean isCIDFont()
-    {
+    public boolean isCIDFont() {
         return getFont() != null;
     }
 }

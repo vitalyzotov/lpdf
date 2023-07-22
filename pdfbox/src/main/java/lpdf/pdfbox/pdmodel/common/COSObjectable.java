@@ -23,8 +23,7 @@ import lpdf.pdfbox.cos.COSBase;
  *
  * @author Ben Litchfield
  */
-public interface COSObjectable
-{
+public interface COSObjectable {
     /**
      * Convert this standard java object to a COS object.
      *

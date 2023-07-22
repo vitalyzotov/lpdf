@@ -16,15 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.font;
 
-import lpdf.harmony.awt.geom.AffineTransform;
-import lpdf.harmony.awt.geom.GeneralPath;
-import lpdf.harmony.awt.geom.Point2D;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.cff.CFFCIDFont;
 import lpdf.fontbox.cff.CFFFont;
@@ -32,12 +23,21 @@ import lpdf.fontbox.cff.CFFParser;
 import lpdf.fontbox.cff.CFFType1Font;
 import lpdf.fontbox.cff.Type2CharString;
 import lpdf.fontbox.util.BoundingBox;
-import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.Point2D;
 import lpdf.io.RandomAccessRead;
+import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
 import lpdf.pdfbox.pdmodel.common.PDStream;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
@@ -47,8 +47,7 @@ import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public class PDCIDFontType0 extends PDCIDFont
-{
+public class PDCIDFontType0 extends PDCIDFont {
     private static final Logger LOG = LoggerFactory.getLogger(PDCIDFontType0.class);
 
     private final CFFCIDFont cidFont;  // Top DICT that uses CIDFont operators
@@ -67,97 +66,74 @@ public class PDCIDFontType0 extends PDCIDFont
      * Constructor.
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
-     * @param parent The parent font.
-     *
+     * @param parent         The parent font.
      * @throws IOException if the font could not be read
      */
-    public PDCIDFontType0(COSDictionary fontDictionary, PDType0Font parent) throws IOException
-    {
+    public PDCIDFontType0(COSDictionary fontDictionary, PDType0Font parent) throws IOException {
         super(fontDictionary, parent);
 
         boolean fontIsDamaged = false;
         CFFFont cffFont = null;
         PDFontDescriptor fd = getFontDescriptor();
-        if (fd != null)
-        {
+        if (fd != null) {
             PDStream ff3Stream = fd.getFontFile3();
-            if (ff3Stream != null)
-            {
-                try (RandomAccessRead randomAccessRead = ff3Stream.getCOSObject().createView())
-                {
-                    if (randomAccessRead.length() > 0 && randomAccessRead.peek() == '%')
-                    {
+            if (ff3Stream != null) {
+                try (RandomAccessRead randomAccessRead = ff3Stream.getCOSObject().createView()) {
+                    if (randomAccessRead.length() > 0 && randomAccessRead.peek() == '%') {
                         // PDFBOX-2642 contains a corrupt PFB font instead of a CFF
                         LOG.warn("Found PFB but expected embedded CFF font " + fd.getFontName());
                         fontIsDamaged = true;
-                    }
-                    else
-                    {
+                    } else {
                         CFFParser cffParser = new CFFParser();
                         cffFont = cffParser.parse(randomAccessRead).get(0);
                     }
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     LOG.error("Can't read the embedded CFF font " + fd.getFontName(), e);
                     fontIsDamaged = true;
                 }
             }
         }
 
-        if (cffFont != null)
-        {
+        if (cffFont != null) {
             // embedded
-            if (cffFont instanceof CFFCIDFont)
-            {
-                cidFont = (CFFCIDFont)cffFont;
+            if (cffFont instanceof CFFCIDFont) {
+                cidFont = (CFFCIDFont) cffFont;
                 t1Font = null;
-            }
-            else
-            {
+            } else {
                 cidFont = null;
                 t1Font = cffFont;
             }
             cid2gid = readCIDToGIDMap();
             isEmbedded = true;
             isDamaged = false;
-        }
-        else
-        {
+        } else {
             // find font or substitute
             CIDFontMapping mapping = FontMappers.instance()
-                                                .getCIDFont(getBaseFont(), getFontDescriptor(),
-                                                            getCIDSystemInfo());
+                    .getCIDFont(getBaseFont(), getFontDescriptor(),
+                            getCIDSystemInfo());
             FontBoxFont font;
-            if (mapping.isCIDFont())
-            {
+            if (mapping.isCIDFont()) {
                 cffFont = mapping.getFont().getCFF().getFont();
-                if (cffFont instanceof CFFCIDFont)
-                {
+                if (cffFont instanceof CFFCIDFont) {
                     cidFont = (CFFCIDFont) cffFont;
                     t1Font = null;
                     font = cidFont;
-                }
-                else
-                {
+                } else {
                     // PDFBOX-3515: OpenType fonts are loaded as CFFType1Font
                     CFFType1Font f = (CFFType1Font) cffFont;
                     cidFont = null;
                     t1Font = f;
                     font = f;
                 }
-            }
-            else
-            {
+            } else {
                 cidFont = null;
                 t1Font = mapping.getTrueTypeFont();
                 font = t1Font;
             }
 
-            if (mapping.isFallback())
-            {
+            if (mapping.isFallback()) {
                 LOG.warn("Using fallback " + font.getName() + " for CID-keyed font " +
-                         getBaseFont());
+                        getBaseFont());
             }
             isEmbedded = false;
             isDamaged = fontIsDamaged;
@@ -167,36 +143,25 @@ public class PDCIDFontType0 extends PDCIDFont
     }
 
     @Override
-    public final Matrix getFontMatrix()
-    {
-        if (fontMatrix == null)
-        {
+    public final Matrix getFontMatrix() {
+        if (fontMatrix == null) {
             List<Number> numbers;
-            if (cidFont != null)
-            {
+            if (cidFont != null) {
                 numbers = cidFont.getFontMatrix();
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     numbers = t1Font.getFontMatrix();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     LOG.debug("Couldn't get font matrix - returning default value", e);
                     return new Matrix(0.001f, 0, 0, 0.001f, 0, 0);
                 }
             }
 
-            if (numbers != null && numbers.size() == 6)
-            {
+            if (numbers != null && numbers.size() == 6) {
                 fontMatrix = new Matrix(numbers.get(0).floatValue(), numbers.get(1).floatValue(),
-                                        numbers.get(2).floatValue(), numbers.get(3).floatValue(),
-                                        numbers.get(4).floatValue(), numbers.get(5).floatValue());
-            }
-            else
-            {
+                        numbers.get(2).floatValue(), numbers.get(3).floatValue(),
+                        numbers.get(4).floatValue(), numbers.get(5).floatValue());
+            } else {
                 fontMatrix = new Matrix(0.001f, 0, 0, 0.001f, 0, 0);
             }
         }
@@ -204,34 +169,27 @@ public class PDCIDFontType0 extends PDCIDFont
     }
 
     @Override
-    public BoundingBox getBoundingBox()
-    {
-        if (fontBBox == null)
-        {
+    public BoundingBox getBoundingBox() {
+        if (fontBBox == null) {
             fontBBox = generateBoundingBox();
         }
         return fontBBox;
     }
 
-    private BoundingBox generateBoundingBox()
-    {
+    private BoundingBox generateBoundingBox() {
         if (getFontDescriptor() != null) {
             PDRectangle bbox = getFontDescriptor().getFontBoundingBox();
-            if (bbox != null && (Float.compare(bbox.getLowerLeftX(),0) != 0 ||
-                Float.compare(bbox.getLowerLeftY(),0) != 0 ||
-                Float.compare(bbox.getUpperRightX(),0) != 0 ||
-                Float.compare(bbox.getUpperRightY(),0) != 0))
-            {
+            if (bbox != null && (Float.compare(bbox.getLowerLeftX(), 0) != 0 ||
+                    Float.compare(bbox.getLowerLeftY(), 0) != 0 ||
+                    Float.compare(bbox.getUpperRightX(), 0) != 0 ||
+                    Float.compare(bbox.getUpperRightY(), 0) != 0)) {
                 return new BoundingBox(bbox.getLowerLeftX(), bbox.getLowerLeftY(),
-                                          bbox.getUpperRightX(), bbox.getUpperRightY());
+                        bbox.getUpperRightX(), bbox.getUpperRightY());
             }
         }
-        try
-        {
+        try {
             return cidFont != null ? cidFont.getFontBBox() : t1Font.getFontBBox();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             LOG.debug("Couldn't get font bounding box - returning default value", e);
             return new BoundingBox();
         }
@@ -242,18 +200,12 @@ public class PDCIDFontType0 extends PDCIDFont
      *
      * @return the embedded CFF CIDFont or null
      */
-    public CFFFont getCFFFont()
-    {
-        if (cidFont != null)
-        {
+    public CFFFont getCFFFont() {
+        if (cidFont != null) {
             return cidFont;
-        }
-        else if (t1Font instanceof CFFType1Font)
-        {
-            return (CFFType1Font)t1Font;
-        }
-        else
-        {
+        } else if (t1Font instanceof CFFType1Font) {
+            return (CFFType1Font) t1Font;
+        } else {
             return null;
         }
     }
@@ -263,14 +215,10 @@ public class PDCIDFontType0 extends PDCIDFont
      *
      * @return the embedded or substituted font
      */
-    public FontBoxFont getFontBoxFont()
-    {
-        if (cidFont != null)
-        {
+    public FontBoxFont getFontBoxFont() {
+        if (cidFont != null) {
             return cidFont;
-        }
-        else
-        {
+        } else {
             return t1Font;
         }
     }
@@ -281,21 +229,14 @@ public class PDCIDFontType0 extends PDCIDFont
      *
      * @param cid CID
      * @return the Type 2 charstring for the given CID or null
-     *
      * @throws IOException if the charstring could not be read
      */
-    public Type2CharString getType2CharString(int cid) throws IOException
-    {
-        if (cidFont != null)
-        {
+    public Type2CharString getType2CharString(int cid) throws IOException {
+        if (cidFont != null) {
             return cidFont.getType2CharString(cid);
-        }
-        else if (t1Font instanceof CFFType1Font)
-        {
-            return ((CFFType1Font)t1Font).getType2CharString(cid);
-        }
-        else
-        {
+        } else if (t1Font instanceof CFFType1Font) {
+            return ((CFFType1Font) t1Font).getType2CharString(cid);
+        } else {
             return null;
         }
     }
@@ -304,61 +245,45 @@ public class PDCIDFontType0 extends PDCIDFont
      * Returns the name of the glyph with the given character code. This is done by looking up the
      * code in the parent font's ToUnicode map and generating a glyph name from that.
      */
-    private String getGlyphName(int code)
-    {
+    private String getGlyphName(int code) {
         String unicodes = parent.toUnicode(code);
-        if (unicodes == null)
-        {
+        if (unicodes == null) {
             return ".notdef";
         }
         return getUniNameOfCodePoint(unicodes.codePointAt(0));
     }
 
     @Override
-    public GeneralPath getPath(int code) throws IOException
-    {
+    public GeneralPath getPath(int code) throws IOException {
         int cid = codeToCID(code);
-        if (cid2gid != null && isEmbedded)
-        {
+        if (cid2gid != null && isEmbedded) {
             // PDFBOX-4093: despite being a type 0 font, there is a CIDToGIDMap
             cid = cid2gid[cid];
         }
         Type2CharString charstring = getType2CharString(cid);
-        if (charstring != null)
-        {
+        if (charstring != null) {
             return charstring.getPath();
-        }
-        else if (isEmbedded && t1Font instanceof CFFType1Font)
-        {
-            return ((CFFType1Font)t1Font).getType2CharString(cid).getPath();
-        }
-        else
-        {
+        } else if (isEmbedded && t1Font instanceof CFFType1Font) {
+            return ((CFFType1Font) t1Font).getType2CharString(cid).getPath();
+        } else {
             return t1Font.getPath(getGlyphName(code));
         }
     }
 
     @Override
-    public GeneralPath getNormalizedPath(int code) throws IOException
-    {
+    public GeneralPath getNormalizedPath(int code) throws IOException {
         return getPath(code);
     }
 
     @Override
-    public boolean hasGlyph(int code) throws IOException
-    {
+    public boolean hasGlyph(int code) throws IOException {
         int cid = codeToCID(code);
         Type2CharString charstring = getType2CharString(cid);
-        if (charstring != null)
-        {
+        if (charstring != null) {
             return charstring.getGID() != 0;
-        }
-        else if (isEmbedded && t1Font instanceof CFFType1Font)
-        {
-            return ((CFFType1Font)t1Font).getType2CharString(cid).getGID() != 0;
-        }
-        else
-        {
+        } else if (isEmbedded && t1Font instanceof CFFType1Font) {
+            return ((CFFType1Font) t1Font).getType2CharString(cid).getGID() != 0;
+        } else {
             return t1Font.hasGlyph(getGlyphName(code));
         }
     }
@@ -370,108 +295,86 @@ public class PDCIDFontType0 extends PDCIDFont
      * @return CID
      */
     @Override
-    public int codeToCID(int code)
-    {
+    public int codeToCID(int code) {
         return parent.getCMap().toCID(code);
     }
 
     @Override
-    public int codeToGID(int code)
-    {
+    public int codeToGID(int code) {
         int cid = codeToCID(code);
-        if (cidFont != null)
-        {
+        if (cidFont != null) {
             // The CIDs shall be used to determine the GID value for the glyph procedure using the
             // charset table in the CFF program
             return cidFont.getCharset().getGIDForCID(cid);
-        }
-        else
-        {
+        } else {
             // The CIDs shall be used directly as GID values
             return cid;
         }
     }
 
     @Override
-    public byte[] encode(int unicode)
-    {
+    public byte[] encode(int unicode) {
         // todo: we can use a known character collection CMap for a CIDFont
         //       and an Encoding for Type 1-equivalent
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public byte[] encodeGlyphId(int glyphId)
-    {
+    public byte[] encodeGlyphId(int glyphId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public float getWidthFromFont(int code) throws IOException
-    {
+    public float getWidthFromFont(int code) throws IOException {
         int cid = codeToCID(code);
         float width;
-        if (cidFont != null)
-        {
+        if (cidFont != null) {
             width = getType2CharString(cid).getWidth();
-        }
-        else if (isEmbedded && t1Font instanceof CFFType1Font)
-        {
-            width = ((CFFType1Font)t1Font).getType2CharString(cid).getWidth();
-        }
-        else
-        {
+        } else if (isEmbedded && t1Font instanceof CFFType1Font) {
+            width = ((CFFType1Font) t1Font).getType2CharString(cid).getWidth();
+        } else {
             width = t1Font.getWidth(getGlyphName(code));
         }
 
         Point2D p = new Point2D.Float(width, 0);
         fontMatrixTransform.transform(p, p);
-        return (float)p.getX();
+        return (float) p.getX();
     }
 
     @Override
-    public boolean isEmbedded()
-    {
+    public boolean isEmbedded() {
         return isEmbedded;
     }
 
     @Override
-    public boolean isDamaged()
-    {
+    public boolean isDamaged() {
         return isDamaged;
     }
 
     @Override
-    public float getHeight(int code) throws IOException
-    {
+    public float getHeight(int code) throws IOException {
         int cid = codeToCID(code);
 
         float height;
-        if (!glyphHeights.containsKey(cid))
-        {
+        if (!glyphHeights.containsKey(cid)) {
             height = (float) getType2CharString(cid).getBounds().getHeight();
             glyphHeights.put(cid, height);
-        }
-        else
-        {
+        } else {
             height = glyphHeights.get(cid);
         }
         return height;
     }
 
     @Override
-    public float getAverageFontWidth()
-    {
-        if (avgWidth == null)
-        {
+    public float getAverageFontWidth() {
+        if (avgWidth == null) {
             avgWidth = getAverageCharacterWidth();
         }
         return avgWidth;
     }
 
     // todo: this is a replacement for FontMetrics method
-    private float getAverageCharacterWidth()
-    {
+    private float getAverageCharacterWidth() {
         // todo: not implemented, highly suspect
         return 500;
     }

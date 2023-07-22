@@ -27,8 +27,7 @@ import lpdf.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentMembershipD
  * A property list is a dictionary containing private information meaningful to the conforming
  * writer creating the marked content.
  */
-public class PDPropertyList implements COSObjectable
-{
+public class PDPropertyList implements COSObjectable {
     protected final COSDictionary dict;
 
     /**
@@ -37,19 +36,13 @@ public class PDPropertyList implements COSObjectable
      * @param dict COS dictionary
      * @return a new instance of a PDPropertyList using the given dictionary
      */
-    public static PDPropertyList create(COSDictionary dict)
-    {
+    public static PDPropertyList create(COSDictionary dict) {
         COSBase item = dict.getItem(COSName.TYPE);
-        if (COSName.OCG.equals(item))
-        {
+        if (COSName.OCG.equals(item)) {
             return new PDOptionalContentGroup(dict);
-        }
-        else if (COSName.OCMD.equals(item))
-        {
+        } else if (COSName.OCMD.equals(item)) {
             return new PDOptionalContentMembershipDictionary(dict);
-        }
-        else
-        {
+        } else {
             // todo: more types
             return new PDPropertyList(dict);
         }
@@ -58,8 +51,7 @@ public class PDPropertyList implements COSObjectable
     /**
      * Constructor for subclasses.
      */
-    protected PDPropertyList()
-    {
+    protected PDPropertyList() {
         this.dict = new COSDictionary();
     }
 
@@ -68,14 +60,12 @@ public class PDPropertyList implements COSObjectable
      *
      * @param dict the dictionary to be used to create an instance of PDPropertyList
      */
-    protected PDPropertyList(COSDictionary dict)
-    {
+    protected PDPropertyList(COSDictionary dict) {
         this.dict = dict;
     }
 
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dict;
     }
 }

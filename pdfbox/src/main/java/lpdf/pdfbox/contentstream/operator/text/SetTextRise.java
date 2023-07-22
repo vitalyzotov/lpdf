@@ -16,39 +16,33 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Ts: Set text rise.
  *
  * @author Ben Litchfield
  */
-public class SetTextRise extends OperatorProcessor
-{
-    public SetTextRise(PDFStreamEngine context)
-    {
+public class SetTextRise extends OperatorProcessor {
+    public SetTextRise(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             return;
         }
         COSBase base = arguments.get(0);
-        if (!(base instanceof COSNumber))
-        {
+        if (!(base instanceof COSNumber)) {
             return;
         }
         COSNumber rise = (COSNumber) base;
@@ -56,8 +50,7 @@ public class SetTextRise extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_TEXT_RISE;
     }
 }

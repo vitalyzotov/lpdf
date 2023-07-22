@@ -22,13 +22,11 @@ import java.io.IOException;
 /**
  * An interface allowing random access read operations.
  */
-public interface RandomAccessRead extends Closeable
-{
+public interface RandomAccessRead extends Closeable {
     /**
      * Read a single byte of data.
      *
      * @return The byte of data that is being read.
-     *
      * @throws IOException If there is an error while reading the data.
      */
     int read() throws IOException;
@@ -40,15 +38,14 @@ public interface RandomAccessRead extends Closeable
      * @return The number of bytes that were actually read.
      * @throws IOException If there was an error while reading the data.
      */
-    default int read(byte[] b) throws IOException
-    {
+    default int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     /**
      * Read a buffer of data.
      *
-     * @param b The buffer to write the data to.
+     * @param b      The buffer to write the data to.
      * @param offset Offset into the buffer to start writing.
      * @param length The amount of data to attempt to read.
      * @return The number of bytes that were actually read.
@@ -61,7 +58,6 @@ public interface RandomAccessRead extends Closeable
      *
      * @return offset of next byte which will be returned with next {@link #read()} (if no more bytes are left it
      * returns a value &gt;= length of source)
-     *
      * @throws IOException If there was an error while getting the current position
      */
     long getPosition() throws IOException;
@@ -78,7 +74,6 @@ public interface RandomAccessRead extends Closeable
      * The total number of bytes that are available.
      *
      * @return The number of bytes available.
-     *
      * @throws IOException If there is an IO error while determining the length of the data stream.
      */
     long length() throws IOException;
@@ -94,14 +89,11 @@ public interface RandomAccessRead extends Closeable
      * This will peek at the next byte.
      *
      * @return The next byte on the stream, leaving it as available to read.
-     *
      * @throws IOException If there is an error reading the next byte.
      */
-    default int peek() throws IOException
-    {
+    default int peek() throws IOException {
         int result = read();
-        if (result != -1)
-        {
+        if (result != -1) {
             rewind(1);
         }
         return result;
@@ -113,8 +105,7 @@ public interface RandomAccessRead extends Closeable
      * @param bytes the number of bytes to be seeked backwards
      * @throws IOException If there is an error while seeking
      */
-    default void rewind(int bytes) throws IOException
-    {
+    default void rewind(int bytes) throws IOException {
         seek(getPosition() - bytes);
     }
 
@@ -122,7 +113,6 @@ public interface RandomAccessRead extends Closeable
      * A simple test to see if we are at the end of the data.
      *
      * @return true if we are at the end of the data.
-     *
      * @throws IOException If there is an error reading the next byte.
      */
     boolean isEOF() throws IOException;
@@ -133,8 +123,7 @@ public interface RandomAccessRead extends Closeable
      * @return the number of bytes that can be read
      * @throws IOException if this random access has been closed
      */
-    default int available() throws IOException
-    {
+    default int available() throws IOException {
         return (int) Math.min(length() - getPosition(), Integer.MAX_VALUE);
     }
 
@@ -144,8 +133,7 @@ public interface RandomAccessRead extends Closeable
      * @param length the number of bytes to be skipped
      * @throws IOException if an I/O error occurs while reading data
      */
-    default void skip(int length) throws IOException
-    {
+    default void skip(int length) throws IOException {
         seek(getPosition() + length);
     }
 
@@ -153,10 +141,9 @@ public interface RandomAccessRead extends Closeable
      * Creates a random access read view starting at the given position with the given length.
      *
      * @param startPosition start position within the underlying random access read
-     * @param streamLength stream length
+     * @param streamLength  stream length
      * @return the random access read view
      * @throws IOException if something went wrong when creating the view for the RandomAccessRead
-     *
      */
     RandomAccessReadView createView(long startPosition, long streamLength) throws IOException;
 }

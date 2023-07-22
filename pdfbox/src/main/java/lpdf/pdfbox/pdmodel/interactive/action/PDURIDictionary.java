@@ -21,19 +21,15 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * This is the implementation of an URI dictionary.
- *
  */
-public class PDURIDictionary implements COSObjectable
-{
+public class PDURIDictionary implements COSObjectable {
 
     private final COSDictionary uriDictionary;
 
     /**
      * Constructor.
-     *
      */
-    public PDURIDictionary()
-    {
+    public PDURIDictionary() {
         this.uriDictionary = new COSDictionary();
     }
 
@@ -42,18 +38,17 @@ public class PDURIDictionary implements COSObjectable
      *
      * @param dictionary the corresponding dictionary
      */
-    public PDURIDictionary(COSDictionary dictionary)
-    {
+    public PDURIDictionary(COSDictionary dictionary) {
         this.uriDictionary = dictionary;
     }
 
     /**
      * Returns the corresponding dictionary.
+     *
      * @return the dictionary
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return this.uriDictionary;
     }
 
@@ -67,8 +62,7 @@ public class PDURIDictionary implements COSObjectable
      *
      * @return The URI entry of the specific URI dictionary.
      */
-    public String getBase()
-    {
+    public String getBase() {
         return this.getCOSObject().getString("Base");
     }
 
@@ -82,8 +76,7 @@ public class PDURIDictionary implements COSObjectable
      *
      * @param base The base URI to be used.
      */
-    public void setBase(String base)
-    {
+    public void setBase(String base) {
         this.getCOSObject().setString("Base", base);
     }
 

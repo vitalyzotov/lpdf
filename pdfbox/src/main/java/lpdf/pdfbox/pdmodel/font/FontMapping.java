@@ -24,13 +24,11 @@ import lpdf.fontbox.FontBoxFont;
  *
  * @author John Hewson
  */
-public class FontMapping<T extends FontBoxFont>
-{
+public class FontMapping<T extends FontBoxFont> {
     private final T font;
     private final boolean isFallback;
 
-    public FontMapping(T font, boolean isFallback)
-    {
+    public FontMapping(T font, boolean isFallback) {
         this.font = font;
         this.isFallback = isFallback;
     }
@@ -40,8 +38,7 @@ public class FontMapping<T extends FontBoxFont>
      *
      * @return the mapped font
      */
-    public T getFont()
-    {
+    public T getFont() {
         return font;
     }
 
@@ -51,8 +48,7 @@ public class FontMapping<T extends FontBoxFont>
      *
      * @return true if the mapped font is a fallback
      */
-    public boolean isFallback()
-    {
+    public boolean isFallback() {
         return isFallback;
     }
 }

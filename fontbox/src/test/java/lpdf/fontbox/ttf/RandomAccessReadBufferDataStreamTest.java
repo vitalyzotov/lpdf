@@ -16,10 +16,10 @@
  */
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import lpdf.io.RandomAccessRead;
+import lpdf.io.RandomAccessReadBuffer;
+import lpdf.io.RandomAccessReadBufferedFile;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
@@ -29,84 +29,71 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import lpdf.io.RandomAccessRead;
-import lpdf.io.RandomAccessReadBuffer;
-import lpdf.io.RandomAccessReadBufferedFile;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- *
  * @author Tilman Hausherr
  */
-class RandomAccessReadBufferDataStreamTest
-{
+class RandomAccessReadBufferDataStreamTest {
     @Test
-    void testEOF() throws IOException
-    {
+    void testEOF() throws IOException {
         byte[] byteArray = new byte[10];
         RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(byteArray);
         try (RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(
-                randomAccessReadBuffer))
-        {
+                randomAccessReadBuffer)) {
             int value = dataStream.read();
-            while (value > -1)
-            {
+            while (value > -1) {
                 value = dataStream.read();
             }
-        }
-        catch (ArrayIndexOutOfBoundsException exception)
-        {
+        } catch (ArrayIndexOutOfBoundsException exception) {
             fail("EOF not detected!");
         }
     }
 
     @Test
-    void testEOFUnsignedShort() throws IOException
-    {
+    void testEOFUnsignedShort() throws IOException {
         byte[] byteArray = new byte[3];
         RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(byteArray);
-        try(RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(
-                randomAccessReadBuffer))
-        {
+        try (RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(
+                randomAccessReadBuffer)) {
             dataStream.readUnsignedShort();
             assertThrows(EOFException.class, () -> dataStream.readUnsignedShort());
         }
     }
 
     @Test
-    void testEOFUnsignedInt() throws IOException
-    {
+    void testEOFUnsignedInt() throws IOException {
         byte[] byteArray = new byte[5];
         RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(byteArray);
         try (RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(
-                randomAccessReadBuffer))
-        {
+                randomAccessReadBuffer)) {
             dataStream.readUnsignedInt();
             assertThrows(EOFException.class, () -> dataStream.readUnsignedInt());
         }
     }
 
     @Test
-    void testEOFUnsignedByte() throws IOException
-    {
+    void testEOFUnsignedByte() throws IOException {
         byte[] byteArray = new byte[2];
         RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(byteArray);
         try (RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(
-                randomAccessReadBuffer))
-        {
+                randomAccessReadBuffer)) {
             dataStream.readUnsignedByte();
             dataStream.readUnsignedByte();
             assertThrows(EOFException.class, () -> dataStream.readUnsignedByte());
         }
     }
+
     /**
      * Test of PDFBOX-4242: make sure that the Closeable.close() contract is fulfilled.
      *
      * @throws IOException
      */
     @Test
-    void testDoubleClose() throws IOException
-    {
+    void testDoubleClose() throws IOException {
         RandomAccessRead randomAccessRead = new RandomAccessReadBufferedFile(
                 "src/test/resources/ttf/LiberationSans-Regular.ttf");
         RandomAccessReadDataStream randomAccessReadDataStream = new RandomAccessReadDataStream(
@@ -121,12 +108,10 @@ class RandomAccessReadBufferDataStreamTest
      * @throws IOException
      */
     @Test
-    void ensureReadFinishes() throws IOException
-    {
+    void ensureReadFinishes() throws IOException {
         final File file = File.createTempFile("apache-pdfbox", ".dat");
 
-        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file)))
-        {
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             final String content = "1234567890";
             outputStream.write(content.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
@@ -135,12 +120,10 @@ class RandomAccessReadBufferDataStreamTest
         final byte[] readBuffer = new byte[2];
         RandomAccessRead randomAccessRead = new RandomAccessReadBufferedFile(file);
         try (RandomAccessReadDataStream randomAccessReadDataStream = new RandomAccessReadDataStream(
-                randomAccessRead))
-        {
+                randomAccessRead)) {
             int amountRead;
             int totalAmountRead = 0;
-            while ((amountRead = randomAccessReadDataStream.read(readBuffer, 0, 2)) != -1)
-            {
+            while ((amountRead = randomAccessReadDataStream.read(readBuffer, 0, 2)) != -1) {
                 totalAmountRead += amountRead;
             }
             assertEquals(10, totalAmountRead);
@@ -154,12 +137,10 @@ class RandomAccessReadBufferDataStreamTest
      * @throws IOException
      */
     @Test
-    void testReadBuffer() throws IOException
-    {
+    void testReadBuffer() throws IOException {
         final File file = File.createTempFile("apache-pdfbox", ".dat");
 
-        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file)))
-        {
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             final String content = "012345678A012345678B012345678C012345678D";
             outputStream.write(content.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
@@ -168,8 +149,7 @@ class RandomAccessReadBufferDataStreamTest
 
         final byte[] readBuffer = new byte[40];
         try (RandomAccessReadDataStream randomAccessReadDataStream = new RandomAccessReadDataStream(
-                randomAccessRead))
-        {
+                randomAccessRead)) {
             int count = 4;
             int bytesRead = randomAccessReadDataStream.read(readBuffer, 0, count);
             assertEquals(4, randomAccessReadDataStream.getCurrentPosition());

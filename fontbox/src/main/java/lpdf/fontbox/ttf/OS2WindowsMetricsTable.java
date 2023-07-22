@@ -16,21 +16,19 @@
  */
 package lpdf.fontbox.ttf;
 
-import java.io.EOFException;
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.EOFException;
+import java.io.IOException;
 
 /**
  * The OS/2 and Windows Metrics Table in a TrueType font, see
  * <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/os2">here</a>.
  *
  * @author Ben Litchfield
- *
  */
-public class OS2WindowsMetricsTable extends TTFTable
-{
+public class OS2WindowsMetricsTable extends TTFTable {
     /**
      * Log instance.
      */
@@ -224,520 +222,455 @@ public class OS2WindowsMetricsTable extends TTFTable
     private int usBreakChar;
     private int usMaxContext;
 
-    OS2WindowsMetricsTable()
-    {
+    OS2WindowsMetricsTable() {
         super();
     }
 
     /**
      * @return Returns the achVendId.
      */
-    public String getAchVendId()
-    {
+    public String getAchVendId() {
         return achVendId;
     }
 
     /**
      * @param achVendIdValue The achVendId to set.
      */
-    public void setAchVendId(String achVendIdValue)
-    {
+    public void setAchVendId(String achVendIdValue) {
         this.achVendId = achVendIdValue;
     }
 
     /**
      * @return Returns the averageCharWidth.
      */
-    public short getAverageCharWidth()
-    {
+    public short getAverageCharWidth() {
         return averageCharWidth;
     }
 
     /**
      * @param averageCharWidthValue The averageCharWidth to set.
      */
-    public void setAverageCharWidth(short averageCharWidthValue)
-    {
+    public void setAverageCharWidth(short averageCharWidthValue) {
         this.averageCharWidth = averageCharWidthValue;
     }
 
     /**
      * @return Returns the codePageRange1.
      */
-    public long getCodePageRange1()
-    {
+    public long getCodePageRange1() {
         return codePageRange1;
     }
 
     /**
      * @param codePageRange1Value The codePageRange1 to set.
      */
-    public void setCodePageRange1(long codePageRange1Value)
-    {
+    public void setCodePageRange1(long codePageRange1Value) {
         this.codePageRange1 = codePageRange1Value;
     }
 
     /**
      * @return Returns the codePageRange2.
      */
-    public long getCodePageRange2()
-    {
+    public long getCodePageRange2() {
         return codePageRange2;
     }
 
     /**
      * @param codePageRange2Value The codePageRange2 to set.
      */
-    public void setCodePageRange2(long codePageRange2Value)
-    {
+    public void setCodePageRange2(long codePageRange2Value) {
         this.codePageRange2 = codePageRange2Value;
     }
 
     /**
      * @return Returns the familyClass.
      */
-    public int getFamilyClass()
-    {
+    public int getFamilyClass() {
         return familyClass;
     }
 
     /**
      * @param familyClassValue The familyClass to set.
      */
-    public void setFamilyClass(int familyClassValue)
-    {
+    public void setFamilyClass(int familyClassValue) {
         this.familyClass = familyClassValue;
     }
 
     /**
      * @return Returns the firstCharIndex.
      */
-    public int getFirstCharIndex()
-    {
+    public int getFirstCharIndex() {
         return firstCharIndex;
     }
 
     /**
      * @param firstCharIndexValue The firstCharIndex to set.
      */
-    public void setFirstCharIndex(int firstCharIndexValue)
-    {
+    public void setFirstCharIndex(int firstCharIndexValue) {
         this.firstCharIndex = firstCharIndexValue;
     }
 
     /**
      * @return Returns the fsSelection.
      */
-    public int getFsSelection()
-    {
+    public int getFsSelection() {
         return fsSelection;
     }
 
     /**
      * @param fsSelectionValue The fsSelection to set.
      */
-    public void setFsSelection(int fsSelectionValue)
-    {
+    public void setFsSelection(int fsSelectionValue) {
         this.fsSelection = fsSelectionValue;
     }
 
     /**
      * @return Returns the fsType.
      */
-    public short getFsType()
-    {
+    public short getFsType() {
         return fsType;
     }
 
     /**
      * @param fsTypeValue The fsType to set.
      */
-    public void setFsType(short fsTypeValue)
-    {
+    public void setFsType(short fsTypeValue) {
         this.fsType = fsTypeValue;
     }
 
     /**
      * @return Returns the lastCharIndex.
      */
-    public int getLastCharIndex()
-    {
+    public int getLastCharIndex() {
         return lastCharIndex;
     }
 
     /**
      * @param lastCharIndexValue The lastCharIndex to set.
      */
-    public void setLastCharIndex(int lastCharIndexValue)
-    {
+    public void setLastCharIndex(int lastCharIndexValue) {
         this.lastCharIndex = lastCharIndexValue;
     }
 
     /**
      * @return Returns the panose.
      */
-    public byte[] getPanose()
-    {
+    public byte[] getPanose() {
         return panose;
     }
 
     /**
      * @param panoseValue The panose to set.
      */
-    public void setPanose(byte[] panoseValue)
-    {
+    public void setPanose(byte[] panoseValue) {
         this.panose = panoseValue;
     }
 
     /**
      * @return Returns the strikeoutPosition.
      */
-    public short getStrikeoutPosition()
-    {
+    public short getStrikeoutPosition() {
         return strikeoutPosition;
     }
 
     /**
      * @param strikeoutPositionValue The strikeoutPosition to set.
      */
-    public void setStrikeoutPosition(short strikeoutPositionValue)
-    {
+    public void setStrikeoutPosition(short strikeoutPositionValue) {
         this.strikeoutPosition = strikeoutPositionValue;
     }
 
     /**
      * @return Returns the strikeoutSize.
      */
-    public short getStrikeoutSize()
-    {
+    public short getStrikeoutSize() {
         return strikeoutSize;
     }
 
     /**
      * @param strikeoutSizeValue The strikeoutSize to set.
      */
-    public void setStrikeoutSize(short strikeoutSizeValue)
-    {
+    public void setStrikeoutSize(short strikeoutSizeValue) {
         this.strikeoutSize = strikeoutSizeValue;
     }
 
     /**
      * @return Returns the subscriptXOffset.
      */
-    public short getSubscriptXOffset()
-    {
+    public short getSubscriptXOffset() {
         return subscriptXOffset;
     }
 
     /**
      * @param subscriptXOffsetValue The subscriptXOffset to set.
      */
-    public void setSubscriptXOffset(short subscriptXOffsetValue)
-    {
+    public void setSubscriptXOffset(short subscriptXOffsetValue) {
         this.subscriptXOffset = subscriptXOffsetValue;
     }
 
     /**
      * @return Returns the subscriptXSize.
      */
-    public short getSubscriptXSize()
-    {
+    public short getSubscriptXSize() {
         return subscriptXSize;
     }
 
     /**
      * @param subscriptXSizeValue The subscriptXSize to set.
      */
-    public void setSubscriptXSize(short subscriptXSizeValue)
-    {
+    public void setSubscriptXSize(short subscriptXSizeValue) {
         this.subscriptXSize = subscriptXSizeValue;
     }
 
     /**
      * @return Returns the subscriptYOffset.
      */
-    public short getSubscriptYOffset()
-    {
+    public short getSubscriptYOffset() {
         return subscriptYOffset;
     }
 
     /**
      * @param subscriptYOffsetValue The subscriptYOffset to set.
      */
-    public void setSubscriptYOffset(short subscriptYOffsetValue)
-    {
+    public void setSubscriptYOffset(short subscriptYOffsetValue) {
         this.subscriptYOffset = subscriptYOffsetValue;
     }
 
     /**
      * @return Returns the subscriptYSize.
      */
-    public short getSubscriptYSize()
-    {
+    public short getSubscriptYSize() {
         return subscriptYSize;
     }
 
     /**
      * @param subscriptYSizeValue The subscriptYSize to set.
      */
-    public void setSubscriptYSize(short subscriptYSizeValue)
-    {
+    public void setSubscriptYSize(short subscriptYSizeValue) {
         this.subscriptYSize = subscriptYSizeValue;
     }
 
     /**
      * @return Returns the superscriptXOffset.
      */
-    public short getSuperscriptXOffset()
-    {
+    public short getSuperscriptXOffset() {
         return superscriptXOffset;
     }
 
     /**
      * @param superscriptXOffsetValue The superscriptXOffset to set.
      */
-    public void setSuperscriptXOffset(short superscriptXOffsetValue)
-    {
+    public void setSuperscriptXOffset(short superscriptXOffsetValue) {
         this.superscriptXOffset = superscriptXOffsetValue;
     }
 
     /**
      * @return Returns the superscriptXSize.
      */
-    public short getSuperscriptXSize()
-    {
+    public short getSuperscriptXSize() {
         return superscriptXSize;
     }
 
     /**
      * @param superscriptXSizeValue The superscriptXSize to set.
      */
-    public void setSuperscriptXSize(short superscriptXSizeValue)
-    {
+    public void setSuperscriptXSize(short superscriptXSizeValue) {
         this.superscriptXSize = superscriptXSizeValue;
     }
 
     /**
      * @return Returns the superscriptYOffset.
      */
-    public short getSuperscriptYOffset()
-    {
+    public short getSuperscriptYOffset() {
         return superscriptYOffset;
     }
 
     /**
      * @param superscriptYOffsetValue The superscriptYOffset to set.
      */
-    public void setSuperscriptYOffset(short superscriptYOffsetValue)
-    {
+    public void setSuperscriptYOffset(short superscriptYOffsetValue) {
         this.superscriptYOffset = superscriptYOffsetValue;
     }
 
     /**
      * @return Returns the superscriptYSize.
      */
-    public short getSuperscriptYSize()
-    {
+    public short getSuperscriptYSize() {
         return superscriptYSize;
     }
 
     /**
      * @param superscriptYSizeValue The superscriptYSize to set.
      */
-    public void setSuperscriptYSize(short superscriptYSizeValue)
-    {
+    public void setSuperscriptYSize(short superscriptYSizeValue) {
         this.superscriptYSize = superscriptYSizeValue;
     }
 
     /**
      * @return Returns the typoLineGap.
      */
-    public int getTypoLineGap()
-    {
+    public int getTypoLineGap() {
         return typoLineGap;
     }
 
     /**
      * @param typeLineGapValue The typoLineGap to set.
      */
-    public void setTypoLineGap(int typeLineGapValue)
-    {
+    public void setTypoLineGap(int typeLineGapValue) {
         this.typoLineGap = typeLineGapValue;
     }
 
     /**
      * @return Returns the typoAscender.
      */
-    public int getTypoAscender()
-    {
+    public int getTypoAscender() {
         return typoAscender;
     }
 
     /**
      * @param typoAscenderValue The typoAscender to set.
      */
-    public void setTypoAscender(int typoAscenderValue)
-    {
+    public void setTypoAscender(int typoAscenderValue) {
         this.typoAscender = typoAscenderValue;
     }
 
     /**
      * @return Returns the typoDescender.
      */
-    public int getTypoDescender()
-    {
+    public int getTypoDescender() {
         return typoDescender;
     }
 
     /**
      * @param typoDescenderValue The typoDescender to set.
      */
-    public void setTypoDescender(int typoDescenderValue)
-    {
+    public void setTypoDescender(int typoDescenderValue) {
         this.typoDescender = typoDescenderValue;
     }
 
     /**
      * @return Returns the unicodeRange1.
      */
-    public long getUnicodeRange1()
-    {
+    public long getUnicodeRange1() {
         return unicodeRange1;
     }
 
     /**
      * @param unicodeRange1Value The unicodeRange1 to set.
      */
-    public void setUnicodeRange1(long unicodeRange1Value)
-    {
+    public void setUnicodeRange1(long unicodeRange1Value) {
         this.unicodeRange1 = unicodeRange1Value;
     }
 
     /**
      * @return Returns the unicodeRange2.
      */
-    public long getUnicodeRange2()
-    {
+    public long getUnicodeRange2() {
         return unicodeRange2;
     }
 
     /**
      * @param unicodeRange2Value The unicodeRange2 to set.
      */
-    public void setUnicodeRange2(long unicodeRange2Value)
-    {
+    public void setUnicodeRange2(long unicodeRange2Value) {
         this.unicodeRange2 = unicodeRange2Value;
     }
 
     /**
      * @return Returns the unicodeRange3.
      */
-    public long getUnicodeRange3()
-    {
+    public long getUnicodeRange3() {
         return unicodeRange3;
     }
 
     /**
      * @param unicodeRange3Value The unicodeRange3 to set.
      */
-    public void setUnicodeRange3(long unicodeRange3Value)
-    {
+    public void setUnicodeRange3(long unicodeRange3Value) {
         this.unicodeRange3 = unicodeRange3Value;
     }
 
     /**
      * @return Returns the unicodeRange4.
      */
-    public long getUnicodeRange4()
-    {
+    public long getUnicodeRange4() {
         return unicodeRange4;
     }
 
     /**
      * @param unicodeRange4Value The unicodeRange4 to set.
      */
-    public void setUnicodeRange4(long unicodeRange4Value)
-    {
+    public void setUnicodeRange4(long unicodeRange4Value) {
         this.unicodeRange4 = unicodeRange4Value;
     }
 
     /**
      * @return Returns the version.
      */
-    public int getVersion()
-    {
+    public int getVersion() {
         return version;
     }
 
     /**
      * @param versionValue The version to set.
      */
-    public void setVersion(int versionValue)
-    {
+    public void setVersion(int versionValue) {
         this.version = versionValue;
     }
 
     /**
      * @return Returns the weightClass.
      */
-    public int getWeightClass()
-    {
+    public int getWeightClass() {
         return weightClass;
     }
 
     /**
      * @param weightClassValue The weightClass to set.
      */
-    public void setWeightClass(int weightClassValue)
-    {
+    public void setWeightClass(int weightClassValue) {
         this.weightClass = weightClassValue;
     }
 
     /**
      * @return Returns the widthClass.
      */
-    public int getWidthClass()
-    {
+    public int getWidthClass() {
         return widthClass;
     }
 
     /**
      * @param widthClassValue The widthClass to set.
      */
-    public void setWidthClass(int widthClassValue)
-    {
+    public void setWidthClass(int widthClassValue) {
         this.widthClass = widthClassValue;
     }
 
     /**
      * @return Returns the winAscent.
      */
-    public int getWinAscent()
-    {
+    public int getWinAscent() {
         return winAscent;
     }
 
     /**
      * @param winAscentValue The winAscent to set.
      */
-    public void setWinAscent(int winAscentValue)
-    {
+    public void setWinAscent(int winAscentValue) {
         this.winAscent = winAscentValue;
     }
 
     /**
      * @return Returns the winDescent.
      */
-    public int getWinDescent()
-    {
+    public int getWinDescent() {
         return winDescent;
     }
 
     /**
      * @param winDescentValue The winDescent to set.
      */
-    public void setWinDescent(int winDescentValue)
-    {
+    public void setWinDescent(int winDescentValue) {
         this.winDescent = winDescentValue;
     }
 
@@ -746,8 +679,7 @@ public class OS2WindowsMetricsTable extends TTFTable
      *
      * @return the sxHeight value
      */
-    public int getHeight()
-    {
+    public int getHeight() {
         return sxHeight;
     }
 
@@ -756,8 +688,7 @@ public class OS2WindowsMetricsTable extends TTFTable
      *
      * @return the sCapHeight value
      */
-    public int getCapHeight()
-    {
+    public int getCapHeight() {
         return sCapHeight;
     }
 
@@ -766,8 +697,7 @@ public class OS2WindowsMetricsTable extends TTFTable
      *
      * @return the usDefaultChar value
      */
-    public int getDefaultChar()
-    {
+    public int getDefaultChar() {
         return usDefaultChar;
     }
 
@@ -776,8 +706,7 @@ public class OS2WindowsMetricsTable extends TTFTable
      *
      * @return the usBreakChar value
      */
-    public int getBreakChar()
-    {
+    public int getBreakChar() {
         return usBreakChar;
     }
 
@@ -786,8 +715,7 @@ public class OS2WindowsMetricsTable extends TTFTable
      *
      * @return the usMaxContent value
      */
-    public int getMaxContext()
-    {
+    public int getMaxContext() {
         return usMaxContext;
     }
 
@@ -799,13 +727,12 @@ public class OS2WindowsMetricsTable extends TTFTable
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.readUnsignedShort();
         averageCharWidth = data.readSignedShort();
         weightClass = data.readUnsignedShort();
@@ -831,47 +758,36 @@ public class OS2WindowsMetricsTable extends TTFTable
         fsSelection = data.readUnsignedShort();
         firstCharIndex = data.readUnsignedShort();
         lastCharIndex = data.readUnsignedShort();
-        try
-        {
+        try {
             typoAscender = data.readSignedShort();
             typoDescender = data.readSignedShort();
             typoLineGap = data.readSignedShort();
             winAscent = data.readUnsignedShort();
             winDescent = data.readUnsignedShort();
-        }
-        catch (EOFException ex)
-        {
+        } catch (EOFException ex) {
             LOG.debug("EOF, probably some legacy TrueType font");
             initialized = true;
             return;
         }
-        if (version >= 1)
-        {
-            try
-            {
+        if (version >= 1) {
+            try {
                 codePageRange1 = data.readUnsignedInt();
                 codePageRange2 = data.readUnsignedInt();
-            }
-            catch (EOFException ex)
-            {
+            } catch (EOFException ex) {
                 version = 0;
                 LOG.warn("Could not read all expected parts of version >= 1, setting version to 0", ex);
                 initialized = true;
                 return;
             }
         }
-        if (version >= 2)
-        {
-            try
-            {
+        if (version >= 2) {
+            try {
                 sxHeight = data.readSignedShort();
                 sCapHeight = data.readSignedShort();
                 usDefaultChar = data.readUnsignedShort();
                 usBreakChar = data.readUnsignedShort();
                 usMaxContext = data.readUnsignedShort();
-            }
-            catch (EOFException ex)
-            {
+            } catch (EOFException ex) {
                 version = 1;
                 LOG.warn("Could not read all expected parts of version >= 2, setting version to 1", ex);
                 initialized = true;

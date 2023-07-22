@@ -16,18 +16,8 @@
  */
 package lpdf.pdfbox.multipdf;
 
-import lpdf.harmony.awt.geom.AffineTransform;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lpdf.fontbox.util.BoundingBox;
+import lpdf.harmony.awt.geom.AffineTransform;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -36,23 +26,32 @@ import lpdf.pdfbox.cos.COSStream;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDDocumentCatalog;
 import lpdf.pdfbox.pdmodel.PDPage;
+import lpdf.pdfbox.pdmodel.PDPageContentStream;
+import lpdf.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
 import lpdf.pdfbox.pdmodel.common.PDStream;
-import lpdf.pdfbox.pdmodel.PDPageContentStream;
-import lpdf.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import lpdf.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import lpdf.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentGroup;
 import lpdf.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentProperties;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class allows to import pages as Form XObjects into a document and use them to create layers
  * (optional content groups). It should used only on loaded documents, not on generated documents
  * because these can contain unfinished parts, e.g. font subsetting information.
  */
-public class LayerUtility
-{
+public class LayerUtility {
     private static final Logger LOG = LoggerFactory.getLogger(LayerUtility.class);
 
     private static final boolean DEBUG = true;
@@ -62,20 +61,20 @@ public class LayerUtility
 
     /**
      * Creates a new instance.
+     *
      * @param targetDoc the PDF document to modify
      */
-    public LayerUtility(PDDocument targetDoc)
-    {
+    public LayerUtility(PDDocument targetDoc) {
         this.targetDoc = targetDoc;
         this.cloner = new PDFCloneUtility(targetDoc);
     }
 
     /**
      * Returns the PDF document we work on.
+     *
      * @return the PDF document
      */
-    public PDDocument getDocument()
-    {
+    public PDDocument getDocument() {
         return this.targetDoc;
     }
 
@@ -83,20 +82,18 @@ public class LayerUtility
      * Some applications may not wrap their page content in a save/restore (q/Q) pair which can
      * lead to problems with coordinate system transformations when content is appended. This
      * method lets you add a q/Q pair around the existing page's content.
+     *
      * @param page the page
      * @throws IOException if an I/O error occurs
      */
-    public void wrapInSaveRestore(PDPage page) throws IOException
-    {
+    public void wrapInSaveRestore(PDPage page) throws IOException {
         COSStream saveGraphicsStateStream = getDocument().getDocument().createCOSStream();
-        try (OutputStream saveStream = saveGraphicsStateStream.createOutputStream())
-        {
+        try (OutputStream saveStream = saveGraphicsStateStream.createOutputStream()) {
             saveStream.write("q\n".getBytes(StandardCharsets.ISO_8859_1));
         }
 
         COSStream restoreGraphicsStateStream = getDocument().getDocument().createCOSStream();
-        try (OutputStream restoreStream = restoreGraphicsStateStream.createOutputStream())
-        {
+        try (OutputStream restoreStream = restoreGraphicsStateStream.createOutputStream()) {
             restoreStream.write("Q\n".getBytes(StandardCharsets.ISO_8859_1));
         }
 
@@ -104,9 +101,8 @@ public class LayerUtility
         //environment to add additional content.
         COSDictionary pageDictionary = page.getCOSObject();
         COSBase contents = pageDictionary.getDictionaryObject(COSName.CONTENTS);
-        if (contents instanceof COSStream)
-        {
-            COSStream contentsStream = (COSStream)contents;
+        if (contents instanceof COSStream) {
+            COSStream contentsStream = (COSStream) contents;
 
             COSArray array = new COSArray();
             array.add(saveGraphicsStateStream);
@@ -114,16 +110,12 @@ public class LayerUtility
             array.add(restoreGraphicsStateStream);
 
             pageDictionary.setItem(COSName.CONTENTS, array);
-        }
-        else if( contents instanceof COSArray )
-        {
-            COSArray contentsArray = (COSArray)contents;
+        } else if (contents instanceof COSArray) {
+            COSArray contentsArray = (COSArray) contents;
 
             contentsArray.add(0, saveGraphicsStateStream);
             contentsArray.add(restoreGraphicsStateStream);
-        }
-        else
-        {
+        } else {
             throw new IOException("Contents are unknown type: " + contents.getClass().getName());
         }
     }
@@ -135,13 +127,12 @@ public class LayerUtility
      * You may want to call {@link #wrapInSaveRestore(PDPage) wrapInSaveRestore(PDPage)} before invoking the Form XObject to
      * make sure that the graphics state is reset.
      *
-     * @param sourceDoc the source PDF document that contains the page to be copied
+     * @param sourceDoc  the source PDF document that contains the page to be copied
      * @param pageNumber the 0-based page number of the page to be copied
      * @return a Form XObject containing the original page's content
      * @throws IOException if an I/O error occurs
      */
-    public PDFormXObject importPageAsForm(PDDocument sourceDoc, int pageNumber) throws IOException
-    {
+    public PDFormXObject importPageAsForm(PDDocument sourceDoc, int pageNumber) throws IOException {
         PDPage page = sourceDoc.getPage(pageNumber);
         return importPageAsForm(sourceDoc, page);
     }
@@ -157,12 +148,11 @@ public class LayerUtility
      * make sure that the graphics state is reset.
      *
      * @param sourceDoc the source PDF document that contains the page to be copied
-     * @param page the page in the source PDF document to be copied
+     * @param page      the page in the source PDF document to be copied
      * @return a Form XObject containing the original page's content
      * @throws IOException if an I/O error occurs
      */
-    public PDFormXObject importPageAsForm(PDDocument sourceDoc, PDPage page) throws IOException
-    {
+    public PDFormXObject importPageAsForm(PDDocument sourceDoc, PDPage page) throws IOException {
         importOcProperties(sourceDoc);
 
         PDStream newStream = new PDStream(targetDoc, page.getContents(), COSName.FLATE_DECODE);
@@ -190,29 +180,27 @@ public class LayerUtility
         //at.scale(1 / viewBox.getWidth(), 1 / viewBox.getHeight());
         at.translate(mediaBox.getLowerLeftX() - viewBox.getLowerLeftX(),
                 mediaBox.getLowerLeftY() - viewBox.getLowerLeftY());
-        switch (rotation)
-        {
-        case 90:
-            at.scale(viewBox.getWidth() / viewBox.getHeight(), viewBox.getHeight() / viewBox.getWidth());
-            at.translate(0, viewBox.getWidth());
-            at.rotate(-Math.PI / 2.0);
-            break;
-        case 180:
-            at.translate(viewBox.getWidth(), viewBox.getHeight());
-            at.rotate(-Math.PI);
-            break;
-        case 270:
-            at.scale(viewBox.getWidth() / viewBox.getHeight(), viewBox.getHeight() / viewBox.getWidth());
-            at.translate(viewBox.getHeight(), 0);
-            at.rotate(-Math.PI * 1.5);
-            break;
-        default:
-            //no additional transformations necessary
+        switch (rotation) {
+            case 90:
+                at.scale(viewBox.getWidth() / viewBox.getHeight(), viewBox.getHeight() / viewBox.getWidth());
+                at.translate(0, viewBox.getWidth());
+                at.rotate(-Math.PI / 2.0);
+                break;
+            case 180:
+                at.translate(viewBox.getWidth(), viewBox.getHeight());
+                at.rotate(-Math.PI);
+                break;
+            case 270:
+                at.scale(viewBox.getWidth() / viewBox.getHeight(), viewBox.getHeight() / viewBox.getWidth());
+                at.translate(viewBox.getHeight(), 0);
+                at.rotate(-Math.PI * 1.5);
+                break;
+            default:
+                //no additional transformations necessary
         }
         //Compensate for Crop Boxes not starting at 0,0
         at.translate(-viewBox.getLowerLeftX(), -viewBox.getLowerLeftY());
-        if (!at.isIdentity())
-        {
+        if (!at.isIdentity()) {
             form.setMatrix(at);
         }
 
@@ -236,44 +224,39 @@ public class LayerUtility
      * sure that the graphics state is reset.
      *
      * @param targetPage the target page
-     * @param form the form to place
-     * @param transform the transformation matrix that controls the placement of your form. You'll
-     * need this if your page has a crop box different than the media box, or if these have negative
-     * coordinates, or if you want to scale or adjust your form.
-     * @param layerName the name for the layer/OCG to produce
+     * @param form       the form to place
+     * @param transform  the transformation matrix that controls the placement of your form. You'll
+     *                   need this if your page has a crop box different than the media box, or if these have negative
+     *                   coordinates, or if you want to scale or adjust your form.
+     * @param layerName  the name for the layer/OCG to produce
      * @return the optional content group that was generated for the form usage
      * @throws IOException if an I/O error occurs
      */
     public PDOptionalContentGroup appendFormAsLayer(PDPage targetPage,
-            PDFormXObject form, AffineTransform transform,
-            String layerName) throws IOException
-    {
+                                                    PDFormXObject form, AffineTransform transform,
+                                                    String layerName) throws IOException {
         PDDocumentCatalog catalog = targetDoc.getDocumentCatalog();
         PDOptionalContentProperties ocprops = catalog.getOCProperties();
-        if (ocprops == null)
-        {
+        if (ocprops == null) {
             ocprops = new PDOptionalContentProperties();
             catalog.setOCProperties(ocprops);
         }
-        if (ocprops.hasGroup(layerName))
-        {
+        if (ocprops.hasGroup(layerName)) {
             throw new IllegalArgumentException("Optional group (layer) already exists: " + layerName);
         }
 
         PDRectangle cropBox = targetPage.getCropBox();
-        if ((cropBox.getLowerLeftX() < 0 || cropBox.getLowerLeftY() < 0) && transform.isIdentity())
-        {
+        if ((cropBox.getLowerLeftX() < 0 || cropBox.getLowerLeftY() < 0) && transform.isIdentity()) {
             // PDFBOX-4044
             LOG.warn("Negative cropBox " + cropBox +
-                     " and identity transform may make your form invisible");
+                    " and identity transform may make your form invisible");
         }
 
         PDOptionalContentGroup layer = new PDOptionalContentGroup(layerName);
         ocprops.addGroup(layer);
 
         try (PDPageContentStream contentStream = new PDPageContentStream(
-                targetDoc, targetPage, AppendMode.APPEND, !DEBUG))
-        {
+                targetDoc, targetPage, AppendMode.APPEND, !DEBUG)) {
             contentStream.beginMarkedContent(COSName.OC, layer);
             contentStream.saveGraphicsState();
             contentStream.transform(new Matrix(transform));
@@ -286,13 +269,10 @@ public class LayerUtility
     }
 
     private void transferDict(COSDictionary orgDict, COSDictionary targetDict, Set<String> filter)
-            throws IOException
-    {
-        for (Map.Entry<COSName, COSBase> entry : orgDict.entrySet())
-        {
+            throws IOException {
+        for (Map.Entry<COSName, COSBase> entry : orgDict.entrySet()) {
             COSName key = entry.getKey();
-            if (filter.contains(key.getName()))
-            {
+            if (filter.contains(key.getName())) {
                 targetDict.setItem(key, cloner.cloneForNewDocument(entry.getValue()));
             }
         }
@@ -305,25 +285,20 @@ public class LayerUtility
      * @param srcDoc The source PDF document that contains the /OCProperties to be copied.
      * @throws IOException If an I/O error occurs.
      */
-    private void importOcProperties(PDDocument srcDoc) throws IOException
-    {
+    private void importOcProperties(PDDocument srcDoc) throws IOException {
         PDDocumentCatalog srcCatalog = srcDoc.getDocumentCatalog();
         PDOptionalContentProperties srcOCProperties = srcCatalog.getOCProperties();
-        if (srcOCProperties == null)
-        {
+        if (srcOCProperties == null) {
             return;
         }
 
         PDDocumentCatalog dstCatalog = targetDoc.getDocumentCatalog();
         PDOptionalContentProperties dstOCProperties = dstCatalog.getOCProperties();
 
-        if (dstOCProperties == null)
-        {
+        if (dstOCProperties == null) {
             dstCatalog.setOCProperties(new PDOptionalContentProperties(
                     cloner.cloneForNewDocument(srcOCProperties.getCOSObject())));
-        }
-        else
-        {
+        } else {
             cloner.cloneMerge(srcOCProperties, dstOCProperties);
         }
     }

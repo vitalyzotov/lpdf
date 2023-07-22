@@ -16,11 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.markedcontent;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -32,6 +27,11 @@ import lpdf.pdfbox.pdmodel.graphics.PDXObject;
 import lpdf.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import lpdf.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
 import lpdf.pdfbox.text.PDFMarkedContentExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Do: Draws an XObject.
@@ -39,25 +39,20 @@ import lpdf.pdfbox.text.PDFMarkedContentExtractor;
  * @author Ben Litchfield
  * @author Mario Ivankovits
  */
-public class DrawObject extends OperatorProcessor
-{
+public class DrawObject extends OperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(DrawObject.class);
 
-    public DrawObject(PDFStreamEngine context)
-    {
+    public DrawObject(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
         COSBase base0 = arguments.get(0);
-        if (!(base0 instanceof COSName))
-        {
+        if (!(base0 instanceof COSName)) {
             return;
         }
         COSName name = (COSName) base0;
@@ -65,35 +60,26 @@ public class DrawObject extends OperatorProcessor
         PDXObject xobject = context.getResources().getXObject(name);
         ((PDFMarkedContentExtractor) context).xobject(xobject);
 
-        if (xobject instanceof PDFormXObject)
-        {
-            try
-            {
+        if (xobject instanceof PDFormXObject) {
+            try {
                 context.increaseLevel();
-                if (context.getLevel() > 50)
-                {
+                if (context.getLevel() > 50) {
                     LOG.error("recursion is too deep, skipping form XObject");
                     return;
                 }
-                if (xobject instanceof PDTransparencyGroup)
-                {
+                if (xobject instanceof PDTransparencyGroup) {
                     context.showTransparencyGroup((PDTransparencyGroup) xobject);
-                }
-                else
-                {
+                } else {
                     context.showForm((PDFormXObject) xobject);
                 }
-            }
-            finally
-            {
+            } finally {
                 context.decreaseLevel();
             }
         }
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.DRAW_OBJECT;
     }
 }

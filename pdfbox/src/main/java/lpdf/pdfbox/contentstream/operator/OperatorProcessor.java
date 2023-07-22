@@ -16,20 +16,21 @@
  */
 package lpdf.pdfbox.contentstream.operator;
 
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
+import lpdf.pdfbox.cos.COSBase;
 
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Processes a PDF operator.
  *
  * @author Laurent Huault
  */
-public abstract class OperatorProcessor
-{
-    /** The processing context. */
+public abstract class OperatorProcessor {
+    /**
+     * The processing context.
+     */
     private final PDFStreamEngine context;
 
     /**
@@ -37,8 +38,7 @@ public abstract class OperatorProcessor
      *
      * @param context the processing context to be used
      */
-    protected OperatorProcessor(PDFStreamEngine context)
-    {
+    protected OperatorProcessor(PDFStreamEngine context) {
         this.context = context;
     }
 
@@ -47,13 +47,13 @@ public abstract class OperatorProcessor
      *
      * @return the processing context
      */
-    protected final PDFStreamEngine getContext()
-    {
+    protected final PDFStreamEngine getContext() {
         return context;
     }
 
     /**
      * Process the operator.
+     *
      * @param operator the operator to process
      * @param operands the operands to use when processing
      * @throws IOException if the operator cannot be processed
@@ -71,11 +71,10 @@ public abstract class OperatorProcessor
      * Check whether all operands list elements are an instance of a specific class.
      *
      * @param operands The operands list.
-     * @param clazz The expected class.
+     * @param clazz    The expected class.
      * @return true if all operands list elements are an instance of the given class
      */
-    public boolean checkArrayTypesClass(List<COSBase> operands, Class<?> clazz)
-    {
+    public boolean checkArrayTypesClass(List<COSBase> operands, Class<?> clazz) {
         return operands.stream().allMatch(clazz::isInstance);
     }
 }

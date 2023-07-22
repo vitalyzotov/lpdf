@@ -24,8 +24,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public class FreeXReference extends AbstractXReference
-{
+public class FreeXReference extends AbstractXReference {
 
     public static final FreeXReference NULL_ENTRY = //
             new FreeXReference(new COSObjectKey(0, 65535), 0);
@@ -35,11 +34,10 @@ public class FreeXReference extends AbstractXReference
     /**
      * Sets the given {@link COSObjectKey} as a free reference in a PDF's crossreference stream ({@link PDFXRefStream}).
      *
-     * @param key The key, that shall be set as the free reference of the document.
+     * @param key            The key, that shall be set as the free reference of the document.
      * @param nextFreeObject The object number of the next free object.
      */
-    public FreeXReference(COSObjectKey key, long nextFreeObject)
-    {
+    public FreeXReference(COSObjectKey key, long nextFreeObject) {
         super(XReferenceType.FREE);
         this.key = key;
         this.nextFreeObject = nextFreeObject;
@@ -51,8 +49,7 @@ public class FreeXReference extends AbstractXReference
      * @return The {@link COSObjectKey} of the object, that is described by this crossreference stream entry.
      */
     @Override
-    public COSObjectKey getReferencedKey()
-    {
+    public COSObjectKey getReferencedKey() {
         return key;
     }
 
@@ -63,8 +60,7 @@ public class FreeXReference extends AbstractXReference
      * @return The value for the second column of the crossreference stream entry.
      */
     @Override
-    public long getSecondColumnValue()
-    {
+    public long getSecondColumnValue() {
         return nextFreeObject;
     }
 
@@ -75,8 +71,7 @@ public class FreeXReference extends AbstractXReference
      * @return The value for the third column of the crossreference stream entry.
      */
     @Override
-    public long getThirdColumnValue()
-    {
+    public long getThirdColumnValue() {
         return getReferencedKey().getGeneration();
     }
 
@@ -86,8 +81,7 @@ public class FreeXReference extends AbstractXReference
      * @return A string representation of this crossreference stream entry.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "FreeReference{" + "key=" + key + ", nextFreeObject=" + nextFreeObject + ", type="
                 + getType().getNumericValue() + " }";
     }

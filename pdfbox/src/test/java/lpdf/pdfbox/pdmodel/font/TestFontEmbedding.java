@@ -44,33 +44,27 @@ import static org.mockito.BDDMockito.given;
  * @author Tilman Hausherr
  */
 @Execution(ExecutionMode.CONCURRENT)
-class TestFontEmbedding
-{
+class TestFontEmbedding {
     private static final File OUT_DIR = new File("target/test-output");
 
     @BeforeAll
-    static void setUp()
-    {
+    static void setUp() {
         OUT_DIR.mkdirs();
     }
 
-    private class TrueTypeEmbedderTester extends TrueTypeEmbedder
-    {
+    private class TrueTypeEmbedderTester extends TrueTypeEmbedder {
 
         /**
          * Common functionality for testing the TrueTypeFontEmbedder
-         *
          */
         TrueTypeEmbedderTester(PDDocument document, COSDictionary dict, TrueTypeFont ttf, boolean embedSubset)
-                throws IOException
-        {
+                throws IOException {
             super(document, dict, ttf, embedSubset);
         }
 
         @Override
         protected void buildSubset(InputStream ttfSubset, String tag, Map<Integer, Integer> gidToCid)
-                throws IOException
-        {
+                throws IOException {
             // no-op.  Need to define method to extend abstract class, but
             // this method is not currently needed for testing
         }
@@ -82,8 +76,7 @@ class TestFontEmbedding
      * @throws IOException
      */
     @Test
-    void testIsEmbeddingPermittedMultipleVersions() throws IOException
-    {
+    void testIsEmbeddingPermittedMultipleVersions() throws IOException {
         // SETUP
         PDDocument doc = new PDDocument();
         COSDictionary cosDictionary = new COSDictionary();

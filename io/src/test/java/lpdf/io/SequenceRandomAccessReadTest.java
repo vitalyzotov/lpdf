@@ -17,6 +17,8 @@
 
 package lpdf.io;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,18 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
 
 /**
  * Unittest for org.apache.pdfbox.io.SequenceRandomAccessRead
- *
  */
-class SequenceRandomAccessReadTest
-{
+class SequenceRandomAccessReadTest {
 
     @Test
-    void TestCreateAndRead() throws IOException
-    {
+    void TestCreateAndRead() throws IOException {
         String input1 = "This is a test string number 1";
         RandomAccessReadBuffer randomAccessReadBuffer1 = new RandomAccessReadBuffer(
                 input1.getBytes());
@@ -46,8 +44,7 @@ class SequenceRandomAccessReadTest
                 input2.getBytes());
         List<RandomAccessRead> inputList = Arrays.asList(randomAccessReadBuffer1,
                 randomAccessReadBuffer2);
-        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList))
-        {
+        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList)) {
             assertThrows(UnsupportedOperationException.class, () -> sequenceRandomAccessRead.createView(0, 10));
 
             int overallLength = input1.length() + input2.length();
@@ -71,8 +68,7 @@ class SequenceRandomAccessReadTest
     }
 
     @Test
-    void TestSeekPeekAndRewind() throws IOException
-    {
+    void TestSeekPeekAndRewind() throws IOException {
         String input1 = "01234567890123456789";
         RandomAccessReadBuffer randomAccessReadBuffer1 = new RandomAccessReadBuffer(
                 input1.getBytes());
@@ -82,8 +78,7 @@ class SequenceRandomAccessReadTest
         List<RandomAccessRead> inputList = Arrays.asList(randomAccessReadBuffer1,
                 randomAccessReadBuffer2);
         // test seek, rewind and peek in the first part of the sequence
-        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList))
-        {
+        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList)) {
             // test seek, rewind and peek in the first part of the sequence
             sequenceRandomAccessRead.seek(4);
             assertEquals(4, sequenceRandomAccessRead.getPosition());
@@ -109,8 +104,7 @@ class SequenceRandomAccessReadTest
     }
 
     @Test
-    void TestBorderCases() throws IOException
-    {
+    void TestBorderCases() throws IOException {
         String input1 = "01234567890123456789";
         RandomAccessReadBuffer randomAccessReadBuffer1 = new RandomAccessReadBuffer(
                 input1.getBytes());
@@ -120,8 +114,7 @@ class SequenceRandomAccessReadTest
         List<RandomAccessRead> inputList = Arrays.asList(randomAccessReadBuffer1,
                 randomAccessReadBuffer2);
         // jump to the last byte of the first part of the sequence
-        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList))
-        {
+        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList)) {
             // jump to the last byte of the first part of the sequence
             sequenceRandomAccessRead.seek(19);
             assertEquals('9', sequenceRandomAccessRead.read());
@@ -153,8 +146,7 @@ class SequenceRandomAccessReadTest
     }
 
     @Test
-    void TestEOF() throws IOException
-    {
+    void TestEOF() throws IOException {
         String input1 = "01234567890123456789";
         RandomAccessReadBuffer randomAccessReadBuffer1 = new RandomAccessReadBuffer(
                 input1.getBytes());
@@ -199,8 +191,7 @@ class SequenceRandomAccessReadTest
     }
 
     @Test
-    void TestEmptyStream() throws IOException
-    {
+    void TestEmptyStream() throws IOException {
         String input1 = "01234567890123456789";
         RandomAccessReadBuffer randomAccessReadBuffer1 = new RandomAccessReadBuffer(
                 input1.getBytes());
@@ -212,8 +203,7 @@ class SequenceRandomAccessReadTest
         List<RandomAccessRead> inputList = Arrays.asList(randomAccessReadBuffer1, emptyBuffer,
                 randomAccessReadBuffer2);
 
-        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList))
-        {
+        try (SequenceRandomAccessRead sequenceRandomAccessRead = new SequenceRandomAccessRead(inputList)) {
             // check length
             assertEquals(sequenceRandomAccessRead.length(), input1.length() + input2.length());
 

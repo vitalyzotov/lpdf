@@ -16,23 +16,23 @@
  */
 package lpdf.pdfbox.pdmodel.common;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import lpdf.pdfbox.cos.COSInteger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import lpdf.pdfbox.cos.COSInteger;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * A test case for PDNameTreeNode.
  *
  * @author Koch
  */
-class TestPDNameTreeNode
-{
+class TestPDNameTreeNode {
     private PDNameTreeNode<COSInteger> node1;
     private PDNameTreeNode<COSInteger> node2;
     private PDNameTreeNode<COSInteger> node4;
@@ -40,8 +40,7 @@ class TestPDNameTreeNode
     private PDNameTreeNode<COSInteger> node24;
 
     @BeforeEach
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         this.node5 = new PDIntegerNameTreeNode();
         Map<String, COSInteger> names = new TreeMap<>();
         names.put("Actinium", COSInteger.get(89));
@@ -64,8 +63,7 @@ class TestPDNameTreeNode
 
         this.node2 = new PDIntegerNameTreeNode();
         List<PDNameTreeNode<COSInteger>> kids = this.node2.getKids();
-        if (kids == null)
-        {
+        if (kids == null) {
             kids = new COSArrayList<>();
         }
         kids.add(this.node5);
@@ -73,8 +71,7 @@ class TestPDNameTreeNode
 
         this.node4 = new PDIntegerNameTreeNode();
         kids = this.node4.getKids();
-        if (kids == null)
-        {
+        if (kids == null) {
             kids = new COSArrayList<>();
         }
         kids.add(this.node24);
@@ -82,8 +79,7 @@ class TestPDNameTreeNode
 
         this.node1 = new PDIntegerNameTreeNode();
         kids = this.node1.getKids();
-        if (kids == null)
-        {
+        if (kids == null) {
             kids = new COSArrayList<>();
         }
         kids.add(this.node2);
@@ -92,8 +88,7 @@ class TestPDNameTreeNode
     }
 
     @Test
-    void testUpperLimit() throws IOException
-    {
+    void testUpperLimit() throws IOException {
         assertEquals("Astatine", this.node5.getUpperLimit());
         assertEquals("Astatine", this.node2.getUpperLimit());
 
@@ -104,8 +99,7 @@ class TestPDNameTreeNode
     }
 
     @Test
-    void testLowerLimit() throws IOException
-    {
+    void testLowerLimit() throws IOException {
         assertEquals("Actinium", this.node5.getLowerLimit());
         assertEquals("Actinium", this.node2.getLowerLimit());
 

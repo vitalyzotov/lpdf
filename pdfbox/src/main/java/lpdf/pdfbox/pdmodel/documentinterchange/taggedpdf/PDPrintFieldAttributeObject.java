@@ -23,8 +23,7 @@ import lpdf.pdfbox.cos.COSDictionary;
  *
  * @author Johannes Koch
  */
-public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
-{
+public class PDPrintFieldAttributeObject extends PDStandardAttributeObject {
 
     /**
      * standard attribute owner: PrintField
@@ -68,8 +67,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
     /**
      * Default constructor.
      */
-    public PDPrintFieldAttributeObject()
-    {
+    public PDPrintFieldAttributeObject() {
         this.setOwner(OWNER_PRINT_FIELD);
     }
 
@@ -78,8 +76,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @param dictionary the dictionary
      */
-    public PDPrintFieldAttributeObject(COSDictionary dictionary)
-    {
+    public PDPrintFieldAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -89,8 +86,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @return the role
      */
-    public String getRole()
-    {
+    public String getRole() {
         return this.getName(ROLE);
     }
 
@@ -105,8 +101,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @param role the role
      */
-    public void setRole(String role)
-    {
+    public void setRole(String role) {
         this.setName(ROLE, role);
     }
 
@@ -115,8 +110,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @return the checked state
      */
-    public String getCheckedState()
-    {
+    public String getCheckedState() {
         return this.getName(CHECKED, CHECKED_STATE_OFF);
     }
 
@@ -130,8 +124,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @param checkedState the checked state
      */
-    public void setCheckedState(String checkedState)
-    {
+    public void setCheckedState(String checkedState) {
         this.setName(CHECKED, checkedState);
     }
 
@@ -140,8 +133,7 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @return the alternate name of the field
      */
-    public String getAlternateName()
-    {
+    public String getAlternateName() {
         return this.getString(DESC);
     }
 
@@ -150,25 +142,20 @@ public class PDPrintFieldAttributeObject extends PDStandardAttributeObject
      *
      * @param alternateName the alternate name of the field
      */
-    public void setAlternateName(String alternateName)
-    {
+    public void setAlternateName(String alternateName) {
         this.setString(DESC, alternateName);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder().append(super.toString());
-        if (this.isSpecified(ROLE))
-        {
+        if (this.isSpecified(ROLE)) {
             sb.append(", Role=").append(this.getRole());
         }
-        if (this.isSpecified(CHECKED))
-        {
+        if (this.isSpecified(CHECKED)) {
             sb.append(", Checked=").append(this.getCheckedState());
         }
-        if (this.isSpecified(DESC))
-        {
+        if (this.isSpecified(DESC)) {
             sb.append(", Desc=").append(this.getAlternateName());
         }
         return sb.toString();

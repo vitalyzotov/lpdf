@@ -29,33 +29,27 @@ import lpdf.fontbox.ttf.table.common.LookupSubTable;
  * Substitution Format 1</a>.
  *
  * @author Palash Ray
- *
  */
-public class LookupTypeLigatureSubstitutionSubstFormat1 extends LookupSubTable
-{
+public class LookupTypeLigatureSubstitutionSubstFormat1 extends LookupSubTable {
     private final LigatureSetTable[] ligatureSetTables;
 
     public LookupTypeLigatureSubstitutionSubstFormat1(int substFormat, CoverageTable coverageTable,
-            LigatureSetTable[] ligatureSetTables)
-    {
+                                                      LigatureSetTable[] ligatureSetTables) {
         super(substFormat, coverageTable);
         this.ligatureSetTables = ligatureSetTables;
     }
 
     @Override
-    public int doSubstitution(int gid, int coverageIndex)
-    {
+    public int doSubstitution(int gid, int coverageIndex) {
         throw new UnsupportedOperationException("not applicable");
     }
 
-    public LigatureSetTable[] getLigatureSetTables()
-    {
+    public LigatureSetTable[] getLigatureSetTables() {
         return ligatureSetTables;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("%s[substFormat=%d]",
                 LookupTypeLigatureSubstitutionSubstFormat1.class.getSimpleName(), getSubstFormat());
     }

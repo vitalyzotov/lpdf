@@ -23,11 +23,9 @@ package lpdf.pdfbox.pdmodel.graphics.color;
  *
  * @author John Hewson
  */
-public abstract class PDCIEBasedColorSpace extends PDColorSpace
-{
+public abstract class PDCIEBasedColorSpace extends PDColorSpace {
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName();   // TODO return more info
     }
 }

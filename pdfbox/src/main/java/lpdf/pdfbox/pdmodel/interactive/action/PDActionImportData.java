@@ -18,16 +18,15 @@
 package lpdf.pdfbox.pdmodel.interactive.action;
 
 import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
 
 import java.io.IOException;
-import lpdf.pdfbox.cos.COSName;
 
 /**
  * @author Timur Kamalov
  */
-public class PDActionImportData extends PDAction
-{
+public class PDActionImportData extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -37,8 +36,7 @@ public class PDActionImportData extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionImportData()
-    {
+    public PDActionImportData() {
         setSubType(SUB_TYPE);
     }
 
@@ -47,8 +45,7 @@ public class PDActionImportData extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionImportData(COSDictionary a)
-    {
+    public PDActionImportData(COSDictionary a) {
         super(a);
     }
 
@@ -58,8 +55,7 @@ public class PDActionImportData extends PDAction
      * @return The F entry of the specific Submit-From action dictionary.
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
+    public PDFileSpecification getFile() throws IOException {
         return PDFileSpecification.createFS(action.getDictionaryObject(COSName.F));
     }
 
@@ -68,8 +64,7 @@ public class PDActionImportData extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile(PDFileSpecification fs)
-    {
+    public void setFile(PDFileSpecification fs) {
         action.setItem(COSName.F, fs);
     }
 

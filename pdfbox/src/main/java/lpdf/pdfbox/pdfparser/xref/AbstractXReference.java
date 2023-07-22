@@ -24,8 +24,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public abstract class AbstractXReference implements XReferenceEntry
-{
+public abstract class AbstractXReference implements XReferenceEntry {
 
     private final XReferenceType type;
 
@@ -34,8 +33,7 @@ public abstract class AbstractXReference implements XReferenceEntry
      *
      * @param type The {@link XReferenceType} of the crossreference stream entry.
      */
-    protected AbstractXReference(XReferenceType type)
-    {
+    protected AbstractXReference(XReferenceType type) {
         this.type = type;
     }
 
@@ -45,8 +43,7 @@ public abstract class AbstractXReference implements XReferenceEntry
      * @return The {@link XReferenceType} of this crossreference stream entry.
      */
     @Override
-    public XReferenceType getType()
-    {
+    public XReferenceType getType() {
         return type;
     }
 
@@ -57,8 +54,7 @@ public abstract class AbstractXReference implements XReferenceEntry
      * @return The value for the first column of the crossreference stream entry.
      */
     @Override
-    public long getFirstColumnValue()
-    {
+    public long getFirstColumnValue() {
         return getType().getNumericValue();
     }
 
@@ -71,14 +67,10 @@ public abstract class AbstractXReference implements XReferenceEntry
      * the specified object.
      */
     @Override
-    public int compareTo(XReferenceEntry xReferenceEntry)
-    {
-        if (getReferencedKey() == null)
-        {
+    public int compareTo(XReferenceEntry xReferenceEntry) {
+        if (getReferencedKey() == null) {
             return -1;
-        }
-        else if (xReferenceEntry == null || xReferenceEntry.getReferencedKey() == null)
-        {
+        } else if (xReferenceEntry == null || xReferenceEntry.getReferencedKey() == null) {
             return 1;
         }
 

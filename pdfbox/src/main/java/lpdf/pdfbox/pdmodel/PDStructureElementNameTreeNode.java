@@ -17,24 +17,23 @@
 
 package lpdf.pdfbox.pdmodel;
 
-import java.io.IOException;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.pdmodel.common.PDNameTreeNode;
 import lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
+
+import java.io.IOException;
 
 /**
  * todo: JavaDoc
  *
  * @author John Hewson
  */
-public class PDStructureElementNameTreeNode extends PDNameTreeNode<PDStructureElement>
-{
+public class PDStructureElementNameTreeNode extends PDNameTreeNode<PDStructureElement> {
     /**
      * Constructor.
      */
-    public PDStructureElementNameTreeNode()
-    {
+    public PDStructureElementNameTreeNode() {
         // just calls super()
     }
 
@@ -43,20 +42,17 @@ public class PDStructureElementNameTreeNode extends PDNameTreeNode<PDStructureEl
      *
      * @param dic The COS dictionary.
      */
-    public PDStructureElementNameTreeNode( COSDictionary dic )
-    {
+    public PDStructureElementNameTreeNode(COSDictionary dic) {
         super(dic);
     }
 
     @Override
-    protected PDStructureElement convertCOSToPD( COSBase base ) throws IOException
-    {
-        return new PDStructureElement((COSDictionary)base);
+    protected PDStructureElement convertCOSToPD(COSBase base) throws IOException {
+        return new PDStructureElement((COSDictionary) base);
     }
 
     @Override
-    protected PDNameTreeNode<PDStructureElement> createChildNode( COSDictionary dic )
-    {
+    protected PDNameTreeNode<PDStructureElement> createChildNode(COSDictionary dic) {
         return new PDStructureElementNameTreeNode(dic);
     }
 }

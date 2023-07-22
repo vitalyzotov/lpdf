@@ -16,12 +16,7 @@
  */
 package lpdf.pdfbox.contentstream;
 
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.PDPage;
-import lpdf.pdfbox.pdmodel.graphics.image.PDImage;
-
 import lpdf.harmony.awt.geom.Point2D;
-import java.io.IOException;
 import lpdf.pdfbox.contentstream.operator.color.SetNonStrokingColor;
 import lpdf.pdfbox.contentstream.operator.color.SetNonStrokingColorN;
 import lpdf.pdfbox.contentstream.operator.color.SetNonStrokingColorSpace;
@@ -73,20 +68,25 @@ import lpdf.pdfbox.contentstream.operator.state.SetMatrix;
 import lpdf.pdfbox.contentstream.operator.state.SetRenderingIntent;
 import lpdf.pdfbox.contentstream.operator.text.BeginText;
 import lpdf.pdfbox.contentstream.operator.text.EndText;
-import lpdf.pdfbox.contentstream.operator.text.SetFontAndSize;
-import lpdf.pdfbox.contentstream.operator.text.SetTextHorizontalScaling;
-import lpdf.pdfbox.contentstream.operator.text.ShowTextAdjusted;
-import lpdf.pdfbox.contentstream.operator.text.ShowTextLine;
-import lpdf.pdfbox.contentstream.operator.text.ShowTextLineAndSpace;
 import lpdf.pdfbox.contentstream.operator.text.MoveText;
 import lpdf.pdfbox.contentstream.operator.text.MoveTextSetLeading;
 import lpdf.pdfbox.contentstream.operator.text.NextLine;
 import lpdf.pdfbox.contentstream.operator.text.SetCharSpacing;
+import lpdf.pdfbox.contentstream.operator.text.SetFontAndSize;
+import lpdf.pdfbox.contentstream.operator.text.SetTextHorizontalScaling;
 import lpdf.pdfbox.contentstream.operator.text.SetTextLeading;
 import lpdf.pdfbox.contentstream.operator.text.SetTextRenderingMode;
 import lpdf.pdfbox.contentstream.operator.text.SetTextRise;
 import lpdf.pdfbox.contentstream.operator.text.SetWordSpacing;
 import lpdf.pdfbox.contentstream.operator.text.ShowText;
+import lpdf.pdfbox.contentstream.operator.text.ShowTextAdjusted;
+import lpdf.pdfbox.contentstream.operator.text.ShowTextLine;
+import lpdf.pdfbox.contentstream.operator.text.ShowTextLineAndSpace;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.PDPage;
+import lpdf.pdfbox.pdmodel.graphics.image.PDImage;
+
+import java.io.IOException;
 
 /**
  * PDFStreamEngine subclass for advanced processing of graphics.
@@ -94,8 +94,7 @@ import lpdf.pdfbox.contentstream.operator.text.ShowText;
  *
  * @author John Hewson
  */
-public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
-{
+public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine {
     // may be null, for example if the stream is a tiling pattern
     private final PDPage page;
 
@@ -104,8 +103,7 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      *
      * @param page the page the content stream belongs to
      */
-    protected PDFGraphicsStreamEngine(PDPage page)
-    {
+    protected PDFGraphicsStreamEngine(PDPage page) {
         this.page = page;
 
         addOperator(new CloseFillNonZeroAndStrokePath(this));
@@ -180,8 +178,7 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      *
      * @return the current page
      */
-    protected final PDPage getPage()
-    {
+    protected final PDPage getPage() {
         return page;
     }
 
@@ -192,7 +189,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * @param p1 second coordinate of the rectangle
      * @param p2 third coordinate of the rectangle
      * @param p3 last coordinate of the rectangle
-     *
      * @throws IOException if the rectangle could not be appended
      */
     public abstract void appendRectangle(Point2D p0, Point2D p1,
@@ -202,7 +198,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * Draw the image.
      *
      * @param pdImage The image to draw.
-     *
      * @throws IOException if the image could not be drawn
      */
     public abstract void drawImage(PDImage pdImage) throws IOException;
@@ -212,7 +207,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * until the succeeding painting operator is called.
      *
      * @param windingRule The winding rule which will be used for clipping.
-     *
      * @throws IOException if the clipping path could not be modified
      */
     public abstract void clip(int windingRule) throws IOException;
@@ -222,7 +216,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      *
      * @param x the x-coordinate to move to
      * @param y the y-coordinate to move to
-     *
      * @throws IOException if the something went wrong when moving to the given coordinate
      */
     public abstract void moveTo(float x, float y) throws IOException;
@@ -232,7 +225,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      *
      * @param x the X-coordinate of the ending-point of the line to be drawn
      * @param y the Y-coordinate of the ending-point of the line to be drawn
-     *
      * @throws IOException if the line could not be drawn
      */
     public abstract void lineTo(float x, float y) throws IOException;
@@ -246,7 +238,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * @param y2 the Y coordinate of the second B&eacute;zier control point
      * @param x3 the X coordinate of the final end point
      * @param y3 the Y coordinate of the final end point
-     *
      * @throws IOException if the curve could not be drawn
      */
     public abstract void curveTo(float x1, float y1,
@@ -257,7 +248,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * Returns the current point of the current path.
      *
      * @return the current point or null
-     *
      * @throws IOException if the something went wrong when providing the current point
      */
     public abstract Point2D getCurrentPoint() throws IOException;
@@ -287,7 +277,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * Fill the path.
      *
      * @param windingRule The winding rule this path will use.
-     *
      * @throws IOException if the path could not be filled
      */
     public abstract void fillPath(int windingRule) throws IOException;
@@ -296,7 +285,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * Fills and then strokes the path.
      *
      * @param windingRule The winding rule this path will use.
-     *
      * @throws IOException if the path could not be filled and stroke
      */
     public abstract void fillAndStrokePath(int windingRule) throws IOException;
@@ -305,7 +293,6 @@ public abstract class PDFGraphicsStreamEngine extends PDFStreamEngine
      * Fill with Shading.
      *
      * @param shadingName The name of the Shading Dictionary to use for this fill instruction.
-     *
      * @throws IOException if the path could not be filled using the given shading
      */
     public abstract void shadingFill(COSName shadingName) throws IOException;

@@ -16,14 +16,14 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
-
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.io.IOUtils;
 
 /**
  * Decodes image data that has been encoded using either Group 3 or Group 4
@@ -33,12 +33,10 @@ import lpdf.io.IOUtils;
  * @author Marcel Kammer
  * @author Paul King
  */
-final class CCITTFaxFilter extends Filter
-{
+final class CCITTFaxFilter extends Filter {
     @Override
     public DecodeResult decode(InputStream encoded, OutputStream decoded,
-                                         COSDictionary parameters, int index) throws IOException
-    {
+                               COSDictionary parameters, int index) throws IOException {
         // get decode parameters
         COSDictionary decodeParms = getDecodeParams(parameters, index);
 
@@ -46,13 +44,10 @@ final class CCITTFaxFilter extends Filter
         int cols = decodeParms.getInt(COSName.COLUMNS, 1728);
         int rows = decodeParms.getInt(COSName.ROWS, 0);
         int height = parameters.getInt(COSName.HEIGHT, COSName.H, 0);
-        if (rows > 0 && height > 0)
-        {
+        if (rows > 0 && height > 0) {
             // PDFBOX-771, PDFBOX-3727: rows in DecodeParms sometimes contains an incorrect value
             rows = height;
-        }
-        else
-        {
+        } else {
             // at least one of the values has to have a valid value
             rows = Math.max(rows, height);
         }
@@ -66,39 +61,31 @@ final class CCITTFaxFilter extends Filter
         CCITTFaxDecoderStream s;
         int type;
         long tiffOptions = 0;
-        if (k == 0)
-        {
+        if (k == 0) {
             type = TIFFExtension.COMPRESSION_CCITT_T4; // Group 3 1D
             byte[] streamData = new byte[20];
             int bytesRead = encoded.read(streamData);
             PushbackInputStream pushbackInputStream = new PushbackInputStream(encoded, streamData.length);
             pushbackInputStream.unread(streamData, 0, bytesRead);
             encoded = pushbackInputStream;
-            if (streamData[0] != 0 || (streamData[1] >> 4 != 1 && streamData[1] != 1))
-            {
+            if (streamData[0] != 0 || (streamData[1] >> 4 != 1 && streamData[1] != 1)) {
                 // leading EOL (0b000000000001) not found, search further and try RLE if not
                 // found
                 type = TIFFExtension.COMPRESSION_CCITT_MODIFIED_HUFFMAN_RLE;
                 short b = (short) (((streamData[0] << 8) + (streamData[1] & 0xff)) >> 4);
-                for (int i = 12; i < bytesRead * 8; i++)
-                {
+                for (int i = 12; i < bytesRead * 8; i++) {
                     b = (short) ((b << 1) + ((streamData[(i / 8)] >> (7 - (i % 8))) & 0x01));
-                    if ((b & 0xFFF) == 1)
-                    {
+                    if ((b & 0xFFF) == 1) {
                         type = TIFFExtension.COMPRESSION_CCITT_T4;
                         break;
                     }
                 }
             }
-        }
-        else if (k > 0)
-        {
+        } else if (k > 0) {
             // Group 3 2D
             type = TIFFExtension.COMPRESSION_CCITT_T4;
             tiffOptions = TIFFExtension.GROUP3OPT_2DENCODING;
-        }
-        else
-        {
+        } else {
             // Group 4
             type = TIFFExtension.COMPRESSION_CCITT_T6;
         }
@@ -107,8 +94,7 @@ final class CCITTFaxFilter extends Filter
 
         // invert bitmap
         boolean blackIsOne = decodeParms.getBoolean(COSName.BLACK_IS_1, false);
-        if (!blackIsOne)
-        {
+        if (!blackIsOne) {
             // Inverting the bitmap
             // Note the previous approach with starting from an IndexColorModel didn't work
             // reliably. In some cases the image wouldn't be painted for some reason.
@@ -121,32 +107,26 @@ final class CCITTFaxFilter extends Filter
     }
 
     void readFromDecoderStream(CCITTFaxDecoderStream decoderStream, byte[] result)
-            throws IOException
-    {
+            throws IOException {
         int pos = 0;
         int read;
-        while ((read = decoderStream.read(result, pos, result.length - pos)) > -1)
-        {
+        while ((read = decoderStream.read(result, pos, result.length - pos)) > -1) {
             pos += read;
-            if (pos >= result.length)
-            {
+            if (pos >= result.length) {
                 break;
             }
         }
     }
 
-    private void invertBitmap(byte[] bufferData)
-    {
-        for (int i = 0, c = bufferData.length; i < c; i++)
-        {
+    private void invertBitmap(byte[] bufferData) {
+        for (int i = 0, c = bufferData.length; i < c; i++) {
             bufferData[i] = (byte) (~bufferData[i] & 0xFF);
         }
     }
 
     @Override
     protected void encode(InputStream input, OutputStream encoded, COSDictionary parameters)
-            throws IOException
-    {
+            throws IOException {
         int cols = parameters.getInt(COSName.COLUMNS);
         int rows = parameters.getInt(COSName.ROWS);
         CCITTFaxEncoderStream ccittFaxEncoderStream =

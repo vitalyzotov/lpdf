@@ -16,8 +16,7 @@
  */
 package lpdf.pdfbox.contentstream.operator;
 
-public final class OperatorName
-{
+public final class OperatorName {
 
     // non stroking color
     public static final String NON_STROKING_COLOR = "sc";
@@ -111,8 +110,7 @@ public final class OperatorName
     /**
      * private constructor
      */
-    private OperatorName()
-    {
+    private OperatorName() {
     }
 
 }

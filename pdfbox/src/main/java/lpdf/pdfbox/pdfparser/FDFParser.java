@@ -16,12 +16,12 @@
  */
 package lpdf.pdfbox.pdfparser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSDocument;
 import lpdf.pdfbox.cos.COSName;
-import lpdf.io.RandomAccessRead;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 

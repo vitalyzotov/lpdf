@@ -17,15 +17,13 @@
 
 package lpdf.fontbox.afm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class KernPairTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class KernPairTest {
     @Test
-    void testKernPair()
-    {
+    void testKernPair() {
         KernPair kernPair = new KernPair("firstKernCharacter", "secondKernCharacter", 10f, 20f);
         assertEquals("firstKernCharacter", kernPair.getFirstKernCharacter());
         assertEquals("secondKernCharacter", kernPair.getSecondKernCharacter());

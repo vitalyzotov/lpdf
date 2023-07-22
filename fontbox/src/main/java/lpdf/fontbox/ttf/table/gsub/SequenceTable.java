@@ -28,32 +28,26 @@ import java.util.Arrays;
  * table</a>.
  *
  * @author Tilman Hausherr
- *
  */
-public class SequenceTable
-{
+public class SequenceTable {
     private final int glyphCount;
     private final int[] substituteGlyphIDs;
 
-    public SequenceTable(int glyphCount, int[] substituteGlyphIDs)
-    {
+    public SequenceTable(int glyphCount, int[] substituteGlyphIDs) {
         this.glyphCount = glyphCount;
         this.substituteGlyphIDs = substituteGlyphIDs;
     }
 
-    public int getGlyphCount()
-    {
+    public int getGlyphCount() {
         return glyphCount;
     }
 
-    public int[] getSubstituteGlyphIDs()
-    {
+    public int[] getSubstituteGlyphIDs() {
         return substituteGlyphIDs;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "SequenceTable{" + "glyphCount=" + glyphCount + ", substituteGlyphIDs=" + Arrays.toString(substituteGlyphIDs) + '}';
     }
 }

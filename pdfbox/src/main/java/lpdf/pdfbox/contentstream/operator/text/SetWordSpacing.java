@@ -16,37 +16,32 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.util.List;
 
 /**
  * Tw: Set word spacing.
  *
  * @author Laurent Huault
  */
-public class SetWordSpacing extends OperatorProcessor
-{
-    public SetWordSpacing(PDFStreamEngine context)
-    {
+public class SetWordSpacing extends OperatorProcessor {
+    public SetWordSpacing(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments)
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) {
+        if (arguments.isEmpty()) {
             return;
         }
         COSBase base = arguments.get(0);
-        if (!(base instanceof COSNumber))
-        {
+        if (!(base instanceof COSNumber)) {
             return;
         }
         COSNumber wordSpacing = (COSNumber) base;
@@ -54,8 +49,7 @@ public class SetWordSpacing extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_WORD_SPACING;
     }
 }

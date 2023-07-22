@@ -16,12 +16,6 @@
  */
 package lpdf.pdfbox.pdfparser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
-
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSBoolean;
 import lpdf.pdfbox.cos.COSDocument;
@@ -31,14 +25,18 @@ import lpdf.pdfbox.cos.COSObjectKey;
 import lpdf.pdfbox.cos.COSStream;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test for PDFObjectStreamParser.
  */
-class PDFObjectStreamParserTest
-{
+class PDFObjectStreamParserTest {
     @Test
-    void testOffsetParsing() throws IOException
-    {
+    void testOffsetParsing() throws IOException {
         COSStream stream = new COSStream();
         stream.setItem(COSName.N, COSInteger.TWO);
         stream.setItem(COSName.FIRST, COSInteger.get(8));
@@ -57,8 +55,7 @@ class PDFObjectStreamParserTest
     }
 
     @Test
-    void testParseAllObjects() throws IOException
-    {
+    void testParseAllObjects() throws IOException {
         COSStream stream = new COSStream();
         stream.setItem(COSName.N, COSInteger.TWO);
         stream.setItem(COSName.FIRST, COSInteger.get(8));
@@ -73,8 +70,7 @@ class PDFObjectStreamParserTest
     }
 
     @Test
-    void testParseAllObjectsIndexed() throws IOException
-    {
+    void testParseAllObjectsIndexed() throws IOException {
         COSStream stream = new COSStream();
         stream.setItem(COSName.N, COSInteger.THREE);
         stream.setItem(COSName.FIRST, COSInteger.get(13));
@@ -105,8 +101,7 @@ class PDFObjectStreamParserTest
     }
 
     @Test
-    void testParseAllObjectsSkipMalformedIndex() throws IOException
-    {
+    void testParseAllObjectsSkipMalformedIndex() throws IOException {
         COSStream stream = new COSStream();
         stream.setItem(COSName.N, COSInteger.THREE);
         stream.setItem(COSName.FIRST, COSInteger.get(13));
@@ -130,8 +125,7 @@ class PDFObjectStreamParserTest
     }
 
     @Test
-    void testParseAllObjectsUseMalformedIndex() throws IOException
-    {
+    void testParseAllObjectsUseMalformedIndex() throws IOException {
         COSStream stream = new COSStream();
         stream.setItem(COSName.N, COSInteger.THREE);
         stream.setItem(COSName.FIRST, COSInteger.get(13));

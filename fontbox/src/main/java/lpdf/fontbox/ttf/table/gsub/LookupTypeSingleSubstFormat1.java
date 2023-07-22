@@ -29,33 +29,27 @@ import lpdf.fontbox.ttf.table.common.LookupSubTable;
  * Substitution Format 1</a>.
  *
  * @author Palash Ray
- *
  */
-public class LookupTypeSingleSubstFormat1 extends LookupSubTable
-{
+public class LookupTypeSingleSubstFormat1 extends LookupSubTable {
     private final short deltaGlyphID;
 
     public LookupTypeSingleSubstFormat1(int substFormat, CoverageTable coverageTable,
-            short deltaGlyphID)
-    {
+                                        short deltaGlyphID) {
         super(substFormat, coverageTable);
         this.deltaGlyphID = deltaGlyphID;
     }
 
     @Override
-    public int doSubstitution(int gid, int coverageIndex)
-    {
+    public int doSubstitution(int gid, int coverageIndex) {
         return coverageIndex < 0 ? gid : gid + deltaGlyphID;
     }
 
-    public short getDeltaGlyphID()
-    {
+    public short getDeltaGlyphID() {
         return deltaGlyphID;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("LookupTypeSingleSubstFormat1[substFormat=%d,deltaGlyphID=%d]",
                 getSubstFormat(), deltaGlyphID);
     }

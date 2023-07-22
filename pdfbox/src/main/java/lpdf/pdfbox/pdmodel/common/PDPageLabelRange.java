@@ -21,14 +21,11 @@ import lpdf.pdfbox.cos.COSName;
 
 /**
  * Contains information for a page label range.
- * 
+ *
  * @author Igor Podolskiy
- * 
  * @see PDPageLabels
- * 
  */
-public class PDPageLabelRange implements COSObjectable
-{
+public class PDPageLabelRange implements COSObjectable {
 
     private final COSDictionary root;
 
@@ -69,84 +66,69 @@ public class PDPageLabelRange implements COSObjectable
     /**
      * Creates a new empty page label range object.
      */
-    public PDPageLabelRange()
-    {
+    public PDPageLabelRange() {
         this(new COSDictionary());
     }
 
     /**
      * Creates a new page label range object from the given dictionary.
-     * 
-     * @param dict
-     *            the base dictionary for the new object.
+     *
+     * @param dict the base dictionary for the new object.
      */
-    public PDPageLabelRange(COSDictionary dict)
-    {
+    public PDPageLabelRange(COSDictionary dict) {
         root = dict;
     }
 
     /**
      * Returns the underlying dictionary.
-     * 
+     *
      * @return the underlying dictionary.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return root;
     }
 
     /**
      * Returns the numbering style for this page range.
-     * 
+     *
      * @return one of the STYLE_* constants
      */
-    public String getStyle()
-    {
+    public String getStyle() {
         return root.getNameAsString(KEY_STYLE);
     }
 
     /**
      * Sets the numbering style for this page range.
-     * 
-     * @param style
-     *            one of the STYLE_* constants or {@code null} if no page
-     *            numbering is desired.
+     *
+     * @param style one of the STYLE_* constants or {@code null} if no page
+     *              numbering is desired.
      */
-    public void setStyle(String style)
-    {
-        if (style != null)
-        {
+    public void setStyle(String style) {
+        if (style != null) {
             root.setName(KEY_STYLE, style);
-        }
-        else
-        {
+        } else {
             root.removeItem(KEY_STYLE);
         }
     }
 
     /**
      * Returns the start value for page numbering in this page range.
-     * 
+     *
      * @return a positive integer the start value for numbering.
      */
-    public int getStart()
-    {
+    public int getStart() {
         return root.getInt(KEY_START, 1);
     }
 
     /**
      * Sets the start value for page numbering in this page range.
-     * 
-     * @param start
-     *            a positive integer representing the start value.
-     * @throws IllegalArgumentException
-     *             if {@code start} is not a positive integer
+     *
+     * @param start a positive integer representing the start value.
+     * @throws IllegalArgumentException if {@code start} is not a positive integer
      */
-    public void setStart(int start)
-    {
-        if (start <= 0)
-        {
+    public void setStart(int start) {
+        if (start <= 0) {
             throw new IllegalArgumentException(
                     "The page numbering start value must be a positive integer");
         }
@@ -155,30 +137,24 @@ public class PDPageLabelRange implements COSObjectable
 
     /**
      * Returns the page label prefix for this page range.
-     * 
+     *
      * @return the page label prefix for this page range, or {@code null} if no
-     *         prefix has been defined.
+     * prefix has been defined.
      */
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return root.getString(KEY_PREFIX);
     }
 
     /**
      * Sets the page label prefix for this page range.
-     * 
-     * @param prefix
-     *            the page label prefix for this page range, or {@code null} to
-     *            unset the prefix.
+     *
+     * @param prefix the page label prefix for this page range, or {@code null} to
+     *               unset the prefix.
      */
-    public void setPrefix(String prefix)
-    {
-        if (prefix != null)
-        {
+    public void setPrefix(String prefix) {
+        if (prefix != null) {
             root.setString(KEY_PREFIX, prefix);
-        }
-        else
-        {
+        } else {
             root.removeItem(KEY_PREFIX);
         }
     }

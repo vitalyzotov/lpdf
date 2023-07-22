@@ -21,9 +21,7 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSNumber;
-
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
-
 import lpdf.pdfbox.pdmodel.font.PDFont;
 import lpdf.pdfbox.pdmodel.font.PDFontFactory;
 
@@ -35,18 +33,16 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class PDFontSetting implements COSObjectable
-{
+public class PDFontSetting implements COSObjectable {
     private COSArray fontSetting = null;
 
     /**
      * Creates a blank font setting, font will be null, size will be 1.
      */
-    public PDFontSetting()
-    {
+    public PDFontSetting() {
         fontSetting = new COSArray();
-        fontSetting.add( null );
-        fontSetting.add( new COSFloat( 1 ) );
+        fontSetting.add(null);
+        fontSetting.add(new COSFloat(1));
     }
 
     /**
@@ -54,8 +50,7 @@ public class PDFontSetting implements COSObjectable
      *
      * @param fs The new font setting value.
      */
-    public PDFontSetting( COSArray fs )
-    {
+    public PDFontSetting(COSArray fs) {
         fontSetting = fs;
     }
 
@@ -63,8 +58,7 @@ public class PDFontSetting implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return fontSetting;
     }
 
@@ -72,16 +66,13 @@ public class PDFontSetting implements COSObjectable
      * This will get the font for this font setting.
      *
      * @return The font for this setting of null if one was not found.
-     *
      * @throws IOException If there is an error getting the font.
      */
-    public PDFont getFont() throws IOException
-    {
+    public PDFont getFont() throws IOException {
         PDFont retval = null;
         COSBase font = fontSetting.getObject(0);
-        if( font instanceof COSDictionary )
-        {
-            retval = PDFontFactory.createFont( (COSDictionary)font );
+        if (font instanceof COSDictionary) {
+            retval = PDFontFactory.createFont((COSDictionary) font);
         }
         return retval;
     }
@@ -91,9 +82,8 @@ public class PDFontSetting implements COSObjectable
      *
      * @param font The new font.
      */
-    public void setFont( PDFont font )
-    {
-        fontSetting.set( 0, font );
+    public void setFont(PDFont font) {
+        fontSetting.set(0, font);
     }
 
     /**
@@ -101,9 +91,8 @@ public class PDFontSetting implements COSObjectable
      *
      * @return The size of the font.
      */
-    public float getFontSize()
-    {
-        COSNumber size = (COSNumber)fontSetting.get( 1 );
+    public float getFontSize() {
+        COSNumber size = (COSNumber) fontSetting.get(1);
         return size.floatValue();
     }
 
@@ -112,8 +101,7 @@ public class PDFontSetting implements COSObjectable
      *
      * @param size The new size of the font.
      */
-    public void setFontSize( float size )
-    {
-        fontSetting.set( 1, new COSFloat( size ) );
+    public void setFontSize(float size) {
+        fontSetting.set(1, new COSFloat(size));
     }
 }

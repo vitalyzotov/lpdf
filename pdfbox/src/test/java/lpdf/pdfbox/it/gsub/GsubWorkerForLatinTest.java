@@ -17,38 +17,32 @@
 
 package lpdf.pdfbox.it.gsub;
 
+import lpdf.fontbox.ttf.CmapLookup;
+import lpdf.fontbox.ttf.gsub.GsubWorker;
+import lpdf.fontbox.ttf.gsub.GsubWorkerFactory;
+import lpdf.pdfbox.pdmodel.PDDocument;
+import lpdf.pdfbox.pdmodel.font.PDType0Font;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import lpdf.fontbox.ttf.CmapLookup;
-import lpdf.fontbox.ttf.gsub.GsubWorker;
-import lpdf.fontbox.ttf.gsub.GsubWorkerFactory;
-
-import lpdf.pdfbox.pdmodel.PDDocument;
-import lpdf.pdfbox.pdmodel.font.PDType0Font;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.Test;
 
 /**
- *
  * @author Tilman Hausherr
  */
-class GsubWorkerForLatinTest
-{
+class GsubWorkerForLatinTest {
     @Test
-    void testApplyLigatures() throws IOException
-    {
+    void testApplyLigatures() throws IOException {
         File file = new File("c:/windows/fonts/calibri.ttf");
         Assumptions.assumeTrue(file.exists(), "calibri ligature test skipped");
-        try (PDDocument doc = new PDDocument())
-        {
+        try (PDDocument doc = new PDDocument()) {
             PDType0Font font = PDType0Font.load(doc, file);
 
             CmapLookup cmapLookup = font.getCmapLookup();
@@ -69,12 +63,10 @@ class GsubWorkerForLatinTest
         }
     }
 
-    private List<Integer> getGlyphIds(String word, CmapLookup cmapLookup)
-    {
+    private List<Integer> getGlyphIds(String word, CmapLookup cmapLookup) {
         List<Integer> originalGlyphIds = new ArrayList<>();
 
-        for (char unicodeChar : word.toCharArray())
-        {
+        for (char unicodeChar : word.toCharArray()) {
             int glyphId = cmapLookup.getGlyphId(unicodeChar);
             assertTrue(glyphId > 0);
             originalGlyphIds.add(glyphId);

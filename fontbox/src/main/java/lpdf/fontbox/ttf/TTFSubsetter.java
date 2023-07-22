@@ -16,6 +16,9 @@
  */
 package lpdf.fontbox.ttf;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -37,8 +40,6 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Subsetter for TrueType (TTF) fonts.
@@ -48,11 +49,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author Wolfgang Glas
  */
-public final class TTFSubsetter
-{
+public final class TTFSubsetter {
     private static final Logger LOG = LoggerFactory.getLogger(TTFSubsetter.class);
 
-    private static final byte[] PAD_BUF = new byte[] { 0, 0, 0 };
+    private static final byte[] PAD_BUF = new byte[]{0, 0, 0};
 
     private final TrueTypeFont ttf;
     private final CmapLookup unicodeCmap;
@@ -67,24 +67,20 @@ public final class TTFSubsetter
      * Creates a subsetter for the given font.
      *
      * @param ttf the font to be subset
-     *
      * @throws IOException if there is an error reading the font data
      */
-    public TTFSubsetter(TrueTypeFont ttf) throws IOException
-    {
+    public TTFSubsetter(TrueTypeFont ttf) throws IOException {
         this(ttf, null);
     }
 
     /**
      * Creates a subsetter for the given font.
      *
-     * @param ttf the font to be subset
+     * @param ttf    the font to be subset
      * @param tables optional tables to keep if present
-     *
      * @throws IOException if there is an error reading the font data
      */
-    public TTFSubsetter(TrueTypeFont ttf, List<String> tables) throws IOException
-    {
+    public TTFSubsetter(TrueTypeFont ttf, List<String> tables) throws IOException {
         this.ttf = ttf;
         this.keepTables = tables;
 
@@ -103,8 +99,7 @@ public final class TTFSubsetter
      *
      * @param prefix to be used as prefix for the PostScript name of the font
      */
-    public void setPrefix(String prefix)
-    {
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
@@ -113,11 +108,9 @@ public final class TTFSubsetter
      *
      * @param unicode character code
      */
-    public void add(int unicode)
-    {
+    public void add(int unicode) {
         int gid = unicodeCmap.getGlyphId(unicode);
-        if (gid != 0)
-        {
+        if (gid != 0) {
             uniToGID.put(unicode, gid);
             glyphIds.add(gid);
         }
@@ -128,8 +121,7 @@ public final class TTFSubsetter
      *
      * @param unicodeSet character code set
      */
-    public void addAll(Set<Integer> unicodeSet)
-    {
+    public void addAll(Set<Integer> unicodeSet) {
         unicodeSet.forEach(this::add);
     }
 
@@ -137,17 +129,14 @@ public final class TTFSubsetter
      * Returns the map of new -&gt; old GIDs.
      *
      * @return the GID map
-     *
      * @throws IOException if the font data could not be read
      */
-    public Map<Integer, Integer> getGIDMap() throws IOException
-    {
+    public Map<Integer, Integer> getGIDMap() throws IOException {
         addCompoundReferences();
 
         Map<Integer, Integer> newToOld = new HashMap<>();
         int newGID = 0;
-        for (int oldGID : glyphIds)
-        {
+        for (int oldGID : glyphIds) {
             newToOld.put(newGID, oldGID);
             newGID++;
         }
@@ -155,13 +144,12 @@ public final class TTFSubsetter
     }
 
     /**
-     * @param out The data output stream.
+     * @param out     The data output stream.
      * @param nTables The number of table.
      * @return The file offset of the first TTF table to write.
      * @throws IOException Upon errors.
      */
-    private long writeFileHeader(DataOutputStream out, int nTables) throws IOException
-    {
+    private long writeFileHeader(DataOutputStream out, int nTables) throws IOException {
         out.writeInt(0x00010000);
         out.writeShort(nTables);
 
@@ -181,11 +169,9 @@ public final class TTFSubsetter
     }
 
     private long writeTableHeader(DataOutputStream out, String tag, long offset, byte[] bytes)
-            throws IOException
-    {
+            throws IOException {
         long checksum = 0;
-        for (int nup = 0, n = bytes.length; nup < n; nup++)
-        {
+        for (int nup = 0, n = bytes.length; nup < n; nup++) {
             checksum += (bytes[nup] & 0xffL) << 24 - nup % 4 * 8;
         }
         checksum &= 0xffffffffL;
@@ -193,26 +179,23 @@ public final class TTFSubsetter
         byte[] tagbytes = tag.getBytes(StandardCharsets.US_ASCII);
 
         out.write(tagbytes, 0, 4);
-        out.writeInt((int)checksum);
-        out.writeInt((int)offset);
+        out.writeInt((int) checksum);
+        out.writeInt((int) offset);
         out.writeInt(bytes.length);
 
         // account for the checksum twice, once for the header field, once for the content itself
         return toUInt32(tagbytes) + checksum + checksum + offset + bytes.length;
     }
 
-    private void writeTableBody(OutputStream os, byte[] bytes) throws IOException
-    {
+    private void writeTableBody(OutputStream os, byte[] bytes) throws IOException {
         int n = bytes.length;
         os.write(bytes);
-        if (n % 4 != 0)
-        {
+        if (n % 4 != 0) {
             os.write(PAD_BUF, 0, 4 - n % 4);
         }
     }
 
-    private byte[] buildHeadTable() throws IOException
-    {
+    private byte[] buildHeadTable() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bos);
 
@@ -233,15 +216,14 @@ public final class TTFSubsetter
         writeUint16(out, h.getLowestRecPPEM());
         writeSInt16(out, h.getFontDirectionHint());
         // force long format of 'loca' table
-        writeSInt16(out, (short)1); // h.getIndexToLocFormat()
+        writeSInt16(out, (short) 1); // h.getIndexToLocFormat()
         writeSInt16(out, h.getGlyphDataFormat());
         out.flush();
 
         return bos.toByteArray();
     }
 
-    private byte[] buildHheaTable() throws IOException
-    {
+    private byte[] buildHheaTable() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bos);
 
@@ -266,8 +248,7 @@ public final class TTFSubsetter
         // is there a GID >= numberOfHMetrics ? Then keep the last entry of original hmtx table,
         // (add if it isn't in our set of GIDs), see also in buildHmtxTable()
         int hmetrics = glyphIds.subSet(0, h.getNumberOfHMetrics()).size();
-        if (glyphIds.last() >= h.getNumberOfHMetrics() && !glyphIds.contains(h.getNumberOfHMetrics()-1))
-        {
+        if (glyphIds.last() >= h.getNumberOfHMetrics() && !glyphIds.contains(h.getNumberOfHMetrics() - 1)) {
             ++hmetrics;
         }
         writeUint16(out, hmetrics);
@@ -276,22 +257,19 @@ public final class TTFSubsetter
         return bos.toByteArray();
     }
 
-    private boolean shouldCopyNameRecord(NameRecord nr)
-    {
+    private boolean shouldCopyNameRecord(NameRecord nr) {
         return nr.getPlatformId() == NameRecord.PLATFORM_WINDOWS
                 && nr.getPlatformEncodingId() == NameRecord.ENCODING_WINDOWS_UNICODE_BMP
                 && nr.getLanguageId() == NameRecord.LANGUAGE_WINDOWS_EN_US
                 && nr.getNameId() >= 0 && nr.getNameId() < 7;
     }
 
-    private byte[] buildNameTable() throws IOException
-    {
+    private byte[] buildNameTable() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bos);
 
         NamingTable name = ttf.getNaming();
-        if (name == null || keepTables != null && !keepTables.contains(NamingTable.TAG))
-        {
+        if (name == null || keepTables != null && !keepTables.contains(NamingTable.TAG)) {
             return null;
         }
 
@@ -299,43 +277,36 @@ public final class TTFSubsetter
         int numRecords = (int) nameRecords.stream().filter(this::shouldCopyNameRecord).count();
         writeUint16(out, 0);
         writeUint16(out, numRecords);
-        writeUint16(out, 2*3 + 2*6 * numRecords);
+        writeUint16(out, 2 * 3 + 2 * 6 * numRecords);
 
-        if (numRecords == 0)
-        {
+        if (numRecords == 0) {
             return null;
         }
 
         byte[][] names = new byte[numRecords][];
         int j = 0;
-        for (NameRecord nameRecord : nameRecords)
-        {
-            if (shouldCopyNameRecord(nameRecord))
-            {
+        for (NameRecord nameRecord : nameRecords) {
+            if (shouldCopyNameRecord(nameRecord)) {
                 int platform = nameRecord.getPlatformId();
                 int encoding = nameRecord.getPlatformEncodingId();
                 Charset charset = StandardCharsets.ISO_8859_1;
 
                 if (platform == CmapTable.PLATFORM_WINDOWS &&
-                    encoding == CmapTable.ENCODING_WIN_UNICODE_BMP)
-                {
+                        encoding == CmapTable.ENCODING_WIN_UNICODE_BMP) {
                     charset = StandardCharsets.UTF_16BE;
-                }
-                else if (platform == 2) // ISO [deprecated]=
+                } else if (platform == 2) // ISO [deprecated]=
                 {
                     if (encoding == 0) // 7-bit ASCII
                     {
                         charset = StandardCharsets.US_ASCII;
-                    }
-                    else if (encoding == 1) // ISO 10646=
+                    } else if (encoding == 1) // ISO 10646=
                     {
                         //not sure is this is correct??
                         charset = StandardCharsets.UTF_16BE;
                     }
                 }
                 String value = nameRecord.getString();
-                if (nameRecord.getNameId() == 6 && prefix != null)
-                {
+                if (nameRecord.getNameId() == 6 && prefix != null) {
                     value = prefix + value;
                 }
                 names[j] = value.getBytes(charset);
@@ -345,10 +316,8 @@ public final class TTFSubsetter
 
         int offset = 0;
         j = 0;
-        for (NameRecord nr : nameRecords)
-        {
-            if (shouldCopyNameRecord(nr))
-            {
+        for (NameRecord nr : nameRecords) {
+            if (shouldCopyNameRecord(nr)) {
                 writeUint16(out, nr.getPlatformId());
                 writeUint16(out, nr.getPlatformEncodingId());
                 writeUint16(out, nr.getLanguageId());
@@ -360,8 +329,7 @@ public final class TTFSubsetter
             }
         }
 
-        for (int i = 0; i < numRecords; i++)
-        {
+        for (int i = 0; i < numRecords; i++) {
             out.write(names[i]);
         }
 
@@ -369,16 +337,14 @@ public final class TTFSubsetter
         return bos.toByteArray();
     }
 
-    private byte[] buildMaxpTable() throws IOException
-    {
+    private byte[] buildMaxpTable() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bos);
 
         MaximumProfileTable p = ttf.getMaximumProfile();
         writeFixed(out, p.getVersion());
         writeUint16(out, glyphIds.size());
-        if (p.getVersion() >= 1.0f)
-        {
+        if (p.getVersion() >= 1.0f) {
             writeUint16(out, p.getMaxPoints());
             writeUint16(out, p.getMaxContours());
             writeUint16(out, p.getMaxCompositePoints());
@@ -397,12 +363,10 @@ public final class TTFSubsetter
         return bos.toByteArray();
     }
 
-    private byte[] buildOS2Table() throws IOException
-    {
+    private byte[] buildOS2Table() throws IOException {
         OS2WindowsMetricsTable os2 = ttf.getOS2Windows();
         if (os2 == null || uniToGID.isEmpty()
-                || keepTables != null && !keepTables.contains(OS2WindowsMetricsTable.TAG))
-        {
+                || keepTables != null && !keepTables.contains(OS2WindowsMetricsTable.TAG)) {
             return null;
         }
 
@@ -428,7 +392,7 @@ public final class TTFSubsetter
 
         writeSInt16(out, os2.getStrikeoutSize());
         writeSInt16(out, os2.getStrikeoutPosition());
-        writeSInt16(out, (short)os2.getFamilyClass());
+        writeSInt16(out, (short) os2.getFamilyClass());
         out.write(os2.getPanose());
 
         writeUint32(out, 0);
@@ -452,13 +416,11 @@ public final class TTFSubsetter
     }
 
     // never returns null
-    private byte[] buildLocaTable(long[] newOffsets) throws IOException
-    {
+    private byte[] buildLocaTable(long[] newOffsets) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bos);
 
-        for (long offset : newOffsets)
-        {
+        for (long offset : newOffsets) {
             writeUint32(out, offset);
         }
 
@@ -469,10 +431,8 @@ public final class TTFSubsetter
     /**
      * Resolve compound glyph references.
      */
-    private void addCompoundReferences() throws IOException
-    {
-        if (hasAddedCompoundReferences)
-        {
+    private void addCompoundReferences() throws IOException {
+        if (hasAddedCompoundReferences) {
             return;
         }
         hasAddedCompoundReferences = true;
@@ -480,79 +440,63 @@ public final class TTFSubsetter
         boolean hasNested;
         GlyphTable g = ttf.getGlyph();
         long[] offsets = ttf.getIndexToLocation().getOffsets();
-        do
-        {
+        do {
             Set<Integer> glyphIdsToAdd = null;
-            try (InputStream is = ttf.getOriginalData())
-            {
+            try (InputStream is = ttf.getOriginalData()) {
                 long isResult = is.skip(g.getOffset());
 
-                if (Long.compare(isResult, g.getOffset()) != 0)
-                {
+                if (Long.compare(isResult, g.getOffset()) != 0) {
                     LOG.debug("Tried skipping " + g.getOffset() + " bytes but skipped only " + isResult + " bytes");
                 }
 
                 long lastOff = 0L;
-                for (Integer glyphId : glyphIds)
-                {
+                for (Integer glyphId : glyphIds) {
                     long offset = offsets[glyphId];
                     long len = offsets[glyphId + 1] - offset;
                     isResult = is.skip(offset - lastOff);
 
-                    if (Long.compare(isResult, offset - lastOff) != 0)
-                    {
+                    if (Long.compare(isResult, offset - lastOff) != 0) {
                         LOG.debug("Tried skipping " + (offset - lastOff) + " bytes but skipped only " + isResult + " bytes");
                     }
 
-                    byte[] buf = new byte[(int)len];
+                    byte[] buf = new byte[(int) len];
                     isResult = is.read(buf);
 
-                    if (Long.compare(isResult, len) != 0)
-                    {
+                    if (Long.compare(isResult, len) != 0) {
                         LOG.debug("Tried reading " + len + " bytes but only " + isResult + " bytes read");
                     }
 
                     // rewrite glyphIds for compound glyphs
-                    if (buf.length >= 2 && buf[0] == -1 && buf[1] == -1)
-                    {
-                        int off = 2*5;
+                    if (buf.length >= 2 && buf[0] == -1 && buf[1] == -1) {
+                        int off = 2 * 5;
                         int flags;
-                        do
-                        {
+                        do {
                             flags = (buf[off] & 0xff) << 8 | buf[off + 1] & 0xff;
-                            off +=2;
+                            off += 2;
                             int ogid = (buf[off] & 0xff) << 8 | buf[off + 1] & 0xff;
-                            if (!glyphIds.contains(ogid))
-                            {
-                                if (glyphIdsToAdd == null)
-                                {
+                            if (!glyphIds.contains(ogid)) {
+                                if (glyphIdsToAdd == null) {
                                     glyphIdsToAdd = new TreeSet<>();
                                 }
                                 glyphIdsToAdd.add(ogid);
                             }
                             off += 2;
                             // ARG_1_AND_2_ARE_WORDS
-                            if ((flags & 1 << 0) != 0)
-                            {
+                            if ((flags & 1 << 0) != 0) {
                                 off += 2 * 2;
-                            }
-                            else
-                            {
+                            } else {
                                 off += 2;
                             }
                             // WE_HAVE_A_TWO_BY_TWO
-                            if ((flags & 1 << 7) != 0)
-                            {
+                            if ((flags & 1 << 7) != 0) {
                                 off += 2 * 4;
                             }
                             // WE_HAVE_AN_X_AND_Y_SCALE
-                            else if ((flags & 1 << 6) != 0)
-                            {
+                            else if ((flags & 1 << 6) != 0) {
                                 off += 2 * 2;
                             }
                             // WE_HAVE_A_SCALE
-                            else if ((flags & 1 << 3) != 0)
-                            {
+                            else if ((flags & 1 << 3) != 0) {
                                 off += 2;
                             }
                         }
@@ -563,8 +507,7 @@ public final class TTFSubsetter
                 }
             }
             hasNested = glyphIdsToAdd != null;
-            if (hasNested)
-            {
+            if (hasNested) {
                 glyphIds.addAll(glyphIdsToAdd);
             }
         }
@@ -572,18 +515,15 @@ public final class TTFSubsetter
     }
 
     // never returns null
-    private byte[] buildGlyfTable(long[] newOffsets) throws IOException
-    {
+    private byte[] buildGlyfTable(long[] newOffsets) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         GlyphTable g = ttf.getGlyph();
         long[] offsets = ttf.getIndexToLocation().getOffsets();
-        try (InputStream is = ttf.getOriginalData())
-        {
+        try (InputStream is = ttf.getOriginalData()) {
             long isResult = is.skip(g.getOffset());
 
-            if (Long.compare(isResult, g.getOffset()) != 0)
-            {
+            if (Long.compare(isResult, g.getOffset()) != 0) {
                 LOG.debug("Tried skipping " + g.getOffset() + " bytes but skipped only " + isResult + " bytes");
             }
 
@@ -592,35 +532,30 @@ public final class TTFSubsetter
             int newGid = 0;      // new GID in subset font
 
             // for each glyph in the subset
-            for (Integer gid : glyphIds)
-            {
+            for (Integer gid : glyphIds) {
                 long offset = offsets[gid];
                 long length = offsets[gid + 1] - offset;
 
                 newOffsets[newGid++] = newOffset;
                 isResult = is.skip(offset - prevEnd);
 
-                if (Long.compare(isResult, offset - prevEnd) != 0)
-                {
+                if (Long.compare(isResult, offset - prevEnd) != 0) {
                     LOG.debug("Tried skipping " + (offset - prevEnd) + " bytes but skipped only " + isResult + " bytes");
                 }
 
-                byte[] buf = new byte[(int)length];
+                byte[] buf = new byte[(int) length];
                 isResult = is.read(buf);
 
-                if (Long.compare(isResult, length) != 0)
-                {
+                if (Long.compare(isResult, length) != 0) {
                     LOG.debug("Tried reading " + length + " bytes but only " + isResult + " bytes read");
                 }
 
                 // detect glyph type
-                if (buf.length >= 2 && buf[0] == -1 && buf[1] == -1)
-                {
+                if (buf.length >= 2 && buf[0] == -1 && buf[1] == -1) {
                     // compound glyph
-                    int off = 2*5;
+                    int off = 2 * 5;
                     int flags;
-                    do
-                    {
+                    do {
                         // flags
                         flags = (buf[off] & 0xff) << 8 | buf[off + 1] & 0xff;
                         off += 2;
@@ -630,40 +565,33 @@ public final class TTFSubsetter
                         glyphIds.add(componentGid);
 
                         int newComponentGid = getNewGlyphId(componentGid);
-                        buf[off]   = (byte)(newComponentGid >>> 8);
-                        buf[off + 1] = (byte)newComponentGid;
+                        buf[off] = (byte) (newComponentGid >>> 8);
+                        buf[off + 1] = (byte) newComponentGid;
                         off += 2;
 
                         // ARG_1_AND_2_ARE_WORDS
-                        if ((flags & 1 << 0) != 0)
-                        {
+                        if ((flags & 1 << 0) != 0) {
                             off += 2 * 2;
-                        }
-                        else
-                        {
+                        } else {
                             off += 2;
                         }
                         // WE_HAVE_A_TWO_BY_TWO
-                        if ((flags & 1 << 7) != 0)
-                        {
+                        if ((flags & 1 << 7) != 0) {
                             off += 2 * 4;
                         }
                         // WE_HAVE_AN_X_AND_Y_SCALE
-                        else if ((flags & 1 << 6) != 0)
-                        {
+                        else if ((flags & 1 << 6) != 0) {
                             off += 2 * 2;
                         }
                         // WE_HAVE_A_SCALE
-                        else if ((flags & 1 << 3) != 0)
-                        {
+                        else if ((flags & 1 << 3) != 0) {
                             off += 2;
                         }
                     }
                     while ((flags & 1 << 5) != 0); // MORE_COMPONENTS
 
                     // WE_HAVE_INSTRUCTIONS
-                    if ((flags & 0x0100) == 0x0100)
-                    {
+                    if ((flags & 0x0100) == 0x0100) {
                         // USHORT numInstr
                         int numInstr = (buf[off] & 0xff) << 8 | buf[off + 1] & 0xff;
                         off += 2;
@@ -677,9 +605,7 @@ public final class TTFSubsetter
 
                     // offset to start next glyph
                     newOffset += off;
-                }
-                else if (buf.length > 0)
-                {
+                } else if (buf.length > 0) {
                     // copy the entire glyph
                     bos.write(buf, 0, buf.length);
 
@@ -688,9 +614,8 @@ public final class TTFSubsetter
                 }
 
                 // 4-byte alignment
-                if (newOffset % 4 != 0)
-                {
-                    int len = 4 - (int)(newOffset % 4);
+                if (newOffset % 4 != 0) {
+                    int len = 4 - (int) (newOffset % 4);
                     bos.write(PAD_BUF, 0, len);
                     newOffset += len;
                 }
@@ -703,16 +628,13 @@ public final class TTFSubsetter
         return bos.toByteArray();
     }
 
-    private int getNewGlyphId(Integer oldGid)
-    {
+    private int getNewGlyphId(Integer oldGid) {
         return glyphIds.headSet(oldGid).size();
     }
 
-    private byte[] buildCmapTable() throws IOException
-    {
+    private byte[] buildCmapTable() throws IOException {
         if (ttf.getCmap() == null || uniToGID.isEmpty()
-                || keepTables != null && !keepTables.contains(CmapTable.TAG))
-        {
+                || keepTables != null && !keepTables.contains(CmapTable.TAG)) {
             return null;
         }
 
@@ -735,35 +657,29 @@ public final class TTFSubsetter
         int lastGid = getNewGlyphId(lastChar.getValue());
 
         // +1 because .notdef is missing in uniToGID
-        int[] startCode = new int[uniToGID.size()+1];
+        int[] startCode = new int[uniToGID.size() + 1];
         int[] endCode = new int[startCode.length];
         int[] idDelta = new int[startCode.length];
         int segCount = 0;
-        while(it.hasNext())
-        {
+        while (it.hasNext()) {
             Entry<Integer, Integer> curChar2Gid = it.next();
             int curGid = getNewGlyphId(curChar2Gid.getValue());
 
             // todo: need format Format 12 for non-BMP
-            if (curChar2Gid.getKey() > 0xFFFF)
-            {
+            if (curChar2Gid.getKey() > 0xFFFF) {
                 throw new UnsupportedOperationException("non-BMP Unicode character");
             }
 
-            if (curChar2Gid.getKey() != prevChar.getKey()+1 ||
-                curGid - lastGid != curChar2Gid.getKey() - lastChar.getKey())
-            {
-                if (lastGid != 0)
-                {
+            if (curChar2Gid.getKey() != prevChar.getKey() + 1 ||
+                    curGid - lastGid != curChar2Gid.getKey() - lastChar.getKey()) {
+                if (lastGid != 0) {
                     // don't emit ranges, which map to GID 0, the
                     // undef glyph is emitted a the very last segment
                     startCode[segCount] = lastChar.getKey();
                     endCode[segCount] = prevChar.getKey();
                     idDelta[segCount] = lastGid - lastChar.getKey();
                     segCount++;
-                }
-                else if (!lastChar.getKey().equals(prevChar.getKey()))
-                {
+                } else if (!lastChar.getKey().equals(prevChar.getKey())) {
                     // shorten ranges which start with GID 0 by one
                     startCode[segCount] = lastChar.getKey() + 1;
                     endCode[segCount] = prevChar.getKey();
@@ -779,7 +695,7 @@ public final class TTFSubsetter
         // trailing segment
         startCode[segCount] = lastChar.getKey();
         endCode[segCount] = prevChar.getKey();
-        idDelta[segCount] = lastGid -lastChar.getKey();
+        idDelta[segCount] = lastGid - lastChar.getKey();
         segCount++;
 
         // GID 0
@@ -789,9 +705,9 @@ public final class TTFSubsetter
         segCount++;
 
         // write format 4 subtable
-        int searchRange = 2 * (int)Math.pow(2, log2(segCount));
+        int searchRange = 2 * (int) Math.pow(2, log2(segCount));
         writeUint16(out, 4); // format
-        writeUint16(out, 8 * 2 + segCount * 4*2); // length
+        writeUint16(out, 8 * 2 + segCount * 4 * 2); // length
         writeUint16(out, 0); // language
         writeUint16(out, segCount * 2); // segCountX2
         writeUint16(out, searchRange); // searchRange
@@ -799,8 +715,7 @@ public final class TTFSubsetter
         writeUint16(out, 2 * segCount - searchRange); // rangeShift
 
         // endCode[segCount]
-        for (int i = 0; i < segCount; i++)
-        {
+        for (int i = 0; i < segCount; i++) {
             writeUint16(out, endCode[i]);
         }
 
@@ -808,30 +723,25 @@ public final class TTFSubsetter
         writeUint16(out, 0);
 
         // startCode[segCount]
-        for (int i = 0; i < segCount; i++)
-        {
+        for (int i = 0; i < segCount; i++) {
             writeUint16(out, startCode[i]);
         }
 
         // idDelta[segCount]
-        for (int i = 0; i < segCount; i++)
-        {
+        for (int i = 0; i < segCount; i++) {
             writeUint16(out, idDelta[i]);
         }
 
-        for (int i = 0; i < segCount; i++)
-        {
+        for (int i = 0; i < segCount; i++) {
             writeUint16(out, 0);
         }
 
         return bos.toByteArray();
     }
 
-    private byte[] buildPostTable() throws IOException
-    {
+    private byte[] buildPostTable() throws IOException {
         PostScriptTable post = ttf.getPostScript();
-        if (post == null || keepTables != null && !keepTables.contains(PostScriptTable.TAG))
-        {
+        if (post == null || keepTables != null && !keepTables.contains(PostScriptTable.TAG)) {
             return null;
         }
 
@@ -855,17 +765,13 @@ public final class TTFSubsetter
 
         // glyphNameIndex[numGlyphs]
         Map<String, Integer> names = new LinkedHashMap<>();
-        for (int gid : glyphIds)
-        {
+        for (int gid : glyphIds) {
             String name = post.getName(gid);
             Integer macId = WGL4Names.getGlyphIndex(name);
-            if (macId != null)
-            {
+            if (macId != null) {
                 // the name is implicit, as it's from MacRoman
                 writeUint16(out, macId);
-            }
-            else
-            {
+            } else {
                 // the name will be written explicitly
                 Integer ordinal = names.computeIfAbsent(name, dummy -> names.size());
                 writeUint16(out, 258 + ordinal);
@@ -873,8 +779,7 @@ public final class TTFSubsetter
         }
 
         // names[numberNewGlyphs]
-        for (String name : names.keySet())
-        {
+        for (String name : names.keySet()) {
             byte[] buf = name.getBytes(StandardCharsets.US_ASCII);
             writeUint8(out, buf.length);
             out.write(buf);
@@ -884,8 +789,7 @@ public final class TTFSubsetter
         return bos.toByteArray();
     }
 
-    private byte[] buildHmtxTable() throws IOException
-    {
+    private byte[] buildHmtxTable() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         HorizontalHeaderTable h = ttf.getHorizontalHeader();
@@ -897,30 +801,23 @@ public final class TTFSubsetter
         // true if lastgid is not in the set: we'll need its width (but not its left side bearing) later
         boolean needLastGidWidth = glyphIds.last() > lastgid && !glyphIds.contains(lastgid);
 
-        try
-        {
+        try {
             long isResult = is.skip(hm.getOffset());
 
-            if (Long.compare(isResult, hm.getOffset()) != 0)
-            {
+            if (Long.compare(isResult, hm.getOffset()) != 0) {
                 LOG.debug("Tried skipping " + hm.getOffset() + " bytes but only " + isResult + " bytes skipped");
             }
 
             long lastOffset = 0;
-            for (Integer glyphId : glyphIds)
-            {
+            for (Integer glyphId : glyphIds) {
                 // offset in original file
                 long offset;
-                if (glyphId <= lastgid)
-                {
+                if (glyphId <= lastgid) {
                     // copy width and lsb
                     offset = glyphId * 4l;
                     lastOffset = copyBytes(is, bos, offset, lastOffset, 4);
-                }
-                else
-                {
-                    if (needLastGidWidth)
-                    {
+                } else {
+                    if (needLastGidWidth) {
                         // one time only: copy width from lastgid, whose width applies
                         // to all later glyphs
                         needLastGidWidth = false;
@@ -937,25 +834,20 @@ public final class TTFSubsetter
             }
 
             return bos.toByteArray();
-        }
-        finally
-        {
+        } finally {
             is.close();
         }
     }
 
     private long copyBytes(InputStream is, OutputStream os, long newOffset, long lastOffset, int count)
-            throws IOException
-    {
+            throws IOException {
         // skip over from last original offset
         long nskip = newOffset - lastOffset;
-        if (nskip != is.skip(nskip))
-        {
+        if (nskip != is.skip(nskip)) {
             throw new EOFException("Unexpected EOF exception parsing glyphId of hmtx table.");
         }
         byte[] buf = new byte[count];
-        if (count != is.read(buf, 0, count))
-        {
+        if (count != is.read(buf, 0, count)) {
             throw new EOFException("Unexpected EOF exception parsing glyphId of hmtx table.");
         }
         os.write(buf, 0, count);
@@ -966,20 +858,17 @@ public final class TTFSubsetter
      * Write the subfont to the given output stream.
      *
      * @param os the stream used for writing. It will be closed by this method.
-     * @throws IOException if something went wrong.
+     * @throws IOException           if something went wrong.
      * @throws IllegalStateException if the subset is empty.
      */
-    public void writeToStream(OutputStream os) throws IOException
-    {
-        if (glyphIds.isEmpty() && uniToGID.isEmpty())
-        {
+    public void writeToStream(OutputStream os) throws IOException {
+        if (glyphIds.isEmpty() && uniToGID.isEmpty()) {
             LOG.info("font subset is empty");
         }
 
         addCompoundReferences();
 
-        try (DataOutputStream out = new DataOutputStream(os))
-        {
+        try (DataOutputStream out = new DataOutputStream(os)) {
             long[] newLoca = new long[glyphIds.size() + 1];
 
             // generate tables in dependency order
@@ -987,7 +876,7 @@ public final class TTFSubsetter
             byte[] hhea = buildHheaTable();
             byte[] maxp = buildMaxpTable();
             byte[] name = buildNameTable();
-            byte[] os2  = buildOS2Table();
+            byte[] os2 = buildOS2Table();
             byte[] glyf = buildGlyfTable(newLoca);
             byte[] loca = buildLocaTable(newLoca);
             byte[] cmap = buildCmapTable();
@@ -996,12 +885,10 @@ public final class TTFSubsetter
 
             // save to TTF in optimized order
             Map<String, byte[]> tables = new TreeMap<>();
-            if (os2 != null)
-            {
+            if (os2 != null) {
                 tables.put(OS2WindowsMetricsTable.TAG, os2);
             }
-            if (cmap != null)
-            {
+            if (cmap != null) {
                 tables.put(CmapTable.TAG, cmap);
             }
             tables.put(GlyphTable.TAG, glyf);
@@ -1010,23 +897,19 @@ public final class TTFSubsetter
             tables.put(HorizontalMetricsTable.TAG, hmtx);
             tables.put(IndexToLocationTable.TAG, loca);
             tables.put(MaximumProfileTable.TAG, maxp);
-            if (name != null)
-            {
+            if (name != null) {
                 tables.put(NamingTable.TAG, name);
             }
-            if (post != null)
-            {
+            if (post != null) {
                 tables.put(PostScriptTable.TAG, post);
             }
 
             // copy all other tables
-            for (Map.Entry<String, TTFTable> entry : ttf.getTableMap().entrySet())
-            {
+            for (Map.Entry<String, TTFTable> entry : ttf.getTableMap().entrySet()) {
                 String tag = entry.getKey();
                 TTFTable table = entry.getValue();
 
-                if (!tables.containsKey(tag) && (keepTables == null || keepTables.contains(tag)))
-                {
+                if (!tables.containsKey(tag) && (keepTables == null || keepTables.contains(tag))) {
                     tables.put(tag, ttf.getTableBytes(table));
                 }
             }
@@ -1034,55 +917,47 @@ public final class TTFSubsetter
             // calculate checksum
             long checksum = writeFileHeader(out, tables.size());
             long offset = 12L + 16L * tables.size();
-            for (Map.Entry<String, byte[]> entry : tables.entrySet())
-            {
+            for (Map.Entry<String, byte[]> entry : tables.entrySet()) {
                 checksum += writeTableHeader(out, entry.getKey(), offset, entry.getValue());
                 offset += (entry.getValue().length + 3L) / 4 * 4;
             }
             checksum = 0xB1B0AFBAL - (checksum & 0xffffffffL);
 
             // update checksumAdjustment in 'head' table
-            head[8] = (byte)(checksum >>> 24);
-            head[9] = (byte)(checksum >>> 16);
-            head[10] = (byte)(checksum >>> 8);
-            head[11] = (byte)checksum;
-            for (byte[] bytes : tables.values())
-            {
+            head[8] = (byte) (checksum >>> 24);
+            head[9] = (byte) (checksum >>> 16);
+            head[10] = (byte) (checksum >>> 8);
+            head[11] = (byte) checksum;
+            for (byte[] bytes : tables.values()) {
                 writeTableBody(out, bytes);
             }
         }
     }
 
-    private void writeFixed(DataOutputStream out, double f) throws IOException
-    {
+    private void writeFixed(DataOutputStream out, double f) throws IOException {
         double ip = Math.floor(f);
-        double fp = (f-ip) * 65536.0;
-        out.writeShort((int)ip);
-        out.writeShort((int)fp);
+        double fp = (f - ip) * 65536.0;
+        out.writeShort((int) ip);
+        out.writeShort((int) fp);
     }
 
-    private void writeUint32(DataOutputStream out, long l) throws IOException
-    {
-        out.writeInt((int)l);
+    private void writeUint32(DataOutputStream out, long l) throws IOException {
+        out.writeInt((int) l);
     }
 
-    private void writeUint16(DataOutputStream out, int i) throws IOException
-    {
+    private void writeUint16(DataOutputStream out, int i) throws IOException {
         out.writeShort(i);
     }
 
-    private void writeSInt16(DataOutputStream out, short i) throws IOException
-    {
+    private void writeSInt16(DataOutputStream out, short i) throws IOException {
         out.writeShort(i);
     }
 
-    private void writeUint8(DataOutputStream out, int i) throws IOException
-    {
+    private void writeUint8(DataOutputStream out, int i) throws IOException {
         out.writeByte(i);
     }
 
-    private void writeLongDateTime(DataOutputStream out, Calendar calendar) throws IOException
-    {
+    private void writeLongDateTime(DataOutputStream out, Calendar calendar) throws IOException {
         // inverse operation of TTFDataStream.readInternationalDate()
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.set(1904, 0, 1, 0, 0, 0);
@@ -1092,26 +967,22 @@ public final class TTFSubsetter
         out.writeLong(secondsSince1904);
     }
 
-    private long toUInt32(int high, int low)
-    {
+    private long toUInt32(int high, int low) {
         return (high & 0xffffL) << 16 | low & 0xffffL;
     }
 
-    private long toUInt32(byte[] bytes)
-    {
+    private long toUInt32(byte[] bytes) {
         return (bytes[0] & 0xffL) << 24
                 | (bytes[1] & 0xffL) << 16
                 | (bytes[2] & 0xffL) << 8
                 | bytes[3] & 0xffL;
     }
 
-    private int log2(int num)
-    {
+    private int log2(int num) {
         return (int) Math.floor(Math.log(num) / Math.log(2));
     }
 
-    public void addGlyphIds(Set<Integer> allGlyphIds)
-    {
+    public void addGlyphIds(Set<Integer> allGlyphIds) {
         glyphIds.addAll(allGlyphIds);
     }
 

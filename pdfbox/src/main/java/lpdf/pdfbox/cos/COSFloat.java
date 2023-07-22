@@ -25,10 +25,8 @@ import java.nio.charset.StandardCharsets;
  * This class represents a floating point number in a PDF document.
  *
  * @author Ben Litchfield
- *
  */
-public class COSFloat extends COSNumber
-{
+public class COSFloat extends COSNumber {
     private final float value;
     private String valueAsString;
 
@@ -37,8 +35,7 @@ public class COSFloat extends COSNumber
      *
      * @param aFloat The primitive float object that this object wraps.
      */
-    public COSFloat( float aFloat )
-    {
+    public COSFloat(float aFloat) {
         value = aFloat;
     }
 
@@ -46,44 +43,31 @@ public class COSFloat extends COSNumber
      * Constructor.
      *
      * @param aFloat The primitive float object that this object wraps.
-     *
      * @throws IOException If aFloat is not a float.
      */
-    public COSFloat( String aFloat ) throws IOException
-    {
+    public COSFloat(String aFloat) throws IOException {
         float parsedValue;
         String stringValue = null;
-        try
-        {
+        try {
             float f = Float.parseFloat(aFloat);
             parsedValue = coerce(f);
             stringValue = f == parsedValue ? aFloat : null;
-        }
-        catch( NumberFormatException e )
-        {
-            if (aFloat.startsWith("--"))
-            {
+        } catch (NumberFormatException e) {
+            if (aFloat.startsWith("--")) {
                 // PDFBOX-4289 has --16.33
                 aFloat = aFloat.substring(1);
-            }
-            else if (aFloat.matches("^0\\.0*-\\d+"))
-            {
+            } else if (aFloat.matches("^0\\.0*-\\d+")) {
                 // PDFBOX-2990 has 0.00000-33917698
                 // PDFBOX-3369 has 0.00-35095424
                 // PDFBOX-3500 has 0.-262
                 aFloat = "-" + aFloat.replaceFirst("-", "");
-            }
-            else
-            {
+            } else {
                 throw new IOException("Error expected floating point number actual='" + aFloat + "'", e);
             }
 
-            try
-            {
+            try {
                 parsedValue = coerce(Float.parseFloat(aFloat));
-            }
-            catch (NumberFormatException e2)
-            {
+            } catch (NumberFormatException e2) {
                 throw new IOException("Error expected floating point number actual='" + aFloat + "'", e2);
             }
         }
@@ -93,37 +77,32 @@ public class COSFloat extends COSNumber
 
     /**
      * Check and coerce the value field to be between MIN_NORMAL and MAX_VALUE.
-     * 
+     *
      * @param floatValue the value to be checked
      * @return the coerced value
      */
-    private float coerce(float floatValue)
-    {
-        if (floatValue == Float.POSITIVE_INFINITY)
-        {
+    private float coerce(float floatValue) {
+        if (floatValue == Float.POSITIVE_INFINITY) {
             return Float.MAX_VALUE;
         }
-        if (floatValue == Float.NEGATIVE_INFINITY)
-        {
+        if (floatValue == Float.NEGATIVE_INFINITY) {
             return -Float.MAX_VALUE;
         }
-        if (Math.abs(floatValue) < Float.MIN_NORMAL)
-        {
+        if (Math.abs(floatValue) < Float.MIN_NORMAL) {
             // values smaller than the smallest possible float value are converted to 0
             // see PDF spec, chapter 2 of Appendix C Implementation Limits
             return 0f;
         }
         return floatValue;
     }
-    
+
     /**
      * The value of the float object that this one wraps.
      *
      * @return The value of this object.
      */
     @Override
-    public float floatValue()
-    {
+    public float floatValue() {
         return value;
     }
 
@@ -133,8 +112,7 @@ public class COSFloat extends COSNumber
      * @return The long value of this object,
      */
     @Override
-    public long longValue()
-    {
+    public long longValue() {
         return (long) value;
     }
 
@@ -144,8 +122,7 @@ public class COSFloat extends COSNumber
      * @return The int value of this object,
      */
     @Override
-    public int intValue()
-    {
+    public int intValue() {
         return (int) value;
     }
 
@@ -153,18 +130,16 @@ public class COSFloat extends COSNumber
      * {@inheritDoc}
      */
     @Override
-    public boolean equals( Object o )
-    {
+    public boolean equals(Object o) {
         return o instanceof COSFloat &&
-                Float.floatToIntBits(((COSFloat)o).value) == Float.floatToIntBits(value);
+                Float.floatToIntBits(((COSFloat) o).value) == Float.floatToIntBits(value);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Float.hashCode(value);
     }
 
@@ -172,19 +147,17 @@ public class COSFloat extends COSNumber
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "COSFloat{" + formatString() + "}";
     }
 
     /**
      * Builds, if needed, and returns the string representation of the current value.
+     *
      * @return current value as string.
      */
-    private String formatString()
-    {
-        if (valueAsString == null)
-        {
+    private String formatString() {
+        if (valueAsString == null) {
             String s = String.valueOf(value);
             boolean simpleFormat = s.indexOf('E') < 0;
             valueAsString = simpleFormat ? s
@@ -200,8 +173,7 @@ public class COSFloat extends COSNumber
      * @throws IOException If an error occurs while visiting this object.
      */
     @Override
-    public void accept(ICOSVisitor visitor) throws IOException
-    {
+    public void accept(ICOSVisitor visitor) throws IOException {
         visitor.visitFromFloat(this);
     }
 
@@ -211,8 +183,7 @@ public class COSFloat extends COSNumber
      * @param output The stream to write to.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writePDF( OutputStream output ) throws IOException
-    {
+    public void writePDF(OutputStream output) throws IOException {
         output.write(formatString().getBytes(StandardCharsets.ISO_8859_1));
     }
 }

@@ -19,16 +19,14 @@ package lpdf.pdfbox.pdmodel.encryption;
 
 /**
  * This class represents the protection policy to apply to a document.
- *
+ * <p>
  * Objects implementing this abstract class can be passed to the protect method of PDDocument
  * to protect a document.
  *
- * @see lpdf.pdfbox.pdmodel.PDDocument#protect(ProtectionPolicy)
- *
  * @author Benoit Guillon (benoit.guillon@snv.jussieu.fr)
+ * @see lpdf.pdfbox.pdmodel.PDDocument#protect(ProtectionPolicy)
  */
-public abstract class ProtectionPolicy
-{
+public abstract class ProtectionPolicy {
 
     private static final short DEFAULT_KEY_LENGTH = 40;
 
@@ -43,10 +41,8 @@ public abstract class ProtectionPolicy
      *
      * @param l the length in bits (must be 40, 128 or 256)
      */
-    public void setEncryptionKeyLength(int l)
-    {
-        if(l!=40 && l!=128 && l!=256)
-        {
+    public void setEncryptionKeyLength(int l) {
+        if (l != 40 && l != 128 && l != 256) {
             throw new IllegalArgumentException("Invalid key length '" + l + "' value must be 40, 128 or 256!");
         }
         encryptionKeyLength = (short) l;
@@ -58,8 +54,7 @@ public abstract class ProtectionPolicy
      *
      * @return The length (in bits) of the encryption key.
      */
-    public int getEncryptionKeyLength()
-    {
+    public int getEncryptionKeyLength() {
         return encryptionKeyLength;
     }
 
@@ -70,8 +65,7 @@ public abstract class ProtectionPolicy
      *
      * @return true if AES encryption is preferred
      */
-    public boolean isPreferAES()
-    {
+    public boolean isPreferAES() {
         return this.preferAES;
     }
 
@@ -81,8 +75,7 @@ public abstract class ProtectionPolicy
      *
      * @param preferAES indicates whether AES encryption is preferred or not
      */
-    public void setPreferAES(boolean preferAES)
-    {
+    public void setPreferAES(boolean preferAES) {
         this.preferAES = preferAES;
     }
 }

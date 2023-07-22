@@ -16,36 +16,31 @@
  */
 package lpdf.pdfbox.contentstream.operator.markedcontent;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * BMC : Begins a marked-content sequence.
  *
  * @author Johannes Koch
  */
-public class BeginMarkedContentSequence extends OperatorProcessor
-{
-    public BeginMarkedContentSequence(PDFStreamEngine context)
-    {
+public class BeginMarkedContentSequence extends OperatorProcessor {
+    public BeginMarkedContentSequence(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         COSName tag = null;
-        for (COSBase argument : arguments)
-        {
-            if (argument instanceof COSName)
-            {
+        for (COSBase argument : arguments) {
+            if (argument instanceof COSName) {
                 tag = (COSName) argument;
             }
         }
@@ -53,8 +48,7 @@ public class BeginMarkedContentSequence extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.BEGIN_MARKED_CONTENT;
     }
 }

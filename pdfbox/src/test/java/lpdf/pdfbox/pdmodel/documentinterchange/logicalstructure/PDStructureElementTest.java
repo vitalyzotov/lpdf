@@ -16,13 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
@@ -32,25 +25,28 @@ import lpdf.pdfbox.cos.COSObject;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- *
  * @author Tilman Hausherr
  */
-class PDStructureElementTest
-{
+class PDStructureElementTest {
     private static final File TARGETPDFDIR = new File("target/pdfs");
 
     /**
      * PDFBOX-4197: test that object references in array attributes of a PDStructureElement are caught.
      *
-     * @throws IOException 
+     * @throws IOException
      */
     @Test
-    void testPDFBox4197() throws IOException
-    {
+    void testPDFBox4197() throws IOException {
         Set<Revisions<PDAttributeObject>> attributeSet = new HashSet<>();
-        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4197.pdf")))
-        {
+        try (PDDocument doc = Loader.loadPDF(new File(TARGETPDFDIR, "PDFBOX-4197.pdf"))) {
             PDStructureTreeRoot structureTreeRoot = doc.getDocumentCatalog().getStructureTreeRoot();
             checkElement(structureTreeRoot.getK(), attributeSet);
         }
@@ -63,34 +59,26 @@ class PDStructureElementTest
 
     // Each element can be an array, a dictionary or a number.
     // See PDF specification Table 323 - Entries in a structure element dictionary
-    private void checkElement(COSBase base, Set<Revisions<PDAttributeObject>>attributeSet)
-    {
-        if (base instanceof COSArray)
-        {
-            for (COSBase base2 : (COSArray) base)
-            {
-                if (base2 instanceof COSObject)
-                {
+    private void checkElement(COSBase base, Set<Revisions<PDAttributeObject>> attributeSet) {
+        if (base instanceof COSArray) {
+            for (COSBase base2 : (COSArray) base) {
+                if (base2 instanceof COSObject) {
                     base2 = ((COSObject) base2).getObject();
                 }
                 checkElement(base2, attributeSet);
             }
-        }
-        else if (base instanceof COSDictionary)
-        {
+        } else if (base instanceof COSDictionary) {
             COSDictionary kdict = (COSDictionary) base;
-            if (kdict.containsKey(COSName.PG))
-            {
+            if (kdict.containsKey(COSName.PG)) {
                 PDStructureElement structureElement = new PDStructureElement(kdict);
                 Revisions<PDAttributeObject> attributes = structureElement.getAttributes();
                 attributeSet.add(attributes);
                 Revisions<String> classNames = structureElement.getClassNames();
                 //TODO: modify the test to also check for class names, if we ever have a file.
             }
-            if (kdict.containsKey(COSName.K))
-            {
+            if (kdict.containsKey(COSName.K)) {
                 checkElement(kdict.getDictionaryObject(COSName.K), attributeSet);
             }
         }
-    }    
+    }
 }

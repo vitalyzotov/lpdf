@@ -16,35 +16,29 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.contentstream.PDFStreamEngine;
+import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
 
 import java.io.IOException;
-
-import lpdf.pdfbox.contentstream.PDFStreamEngine;
-import lpdf.pdfbox.contentstream.operator.MissingOperandException;
+import java.util.List;
 
 /**
  * ": Set word and character spacing, move to next line, and show text.
  *
  * @author Laurent Huault
  */
-public class ShowTextLineAndSpace extends OperatorProcessor
-{
-    public ShowTextLineAndSpace(PDFStreamEngine context)
-    {
+public class ShowTextLineAndSpace extends OperatorProcessor {
+    public ShowTextLineAndSpace(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.size() < 3)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.size() < 3) {
             throw new MissingOperandException(operator, arguments);
         }
         PDFStreamEngine context = getContext();
@@ -54,8 +48,7 @@ public class ShowTextLineAndSpace extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SHOW_TEXT_LINE_AND_SPACE;
     }
 }

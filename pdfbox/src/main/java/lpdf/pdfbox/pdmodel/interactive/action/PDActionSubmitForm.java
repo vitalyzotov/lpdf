@@ -29,8 +29,7 @@ import java.io.IOException;
  *
  * @author Evgeniy Muravitskiy
  */
-public class PDActionSubmitForm extends PDAction
-{
+public class PDActionSubmitForm extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -40,8 +39,7 @@ public class PDActionSubmitForm extends PDAction
     /**
      * Default Constructor
      */
-    public PDActionSubmitForm()
-    {
+    public PDActionSubmitForm() {
         setSubType(SUB_TYPE);
     }
 
@@ -50,8 +48,7 @@ public class PDActionSubmitForm extends PDAction
      *
      * @param a the action dictionary
      */
-    public PDActionSubmitForm(COSDictionary a)
-    {
+    public PDActionSubmitForm(COSDictionary a) {
         super(a);
     }
 
@@ -61,8 +58,7 @@ public class PDActionSubmitForm extends PDAction
      * @return The F entry of the specific Submit-From action dictionary.
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
+    public PDFileSpecification getFile() throws IOException {
         return PDFileSpecification.createFS(action.getDictionaryObject(COSName.F));
     }
 
@@ -71,8 +67,7 @@ public class PDActionSubmitForm extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile(PDFileSpecification fs)
-    {
+    public void setFile(PDFileSpecification fs) {
         action.setItem(COSName.F, fs);
     }
 
@@ -82,16 +77,14 @@ public class PDActionSubmitForm extends PDAction
      *
      * @return the array of fields
      */
-    public COSArray getFields()
-    {
+    public COSArray getFields() {
         return action.getCOSArray(COSName.FIELDS);
     }
 
     /**
      * @param array the array of fields
      */
-    public void setFields(COSArray array)
-    {
+    public void setFields(COSArray array) {
         this.action.setItem(COSName.FIELDS, array);
     }
 
@@ -100,16 +93,14 @@ public class PDActionSubmitForm extends PDAction
      *
      * @return the flags
      */
-    public int getFlags()
-    {
+    public int getFlags() {
         return this.action.getInt(COSName.FLAGS, 0);
     }
 
     /**
      * @param flags the flags
      */
-    public void setFlags(int flags)
-    {
+    public void setFlags(int flags) {
         this.action.setInt(COSName.FLAGS, flags);
     }
 

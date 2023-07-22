@@ -25,21 +25,20 @@ import java.util.List;
  *
  * @author Ben Litchfield
  */
-public class Composite
-{
+public class Composite {
     private final String name;
     private final List<CompositePart> parts = new ArrayList<>();
 
-    public Composite(String name)
-    {
+    public Composite(String name) {
         this.name = name;
     }
 
-    /** Getter for property name.
+    /**
+     * Getter for property name.
+     *
      * @return Value of property name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -48,16 +47,16 @@ public class Composite
      *
      * @param part The composite part to add.
      */
-    public void addPart( CompositePart part )
-    {
-        parts.add( part );
+    public void addPart(CompositePart part) {
+        parts.add(part);
     }
 
-    /** Getter for property parts.
+    /**
+     * Getter for property parts.
+     *
      * @return Value of property parts.
      */
-    public List<CompositePart> getParts()
-    {
+    public List<CompositePart> getParts() {
         return Collections.unmodifiableList(parts);
     }
 }

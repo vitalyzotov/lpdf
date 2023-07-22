@@ -17,18 +17,18 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
-import java.io.IOException;
 import lpdf.fontbox.util.BoundingBox;
 import lpdf.pdfbox.util.Matrix;
 import lpdf.pdfbox.util.Vector;
+
+import java.io.IOException;
 
 /**
  * A font-like object.
  *
  * @author John Hewson
  */
-public interface PDFontLike
-{
+public interface PDFontLike {
     /**
      * Returns the name of this font, either the PostScript "BaseName" or the Type 3 "Name".
      *
@@ -54,7 +54,6 @@ public interface PDFontLike
      * Returns the font's bounding box.
      *
      * @return the bounding box
-     *
      * @throws IOException if the bounding box could not be read
      */
     BoundingBox getBoundingBox() throws IOException;
@@ -73,7 +72,7 @@ public interface PDFontLike
      * Returns the height of the given character, in glyph space. This can be expensive to calculate. Results are only
      * approximate.
      * <p>
-     *
+     * <p>
      * Warning: This method is deprecated in PDFBox 2.0 because there is no meaningful value which it can return. The
      * {@link #getWidth(int)} method returns the advance width of a glyph, but there is no corresponding advance height.
      * The logical height of a character is the same for every character in a font, so if you want that, retrieve the
@@ -84,7 +83,6 @@ public interface PDFontLike
      * @param code character code
      * @return the height of the given character
      * @throws IOException if the height could not be read
-     *
      * @deprecated Use {@link #getBoundingBox() getBoundingBox()}.{@link BoundingBox#getHeight() getHeight()} instead.
      */
     @Deprecated
@@ -93,14 +91,13 @@ public interface PDFontLike
     /**
      * Returns the advance width of the given character, in glyph space.
      * <p>
-     *
+     * <p>
      * If you want the visual bounds of the glyph then call getPath(..) on the appropriate PDFont subclass to retrieve
      * the glyph outline as a GeneralPath instead. See the cyan rectangles in the <b>DrawPrintTextLocations.java</b>
      * example to see this in action.
      *
      * @param code character code
      * @return the width of the given character
-     *
      * @throws IOException if the width could not be read
      */
     float getWidth(int code) throws IOException;
@@ -111,7 +108,6 @@ public interface PDFontLike
      *
      * @param code character code
      * @return true if the Font dictionary specifies an explicit width for the given glyph
-     *
      * @throws IOException if the font could not be read
      */
     boolean hasExplicitWidth(int code) throws IOException;

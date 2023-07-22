@@ -16,19 +16,17 @@
  */
 package lpdf.fontbox.ttf;
 
+import lpdf.io.IOUtils;
+import lpdf.io.RandomAccessRead;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import lpdf.io.IOUtils;
-import lpdf.io.RandomAccessRead;
-
 /**
  * An implementation of the TTFDataStream using RandomAccessRead as source.
- *
  */
-class RandomAccessReadDataStream extends TTFDataStream
-{
+class RandomAccessReadDataStream extends TTFDataStream {
     private final long length;
     private final byte[] data;
     private int currentPosition = 0;
@@ -37,18 +35,15 @@ class RandomAccessReadDataStream extends TTFDataStream
      * Constructor.
      *
      * @param randomAccessRead source to be read from
-     *
      * @throws IOException If there is a problem reading the source data.
      */
-    RandomAccessReadDataStream(RandomAccessRead randomAccessRead) throws IOException
-    {
+    RandomAccessReadDataStream(RandomAccessRead randomAccessRead) throws IOException {
         length = randomAccessRead.length();
         data = new byte[(int) length];
         int remainingBytes = data.length;
         int amountRead;
         while ((amountRead = randomAccessRead.read(data, data.length - remainingBytes,
-                remainingBytes)) > 0)
-        {
+                remainingBytes)) > 0) {
             remainingBytes -= amountRead;
         }
     }
@@ -57,23 +52,21 @@ class RandomAccessReadDataStream extends TTFDataStream
      * Constructor.
      *
      * @param inputStream source to be read from
-     *
      * @throws IOException If there is a problem reading the source data.
      */
-    RandomAccessReadDataStream(InputStream inputStream) throws IOException
-    {
+    RandomAccessReadDataStream(InputStream inputStream) throws IOException {
         data = IOUtils.toByteArray(inputStream);
         length = data.length;
     }
 
     /**
      * Get the current position in the stream.
+     *
      * @return The current position in the stream.
      * @throws IOException If an error occurs while reading the stream.
      */
     @Override
-    public long getCurrentPosition() throws IOException
-    {
+    public long getCurrentPosition() throws IOException {
         return currentPosition;
     }
 
@@ -83,21 +76,19 @@ class RandomAccessReadDataStream extends TTFDataStream
      * @throws IOException If there is an error closing the resources.
      */
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         // nothing to do
     }
 
     /**
      * Read an unsigned byte.
+     *
      * @return An unsigned byte.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    public int read() throws IOException
-    {
-        if (currentPosition >= length)
-        {
+    public int read() throws IOException {
+        if (currentPosition >= length) {
             return -1;
         }
         return data[currentPosition++] & 0xff;
@@ -110,8 +101,7 @@ class RandomAccessReadDataStream extends TTFDataStream
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    public final long readLong() throws IOException
-    {
+    public final long readLong() throws IOException {
         return ((long) readInt() << 32) + (readInt() & 0xFFFFFFFFL);
     }
 
@@ -121,14 +111,14 @@ class RandomAccessReadDataStream extends TTFDataStream
      * @return 4 bytes interpreted as a int.
      * @throws IOException If there is an error reading the data.
      */
-    private int readInt() throws IOException
-    {
+    private int readInt() throws IOException {
         int b1 = read();
         int b2 = read();
         int b3 = read();
         int b4 = read();
         return (b1 << 24) + (b2 << 16) + (b3 << 8) + b4;
     }
+
     /**
      * Seek into the datasource.
      *
@@ -136,31 +126,24 @@ class RandomAccessReadDataStream extends TTFDataStream
      * @throws IOException If there is an error seeking to that position.
      */
     @Override
-    public void seek(long pos) throws IOException
-    {
-        if (pos < 0)
-        {
+    public void seek(long pos) throws IOException {
+        if (pos < 0) {
             throw new IOException("Invalid position " + pos);
         }
         currentPosition = pos < length ? (int) pos : (int) length;
     }
 
     /**
-     * @see java.io.InputStream#read( byte[], int, int )
-     *
-     * @param b The buffer to write to.
+     * @param b   The buffer to write to.
      * @param off The offset into the buffer.
      * @param len The length into the buffer.
-     *
      * @return The number of bytes read.
-     *
      * @throws IOException If there is an error reading from the stream.
+     * @see java.io.InputStream#read(byte[], int, int)
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        if (currentPosition >= length)
-        {
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (currentPosition >= length) {
             return -1;
         }
         int remainingBytes = (int) (length - currentPosition);
@@ -174,8 +157,7 @@ class RandomAccessReadDataStream extends TTFDataStream
      * {@inheritDoc}
      */
     @Override
-    public InputStream getOriginalData() throws IOException
-    {
+    public InputStream getOriginalData() throws IOException {
         return new ByteArrayInputStream(data);
     }
 
@@ -183,8 +165,7 @@ class RandomAccessReadDataStream extends TTFDataStream
      * {@inheritDoc}
      */
     @Override
-    public long getOriginalDataSize()
-    {
+    public long getOriginalDataSize() {
         return length;
     }
 }

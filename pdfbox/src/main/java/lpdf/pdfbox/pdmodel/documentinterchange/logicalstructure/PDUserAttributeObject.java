@@ -16,20 +16,19 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A User attribute object.
  *
  * @author Johannes Koch
  */
-public class PDUserAttributeObject extends PDAttributeObject
-{
+public class PDUserAttributeObject extends PDAttributeObject {
 
     /**
      * Attribute owner for user properties
@@ -40,8 +39,7 @@ public class PDUserAttributeObject extends PDAttributeObject
     /**
      * Default constructor
      */
-    public PDUserAttributeObject()
-    {
+    public PDUserAttributeObject() {
         this.setOwner(OWNER_USER_PROPERTIES);
     }
 
@@ -50,8 +48,7 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @param dictionary the dictionary
      */
-    public PDUserAttributeObject(COSDictionary dictionary)
-    {
+    public PDUserAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -61,14 +58,12 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @return the user properties
      */
-    public List<PDUserProperty> getOwnerUserProperties()
-    {
+    public List<PDUserProperty> getOwnerUserProperties() {
         COSArray p = getCOSObject().getCOSArray(COSName.P);
         List<PDUserProperty> properties = new ArrayList<>(p.size());
-        for (int i = 0; i < p.size(); i++)
-        {
+        for (int i = 0; i < p.size(); i++) {
             properties.add(
-                new PDUserProperty((COSDictionary) p.getObject(i), this));
+                    new PDUserProperty((COSDictionary) p.getObject(i), this));
         }
         return properties;
     }
@@ -78,11 +73,9 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @param userProperties the user properties
      */
-    public void setUserProperties(List<PDUserProperty> userProperties)
-    {
+    public void setUserProperties(List<PDUserProperty> userProperties) {
         COSArray p = new COSArray();
-        for (PDUserProperty userProperty : userProperties)
-        {
+        for (PDUserProperty userProperty : userProperties) {
             p.add(userProperty);
         }
         this.getCOSObject().setItem(COSName.P, p);
@@ -93,8 +86,7 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @param userProperty the user property
      */
-    public void addUserProperty(PDUserProperty userProperty)
-    {
+    public void addUserProperty(PDUserProperty userProperty) {
         COSArray p = getCOSObject().getCOSArray(COSName.P);
         p.add(userProperty);
         this.notifyChanged();
@@ -105,15 +97,12 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @param userProperty the user property
      */
-    public void removeUserProperty(PDUserProperty userProperty)
-    {
-        if (userProperty == null)
-        {
+    public void removeUserProperty(PDUserProperty userProperty) {
+        if (userProperty == null) {
             return;
         }
         COSArray p = getCOSObject().getCOSArray(COSName.P);
-        if (p.remove(userProperty.getCOSObject()))
-        {
+        if (p.remove(userProperty.getCOSObject())) {
             this.notifyChanged();
         }
     }
@@ -123,14 +112,12 @@ public class PDUserAttributeObject extends PDAttributeObject
      *
      * @param userProperty the user property which might have be changed
      */
-    public void userPropertyChanged(PDUserProperty userProperty)
-    {
+    public void userPropertyChanged(PDUserProperty userProperty) {
 
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString() + ", userProperties=" + this.getOwnerUserProperties();
     }
 

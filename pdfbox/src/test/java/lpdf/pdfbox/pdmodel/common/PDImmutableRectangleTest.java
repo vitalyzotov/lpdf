@@ -20,23 +20,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- *
  * @author Tilman Hausherr
  */
-class PDImmutableRectangleTest
-{
+class PDImmutableRectangleTest {
     private PDRectangle rect = PDRectangle.A4;
 
-    PDImmutableRectangleTest()
-    {
+    PDImmutableRectangleTest() {
     }
 
     /**
      * Test that class PDImmutableRectangle is used for predefined.
      */
     @Test
-    void testClass()
-    {
+    void testClass() {
         Assertions.assertTrue(rect instanceof PDImmutableRectangle);
         Assertions.assertTrue(PDRectangle.A0 instanceof PDImmutableRectangle);
         Assertions.assertTrue(PDRectangle.A1 instanceof PDImmutableRectangle);
@@ -53,8 +49,7 @@ class PDImmutableRectangleTest
      * Test of setUpperRightY method, of class PDImmutableRectangle.
      */
     @Test
-    void testSetUpperRightY()
-    {
+    void testSetUpperRightY() {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> rect.setUpperRightY(0));
     }
 
@@ -62,8 +57,7 @@ class PDImmutableRectangleTest
      * Test of setUpperRightX method, of class PDImmutableRectangle.
      */
     @Test
-    void testSetUpperRightX()
-    {
+    void testSetUpperRightX() {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> rect.setUpperRightX(0));
     }
 
@@ -71,8 +65,7 @@ class PDImmutableRectangleTest
      * Test of setLowerLeftY method, of class PDImmutableRectangle.
      */
     @Test
-    void testSetLowerLeftY()
-    {
+    void testSetLowerLeftY() {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> rect.setLowerLeftY(0));
     }
 
@@ -80,8 +73,7 @@ class PDImmutableRectangleTest
      * Test of setLowerLeftX method, of class PDImmutableRectangle.
      */
     @Test
-    void testSetLowerLeftX()
-    {
+    void testSetLowerLeftX() {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> rect.setLowerLeftX(0));
     }
 

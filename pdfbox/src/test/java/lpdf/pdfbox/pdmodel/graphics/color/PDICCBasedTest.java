@@ -16,23 +16,21 @@
 package lpdf.pdfbox.pdmodel.graphics.color;
 
 import lpdf.pdfbox.pdmodel.PDDocument;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
- *
  * @author Tilman Hausherr
  */
-class PDICCBasedTest
-{
+class PDICCBasedTest {
 
     /**
      * Test of Constructor for PDFBOX-2812.
      */
     @Test
-    void testConstructor()
-    {
+    void testConstructor() {
         PDDocument doc = new PDDocument();
         PDICCBased iccBased = new PDICCBased(doc);
         assertEquals("ICCBased", iccBased.getName());

@@ -16,17 +16,16 @@
  */
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
-
 import lpdf.io.RandomAccessReadBuffer;
+
+import java.io.IOException;
 
 /**
  * A table in a true type font.
  *
  * @author Ben Litchfield
  */
-public class GlyphTable extends TTFTable
-{
+public class GlyphTable extends TTFTable {
     /**
      * Tag to identify this table.
      */
@@ -53,26 +52,23 @@ public class GlyphTable extends TTFTable
      */
     private static final int MAX_CACHED_GLYPHS = 100;
 
-    GlyphTable()
-    {
+    GlyphTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         loca = ttf.getIndexToLocation();
         numGlyphs = ttf.getNumberOfGlyphs();
 
-        if (numGlyphs < MAX_CACHE_SIZE)
-        {
+        if (numGlyphs < MAX_CACHE_SIZE) {
             // don't cache the huge fonts to save memory
             glyphs = new GlyphData[numGlyphs];
         }
@@ -93,8 +89,7 @@ public class GlyphTable extends TTFTable
     /**
      * @param glyphsValue The glyphs to set.
      */
-    public void setGlyphs(GlyphData[] glyphsValue)
-    {
+    public void setGlyphs(GlyphData[] glyphsValue) {
         glyphs = glyphsValue;
     }
 
@@ -102,20 +97,15 @@ public class GlyphTable extends TTFTable
      * Returns the data for the glyph with the given GID.
      *
      * @param gid GID
-     *
      * @return data of the glyph with the given GID or null
-     *
      * @throws IOException if the font cannot be read
      */
-    public GlyphData getGlyph(int gid) throws IOException
-    {
-        if (gid < 0 || gid >= numGlyphs)
-        {
+    public GlyphData getGlyph(int gid) throws IOException {
+        if (gid < 0 || gid >= numGlyphs) {
             return null;
         }
 
-        if (glyphs != null && glyphs[gid] != null)
-        {
+        if (glyphs != null && glyphs[gid] != null) {
             return glyphs[gid];
         }
 
@@ -123,21 +113,17 @@ public class GlyphTable extends TTFTable
 
         // PDFBOX-4219: synchronize on data because it is accessed by several threads
         // when PDFBox is accessing a standard 14 font for the first time
-        synchronized (data)
-        {
+        synchronized (data) {
             // read a single glyph
             long[] offsets = loca.getOffsets();
 
-            if (offsets[gid] == offsets[gid + 1])
-            {
+            if (offsets[gid] == offsets[gid + 1]) {
                 // no outline
                 // PDFBOX-5135: can't return null, must return an empty glyph because
                 // sometimes this is used in a composite glyph.
                 glyph = new GlyphData();
                 glyph.initEmptyData();
-            }
-            else
-            {
+            } else {
                 // save
                 long currentPosition = data.getCurrentPosition();
 
@@ -149,8 +135,7 @@ public class GlyphTable extends TTFTable
                 data.seek(currentPosition);
             }
 
-            if (glyphs != null && glyphs[gid] == null && cached < MAX_CACHED_GLYPHS)
-            {
+            if (glyphs != null && glyphs[gid] == null && cached < MAX_CACHED_GLYPHS) {
                 glyphs[gid] = glyph;
                 ++cached;
             }
@@ -159,14 +144,12 @@ public class GlyphTable extends TTFTable
         }
     }
 
-    private GlyphData getGlyphData(int gid) throws IOException
-    {
+    private GlyphData getGlyphData(int gid) throws IOException {
         GlyphData glyph = new GlyphData();
         int leftSideBearing = hmt == null ? 0 : hmt.getLeftSideBearing(gid);
         glyph.initData(this, data, leftSideBearing);
         // resolve composite glyph
-        if (glyph.getDescription().isComposite())
-        {
+        if (glyph.getDescription().isComposite()) {
             glyph.getDescription().resolve();
         }
         return glyph;

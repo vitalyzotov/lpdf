@@ -25,14 +25,12 @@ import lpdf.fontbox.ttf.TrueTypeFont;
  *
  * @author John Hewson
  */
-public interface FontMapper
-{
+public interface FontMapper {
     /**
      * Finds a TrueType font with the given PostScript name, or a suitable substitute, or null.
      *
-     * @param baseFont PostScript name of the mapped font
+     * @param baseFont       PostScript name of the mapped font
      * @param fontDescriptor FontDescriptor
-     *
      * @return the mapped TrueType font or null
      */
     FontMapping<TrueTypeFont> getTrueTypeFont(String baseFont, PDFontDescriptor fontDescriptor);
@@ -41,9 +39,8 @@ public interface FontMapper
      * Finds a font with the given PostScript name, or a suitable substitute, or null. This allows any font to be
      * substituted with a PFB, TTF or OTF.
      *
-     * @param baseFont PostScript name of the mapped font
+     * @param baseFont       PostScript name of the mapped font
      * @param fontDescriptor the FontDescriptor of the font to find
-     *
      * @return the mapped FontBox font or null
      */
     FontMapping<FontBoxFont> getFontBoxFont(String baseFont, PDFontDescriptor fontDescriptor);
@@ -52,10 +49,9 @@ public interface FontMapper
      * Finds a CFF CID-Keyed font with the given PostScript name, or a suitable substitute, or null. This method can
      * also map CJK fonts via their CIDSystemInfo (ROS).
      *
-     * @param baseFont PostScript name of the mapped font
+     * @param baseFont       PostScript name of the mapped font
      * @param fontDescriptor FontDescriptor
-     * @param cidSystemInfo the CID system info, e.g. "Adobe-Japan1", if any.
-     *
+     * @param cidSystemInfo  the CID system info, e.g. "Adobe-Japan1", if any.
      * @return the mapped CIDFont font or null
      */
     CIDFontMapping getCIDFont(String baseFont, PDFontDescriptor fontDescriptor,

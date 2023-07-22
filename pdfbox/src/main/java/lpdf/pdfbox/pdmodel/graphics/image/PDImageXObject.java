@@ -16,8 +16,7 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.image;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lpdf.io.IOUtils;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -27,7 +26,6 @@ import lpdf.pdfbox.cos.COSObject;
 import lpdf.pdfbox.cos.COSStream;
 import lpdf.pdfbox.filter.DecodeOptions;
 import lpdf.pdfbox.filter.DecodeResult;
-import lpdf.io.IOUtils;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.common.PDMetadata;
@@ -36,6 +34,8 @@ import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import lpdf.pdfbox.pdmodel.graphics.PDXObject;
 import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import lpdf.pdfbox.pdmodel.graphics.color.PDDeviceGray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

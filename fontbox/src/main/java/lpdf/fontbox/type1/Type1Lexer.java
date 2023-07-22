@@ -19,32 +19,30 @@
 
 package lpdf.fontbox.type1;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Lexer for the ASCII portions of an Adobe Type 1 font.
  *
+ * @author John Hewson
  * @see Type1Parser
- *
+ * <p>
  * The PostScript language, of which Type 1 fonts are a subset, has a
  * somewhat awkward lexical structure. It is neither regular nor
  * context-free, and the execution of the program can modify the
  * the behaviour of the lexer/parser.
- *
+ * <p>
  * Nevertheless, this class represents an attempt to artificially separate
  * the PostScript parsing process into separate lexing and parsing phases
  * in order to reduce the complexity of the parsing phase.
- *
  * @see "PostScript Language Reference 3rd ed, Adobe Systems (1999)"
- *
- * @author John Hewson
  */
-class Type1Lexer
-{
+class Type1Lexer {
     /**
      * Log instance.
      */
@@ -56,21 +54,21 @@ class Type1Lexer
 
     /**
      * Constructs a new Type1Lexer given a header-less .pfb segment.
+     *
      * @param bytes Header-less .pfb segment
      * @throws IOException
      */
-    Type1Lexer(byte[] bytes) throws IOException
-    {
+    Type1Lexer(byte[] bytes) throws IOException {
         buffer = ByteBuffer.wrap(bytes);
         aheadToken = readToken(null);
     }
 
     /**
      * Returns the next token and consumes it.
+     *
      * @return The next token.
      */
-    public Token nextToken() throws IOException
-    {
+    public Token nextToken() throws IOException {
         Token curToken = aheadToken;
         //System.out.println(curToken); // for debugging
         aheadToken = readToken(curToken);
@@ -79,10 +77,10 @@ class Type1Lexer
 
     /**
      * Returns the next token without consuming it.
+     *
      * @return The next token
      */
-    public Token peekToken()
-    {
+    public Token peekToken() {
         return aheadToken;
     }
 
@@ -91,154 +89,105 @@ class Type1Lexer
      *
      * @return true if the kind of the next token equals the given one
      */
-    public boolean peekKind(Token.Kind kind)
-    {
+    public boolean peekKind(Token.Kind kind) {
         return aheadToken != null && aheadToken.getKind() == kind;
     }
 
     /**
      * Reads an ASCII char from the buffer.
      */
-    private char getChar() throws IOException
-    {
-        try
-        {
+    private char getChar() throws IOException {
+        try {
             return (char) buffer.get();
-        }
-        catch (BufferUnderflowException exception)
-        {
+        } catch (BufferUnderflowException exception) {
             throw new IOException("Premature end of buffer reached");
         }
     }
 
     /**
      * Reads a single token.
+     *
      * @param prevToken the previous token
      */
-    private Token readToken(Token prevToken) throws IOException
-    {
+    private Token readToken(Token prevToken) throws IOException {
         boolean skip;
-        do
-        {
+        do {
             skip = false;
-            while (buffer.hasRemaining())
-            {
+            while (buffer.hasRemaining()) {
                 char c = getChar();
 
                 // delimiters
-                if (c == '%')
-                {
+                if (c == '%') {
                     // comment
                     readComment();
-                }
-                else if (c == '(')
-                {
+                } else if (c == '(') {
                     return readString();
-                }
-                else if (c == ')')
-                {
+                } else if (c == ')') {
                     // not allowed outside a string context
                     throw new IOException("unexpected closing parenthesis");
-                }
-                else if (c == '[')
-                {
+                } else if (c == '[') {
                     return new Token(c, Token.START_ARRAY);
-                }
-                else if (c == '{')
-                {
+                } else if (c == '{') {
                     return new Token(c, Token.START_PROC);
-                }
-                else if (c == ']')
-                {
+                } else if (c == ']') {
                     return new Token(c, Token.END_ARRAY);
-                }
-                else if (c == '}')
-                {
+                } else if (c == '}') {
                     return new Token(c, Token.END_PROC);
-                }
-                else if (c == '/')
-                {
+                } else if (c == '/') {
                     String regular = readRegular();
-                    if (regular == null)
-                    {
+                    if (regular == null) {
                         // the stream is corrupt
                         throw new DamagedFontException("Could not read token at position " +
-                                                        buffer.position());
+                                buffer.position());
                     }
                     return new Token(regular, Token.LITERAL);
-                }
-                else if (c == '<')
-                {
+                } else if (c == '<') {
                     char c2 = getChar();
-                    if (c2 == c)
-                    {
+                    if (c2 == c) {
                         return new Token("<<", Token.START_DICT);
-                    }
-                    else
-                    {
+                    } else {
                         // code may have to be changed in something better, maybe new token type
                         buffer.position(buffer.position() - 1);
                         return new Token(c, Token.NAME);
                     }
-                }
-                else if (c == '>')
-                {
+                } else if (c == '>') {
                     char c2 = getChar();
-                    if (c2 == c)
-                    {
+                    if (c2 == c) {
                         return new Token(">>", Token.END_DICT);
-                    }
-                    else
-                    {
+                    } else {
                         // code may have to be changed in something better, maybe new token type
                         buffer.position(buffer.position() - 1);
                         return new Token(c, Token.NAME);
                     }
-                }
-                else if (Character.isWhitespace(c))
-                {
+                } else if (Character.isWhitespace(c)) {
                     skip = true;
-                }
-                else if (c == 0)
-                {
+                } else if (c == 0) {
                     LOG.warn("NULL byte in font, skipped");
                     skip = true;
-                }
-                else
-                {
-                    buffer.position(buffer.position() -1);
+                } else {
+                    buffer.position(buffer.position() - 1);
 
                     // regular character: try parse as number
                     Token number = tryReadNumber();
-                    if (number != null)
-                    {
+                    if (number != null) {
                         return number;
-                    }
-                    else
-                    {
+                    } else {
                         // otherwise this must be a name
                         String name = readRegular();
-                        if (name == null)
-                        {
+                        if (name == null) {
                             // the stream is corrupt
                             throw new DamagedFontException("Could not read token at position " +
-                                                           buffer.position());
+                                    buffer.position());
                         }
 
-                        if (name.equals("RD") || name.equals("-|"))
-                        {
+                        if (name.equals("RD") || name.equals("-|")) {
                             // return the next CharString instead
-                            if (prevToken != null && prevToken.getKind() == Token.INTEGER)
-                            {
+                            if (prevToken != null && prevToken.getKind() == Token.INTEGER) {
                                 return readCharString(prevToken.intValue());
-                            }
-                            else
-                            {
+                            } else {
                                 throw new IOException("expected INTEGER before -| or RD");
                             }
-                        }
-                        else
-                        {
+                        } else {
                             return new Token(name, Token.NAME);
                         }
                     }
@@ -252,8 +201,7 @@ class Type1Lexer
     /**
      * Reads a number or returns null.
      */
-    private Token tryReadNumber() throws IOException
-    {
+    private Token tryReadNumber() throws IOException {
         buffer.mark();
 
         StringBuilder sb = new StringBuilder();
@@ -262,110 +210,87 @@ class Type1Lexer
         boolean hasDigit = false;
 
         // optional + or -
-        if (c == '+' || c == '-')
-        {
+        if (c == '+' || c == '-') {
             sb.append(c);
             c = getChar();
         }
 
         // optional digits
-        while (Character.isDigit(c))
-        {
+        while (Character.isDigit(c)) {
             sb.append(c);
             c = getChar();
             hasDigit = true;
         }
 
         // optional .
-        if (c == '.')
-        {
+        if (c == '.') {
             sb.append(c);
             c = getChar();
-        }
-        else if (c == '#')
-        {
+        } else if (c == '#') {
             // PostScript radix number takes the form base#number
             radix = sb;
             sb = new StringBuilder();
             c = getChar();
-        }
-        else if (sb.length() == 0 || !hasDigit)
-        {
+        } else if (sb.length() == 0 || !hasDigit) {
             // failure
             buffer.reset();
             return null;
-        }
-        else if (c != 'e' && c != 'E')
-        {
+        } else if (c != 'e' && c != 'E') {
             // integer
-            buffer.position(buffer.position() -1);
+            buffer.position(buffer.position() - 1);
             return new Token(sb.toString(), Token.INTEGER);
         }
 
         // required digit
-        if (Character.isDigit(c))
-        {
+        if (Character.isDigit(c)) {
             sb.append(c);
             c = getChar();
-        }
-        else if (c != 'e' && c != 'E')
-        {
+        } else if (c != 'e' && c != 'E') {
             // failure
             buffer.reset();
             return null;
         }
 
         // optional digits
-        while (Character.isDigit(c))
-        {
+        while (Character.isDigit(c)) {
             sb.append(c);
             c = getChar();
         }
 
         // optional E
-        if (c == 'E' || c == 'e')
-        {
+        if (c == 'E' || c == 'e') {
             sb.append(c);
             c = getChar();
 
             // optional minus
-            if (c == '-')
-            {
+            if (c == '-') {
                 sb.append(c);
                 c = getChar();
             }
 
             // required digit
-            if (Character.isDigit(c))
-            {
+            if (Character.isDigit(c)) {
                 sb.append(c);
                 c = getChar();
-            }
-            else
-            {
+            } else {
                 // failure
                 buffer.reset();
                 return null;
             }
 
             // optional digits
-            while (Character.isDigit(c))
-            {
+            while (Character.isDigit(c)) {
                 sb.append(c);
                 c = getChar();
             }
         }
 
         buffer.position(buffer.position() - 1);
-        if (radix != null)
-        {
+        if (radix != null) {
             int val;
-            try
-            {
+            try {
                 val = Integer.parseInt(sb.toString(), Integer.parseInt(radix.toString()));
-            }
-            catch (NumberFormatException ex)
-            {
+            } catch (NumberFormatException ex) {
                 throw new IOException("Invalid number '" + sb + "'", ex);
             }
             return new Token(Integer.toString(val), Token.INTEGER);
@@ -377,30 +302,24 @@ class Type1Lexer
      * Reads a sequence of regular characters, i.e. not delimiters
      * or whitespace
      */
-    private String readRegular() throws IOException
-    {
+    private String readRegular() throws IOException {
         StringBuilder sb = new StringBuilder();
-        while (buffer.hasRemaining())
-        {
+        while (buffer.hasRemaining()) {
             buffer.mark();
             char c = getChar();
             if (Character.isWhitespace(c) ||
-                c == '(' || c == ')' ||
-                c == '<' || c == '>' ||
-                c == '[' || c == ']' ||
-                c == '{' || c == '}' ||
-                c == '/' || c == '%' )
-            {
+                    c == '(' || c == ')' ||
+                    c == '<' || c == '>' ||
+                    c == '[' || c == ']' ||
+                    c == '{' || c == '}' ||
+                    c == '/' || c == '%') {
                 buffer.reset();
                 break;
-            }
-            else
-            {
+            } else {
                 sb.append(c);
             }
         }
-        if (sb.length() == 0)
-        {
+        if (sb.length() == 0) {
             return null;
         }
         return sb.toString();
@@ -409,18 +328,13 @@ class Type1Lexer
     /**
      * Reads a line comment.
      */
-    private String readComment() throws IOException
-    {
+    private String readComment() throws IOException {
         StringBuilder sb = new StringBuilder();
-        while (buffer.hasRemaining())
-        {
+        while (buffer.hasRemaining()) {
             char c = getChar();
-            if (c == '\r' || c == '\n')
-            {
+            if (c == '\r' || c == '\n') {
                 break;
-            }
-            else
-            {
+            } else {
                 sb.append(c);
             }
         }
@@ -430,24 +344,20 @@ class Type1Lexer
     /**
      * Reads a (string).
      */
-    private Token readString() throws IOException
-    {
+    private Token readString() throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        while (buffer.hasRemaining())
-        {
+        while (buffer.hasRemaining()) {
             char c = getChar();
 
             // string context
-            switch (c)
-            {
+            switch (c) {
                 case '(':
                     openParens++;
                     sb.append('(');
                     break;
                 case ')':
-                    if (openParens == 0)
-                    {
+                    if (openParens == 0) {
                         // end of string
                         return new Token(sb.toString(), Token.STRING);
                     }
@@ -457,30 +367,39 @@ class Type1Lexer
                 case '\\':
                     // escapes: \n \r \t \b \f \\ \( \)
                     char c1 = getChar();
-                    switch (c1)
-                    {
+                    switch (c1) {
                         case 'n':
-                        case 'r': sb.append("\n"); break;
-                        case 't': sb.append('\t'); break;
-                        case 'b': sb.append('\b'); break;
-                        case 'f': sb.append('\f'); break;
-                        case '\\': sb.append('\\'); break;
-                        case '(': sb.append('('); break;
-                        case ')': sb.append(')'); break;
+                        case 'r':
+                            sb.append("\n");
+                            break;
+                        case 't':
+                            sb.append('\t');
+                            break;
+                        case 'b':
+                            sb.append('\b');
+                            break;
+                        case 'f':
+                            sb.append('\f');
+                            break;
+                        case '\\':
+                            sb.append('\\');
+                            break;
+                        case '(':
+                            sb.append('(');
+                            break;
+                        case ')':
+                            sb.append(')');
+                            break;
                         default:
                             break;
                     }
                     // octal \ddd
-                    if (Character.isDigit(c1))
-                    {
-                        String num = String.valueOf(new char[] { c1, getChar(), getChar() });
-                        try
-                        {
+                    if (Character.isDigit(c1)) {
+                        String num = String.valueOf(new char[]{c1, getChar(), getChar()});
+                        try {
                             int code = Integer.parseInt(num, 8);
                             sb.append((char) code);
-                        }
-                        catch (NumberFormatException ex)
-                        {
+                        } catch (NumberFormatException ex) {
                             throw new IOException(ex);
                         }
                     }
@@ -500,17 +419,13 @@ class Type1Lexer
     /**
      * Reads a binary CharString.
      */
-    private Token readCharString(int length) throws IOException
-    {
-        try
-        {
+    private Token readCharString(int length) throws IOException {
+        try {
             buffer.get(); // space
             byte[] data = new byte[length];
             buffer.get(data);
             return new Token(data, Token.CHARSTRING);
-        }
-        catch (BufferUnderflowException exception)
-        {
+        } catch (BufferUnderflowException exception) {
             throw new IOException("Premature end of buffer reached");
         }
     }

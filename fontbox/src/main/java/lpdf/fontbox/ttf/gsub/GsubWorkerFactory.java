@@ -25,21 +25,17 @@ import lpdf.fontbox.ttf.model.Language;
  * Gets a {@link Language} specific instance of a {@link GsubWorker}
  *
  * @author Palash Ray
- *
  */
-public class GsubWorkerFactory
-{
+public class GsubWorkerFactory {
 
-    public GsubWorker getGsubWorker(CmapLookup cmapLookup, GsubData gsubData)
-    {
-        switch (gsubData.getLanguage())
-        {
-        case BENGALI:
-            return new GsubWorkerForBengali(cmapLookup, gsubData);
-        case LATIN:
-            return new GsubWorkerForLatin(cmapLookup, gsubData);
-        default:
-            return new DefaultGsubWorker();
+    public GsubWorker getGsubWorker(CmapLookup cmapLookup, GsubData gsubData) {
+        switch (gsubData.getLanguage()) {
+            case BENGALI:
+                return new GsubWorkerForBengali(cmapLookup, gsubData);
+            case LATIN:
+                return new GsubWorkerForLatin(cmapLookup, gsubData);
+            default:
+                return new DefaultGsubWorker();
         }
 
     }

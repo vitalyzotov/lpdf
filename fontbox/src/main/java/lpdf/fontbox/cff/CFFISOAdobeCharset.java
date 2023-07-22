@@ -22,13 +22,11 @@ package lpdf.fontbox.cff;
  *
  * @author Villu Ruusmann
  */
-public final class CFFISOAdobeCharset extends CFFCharsetType1
-{
+public final class CFFISOAdobeCharset extends CFFCharsetType1 {
     private static final int CHAR_CODE = 0;
     private static final int CHAR_NAME = 1;
 
-    private CFFISOAdobeCharset()
-    {
+    private CFFISOAdobeCharset() {
         // Table of character codes and their corresponding names.
         Object[][] cffIsoAdobeCharsetTable = {
                 {0, ".notdef"},
@@ -262,18 +260,17 @@ public final class CFFISOAdobeCharset extends CFFCharsetType1
                 {228, "zcaron"}
         };
         int gid = 0;
-        for (Object[] charsetEntry : cffIsoAdobeCharsetTable)
-        {
+        for (Object[] charsetEntry : cffIsoAdobeCharsetTable) {
             addSID(gid++, (Integer) charsetEntry[CHAR_CODE], charsetEntry[CHAR_NAME].toString());
         }
     }
 
     /**
      * Returns an instance of the CFFExpertSubsetCharset class.
+     *
      * @return an instance of CFFExpertSubsetCharset
      */
-    public static CFFISOAdobeCharset getInstance()
-    {
+    public static CFFISOAdobeCharset getInstance() {
         return CFFISOAdobeCharset.INSTANCE;
     }
 

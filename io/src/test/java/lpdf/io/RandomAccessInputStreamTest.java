@@ -16,28 +16,25 @@
 
 package lpdf.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unittest for {@link RandomAccessInputStream}
  */
-class RandomAccessInputStreamTest
-{
+class RandomAccessInputStreamTest {
     @Test
-    void testPositionSkip() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionSkip() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         try (RandomAccessInputStream randomAccessInputStream = new RandomAccessInputStream(
-                new RandomAccessReadBuffer(bais)))
-        {
+                new RandomAccessReadBuffer(bais))) {
             assertEquals(11, randomAccessInputStream.available());
             randomAccessInputStream.skip(5);
             assertEquals(5, randomAccessInputStream.read());
@@ -47,14 +44,12 @@ class RandomAccessInputStreamTest
     }
 
     @Test
-    void testPositionRead() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionRead() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         try (RandomAccessInputStream randomAccessInputStream = new RandomAccessInputStream(
-                new RandomAccessReadBuffer(bais)))
-        {
+                new RandomAccessReadBuffer(bais))) {
             assertEquals(11, randomAccessInputStream.available());
             assertEquals(0, randomAccessInputStream.read());
             assertEquals(1, randomAccessInputStream.read());
@@ -64,14 +59,12 @@ class RandomAccessInputStreamTest
     }
 
     @Test
-    void testSeekEOF() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testSeekEOF() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         try (RandomAccessInputStream randomAccessInputStream = new RandomAccessInputStream(
-                new RandomAccessReadBuffer(bais)))
-        {
+                new RandomAccessReadBuffer(bais))) {
             assertEquals(12, randomAccessInputStream.skip(inputValues.length + 1));
 
             assertEquals(0, randomAccessInputStream.available());
@@ -81,14 +74,12 @@ class RandomAccessInputStreamTest
     }
 
     @Test
-    void testPositionReadBytes() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionReadBytes() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         try (RandomAccessInputStream randomAccessInputStream = new RandomAccessInputStream(
-                new RandomAccessReadBuffer(bais)))
-        {
+                new RandomAccessReadBuffer(bais))) {
             assertEquals(11, randomAccessInputStream.available());
             byte[] buffer = new byte[4];
             randomAccessInputStream.read(buffer);
@@ -106,11 +97,9 @@ class RandomAccessInputStreamTest
     }
 
     @Test
-    void testEmptyBuffer() throws IOException
-    {
+    void testEmptyBuffer() throws IOException {
         try (RandomAccessInputStream randomAccessInputStream = new RandomAccessInputStream(
-                new RandomAccessReadBuffer(new ByteArrayOutputStream().toByteArray())))
-        {
+                new RandomAccessReadBuffer(new ByteArrayOutputStream().toByteArray()))) {
             assertEquals(-1, randomAccessInputStream.read());
             assertEquals(-1, randomAccessInputStream.read(new byte[6]));
             assertEquals(0, randomAccessInputStream.available());

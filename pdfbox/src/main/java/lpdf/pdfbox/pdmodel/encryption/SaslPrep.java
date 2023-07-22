@@ -23,11 +23,9 @@ import java.text.Normalizer;
  *
  * @author Tom Bentley
  */
-class SaslPrep
-{
+class SaslPrep {
 
-    private SaslPrep()
-    {
+    private SaslPrep() {
     }
 
     /**
@@ -38,54 +36,47 @@ class SaslPrep
      * @param str The string to canonicalise.
      * @return The canonicalised string.
      * @throws IllegalArgumentException if the string contained prohibited codepoints, or broke the
-     * requirements for bidirectional character handling.
+     *                                  requirements for bidirectional character handling.
      * @see <a href="https://tools.ietf.org/html/rfc3454#section-7">RFC 3454, Section 7</a> for
      * discussion of what a query string is.
      */
-    static String saslPrepQuery(String str)
-    {
+    static String saslPrepQuery(String str) {
         return saslPrep(str, true);
     }
 
     /**
      * Return the {@code SASLPrep}-canonicalised version of the given
-     * @code str} for use as a stored string. This implements the {@code SASLPrep} algorithm defined
-     * in
-     * <a href="https://tools.ietf.org/html/rfc4013">RFC 4013</a>.
      *
      * @param str The string to canonicalise.
      * @return The canonicalised string.
      * @throws IllegalArgumentException if the string contained prohibited codepoints, or broke the
-     * requirements for bidirectional character handling.
+     *                                  requirements for bidirectional character handling.
+     * @code str} for use as a stored string. This implements the {@code SASLPrep} algorithm defined
+     * in
+     * <a href="https://tools.ietf.org/html/rfc4013">RFC 4013</a>.
      * @see <a href="https://tools.ietf.org/html/rfc3454#section-7">RFC 3454, Section 7</a> for
      * discussion of what a stored string is.
      */
-    static String saslPrepStored(String str)
-    {
+    static String saslPrepStored(String str) {
         return saslPrep(str, false);
     }
 
-    private static String saslPrep(String str, boolean allowUnassigned)
-    {
+    private static String saslPrep(String str, boolean allowUnassigned) {
         char[] chars = str.toCharArray();
 
         // 1. Map
         // non-ASCII space chars mapped to space
-        for (int i = 0; i < str.length(); i++)
-        {
+        for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
-            if (nonAsciiSpace(ch))
-            {
+            if (nonAsciiSpace(ch)) {
                 chars[i] = ' ';
             }
         }
 
         int length = 0;
-        for (int i = 0; i < str.length(); i++)
-        {
+        for (int i = 0; i < str.length(); i++) {
             char ch = chars[i];
-            if (!mappedToNothing(ch))
-            {
+            if (!mappedToNothing(ch)) {
                 chars[length++] = ch;
             }
         }
@@ -97,12 +88,10 @@ class SaslPrep
         boolean containsLCat = false;
         boolean initialRandALCat = false;
         int i = 0;
-        while (i < normalized.length())
-        {
+        while (i < normalized.length()) {
             final int codepoint = normalized.codePointAt(i);
             // 3. Prohibit
-            if (prohibited(codepoint))
-            {
+            if (prohibited(codepoint)) {
                 throw new IllegalArgumentException("Prohibited character '" +
                         Character.getName(codepoint) + "' at position " + i);
             }
@@ -115,20 +104,17 @@ class SaslPrep
             containsLCat |= directionality == Character.DIRECTIONALITY_LEFT_TO_RIGHT;
 
             initialRandALCat |= i == 0 && isRandALcat;
-            if (!allowUnassigned && !Character.isDefined(codepoint))
-            {
+            if (!allowUnassigned && !Character.isDefined(codepoint)) {
                 throw new IllegalArgumentException("Character at position " + i + " is unassigned");
             }
 
             i += Character.charCount(codepoint);
 
-            if (initialRandALCat && i >= normalized.length() && !isRandALcat)
-            {
+            if (initialRandALCat && i >= normalized.length() && !isRandALcat) {
                 throw new IllegalArgumentException("First character is RandALCat, but last character is not");
             }
         }
-        if (containsRandALCat && containsLCat)
-        {
+        if (containsRandALCat && containsLCat) {
             throw new IllegalArgumentException("Contains both RandALCat characters and LCat characters");
         }
         return normalized;
@@ -140,10 +126,9 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc4013#section-2.3">RFC 4013,
      * Section 2.3</a>.
      */
-    static boolean prohibited(int codepoint)
-    {
-        return nonAsciiSpace((char)codepoint)
-                || asciiControl((char)codepoint)
+    static boolean prohibited(int codepoint) {
+        return nonAsciiSpace((char) codepoint)
+                || asciiControl((char) codepoint)
                 || nonAsciiControl(codepoint)
                 || privateUse(codepoint)
                 || nonCharacterCodePoint(codepoint)
@@ -160,8 +145,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.9">RFC 3454,
      * Appendix C.9</a>.
      */
-    private static boolean tagging(int codepoint)
-    {
+    private static boolean tagging(int codepoint) {
         return codepoint == 0xE0001
                 || 0xE0020 <= codepoint && codepoint <= 0xE007F;
     }
@@ -172,8 +156,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.8">RFC 3454,
      * Appendix C.8</a>.
      */
-    private static boolean changeDisplayProperties(int codepoint)
-    {
+    private static boolean changeDisplayProperties(int codepoint) {
         return codepoint == 0x0340
                 || codepoint == 0x0341
                 || codepoint == 0x200E
@@ -198,8 +181,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.7">RFC 3454,
      * Appendix C.7</a>.
      */
-    private static boolean inappropriateForCanonical(int codepoint)
-    {
+    private static boolean inappropriateForCanonical(int codepoint) {
         return 0x2FF0 <= codepoint && codepoint <= 0x2FFB;
     }
 
@@ -209,8 +191,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.6">RFC 3454,
      * Appendix C.6</a>.
      */
-    private static boolean inappropriateForPlainText(int codepoint)
-    {
+    private static boolean inappropriateForPlainText(int codepoint) {
         return codepoint == 0xFFF9
                 || codepoint == 0xFFFA
                 || codepoint == 0xFFFB
@@ -225,8 +206,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.5">RFC 3454,
      * Appendix C.5</a>.
      */
-    private static boolean surrogateCodePoint(int codepoint)
-    {
+    private static boolean surrogateCodePoint(int codepoint) {
         return 0xD800 <= codepoint && codepoint <= 0xDFFF;
     }
 
@@ -236,8 +216,7 @@ class SaslPrep
      * <a href="https://tools.ietf.org/html/rfc3454#appendix-C.4">RFC 3454,
      * Appendix C.4</a>.
      */
-    private static boolean nonCharacterCodePoint(int codepoint)
-    {
+    private static boolean nonCharacterCodePoint(int codepoint) {
         return 0xFDD0 <= codepoint && codepoint <= 0xFDEF
                 || 0xFFFE <= codepoint && codepoint <= 0xFFFF
                 || 0x1FFFE <= codepoint && codepoint <= 0x1FFFF
@@ -264,8 +243,7 @@ class SaslPrep
      * as defined by <a href="https://tools.ietf.org/html/rfc3454#appendix-C.3">RFC 3454,
      * Appendix C.3</a>.
      */
-    private static boolean privateUse(int codepoint)
-    {
+    private static boolean privateUse(int codepoint) {
         return 0xE000 <= codepoint && codepoint <= 0xF8FF
                 || 0xF0000 <= codepoint && codepoint <= 0xFFFFD
                 || 0x100000 <= codepoint && codepoint <= 0x10FFFD;
@@ -276,8 +254,7 @@ class SaslPrep
      * as defined by <a href="https://tools.ietf.org/html/rfc3454#appendix-C.2.2">RFC 3454,
      * Appendix C.2.2</a>.
      */
-    private static boolean nonAsciiControl(int codepoint)
-    {
+    private static boolean nonAsciiControl(int codepoint) {
         return 0x0080 <= codepoint && codepoint <= 0x009F
                 || codepoint == 0x06DD
                 || codepoint == 0x070F
@@ -301,8 +278,7 @@ class SaslPrep
      * as defined by <a href="https://tools.ietf.org/html/rfc3454#appendix-C.2.1">RFC 3454,
      * Appendix C.2.1</a>.
      */
-    private static boolean asciiControl(char ch)
-    {
+    private static boolean asciiControl(char ch) {
         return '\u0000' <= ch && ch <= '\u001F' || ch == '\u007F';
     }
 
@@ -311,8 +287,7 @@ class SaslPrep
      * as defined by <a href="https://tools.ietf.org/html/rfc3454#appendix-C.1.2">RFC 3454,
      * Appendix C.1.2</a>.
      */
-    private static boolean nonAsciiSpace(char ch)
-    {
+    private static boolean nonAsciiSpace(char ch) {
         return ch == '\u00A0'
                 || ch == '\u1680'
                 || '\u2000' <= ch && ch <= '\u200B'
@@ -326,8 +301,7 @@ class SaslPrep
      * as defined by <a href="https://tools.ietf.org/html/rfc3454#appendix-B.1">RFC 3454,
      * Appendix B.1</a>.
      */
-    private static boolean mappedToNothing(char ch)
-    {
+    private static boolean mappedToNothing(char ch) {
         return ch == '\u00AD'
                 || ch == '\u034F'
                 || ch == '\u1806'

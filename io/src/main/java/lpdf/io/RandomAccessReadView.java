@@ -21,10 +21,8 @@ import java.io.IOException;
 /**
  * This class provides a view of a part of a random access read. It clips the section starting at the given start
  * position with the given length into a new random access read.
- *
  */
-public class RandomAccessReadView implements RandomAccessRead
-{
+public class RandomAccessReadView implements RandomAccessRead {
     // the underlying random access read
     private RandomAccessRead randomAccessRead;
     // the start position within the underlying source
@@ -40,12 +38,11 @@ public class RandomAccessReadView implements RandomAccessRead
      * Constructor.
      *
      * @param randomAccessRead the underlying random access read
-     * @param startPosition start position within the underlying random access read
-     * @param streamLength stream length
+     * @param startPosition    start position within the underlying random access read
+     * @param streamLength     stream length
      */
     public RandomAccessReadView(RandomAccessRead randomAccessRead, long startPosition,
-            long streamLength)
-    {
+                                long streamLength) {
         this(randomAccessRead, startPosition, streamLength, false);
     }
 
@@ -53,13 +50,12 @@ public class RandomAccessReadView implements RandomAccessRead
      * Constructor.
      *
      * @param randomAccessRead the underlying random access read
-     * @param startPosition start position within the underlying random access read
-     * @param streamLength stream length
-     * @param closeInput close the underlying random access read when closing the view if set to true
+     * @param startPosition    start position within the underlying random access read
+     * @param streamLength     stream length
+     * @param closeInput       close the underlying random access read when closing the view if set to true
      */
     public RandomAccessReadView(RandomAccessRead randomAccessRead, long startPosition,
-            long streamLength, boolean closeInput)
-    {
+                                long streamLength, boolean closeInput) {
         this.randomAccessRead = randomAccessRead;
         this.startPosition = startPosition;
         this.streamLength = streamLength;
@@ -70,8 +66,7 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long getPosition() throws IOException
-    {
+    public long getPosition() throws IOException {
         checkClosed();
         return currentPosition;
     }
@@ -80,11 +75,9 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void seek(final long newOffset) throws IOException
-    {
+    public void seek(final long newOffset) throws IOException {
         checkClosed();
-        if (newOffset < 0)
-        {
+        if (newOffset < 0) {
             throw new IOException("Invalid position " + newOffset);
         }
         randomAccessRead.seek(startPosition + Math.min(newOffset, streamLength));
@@ -95,16 +88,13 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
-        if (isEOF())
-        {
+    public int read() throws IOException {
+        if (isEOF()) {
             return -1;
         }
         restorePosition();
         int readValue = randomAccessRead.read();
-        if (readValue > -1)
-        {
+        if (readValue > -1) {
             currentPosition++;
         }
         return readValue;
@@ -114,10 +104,8 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        if (isEOF())
-        {
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (isEOF()) {
             return -1;
         }
         restorePosition();
@@ -130,8 +118,7 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long length() throws IOException
-    {
+    public long length() throws IOException {
         checkClosed();
         return streamLength;
     }
@@ -140,10 +127,8 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void close() throws IOException
-    {
-        if (closeInput && randomAccessRead != null)
-        {
+    public void close() throws IOException {
+        if (closeInput && randomAccessRead != null) {
             randomAccessRead.close();
         }
         randomAccessRead = null;
@@ -153,8 +138,7 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isClosed()
-    {
+    public boolean isClosed() {
         return randomAccessRead == null || randomAccessRead.isClosed();
     }
 
@@ -162,8 +146,7 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void rewind(int bytes) throws IOException
-    {
+    public void rewind(int bytes) throws IOException {
         checkClosed();
         restorePosition();
         randomAccessRead.rewind(bytes);
@@ -174,8 +157,7 @@ public class RandomAccessReadView implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isEOF() throws IOException
-    {
+    public boolean isEOF() throws IOException {
         checkClosed();
         return currentPosition >= streamLength;
     }
@@ -185,8 +167,7 @@ public class RandomAccessReadView implements RandomAccessRead
      *
      * @throws IOException
      */
-    private void restorePosition() throws IOException
-    {
+    private void restorePosition() throws IOException {
         randomAccessRead.seek(startPosition + currentPosition);
     }
 
@@ -195,18 +176,15 @@ public class RandomAccessReadView implements RandomAccessRead
      *
      * @throws IOException If RandomAccessReadView already closed
      */
-    private void checkClosed() throws IOException
-    {
-        if (isClosed())
-        {
+    private void checkClosed() throws IOException {
+        if (isClosed()) {
             // consider that the rab is closed if there is no current buffer
             throw new IOException("RandomAccessReadView already closed");
         }
     }
 
     @Override
-    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException
-    {
+    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException {
         throw new IOException(getClass().getName() + ".createView isn't supported.");
     }
 

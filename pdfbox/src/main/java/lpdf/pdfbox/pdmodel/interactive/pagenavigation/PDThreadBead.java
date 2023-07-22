@@ -19,7 +19,6 @@ package lpdf.pdfbox.pdmodel.interactive.pagenavigation;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-
 import lpdf.pdfbox.pdmodel.PDPage;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
@@ -29,8 +28,7 @@ import lpdf.pdfbox.pdmodel.common.PDRectangle;
  *
  * @author Ben Litchfield
  */
-public class PDThreadBead implements COSObjectable
-{
+public class PDThreadBead implements COSObjectable {
 
 
     private final COSDictionary bead;
@@ -40,21 +38,18 @@ public class PDThreadBead implements COSObjectable
      *
      * @param b The underlying dictionary.
      */
-    public PDThreadBead( COSDictionary b )
-    {
+    public PDThreadBead(COSDictionary b) {
         bead = b;
     }
 
     /**
      * Default constructor.
-     *
      */
-    public PDThreadBead()
-    {
+    public PDThreadBead() {
         bead = new COSDictionary();
         bead.setItem(COSName.TYPE, COSName.BEAD);
-        setNextBead( this );
-        setPreviousBead( this );
+        setNextBead(this);
+        setPreviousBead(this);
     }
 
     /**
@@ -63,8 +58,7 @@ public class PDThreadBead implements COSObjectable
      * @return The underlying info dictionary.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return bead;
     }
 
@@ -74,8 +68,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @return The thread that this bead is part of.
      */
-    public PDThread getThread()
-    {
+    public PDThread getThread() {
         COSDictionary dic = bead.getCOSDictionary(COSName.T);
         return dic != null ? new PDThread(dic) : null;
     }
@@ -86,8 +79,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @param thread The thread that this bead is part of.
      */
-    public void setThread( PDThread thread )
-    {
+    public void setThread(PDThread thread) {
         bead.setItem(COSName.T, thread);
     }
 
@@ -97,8 +89,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @return The next bead in the list or the first bead if this is the last bead.
      */
-    public PDThreadBead getNextBead()
-    {
+    public PDThreadBead getNextBead() {
         return new PDThreadBead(bead.getCOSDictionary(COSName.N));
     }
 
@@ -107,8 +98,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @param next The next bead.
      */
-    protected final void setNextBead( PDThreadBead next )
-    {
+    protected final void setNextBead(PDThreadBead next) {
         bead.setItem(COSName.N, next);
     }
 
@@ -118,8 +108,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @return The previous bead in the list or the last bead if this is the first bead.
      */
-    public PDThreadBead getPreviousBead()
-    {
+    public PDThreadBead getPreviousBead() {
         return new PDThreadBead(bead.getCOSDictionary(COSName.V));
     }
 
@@ -128,8 +117,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @param previous The previous bead.
      */
-    protected final void setPreviousBead( PDThreadBead previous )
-    {
+    protected final void setPreviousBead(PDThreadBead previous) {
         bead.setItem(COSName.V, previous);
     }
 
@@ -139,13 +127,12 @@ public class PDThreadBead implements COSObjectable
      *
      * @param append The bead to insert.
      */
-    public void appendBead( PDThreadBead append )
-    {
+    public void appendBead(PDThreadBead append) {
         PDThreadBead nextBead = getNextBead();
-        nextBead.setPreviousBead( append );
-        append.setNextBead( nextBead );
-        setNextBead( append );
-        append.setPreviousBead( this );
+        nextBead.setPreviousBead(append);
+        append.setNextBead(nextBead);
+        setNextBead(append);
+        append.setPreviousBead(this);
     }
 
     /**
@@ -153,8 +140,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @return The page that this bead is part of.
      */
-    public PDPage getPage()
-    {
+    public PDPage getPage() {
         COSDictionary dic = bead.getCOSDictionary(COSName.P);
         return dic != null ? new PDPage(dic) : null;
     }
@@ -166,8 +152,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @param page The page that this bead is on.
      */
-    public void setPage( PDPage page )
-    {
+    public void setPage(PDPage page) {
         bead.setItem(COSName.P, page);
     }
 
@@ -176,8 +161,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @return The part of the page that this bead covers.
      */
-    public PDRectangle getRectangle()
-    {
+    public PDRectangle getRectangle() {
         COSArray array = bead.getCOSArray(COSName.R);
         return array != null ? new PDRectangle(array) : null;
     }
@@ -187,8 +171,7 @@ public class PDThreadBead implements COSObjectable
      *
      * @param rect The portion of the page that this bead covers.
      */
-    public void setRectangle( PDRectangle rect )
-    {
-        bead.setItem( COSName.R, rect );
+    public void setRectangle(PDRectangle rect) {
+        bead.setItem(COSName.R, rect);
     }
 }

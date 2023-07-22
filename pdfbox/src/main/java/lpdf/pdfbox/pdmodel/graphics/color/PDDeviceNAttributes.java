@@ -20,13 +20,12 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.COSDictionaryMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Contains additional information about the components of colour space.
@@ -35,8 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ben Litchfield
  */
-public final class PDDeviceNAttributes
-{
+public final class PDDeviceNAttributes {
     /**
      * Log instance.
      */
@@ -47,47 +45,42 @@ public final class PDDeviceNAttributes
     /**
      * Creates a new DeviceN colour space attributes dictionary.
      */
-    public PDDeviceNAttributes()
-    {
+    public PDDeviceNAttributes() {
         dictionary = new COSDictionary();
     }
 
     /**
      * Creates a new DeviceN colour space attributes dictionary from the given dictionary.
+     *
      * @param attributes a dictionary that has all of the attributes
      */
-    public PDDeviceNAttributes(COSDictionary attributes)
-    {
+    public PDDeviceNAttributes(COSDictionary attributes) {
         dictionary = attributes;
     }
 
     /**
      * Returns the underlying COS dictionary.
+     *
      * @return the dictionary that this object wraps
      */
-    public COSDictionary getCOSDictionary()
-    {
+    public COSDictionary getCOSDictionary() {
         return dictionary;
     }
 
     /**
      * Returns a map of colorants and their associated Separation color space.
+     *
      * @return map of colorants to color spaces, never null.
      * @throws IOException If there is an error reading a color space
      */
-    public Map<String, PDSeparation> getColorants() throws IOException
-    {
-        Map<String,PDSeparation> actuals = new HashMap<>();
+    public Map<String, PDSeparation> getColorants() throws IOException {
+        Map<String, PDSeparation> actuals = new HashMap<>();
         COSDictionary colorants = dictionary.getCOSDictionary(COSName.COLORANTS);
-        if(colorants == null)
-        {
+        if (colorants == null) {
             colorants = new COSDictionary();
             dictionary.setItem(COSName.COLORANTS, colorants);
-        }
-        else
-        {
-            for (COSName name : colorants.keySet())
-            {
+        } else {
+            for (COSName name : colorants.keySet()) {
                 COSBase value = colorants.getDictionaryObject(name);
                 actuals.put(name.getName(), (PDSeparation) PDColorSpace.create(value));
             }
@@ -97,13 +90,12 @@ public final class PDDeviceNAttributes
 
     /**
      * Returns the DeviceN Process Dictionary, or null if it is missing.
+     *
      * @return the DeviceN Process Dictionary, or null if it is missing.
      */
-    public PDDeviceNProcess getProcess()
-    {
+    public PDDeviceNProcess getProcess() {
         COSDictionary process = dictionary.getCOSDictionary(COSName.PROCESS);
-        if (process == null)
-        {
+        if (process == null) {
             return null;
         }
         return new PDDeviceNProcess(process);
@@ -111,46 +103,41 @@ public final class PDDeviceNAttributes
 
     /**
      * Returns true if this is an NChannel (PDF 1.6) color space.
+     *
      * @return true if this is an NChannel color space.
      */
-    public boolean isNChannel()
-    {
+    public boolean isNChannel() {
         return "NChannel".equals(dictionary.getNameAsString(COSName.SUBTYPE));
     }
 
     /**
      * Sets the colorant map.
+     *
      * @param colorants the map of colorants
      */
-    public void setColorants(Map<String, PDColorSpace> colorants)
-    {
+    public void setColorants(Map<String, PDColorSpace> colorants) {
         COSDictionary colorantDict = null;
-        if(colorants != null)
-        {
+        if (colorants != null) {
             colorantDict = COSDictionaryMap.convert(colorants);
         }
         dictionary.setItem(COSName.COLORANTS, colorantDict);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder(dictionary.getNameAsString(COSName.SUBTYPE));
         sb.append('{');
         PDDeviceNProcess process = getProcess();
-        if (process != null)
-        {
+        if (process != null) {
             sb.append(process);
             sb.append(' ');
         }
 
         Map<String, PDSeparation> colorants;
-        try
-        {
+        try {
             colorants = getColorants();
             sb.append("Colorants{");
-            for (Map.Entry<String, PDSeparation> col : colorants.entrySet())
-            {
+            for (Map.Entry<String, PDSeparation> col : colorants.entrySet()) {
                 sb.append('\"');
                 sb.append(col.getKey());
                 sb.append("\": ");
@@ -158,9 +145,7 @@ public final class PDDeviceNAttributes
                 sb.append(' ');
             }
             sb.append('}');
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             LOG.debug("Couldn't get the colorants information - returning 'ERROR' instead'", e);
             sb.append("ERROR");
         }

@@ -23,8 +23,7 @@ import java.util.List;
  *
  * @author Aaron Madlon-Kay
  */
-public interface CmapLookup
-{
+public interface CmapLookup {
 
     /**
      * Returns the GlyphId linked with the given character code.

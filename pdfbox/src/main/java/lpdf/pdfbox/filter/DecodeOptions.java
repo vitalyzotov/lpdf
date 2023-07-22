@@ -23,8 +23,7 @@ import lpdf.harmony.awt.Rectangle;
  * Filters may not honor some or all of the specified options, and so callers should check the
  * honored flag if further processing relies on the options being used.
  */
-public class DecodeOptions
-{
+public class DecodeOptions {
     /**
      * Default decode options. The honored flag for this instance is always true, as it represents
      * the default behavior.
@@ -41,8 +40,7 @@ public class DecodeOptions
     /**
      * Constructs an empty DecodeOptions instance
      */
-    public DecodeOptions()
-    {
+    public DecodeOptions() {
         // this constructor is intentionally left empty
     }
 
@@ -52,8 +50,7 @@ public class DecodeOptions
      *
      * @param sourceRegion Region of the source image that should be decoded
      */
-    public DecodeOptions(Rectangle sourceRegion)
-    {
+    public DecodeOptions(Rectangle sourceRegion) {
         this.sourceRegion = sourceRegion;
     }
 
@@ -61,13 +58,12 @@ public class DecodeOptions
      * Constructs an instance specifying the region of the image that should be decoded. The actual
      * region will be clipped to the dimensions of the image.
      *
-     * @param x x-coordinate of the top-left corner of the region to be decoded
-     * @param y y-coordinate of the top-left corner of the region to be decoded
-     * @param width Width of the region to be decoded
+     * @param x      x-coordinate of the top-left corner of the region to be decoded
+     * @param y      y-coordinate of the top-left corner of the region to be decoded
+     * @param width  Width of the region to be decoded
      * @param height Height of the region to be decoded
      */
-    public DecodeOptions(int x, int y, int width, int height)
-    {
+    public DecodeOptions(int x, int y, int width, int height) {
         this(new Rectangle(x, y, width, height));
     }
 
@@ -76,10 +72,9 @@ public class DecodeOptions
      * subsampling will be the same for the X and Y axes.
      *
      * @param subsampling The number of rows and columns to advance in the source for each pixel in
-     * the decoded image.
+     *                    the decoded image.
      */
-    public DecodeOptions(int subsampling)
-    {
+    public DecodeOptions(int subsampling) {
         subsamplingX = subsampling;
         subsamplingY = subsampling;
     }
@@ -90,8 +85,7 @@ public class DecodeOptions
      *
      * @return The source region to decode, or null if the entire image should be decoded
      */
-    public Rectangle getSourceRegion()
-    {
+    public Rectangle getSourceRegion() {
         return sourceRegion;
     }
 
@@ -101,10 +95,9 @@ public class DecodeOptions
      * being decoded.
      *
      * @param sourceRegion The source region to decode, or null if the entire image should be
-     * decoded.
+     *                     decoded.
      */
-    public void setSourceRegion(Rectangle sourceRegion)
-    {
+    public void setSourceRegion(Rectangle sourceRegion) {
         this.sourceRegion = sourceRegion;
     }
 
@@ -114,8 +107,7 @@ public class DecodeOptions
      *
      * @return The x-axis subsampling value
      */
-    public int getSubsamplingX()
-    {
+    public int getSubsamplingX() {
         return subsamplingX;
     }
 
@@ -124,8 +116,7 @@ public class DecodeOptions
      *
      * @param ssX The x-axis subsampling value
      */
-    public void setSubsamplingX(int ssX)
-    {
+    public void setSubsamplingX(int ssX) {
         this.subsamplingX = ssX;
     }
 
@@ -134,8 +125,7 @@ public class DecodeOptions
      *
      * @return The y-axis subsampling value
      */
-    public int getSubsamplingY()
-    {
+    public int getSubsamplingY() {
         return subsamplingY;
     }
 
@@ -144,8 +134,7 @@ public class DecodeOptions
      *
      * @param ssY The y-axis subsampling value
      */
-    public void setSubsamplingY(int ssY)
-    {
+    public void setSubsamplingY(int ssY) {
         this.subsamplingY = ssY;
     }
 
@@ -154,8 +143,7 @@ public class DecodeOptions
      *
      * @return The x-axis subsampling offset
      */
-    public int getSubsamplingOffsetX()
-    {
+    public int getSubsamplingOffsetX() {
         return subsamplingOffsetX;
     }
 
@@ -164,8 +152,7 @@ public class DecodeOptions
      *
      * @param ssOffsetX The x-axis subsampling offset
      */
-    public void setSubsamplingOffsetX(int ssOffsetX)
-    {
+    public void setSubsamplingOffsetX(int ssOffsetX) {
         this.subsamplingOffsetX = ssOffsetX;
     }
 
@@ -174,8 +161,7 @@ public class DecodeOptions
      *
      * @return The y-axis subsampling offset
      */
-    public int getSubsamplingOffsetY()
-    {
+    public int getSubsamplingOffsetY() {
         return subsamplingOffsetY;
     }
 
@@ -184,21 +170,19 @@ public class DecodeOptions
      *
      * @param ssOffsetY The y-axis subsampling offset
      */
-    public void setSubsamplingOffsetY(int ssOffsetY)
-    {
+    public void setSubsamplingOffsetY(int ssOffsetY) {
         this.subsamplingOffsetY = ssOffsetY;
     }
 
     /**
      * Flag used by the filter to specify if it performed subsampling.
-     *
+     * <p>
      * Some filters may be unable or unwilling to apply subsampling, and so the caller must check
      * this flag <b>after</b> decoding.
      *
      * @return True if the filter applied the options specified by this instance, false otherwise.
      */
-    public boolean isFilterSubsampled()
-    {
+    public boolean isFilterSubsampled() {
         return filterSubsampled;
     }
 
@@ -207,57 +191,48 @@ public class DecodeOptions
      * options instance.
      *
      * @param filterSubsampled Value specifying if the filter could meet the requested options.
-     * Usually a filter will only call this with the value <code>true</code>, as the default value
-     * for the flag is <code>false</code>.
+     *                         Usually a filter will only call this with the value <code>true</code>, as the default value
+     *                         for the flag is <code>false</code>.
      */
-    void setFilterSubsampled(boolean filterSubsampled)
-    {
+    void setFilterSubsampled(boolean filterSubsampled) {
         this.filterSubsampled = filterSubsampled;
     }
 
     /**
      * Helper class for reusable instances which may not be modified.
      */
-    private static class FinalDecodeOptions extends DecodeOptions
-    {
-        FinalDecodeOptions(boolean filterSubsampled)
-        {
+    private static class FinalDecodeOptions extends DecodeOptions {
+        FinalDecodeOptions(boolean filterSubsampled) {
             super.setFilterSubsampled(filterSubsampled);
         }
 
         @Override
-        public void setSourceRegion(Rectangle sourceRegion)
-        {
+        public void setSourceRegion(Rectangle sourceRegion) {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }
 
         @Override
-        public void setSubsamplingX(int ssX)
-        {
+        public void setSubsamplingX(int ssX) {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }
 
         @Override
-        public void setSubsamplingY(int ssY)
-        {
+        public void setSubsamplingY(int ssY) {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }
 
         @Override
-        public void setSubsamplingOffsetX(int ssOffsetX)
-        {
+        public void setSubsamplingOffsetX(int ssOffsetX) {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }
 
         @Override
-        public void setSubsamplingOffsetY(int ssOffsetY)
-        {
+        public void setSubsamplingOffsetY(int ssOffsetY) {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }
 
         @Override
-        void setFilterSubsampled(boolean filterSubsampled)
-        {
+        void setFilterSubsampled(boolean filterSubsampled) {
             // Silently ignore the request.
         }
     }

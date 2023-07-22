@@ -17,20 +17,20 @@
 
 package lpdf.pdfbox.multipdf;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This class will extract one or more sequential pages and create a new document.
+ *
  * @author Adam Nichols (adam@apache.org)
  */
-public class PageExtractor
-{
+public class PageExtractor {
     private static final Logger LOG = LoggerFactory.getLogger(PageExtractor.class);
 
     private final PDDocument sourceDocument;
@@ -42,22 +42,22 @@ public class PageExtractor
 
     /**
      * Creates a new instance of PageExtractor
+     *
      * @param sourceDocument The document to split.
      */
-    public PageExtractor(PDDocument sourceDocument)
-    {
+    public PageExtractor(PDDocument sourceDocument) {
         this.sourceDocument = sourceDocument;
         endPage = sourceDocument.getNumberOfPages();
     }
 
     /**
      * Creates a new instance of PageExtractor
+     *
      * @param sourceDocument The document to split.
-     * @param startPage The first page you want extracted (1-based, inclusive)
-     * @param endPage The last page you want extracted (1-based, inclusive)
+     * @param startPage      The first page you want extracted (1-based, inclusive)
+     * @param endPage        The last page you want extracted (1-based, inclusive)
      */
-    public PageExtractor(PDDocument sourceDocument, int startPage, int endPage)
-    {
+    public PageExtractor(PDDocument sourceDocument, int startPage, int endPage) {
         this.sourceDocument = sourceDocument;
         this.startPage = startPage;
         this.endPage = endPage;
@@ -75,19 +75,16 @@ public class PageExtractor
      * @return The extracted document
      * @throws IOException If there is an IOError
      */
-    public PDDocument extract() throws IOException
-    {
+    public PDDocument extract() throws IOException {
         PDDocument extractedDocument = new PDDocument();
         extractedDocument.setDocumentInformation(sourceDocument.getDocumentInformation());
         extractedDocument.getDocumentCatalog().setViewerPreferences(
                 sourceDocument.getDocumentCatalog().getViewerPreferences());
 
-        for (int i = startPage; i <= endPage; i++)
-        {
+        for (int i = startPage; i <= endPage; i++) {
             PDPage page = sourceDocument.getPage(i - 1);
             PDPage imported = extractedDocument.importPage(page);
-            if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES))
-            {
+            if (page.getResources() != null && !page.getCOSObject().containsKey(COSName.RESOURCES)) {
                 imported.setResources(page.getResources());
                 LOG.info("Done in PageExtractor"); // follow-up to warning in importPage
             }
@@ -98,37 +95,37 @@ public class PageExtractor
 
     /**
      * Gets the first page number to be extracted.
+     *
      * @return the first page number which should be extracted
      */
-    public int getStartPage()
-    {
+    public int getStartPage() {
         return startPage;
     }
 
     /**
      * Sets the first page number to be extracted.
+     *
      * @param startPage the first page number which should be extracted
      */
-    public void setStartPage(int startPage)
-    {
+    public void setStartPage(int startPage) {
         this.startPage = startPage;
     }
 
     /**
      * Gets the last page number (inclusive) to be extracted.
+     *
      * @return the last page number which should be extracted
      */
-    public int getEndPage()
-    {
+    public int getEndPage() {
         return endPage;
     }
 
     /**
      * Sets the last page number to be extracted.
+     *
      * @param endPage the last page number which should be extracted
      */
-    public void setEndPage(int endPage)
-    {
+    public void setEndPage(int endPage) {
         this.endPage = endPage;
     }
 }

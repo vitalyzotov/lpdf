@@ -16,24 +16,23 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import java.io.IOException;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.pdmodel.common.PDNameTreeNode;
 import lpdf.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
+
+import java.io.IOException;
 
 /**
  * This class holds all of the name trees that are available at the document level.
  *
  * @author Ben Litchfield
  */
-public class PDEmbeddedFilesNameTreeNode extends PDNameTreeNode<PDComplexFileSpecification>
-{
+public class PDEmbeddedFilesNameTreeNode extends PDNameTreeNode<PDComplexFileSpecification> {
     /**
      * Constructor.
      */
-    public PDEmbeddedFilesNameTreeNode()
-    {
+    public PDEmbeddedFilesNameTreeNode() {
         super();
     }
 
@@ -42,20 +41,17 @@ public class PDEmbeddedFilesNameTreeNode extends PDNameTreeNode<PDComplexFileSpe
      *
      * @param dic The COS dictionary.
      */
-    public PDEmbeddedFilesNameTreeNode( COSDictionary dic )
-    {
+    public PDEmbeddedFilesNameTreeNode(COSDictionary dic) {
         super(dic);
     }
 
     @Override
-    protected PDComplexFileSpecification convertCOSToPD( COSBase base ) throws IOException
-    {
-        return new PDComplexFileSpecification( (COSDictionary)base );
+    protected PDComplexFileSpecification convertCOSToPD(COSBase base) throws IOException {
+        return new PDComplexFileSpecification((COSDictionary) base);
     }
 
     @Override
-    protected PDNameTreeNode<PDComplexFileSpecification> createChildNode( COSDictionary dic )
-    {
+    protected PDNameTreeNode<PDComplexFileSpecification> createChildNode(COSDictionary dic) {
         return new PDEmbeddedFilesNameTreeNode(dic);
     }
 }

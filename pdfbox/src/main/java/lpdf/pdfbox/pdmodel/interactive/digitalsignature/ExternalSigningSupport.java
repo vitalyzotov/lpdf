@@ -22,15 +22,12 @@ import java.io.InputStream;
 /**
  * Interface for external signature creation scenarios. It contains method for retrieving PDF data
  * to be sign and setting created CMS signature to the PDF.
- *
  */
-public interface ExternalSigningSupport
-{
+public interface ExternalSigningSupport {
     /**
      * Get PDF content to be signed. Obtained InputStream must be closed after use.
      *
      * @return content stream
-     *
      * @throws IOException if the content could not be read
      */
     InputStream getContent() throws IOException;
@@ -39,7 +36,6 @@ public interface ExternalSigningSupport
      * Set CMS signature bytes to PDF.
      *
      * @param signature CMS signature as byte array
-     *
      * @throws IOException if exception occurred during PDF writing
      */
     void setSignature(byte[] signature) throws IOException;

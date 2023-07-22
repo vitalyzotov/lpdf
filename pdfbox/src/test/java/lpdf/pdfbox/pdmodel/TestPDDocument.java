@@ -16,6 +16,11 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import lpdf.pdfbox.Loader;
+import lpdf.pdfbox.pdfwriter.compress.CompressParameters;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,42 +31,33 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Locale;
 
-import lpdf.pdfbox.Loader;
-import lpdf.pdfbox.pdfwriter.compress.CompressParameters;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test case introduced with PDFBOX-1581.
- *
  */
-class TestPDDocument
-{
+class TestPDDocument {
     static private final File TESTRESULTSDIR = new File("target/test-output");
 
     @BeforeAll
-    static public void setUp() throws Exception
-    {
+    static public void setUp() throws Exception {
         TESTRESULTSDIR.mkdirs();
     }
 
     /**
      * Test document save/load using a stream.
+     *
      * @throws IOException if something went wrong
      */
     @Test
-    void testSaveLoadStream() throws IOException
-    {
+    void testSaveLoadStream() throws IOException {
         ByteArrayOutputStream baos;
         // Create PDF with one blank page
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             document.addPage(new PDPage());
             // Save
             baos = new ByteArrayOutputStream();
@@ -75,24 +71,22 @@ class TestPDDocument
         assertEquals("%%EOF\n", new String(Arrays.copyOfRange(pdf, pdf.length - 6, pdf.length), StandardCharsets.UTF_8));
 
         // reload
-        try (PDDocument loadDoc = Loader.loadPDF(pdf))
-        {
+        try (PDDocument loadDoc = Loader.loadPDF(pdf)) {
             assertEquals(1, loadDoc.getNumberOfPages());
         }
     }
 
     /**
      * Test document save/load using a file.
+     *
      * @throws IOException if something went wrong
      */
     @Test
-    void testSaveLoadFile() throws IOException
-    {
+    void testSaveLoadFile() throws IOException {
         File targetFile = new File(TESTRESULTSDIR, "pddocument-saveloadfile.pdf");
 
         // Create PDF with one blank page
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             document.addPage(new PDPage());
             document.save(targetFile, CompressParameters.NO_COMPRESSION);
         }
@@ -107,22 +101,20 @@ class TestPDDocument
         assertEquals("%%EOF\n", new String(Arrays.copyOfRange(pdf, pdf.length - 6, pdf.length), StandardCharsets.UTF_8));
 
         // reload
-        try (PDDocument loadDoc = Loader.loadPDF(targetFile))
-        {
+        try (PDDocument loadDoc = Loader.loadPDF(targetFile)) {
             assertEquals(1, loadDoc.getNumberOfPages());
         }
     }
 
     /**
      * Test get/setVersion.
+     *
      * @throws IOException if something went wrong
      */
     @Test
-    void testVersions() throws IOException
-    {
+    void testVersions() throws IOException {
         // test default version
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             // test default version
             assertEquals(1.4f, document.getVersion(), 0);
             assertEquals(1.4f, document.getDocument().getVersion(), 0);
@@ -137,8 +129,7 @@ class TestPDDocument
         }
 
         // check if version downgrade is denied
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             document.setVersion(1.3f);
             // all versions shall have their default value
             assertEquals(1.4f, document.getVersion(), 0);
@@ -157,13 +148,11 @@ class TestPDDocument
 
         // PDFBOX-5265: check that all versions are 1.6 when compression is used (default)
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             document.addPage(new PDPage());
             document.save(baos);
         }
-        try (PDDocument document = Loader.loadPDF(baos.toByteArray()))
-        {
+        try (PDDocument document = Loader.loadPDF(baos.toByteArray())) {
             assertEquals("1.6", document.getDocumentCatalog().getVersion());
             assertEquals(1.6f, document.getDocument().getVersion());
             assertEquals(1.6f, document.getVersion());
@@ -177,20 +166,15 @@ class TestPDDocument
      * @throws java.io.IOException
      */
     @Test
-    void testDeleteBadFile() throws IOException
-    {
+    void testDeleteBadFile() throws IOException {
         File f = new File(TESTRESULTSDIR, "testDeleteBadFile.pdf");
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream(f)))
-        {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(f))) {
             pw.write("<script language='JavaScript'>");
         }
         assertThrows(IOException.class, () -> Loader.loadPDF(f), "parsing should fail");
-        try
-        {
+        try {
             Files.delete(f.toPath());
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             fail("delete bad file failed after failed load");
         }
     }
@@ -201,23 +185,18 @@ class TestPDDocument
      * @throws java.io.IOException
      */
     @Test
-    void testDeleteGoodFile() throws IOException
-    {
+    void testDeleteGoodFile() throws IOException {
         File f = new File(TESTRESULTSDIR, "testDeleteGoodFile.pdf");
-        try (PDDocument doc = new PDDocument())
-        {
+        try (PDDocument doc = new PDDocument()) {
             doc.addPage(new PDPage());
             doc.save(f);
         }
 
         Loader.loadPDF(f).close();
 
-        try
-        {
+        try {
             Files.delete(f.toPath());
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             fail("delete good file failed after successful load() and close()");
         }
     }
@@ -229,16 +208,14 @@ class TestPDDocument
      * @throws java.io.IOException
      */
     @Test
-    void testSaveArabicLocale() throws IOException
-    {
+    void testSaveArabicLocale() throws IOException {
         Locale defaultLocale = Locale.getDefault();
         Locale arabicLocale = new Locale.Builder().setLanguageTag("ar-EG-u-nu-arab").build();
         Locale.setDefault(arabicLocale);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (PDDocument doc = new PDDocument())
-        {
+        try (PDDocument doc = new PDDocument()) {
             doc.addPage(new PDPage());
             doc.save(baos);
         }

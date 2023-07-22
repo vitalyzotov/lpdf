@@ -22,47 +22,39 @@ package lpdf.fontbox.ttf.table.common;
  * system tags</a> in the Open Type Font specs.
  *
  * @author Palash Ray
- *
  */
-public class LangSysTable
-{
+public class LangSysTable {
     private final int lookupOrder;
     private final int requiredFeatureIndex;
     private final int featureIndexCount;
     private final int[] featureIndices;
 
     public LangSysTable(int lookupOrder, int requiredFeatureIndex, int featureIndexCount,
-            int[] featureIndices)
-    {
+                        int[] featureIndices) {
         this.lookupOrder = lookupOrder;
         this.requiredFeatureIndex = requiredFeatureIndex;
         this.featureIndexCount = featureIndexCount;
         this.featureIndices = featureIndices;
     }
 
-    public int getLookupOrder()
-    {
+    public int getLookupOrder() {
         return lookupOrder;
     }
 
-    public int getRequiredFeatureIndex()
-    {
+    public int getRequiredFeatureIndex() {
         return requiredFeatureIndex;
     }
 
-    public int getFeatureIndexCount()
-    {
+    public int getFeatureIndexCount() {
         return featureIndexCount;
     }
 
-    public int[] getFeatureIndices()
-    {
+    public int[] getFeatureIndices() {
         return featureIndices;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("LangSysTable[requiredFeatureIndex=%d]", requiredFeatureIndex);
     }
 }

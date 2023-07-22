@@ -16,14 +16,15 @@
  */
 package lpdf.fontbox.cff;
 
+import lpdf.fontbox.EncodedFont;
+import lpdf.fontbox.type1.Type1CharStringReader;
 import lpdf.harmony.awt.geom.GeneralPath;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lpdf.fontbox.EncodedFont;
-import lpdf.fontbox.type1.Type1CharStringReader;
 
 /**
  * A Type 1-equivalent font program represented in a CFF file. Thread safe.
@@ -31,8 +32,7 @@ import lpdf.fontbox.type1.Type1CharStringReader;
  * @author Villu Ruusmann
  * @author John Hewson
  */
-public class CFFType1Font extends CFFFont implements EncodedFont
-{
+public class CFFType1Font extends CFFFont implements EncodedFont {
     private final Map<String, Object> privateDict = new LinkedHashMap<>();
     private CFFEncoding encoding;
 
@@ -50,30 +50,25 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      * Private implementation of Type1CharStringReader, because only CFFType1Font can
      * expose this publicly, as CIDFonts only support this for legacy 'seac' commands.
      */
-    private class PrivateType1CharStringReader implements Type1CharStringReader
-    {
+    private class PrivateType1CharStringReader implements Type1CharStringReader {
         @Override
-        public Type1CharString getType1CharString(String name) throws IOException
-        {
+        public Type1CharString getType1CharString(String name) throws IOException {
             return CFFType1Font.this.getType1CharString(name);
         }
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
+    public GeneralPath getPath(String name) throws IOException {
         return getType1CharString(name).getPath();
     }
 
     @Override
-    public float getWidth(String name) throws IOException
-    {
+    public float getWidth(String name) throws IOException {
         return getType1CharString(name).getWidth();
     }
 
     @Override
-    public boolean hasGlyph(String name)
-    {
+    public boolean hasGlyph(String name) {
         int sid = getCharset().getSID(name);
         int gid = getCharset().getGIDForSID(sid);
         return gid != 0;
@@ -84,11 +79,9 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      *
      * @param name PostScript glyph name
      * @return Type1 charstring of the given PostScript glyph name
-     *
      * @throws IOException if the charstring could not be read
      */
-    public Type1CharString getType1CharString(String name) throws IOException
-    {
+    public Type1CharString getType1CharString(String name) throws IOException {
         // lookup via charset
         int gid = nameToGID(name);
 
@@ -102,8 +95,7 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      * @param name a PostScript glyph name.
      * @return GID
      */
-    public int nameToGID(String name)
-    {
+    public int nameToGID(String name) {
         // some fonts have glyphs beyond their encoding, so we look up by charset SID
         int sid = getCharset().getSID(name);
         return getCharset().getGIDForSID(sid);
@@ -116,25 +108,20 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      * @throws IOException if the charstring could not be read
      */
     @Override
-    public Type2CharString getType2CharString(int gid) throws IOException
-    {
+    public Type2CharString getType2CharString(int gid) throws IOException {
         String name = "GID+" + gid; // for debugging only
         return getType2CharString(gid, name);
     }
 
     // Returns the Type 2 charstring for the given GID, with name for debugging
-    private Type2CharString getType2CharString(int gid, String name) throws IOException
-    {
+    private Type2CharString getType2CharString(int gid, String name) throws IOException {
         Type2CharString type2 = charStringCache.get(gid);
-        if (type2 == null)
-        {
+        if (type2 == null) {
             byte[] bytes = null;
-            if (gid < charStrings.length)
-            {
+            if (gid < charStrings.length) {
                 bytes = charStrings[gid];
             }
-            if (bytes == null)
-            {
+            if (bytes == null) {
                 // .notdef
                 bytes = charStrings[0];
             }
@@ -147,10 +134,8 @@ public class CFFType1Font extends CFFFont implements EncodedFont
         return type2;
     }
 
-    private Type2CharStringParser getParser()
-    {
-        if (charStringParser == null)
-        {
+    private Type2CharStringParser getParser() {
+        if (charStringParser == null) {
             charStringParser = new Type2CharStringParser(getName());
         }
         return charStringParser;
@@ -161,21 +146,18 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      *
      * @return the dictionary
      */
-    public Map<String, Object> getPrivateDict()
-    {
+    public Map<String, Object> getPrivateDict() {
         return privateDict;
     }
 
     /**
      * Adds the given key/value pair to the private dictionary.
      *
-     * @param name the given key
+     * @param name  the given key
      * @param value the given value
      */
-    void addToPrivateDict(String name, Object value)
-    {
-        if (value != null)
-        {
+    void addToPrivateDict(String name, Object value) {
+        if (value != null) {
             privateDict.put(name, value);
         }
     }
@@ -186,8 +168,7 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      * @return the encoding
      */
     @Override
-    public CFFEncoding getEncoding()
-    {
+    public CFFEncoding getEncoding() {
         return encoding;
     }
 
@@ -196,45 +177,36 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      *
      * @param encoding the given CFFEncoding
      */
-    void setEncoding(CFFEncoding encoding)
-    {
+    void setEncoding(CFFEncoding encoding) {
         this.encoding = encoding;
     }
 
-    private byte[][] getLocalSubrIndex()
-    {
-        if (localSubrIndex == null)
-        {
+    private byte[][] getLocalSubrIndex() {
+        if (localSubrIndex == null) {
             localSubrIndex = (byte[][]) privateDict.get("Subrs");
         }
         return localSubrIndex;
     }
 
     // helper for looking up keys/values
-    private Object getProperty(String name)
-    {
+    private Object getProperty(String name) {
         Object topDictValue = topDict.get(name);
-        if (topDictValue != null)
-        {
+        if (topDictValue != null) {
             return topDictValue;
         }
         return privateDict.get(name);
     }
 
-    private int getDefaultWidthX()
-    {
-        if (defaultWidthX == Integer.MIN_VALUE)
-        {
+    private int getDefaultWidthX() {
+        if (defaultWidthX == Integer.MIN_VALUE) {
             Number num = (Number) getProperty("defaultWidthX");
             defaultWidthX = num != null ? num.intValue() : 1000;
         }
         return defaultWidthX;
     }
 
-    private int getNominalWidthX()
-    {
-        if (nominalWidthX == Integer.MIN_VALUE)
-        {
+    private int getNominalWidthX() {
+        if (nominalWidthX == Integer.MIN_VALUE) {
             Number num = (Number) getProperty("nominalWidthX");
             nominalWidthX = num != null ? num.intValue() : 0;
         }

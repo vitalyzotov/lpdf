@@ -16,13 +16,12 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.action;
 
-import java.io.IOException;
 import lpdf.pdfbox.cos.COSBoolean;
-
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-
 import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
+
+import java.io.IOException;
 
 /**
  * This represents a launch action that can be executed in a PDF document.
@@ -30,8 +29,7 @@ import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDActionLaunch extends PDAction
-{
+public class PDActionLaunch extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -41,9 +39,8 @@ public class PDActionLaunch extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionLaunch()
-    {
-        setSubType( SUB_TYPE );
+    public PDActionLaunch() {
+        setSubType(SUB_TYPE);
     }
 
     /**
@@ -51,9 +48,8 @@ public class PDActionLaunch extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionLaunch( COSDictionary a )
-    {
-        super( a );
+    public PDActionLaunch(COSDictionary a) {
+        super(a);
     }
 
     /**
@@ -64,11 +60,9 @@ public class PDActionLaunch extends PDAction
      * entries it should do nothing.
      *
      * @return The F entry of the specific launch action dictionary.
-     *
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
+    public PDFileSpecification getFile() throws IOException {
         return PDFileSpecification.createFS(getCOSObject().getDictionaryObject(COSName.F));
     }
 
@@ -81,8 +75,7 @@ public class PDActionLaunch extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile( PDFileSpecification fs )
-    {
+    public void setFile(PDFileSpecification fs) {
         getCOSObject().setItem(COSName.F, fs);
     }
 
@@ -91,8 +84,7 @@ public class PDActionLaunch extends PDAction
      *
      * @return The Win entry of of the specific launch action dictionary.
      */
-    public PDWindowsLaunchParams getWinLaunchParams()
-    {
+    public PDWindowsLaunchParams getWinLaunchParams() {
         COSDictionary win = action.getCOSDictionary(COSName.WIN);
         return win != null ? new PDWindowsLaunchParams(win) : null;
     }
@@ -102,8 +94,7 @@ public class PDActionLaunch extends PDAction
      *
      * @param win The action to be performed.
      */
-    public void setWinLaunchParams( PDWindowsLaunchParams win )
-    {
+    public void setWinLaunchParams(PDWindowsLaunchParams win) {
         action.setItem(COSName.WIN, win);
     }
 
@@ -115,8 +106,7 @@ public class PDActionLaunch extends PDAction
      *
      * @return The F entry of the specific Windows launch parameter dictionary.
      */
-    public String getF()
-    {
+    public String getF() {
         return action.getString(COSName.F);
     }
 
@@ -128,9 +118,8 @@ public class PDActionLaunch extends PDAction
      *
      * @param f The file name to be launched.
      */
-    public void setF( String f )
-    {
-        action.setString(COSName.F, f );
+    public void setF(String f) {
+        action.setString(COSName.F, f);
     }
 
     /**
@@ -138,8 +127,7 @@ public class PDActionLaunch extends PDAction
      *
      * @return The D entry of the specific Windows launch parameter dictionary.
      */
-    public String getD()
-    {
+    public String getD() {
         return action.getString(COSName.D);
     }
 
@@ -148,9 +136,8 @@ public class PDActionLaunch extends PDAction
      *
      * @param d The default directory.
      */
-    public void setD( String d )
-    {
-        action.setString(COSName.D, d );
+    public void setD(String d) {
+        action.setString(COSName.D, d);
     }
 
     /**
@@ -162,8 +149,7 @@ public class PDActionLaunch extends PDAction
      *
      * @return The O entry of the specific Windows launch parameter dictionary.
      */
-    public String getO()
-    {
+    public String getO() {
         return action.getString(COSName.O);
     }
 
@@ -176,9 +162,8 @@ public class PDActionLaunch extends PDAction
      *
      * @param o The operation to perform.
      */
-    public void setO( String o )
-    {
-        action.setString(COSName.O, o );
+    public void setO(String o) {
+        action.setString(COSName.O, o);
     }
 
     /**
@@ -187,8 +172,7 @@ public class PDActionLaunch extends PDAction
      *
      * @return The P entry of the specific Windows launch parameter dictionary.
      */
-    public String getP()
-    {
+    public String getP() {
         return action.getString(COSName.P);
     }
 
@@ -198,9 +182,8 @@ public class PDActionLaunch extends PDAction
      *
      * @param p The parameter string.
      */
-    public void setP( String p )
-    {
-        action.setString(COSName.P, p );
+    public void setP(String p) {
+        action.setString(COSName.P, p);
     }
 
     /**
@@ -209,10 +192,8 @@ public class PDActionLaunch extends PDAction
      *
      * @return A flag specifying how to open the destination document.
      */
-    public OpenMode getOpenInNewWindow()
-    {
-        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean)
-        {
+    public OpenMode getOpenInNewWindow() {
+        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean) {
             COSBoolean b = (COSBoolean) getCOSObject().getDictionaryObject(COSName.NEW_WINDOW);
             return b.getValue() ? OpenMode.NEW_WINDOW : OpenMode.SAME_WINDOW;
         }
@@ -224,15 +205,12 @@ public class PDActionLaunch extends PDAction
      *
      * @param value The flag value.
      */
-    public void setOpenInNewWindow(OpenMode value)
-    {
-        if (null == value)
-        {
+    public void setOpenInNewWindow(OpenMode value) {
+        if (null == value) {
             getCOSObject().removeItem(COSName.NEW_WINDOW);
             return;
         }
-        switch (value)
-        {
+        switch (value) {
             case USER_PREFERENCE:
                 getCOSObject().removeItem(COSName.NEW_WINDOW);
                 break;

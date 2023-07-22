@@ -24,17 +24,15 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Tilman Hausherr
  */
-public class PDDocumentNameDestinationDictionary implements COSObjectable
-{
+public class PDDocumentNameDestinationDictionary implements COSObjectable {
     private final COSDictionary nameDictionary;
 
-     /**
+    /**
      * Constructor.
      *
      * @param dict The dictionary of names and corresponding destinations.
      */
-    public PDDocumentNameDestinationDictionary(COSDictionary dict)
-    {
+    public PDDocumentNameDestinationDictionary(COSDictionary dict) {
         this.nameDictionary = dict;
     }
 
@@ -44,8 +42,7 @@ public class PDDocumentNameDestinationDictionary implements COSObjectable
      * @return The cos dictionary for this object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return nameDictionary;
     }
 

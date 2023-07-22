@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public abstract class COSNumber extends COSBase
-{
+public abstract class COSNumber extends COSBase {
     /**
      * This will get the float value of this number.
      *
@@ -50,42 +49,31 @@ public abstract class COSNumber extends COSBase
      * This factory method will get the appropriate number object.
      *
      * @param number The string representation of the number.
-     *
      * @return A number object, either float or int.
-     *
      * @throws IOException If the string is not a number.
      */
-    public static COSNumber get( String number ) throws IOException
-    {
-        if (number.length() == 1)
-        {
+    public static COSNumber get(String number) throws IOException {
+        if (number.length() == 1) {
             char digit = number.charAt(0);
-            if ('0' <= digit && digit <= '9')
-            {
+            if ('0' <= digit && digit <= '9') {
                 return COSInteger.get((long) digit - '0');
             }
-            if (digit == '-' || digit == '.')
-            {
+            if (digit == '-' || digit == '.') {
                 // See https://issues.apache.org/jira/browse/PDFBOX-592
                 return COSInteger.ZERO;
             }
             throw new IOException("Not a number: " + number);
         }
-        if (isFloat(number))
-        {
+        if (isFloat(number)) {
             return new COSFloat(number);
         }
-        try
-        {
+        try {
             return COSInteger.get(Long.parseLong(number));
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             // check if the given string could be a number at all
             String numberString = number.startsWith("+") || number.startsWith("-")
                     ? number.substring(1) : number;
-            if (!numberString.matches("[0-9]*"))
-            {
+            if (!numberString.matches("[0-9]*")) {
                 throw new IOException("Not a number: " + number);
             }
             // return a limited COSInteger value which is marked as invalid
@@ -94,14 +82,11 @@ public abstract class COSNumber extends COSBase
         }
     }
 
-    private static boolean isFloat( String number )
-    {
+    private static boolean isFloat(String number) {
         int length = number.length();
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             char digit = number.charAt(i);
-            if (digit == '.' || digit == 'e')
-            {
+            if (digit == '.' || digit == 'e') {
                 return true;
             }
         }

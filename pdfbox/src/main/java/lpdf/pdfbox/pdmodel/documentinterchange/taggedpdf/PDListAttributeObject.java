@@ -23,8 +23,7 @@ import lpdf.pdfbox.cos.COSDictionary;
  *
  * @author Johannes Koch
  */
-public class PDListAttributeObject extends PDStandardAttributeObject
-{
+public class PDListAttributeObject extends PDStandardAttributeObject {
 
     /**
      * standard attribute owner: List
@@ -75,8 +74,7 @@ public class PDListAttributeObject extends PDStandardAttributeObject
     /**
      * Default constructor.
      */
-    public PDListAttributeObject()
-    {
+    public PDListAttributeObject() {
         this.setOwner(OWNER_LIST);
     }
 
@@ -85,8 +83,7 @@ public class PDListAttributeObject extends PDStandardAttributeObject
      *
      * @param dictionary the dictionary
      */
-    public PDListAttributeObject(COSDictionary dictionary)
-    {
+    public PDListAttributeObject(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -97,8 +94,7 @@ public class PDListAttributeObject extends PDStandardAttributeObject
      *
      * @return the list numbering
      */
-    public String getListNumbering()
-    {
+    public String getListNumbering() {
         return this.getName(LIST_NUMBERING, LIST_NUMBERING_NONE);
     }
 
@@ -119,17 +115,14 @@ public class PDListAttributeObject extends PDStandardAttributeObject
      *
      * @param listNumbering the list numbering
      */
-    public void setListNumbering(String listNumbering)
-    {
+    public void setListNumbering(String listNumbering) {
         this.setName(LIST_NUMBERING, listNumbering);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder().append(super.toString());
-        if (this.isSpecified(LIST_NUMBERING))
-        {
+        if (this.isSpecified(LIST_NUMBERING)) {
             sb.append(", ListNumbering=").append(this.getListNumbering());
         }
         return sb.toString();

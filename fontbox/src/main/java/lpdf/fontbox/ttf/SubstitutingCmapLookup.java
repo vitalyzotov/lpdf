@@ -23,31 +23,27 @@ import java.util.List;
  *
  * @author Aaron Madlon-Kay
  */
-public class SubstitutingCmapLookup implements CmapLookup
-{
+public class SubstitutingCmapLookup implements CmapLookup {
     private final CmapSubtable cmap;
     private final GlyphSubstitutionTable gsub;
     private final List<String> enabledFeatures;
 
     public SubstitutingCmapLookup(CmapSubtable cmap, GlyphSubstitutionTable gsub,
-            List<String> enabledFeatures)
-    {
+                                  List<String> enabledFeatures) {
         this.cmap = cmap;
         this.gsub = gsub;
         this.enabledFeatures = enabledFeatures;
     }
 
     @Override
-    public int getGlyphId(int characterCode)
-    {
+    public int getGlyphId(int characterCode) {
         int gid = cmap.getGlyphId(characterCode);
         String[] scriptTags = OpenTypeScript.getScriptTags(characterCode);
         return gsub.getSubstitution(gid, scriptTags, enabledFeatures);
     }
 
     @Override
-    public List<Integer> getCharCodes(int gid)
-    {
+    public List<Integer> getCharCodes(int gid) {
         return cmap.getCharCodes(gsub.getUnsubstitution(gid));
     }
 }

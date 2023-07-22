@@ -16,15 +16,15 @@
  */
 package lpdf.pdfbox.multipdf;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDDocumentInformation;
 import lpdf.pdfbox.pdmodel.PDPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -16,12 +16,12 @@
  */
 package lpdf.fontbox.ttf.gsub;
 
-import java.util.Collections;
-import java.util.List;
-
+import lpdf.fontbox.ttf.GlyphSubstitutionTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lpdf.fontbox.ttf.GlyphSubstitutionTable;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A default implementation of {@link GsubWorker} that actually does not transform the glyphs yet allows to correctly
@@ -30,13 +30,11 @@ import lpdf.fontbox.ttf.GlyphSubstitutionTable;
  *
  * @author Vladimir Plizga
  */
-class DefaultGsubWorker implements GsubWorker
-{
+class DefaultGsubWorker implements GsubWorker {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGsubWorker.class);
 
     @Override
-    public List<Integer> applyTransforms(List<Integer> originalGlyphIds)
-    {
+    public List<Integer> applyTransforms(List<Integer> originalGlyphIds) {
         LOG.warn(getClass().getSimpleName() + " class does not perform actual GSUB substitutions. "
                 + "Perhaps the selected language is not yet supported by the FontBox library.");
         // Make the result read-only to prevent accidental modifications of the source list

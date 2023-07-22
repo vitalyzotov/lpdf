@@ -16,15 +16,13 @@
  */
 package lpdf.pdfbox.cos;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import org.junit.jupiter.api.Test;
 
-class COSDictionaryTest
-{
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+class COSDictionaryTest {
     @Test
-    void testCOSDictionaryNotEqualsCOSStream()
-    {
+    void testCOSDictionaryNotEqualsCOSStream() {
         COSDictionary cosDictionary = new COSDictionary();
         COSStream cosStream = new COSStream();
         cosDictionary.setItem(COSName.BE, COSName.BE);

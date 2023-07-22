@@ -16,38 +16,33 @@
 
 package lpdf.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unittest for org.apache.pdfbox.io.RandomAccessReadBuffer
  */
-class RandomAccessReadBufferTest
-{
+class RandomAccessReadBufferTest {
     @Test
-    void testPositionSkip() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionSkip() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
-        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais))
-        {
+        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais)) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.skip(5);
             assertEquals(5, randomAccessSource.read());
@@ -56,9 +51,8 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testPositionRead() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionRead() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais);
@@ -75,9 +69,8 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testSeekEOF() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testSeekEOF() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais);
@@ -100,13 +93,11 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testPositionReadBytes() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionReadBytes() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
-        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais))
-        {
+        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais)) {
             assertEquals(0, randomAccessSource.getPosition());
             byte[] buffer = new byte[4];
             randomAccessSource.read(buffer);
@@ -124,13 +115,11 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testPositionPeek() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionPeek() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
-        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais))
-        {
+        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais)) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.skip(6);
             assertEquals(6, randomAccessSource.getPosition());
@@ -141,13 +130,11 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testPositionUnreadBytes() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testPositionUnreadBytes() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
-        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais))
-        {
+        try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais)) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.read();
             randomAccessSource.read();
@@ -166,11 +153,9 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testEmptyBuffer() throws IOException
-    {
+    void testEmptyBuffer() throws IOException {
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(
-                new ByteArrayOutputStream().toByteArray()))
-        {
+                new ByteArrayOutputStream().toByteArray())) {
             assertEquals(-1, randomAccessSource.read());
             assertEquals(-1, randomAccessSource.peek());
             byte[] readBytes = new byte[6];
@@ -186,14 +171,12 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testView() throws IOException
-    {
-        byte[] inputValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    void testView() throws IOException {
+        byte[] inputValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ByteArrayInputStream bais = new ByteArrayInputStream(inputValues);
 
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(bais);
-             RandomAccessReadView view = randomAccessSource.createView(3, 5))
-        {
+             RandomAccessReadView view = randomAccessSource.createView(3, 5)) {
             assertEquals(0, view.getPosition());
             assertEquals(3, view.read());
             assertEquals(4, view.read());
@@ -203,13 +186,11 @@ class RandomAccessReadBufferTest
     }
 
     @Test
-    void testPDFBOX5111() throws IOException, URISyntaxException
-    {
+    void testPDFBOX5111() throws IOException, URISyntaxException {
         try (InputStream is = new URI(
                 "https://issues.apache.org/jira/secure/attachment/13017227/stringwidth.pdf")
-                        .toURL().openStream();
-             RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(is))
-        {
+                .toURL().openStream();
+             RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(is)) {
             assertEquals(34060, randomAccessSource.length());
         }
     }
@@ -222,16 +203,13 @@ class RandomAccessReadBufferTest
      * @throws IOException
      */
     @Test
-    void testPDFBOX5158() throws IOException
-    {
+    void testPDFBOX5158() throws IOException {
         Path path = Files.createTempFile("len4096", ".pdf");
-        try (OutputStream os = Files.newOutputStream(path))
-        {
+        try (OutputStream os = Files.newOutputStream(path)) {
             os.write(new byte[4096]);
         }
         assertEquals(4096, path.toFile().length());
-        try (RandomAccessRead rar = new RandomAccessReadBuffer(Files.newInputStream(path)))
-        {
+        try (RandomAccessRead rar = new RandomAccessReadBuffer(Files.newInputStream(path))) {
             assertEquals(0, rar.read());
         }
         Files.delete(path);
@@ -244,10 +222,8 @@ class RandomAccessReadBufferTest
      * @throws IOException
      */
     @Test
-    void testPDFBOX5161() throws IOException
-    {
-        try (RandomAccessRead rar = new RandomAccessReadBuffer(new ByteArrayInputStream(new byte[4099])))
-        {
+    void testPDFBOX5161() throws IOException {
+        try (RandomAccessRead rar = new RandomAccessReadBuffer(new ByteArrayInputStream(new byte[4099]))) {
             byte[] buf = new byte[4096];
             int bytesRead = rar.read(buf);
             assertEquals(4096, bytesRead);

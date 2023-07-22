@@ -27,29 +27,24 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Tilman Hausherr
  */
-public class PDParentTreeValue implements COSObjectable
-{
+public class PDParentTreeValue implements COSObjectable {
     final COSObjectable obj;
 
-    public PDParentTreeValue(COSArray obj)
-    {
+    public PDParentTreeValue(COSArray obj) {
         this.obj = obj;
     }
 
-    public PDParentTreeValue(COSDictionary obj)
-    {
+    public PDParentTreeValue(COSDictionary obj) {
         this.obj = obj;
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return obj.getCOSObject();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return obj.toString();
     }
 }

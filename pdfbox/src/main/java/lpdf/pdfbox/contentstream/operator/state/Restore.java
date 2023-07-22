@@ -16,45 +16,38 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
 import lpdf.pdfbox.cos.COSBase;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * Q: Restore the graphics state.
- * 
+ *
  * @author Laurent Huault
  */
-public class Restore extends OperatorProcessor
-{
-    public Restore(PDFStreamEngine context)
-    {
+public class Restore extends OperatorProcessor {
+    public Restore(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDFStreamEngine context = getContext();
-        if (context.getGraphicsStackSize() > 1)
-        {
+        if (context.getGraphicsStackSize() > 1) {
             context.restoreGraphicsState();
-        }
-        else
-        {
+        } else {
             // this shouldn't happen but it does, see PDFBOX-161
             throw new EmptyGraphicsStackException();
         }
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.RESTORE;
     }
 }

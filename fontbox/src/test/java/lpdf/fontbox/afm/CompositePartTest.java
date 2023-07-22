@@ -17,15 +17,13 @@
 
 package lpdf.fontbox.afm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class CompositePartTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class CompositePartTest {
     @Test
-    void testCompositePart()
-    {
+    void testCompositePart() {
         CompositePart compositePart = new CompositePart("name", 10, 20);
         assertEquals("name", compositePart.getName());
         assertEquals(10, compositePart.getXDisplacement());

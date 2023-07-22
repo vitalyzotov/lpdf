@@ -17,38 +17,33 @@
 
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * i: Set the flatness tolerance.
  *
  * @author John Hewson
  */
-public class SetFlatness extends OperatorProcessor
-{
-    public SetFlatness(PDFStreamEngine context)
-    {
+public class SetFlatness extends OperatorProcessor {
+    public SetFlatness(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.isEmpty()) {
             throw new MissingOperandException(operator, operands);
         }
-        if (!checkArrayTypesClass(operands, COSNumber.class))
-        {
+        if (!checkArrayTypesClass(operands, COSNumber.class)) {
             return;
         }
         COSNumber value = (COSNumber) operands.get(0);
@@ -56,8 +51,7 @@ public class SetFlatness extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_FLATNESS;
     }
 }

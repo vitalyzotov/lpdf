@@ -17,12 +17,6 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import lpdf.fontbox.ttf.HorizontalMetricsTable;
 import lpdf.fontbox.ttf.TrueTypeFont;
 import lpdf.pdfbox.cos.COSArray;
@@ -32,28 +26,33 @@ import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.font.encoding.Encoding;
 import lpdf.pdfbox.pdmodel.font.encoding.GlyphList;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Embedded PDTrueTypeFont builder. Helper class to populate a PDTrueTypeFont from a TTF.
  *
  * @author John Hewson
  * @author Ben Litchfield
  */
-final class PDTrueTypeFontEmbedder extends TrueTypeEmbedder
-{
+final class PDTrueTypeFontEmbedder extends TrueTypeEmbedder {
     private final Encoding fontEncoding;
 
     /**
      * Creates a new TrueType font embedder for the given TTF as a PDTrueTypeFont.
      *
      * @param document The parent document
-     * @param dict Font dictionary
-     * @param ttf TrueType font
+     * @param dict     Font dictionary
+     * @param ttf      TrueType font
      * @param encoding The PostScript encoding vector to be used for embedding.
      * @throws IOException if the TTF could not be read
      */
     PDTrueTypeFontEmbedder(PDDocument document, COSDictionary dict, TrueTypeFont ttf,
-                           Encoding encoding) throws IOException
-    {
+                           Encoding encoding) throws IOException {
         super(document, dict, ttf, false);
         dict.setItem(COSName.SUBTYPE, COSName.TRUE_TYPE);
 
@@ -73,8 +72,7 @@ final class PDTrueTypeFontEmbedder extends TrueTypeEmbedder
     /**
      * Sets the glyph widths in the font dictionary.
      */
-    private void setWidths(COSDictionary font, GlyphList glyphList) throws IOException
-    {
+    private void setWidths(COSDictionary font, GlyphList glyphList) throws IOException {
         float scaling = 1000f / ttf.getHeader().getUnitsPerEm();
         HorizontalMetricsTable hmtx = ttf.getHorizontalMetrics();
 
@@ -84,25 +82,22 @@ final class PDTrueTypeFontEmbedder extends TrueTypeEmbedder
         int lastChar = Collections.max(codeToName.keySet());
 
         List<Integer> widths = new ArrayList<>(lastChar - firstChar + 1);
-        for (int i = 0; i < lastChar - firstChar + 1; i++)
-        {
+        for (int i = 0; i < lastChar - firstChar + 1; i++) {
             widths.add(0);
         }
 
         // a character code is mapped to a glyph name via the provided font encoding
         // afterwards, the glyph name is translated to a glyph ID.
-        for (Map.Entry<Integer, String> entry : codeToName.entrySet())
-        {
+        for (Map.Entry<Integer, String> entry : codeToName.entrySet()) {
             int code = entry.getKey();
             String name = entry.getValue();
 
-            if (code >= firstChar && code <= lastChar)
-            {
+            if (code >= firstChar && code <= lastChar) {
                 String uni = glyphList.toUnicode(name);
                 int charCode = uni.codePointAt(0);
                 int gid = cmapLookup.getGlyphId(charCode);
                 widths.set(entry.getKey() - firstChar,
-                           Math.round(hmtx.getAdvanceWidth(gid) * scaling));
+                        Math.round(hmtx.getAdvanceWidth(gid) * scaling));
             }
         }
 
@@ -114,15 +109,13 @@ final class PDTrueTypeFontEmbedder extends TrueTypeEmbedder
     /**
      * Returns the font's encoding.
      */
-    public Encoding getFontEncoding()
-    {
+    public Encoding getFontEncoding() {
         return fontEncoding;
     }
 
     @Override
     protected void buildSubset(InputStream ttfSubset, String tag,
-                            Map<Integer, Integer> gidToCid) throws IOException
-    {
+                               Map<Integer, Integer> gidToCid) throws IOException {
         // use PDType0Font instead
         throw new UnsupportedOperationException();
     }

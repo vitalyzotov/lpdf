@@ -25,8 +25,7 @@ import java.util.Arrays;
  *
  * @author John Hewson
  */
-public class PDPanose
-{
+public class PDPanose {
     /**
      * Length.
      */
@@ -34,8 +33,7 @@ public class PDPanose
 
     private final byte[] bytes;
 
-    public PDPanose(byte[] bytes)
-    {
+    public PDPanose(byte[] bytes) {
         this.bytes = bytes;
     }
 
@@ -43,25 +41,21 @@ public class PDPanose
      * The font family class and subclass ID bytes, given in the sFamilyClass field of the “OS/2” table in a TrueType
      * font.
      *
+     * @return font family class and subclass ID bytes
      * @see <a href=
      * "http://www.microsoft.com/typography/otspec/ibmfc.htm">http://www.microsoft.com/typography/otspec/ibmfc.htm</a>
-     *
-     * @return font family class and subclass ID bytes
      */
-    public int getFamilyClass()
-    {
+    public int getFamilyClass() {
         return bytes[0] << 8 | (bytes[1] & 0xff);
     }
 
     /**
      * Ten bytes for the PANOSE classification number for the font.
      *
-     * @see <a href="http://www.monotype.com/services/pan1">http://www.monotype.com/services/pan1</a>
-     *
      * @return the PANOSE classification number
+     * @see <a href="http://www.monotype.com/services/pan1">http://www.monotype.com/services/pan1</a>
      */
-    public PDPanoseClassification getPanose()
-    {
+    public PDPanoseClassification getPanose() {
         byte[] panose = Arrays.copyOfRange(bytes, 2, 12);
         return new PDPanoseClassification(panose);
     }

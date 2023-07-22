@@ -27,47 +27,39 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author John Hewson
  */
-public final class PDCIDSystemInfo implements COSObjectable
-{
+public final class PDCIDSystemInfo implements COSObjectable {
     private final COSDictionary dictionary;
 
-    PDCIDSystemInfo(String registry, String ordering, int supplement)
-    {
+    PDCIDSystemInfo(String registry, String ordering, int supplement) {
         dictionary = new COSDictionary();
         dictionary.setString(COSName.REGISTRY, registry);
         dictionary.setString(COSName.ORDERING, ordering);
         dictionary.setInt(COSName.SUPPLEMENT, supplement);
     }
 
-    PDCIDSystemInfo(COSDictionary dictionary)
-    {
+    PDCIDSystemInfo(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
-    public String getRegistry()
-    {
+    public String getRegistry() {
         return dictionary.getNameAsString(COSName.REGISTRY);
     }
 
-    public String getOrdering()
-    {
+    public String getOrdering() {
         return dictionary.getNameAsString(COSName.ORDERING);
     }
 
-    public int getSupplement()
-    {
+    public int getSupplement() {
         return dictionary.getInt(COSName.SUPPLEMENT);
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return dictionary;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getRegistry() + "-" + getOrdering() + "-" + getSupplement();
     }
 }

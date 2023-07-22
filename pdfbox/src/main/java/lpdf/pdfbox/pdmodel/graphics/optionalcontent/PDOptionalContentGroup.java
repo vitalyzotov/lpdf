@@ -23,27 +23,25 @@ import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 /**
  * An optional content group (OCG).
  */
-public class PDOptionalContentGroup extends PDPropertyList
-{
+public class PDOptionalContentGroup extends PDPropertyList {
     /**
      * Creates a new optional content group (OCG).
+     *
      * @param name the name of the content group
      */
-    public PDOptionalContentGroup(String name)
-    {
+    public PDOptionalContentGroup(String name) {
         this.dict.setItem(COSName.TYPE, COSName.OCG);
         setName(name);
     }
 
     /**
      * Creates a new instance based on a given {@link COSDictionary}.
+     *
      * @param dict the dictionary
      */
-    public PDOptionalContentGroup(COSDictionary dict)
-    {
+    public PDOptionalContentGroup(COSDictionary dict) {
         super(dict);
-        if (!dict.getItem(COSName.TYPE).equals(COSName.OCG))
-        {
+        if (!dict.getItem(COSName.TYPE).equals(COSName.OCG)) {
             throw new IllegalArgumentException(
                     "Provided dictionary is not of type '" + COSName.OCG + "'");
         }
@@ -53,17 +51,19 @@ public class PDOptionalContentGroup extends PDPropertyList
      * Enumeration for the renderState dictionary entry on the "Export", "View"
      * and "Print" dictionary.
      */
-    public enum RenderState
-    {
-        /** The "ON" value. */
+    public enum RenderState {
+        /**
+         * The "ON" value.
+         */
         ON(COSName.ON),
-        /** The "OFF" value. */
+        /**
+         * The "OFF" value.
+         */
         OFF(COSName.OFF);
 
         private final COSName name;
 
-        private RenderState(COSName value)
-        {
+        private RenderState(COSName value) {
             this.name = value;
         }
 
@@ -73,10 +73,8 @@ public class PDOptionalContentGroup extends PDPropertyList
          * @param state the state name
          * @return the state enum value
          */
-        public static RenderState valueOf(COSName state)
-        {
-            if (state == null)
-            {
+        public static RenderState valueOf(COSName state) {
+            if (state == null) {
                 return null;
             }
             return RenderState.valueOf(state.getName().toUpperCase());
@@ -87,34 +85,32 @@ public class PDOptionalContentGroup extends PDPropertyList
          *
          * @return the name of the state
          */
-        public COSName getName()
-        {
+        public COSName getName() {
             return this.name;
         }
     }
 
     /**
      * Returns the name of the optional content group.
+     *
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return dict.getString(COSName.NAME);
     }
 
     /**
      * Sets the name of the optional content group.
+     *
      * @param name the name
      */
-    public final void setName(String name)
-    {
+    public final void setName(String name) {
         dict.setString(COSName.NAME, name);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString() + " (" + getName() + ")";
     }
 }

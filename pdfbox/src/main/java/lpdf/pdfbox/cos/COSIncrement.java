@@ -30,9 +30,8 @@ import java.util.Set;
  * @see COSUpdateState
  * @see COSUpdateInfo
  */
-public class COSIncrement implements Iterable<COSBase>
-{
-    
+public class COSIncrement implements Iterable<COSBase> {
+
     /**
      * Contains the {@link COSBase}s, that shall be added to the increment at top level.
      */
@@ -55,7 +54,7 @@ public class COSIncrement implements Iterable<COSBase>
      * Whether this {@link COSIncrement} has already been determined, or must still be evaluated.
      */
     private boolean initialized = false;
-    
+
     /**
      * Creates a new {@link COSIncrement} for the given {@link COSUpdateInfo}, the increment will use it´s
      * {@link COSDocumentState} as it´s own origin and shall collect all updates contained in the given
@@ -64,11 +63,10 @@ public class COSIncrement implements Iterable<COSBase>
      *
      * @param incrementOrigin The {@link COSUpdateInfo} serving as an update source for this {@link COSIncrement}.
      */
-    public COSIncrement(COSUpdateInfo incrementOrigin)
-    {
+    public COSIncrement(COSUpdateInfo incrementOrigin) {
         this.incrementOrigin = incrementOrigin;
     }
-    
+
     /**
      * Collect all updates made to the given {@link COSBase} and it's contained structures.<br>
      * This shall forward all {@link COSUpdateInfo} objects to the proper specialized collection methods.
@@ -80,28 +78,21 @@ public class COSIncrement implements Iterable<COSBase>
      * @see #collect(COSArray)
      * @see #collect(COSObject)
      */
-    private boolean collect(COSBase base)
-    {
-        if(contains(base))
-        {
+    private boolean collect(COSBase base) {
+        if (contains(base)) {
             return false;
         }
         // handle updatable objects:
-        if(base instanceof COSDictionary)
-        {
+        if (base instanceof COSDictionary) {
             return collect((COSDictionary) base);
-        }
-        else if(base instanceof COSObject)
-        {
+        } else if (base instanceof COSObject) {
             return collect((COSObject) base);
-        }
-        else if(base instanceof COSArray)
-        {
+        } else if (base instanceof COSArray) {
             return collect((COSArray) base);
         }
         return false;
     }
-    
+
     /**
      * Collect all updates made to the given {@link COSDictionary} and it's contained structures.
      *
@@ -109,21 +100,17 @@ public class COSIncrement implements Iterable<COSBase>
      * @return Returns {@code true}, if the {@link COSDictionary} represents a direct child structure, that would
      * require it´s parent to be updated instead.
      */
-    private boolean collect(COSDictionary dictionary)
-    {
+    private boolean collect(COSDictionary dictionary) {
         COSUpdateState updateState = dictionary.getUpdateState();
         // Is definitely part of the increment?
-        if(!isExcluded(dictionary) && !contains(dictionary) && updateState.isUpdated())
-        {
+        if (!isExcluded(dictionary) && !contains(dictionary) && updateState.isUpdated()) {
             add(dictionary);
         }
         boolean childDemandsParentUpdate = false;
         // Collect children:
-        for(COSBase entry : dictionary.getValues())
-        {
+        for (COSBase entry : dictionary.getValues()) {
             // Primitives can not be part of an increment. (on top level)
-            if(!(entry instanceof COSUpdateInfo) || contains(entry))
-            {
+            if (!(entry instanceof COSUpdateInfo) || contains(entry)) {
                 continue;
             }
             COSUpdateInfo updatableEntry = (COSUpdateInfo) entry;
@@ -131,9 +118,8 @@ public class COSIncrement implements Iterable<COSBase>
             // Entries with different document origin must be part of the increment!
             updateDifferentOrigin(entryUpdateState);
             // Always attempt to write COSArrays as direct objects.
-            if(updatableEntry.isNeedToBeUpdated() &&
-                ((!(entry instanceof COSObject) && entry.isDirect()) || entry instanceof COSArray))
-            {
+            if (updatableEntry.isNeedToBeUpdated() &&
+                    ((!(entry instanceof COSObject) && entry.isDirect()) || entry instanceof COSArray)) {
                 // Exclude direct entries from the increment!
                 exclude(entry);
                 childDemandsParentUpdate = true;
@@ -141,21 +127,17 @@ public class COSIncrement implements Iterable<COSBase>
             // Collect descendants:
             childDemandsParentUpdate = collect(entry) || childDemandsParentUpdate;
         }
-        
-        if(isExcluded(dictionary))
-        {
+
+        if (isExcluded(dictionary)) {
             return childDemandsParentUpdate;
-        }
-        else
-        {
-            if(childDemandsParentUpdate && !contains(dictionary))
-            {
+        } else {
+            if (childDemandsParentUpdate && !contains(dictionary)) {
                 add(dictionary);
             }
             return false;
         }
     }
-    
+
     /**
      * Collect all updates made to the given {@link COSArray} and it's contained structures.
      *
@@ -163,15 +145,12 @@ public class COSIncrement implements Iterable<COSBase>
      * @return Returns {@code true}, if the {@link COSArray}´s elements changed. A {@link COSArray} shall always be
      * treated as a direct structure, that would require it´s parent to be updated instead.
      */
-    private boolean collect(COSArray array)
-    {
+    private boolean collect(COSArray array) {
         COSUpdateState updateState = array.getUpdateState();
         boolean childDemandsParentUpdate = updateState.isUpdated();
-        for(COSBase entry : array)
-        {
+        for (COSBase entry : array) {
             // Primitives can not be part of an increment. (on top level)
-            if(!(entry instanceof COSUpdateInfo) || contains(entry))
-            {
+            if (!(entry instanceof COSUpdateInfo) || contains(entry)) {
                 continue;
             }
             COSUpdateState entryUpdateState = ((COSUpdateInfo) entry).getUpdateState();
@@ -182,7 +161,7 @@ public class COSIncrement implements Iterable<COSBase>
         }
         return childDemandsParentUpdate;
     }
-    
+
     /**
      * Collect all updates made to the given {@link COSObject} and it's contained structures.
      *
@@ -190,10 +169,8 @@ public class COSIncrement implements Iterable<COSBase>
      * @return Always returns {@code false}. {@link COSObject}s by definition are indirect and shall never cause a
      * parent structure to be updated.
      */
-    private boolean collect(COSObject object)
-    {
-        if(contains(object))
-        {
+    private boolean collect(COSObject object) {
+        if (contains(object)) {
             return false;
         }
         addProcessedObject(object);
@@ -202,34 +179,29 @@ public class COSIncrement implements Iterable<COSBase>
         updateDifferentOrigin(updateState);
         // determine actual, if necessary or possible without dereferencing:
         COSUpdateInfo actual = null;
-        if(updateState.isUpdated() || object.isDereferenced())
-        {
+        if (updateState.isUpdated() || object.isDereferenced()) {
             COSBase base = object.getObject();
-            if(base instanceof COSUpdateInfo)
-            {
+            if (base instanceof COSUpdateInfo) {
                 actual = (COSUpdateInfo) base;
             }
         }
         // Skip?
-        if(actual == null || contains(actual.getCOSObject()))
-        {
+        if (actual == null || contains(actual.getCOSObject())) {
             return false;
         }
         boolean childDemandsParentUpdate = false;
         COSUpdateState actualUpdateState = actual.getUpdateState();
-        if(actualUpdateState.isUpdated())
-        {
+        if (actualUpdateState.isUpdated()) {
             childDemandsParentUpdate = true;
         }
         exclude(actual.getCOSObject());
         childDemandsParentUpdate = collect(actual.getCOSObject()) || childDemandsParentUpdate;
-        if(updateState.isUpdated() || childDemandsParentUpdate)
-        {
+        if (updateState.isUpdated() || childDemandsParentUpdate) {
             add(actual.getCOSObject());
         }
         return false;
     }
-    
+
     /**
      * Returns {@code true}, if the given {@link COSBase} is already known to and has been processed by this
      * {@link COSIncrement}.
@@ -240,11 +212,10 @@ public class COSIncrement implements Iterable<COSBase>
      * @see #objects
      * @see #processedObjects
      */
-    public boolean contains(COSBase base)
-    {
+    public boolean contains(COSBase base) {
         return objects.contains(base) || (base instanceof COSObject && processedObjects.contains((COSObject) base));
     }
-    
+
     /**
      * Check whether the given {@link COSUpdateState}´s {@link COSDocumentState} differs from the {@link COSIncrement}´s
      * known {@link #incrementOrigin}.<br>
@@ -255,15 +226,13 @@ public class COSIncrement implements Iterable<COSBase>
      *                    {@link COSDocument}.
      * @see #incrementOrigin
      */
-    private void updateDifferentOrigin(COSUpdateState updateState)
-    {
-        if(incrementOrigin != null && updateState != null &&
-            incrementOrigin.getUpdateState().getOriginDocumentState() != updateState.getOriginDocumentState())
-        {
+    private void updateDifferentOrigin(COSUpdateState updateState) {
+        if (incrementOrigin != null && updateState != null &&
+                incrementOrigin.getUpdateState().getOriginDocumentState() != updateState.getOriginDocumentState()) {
             updateState.update();
         }
     }
-    
+
     /**
      * The given object and actual {COSBase}s shall be part of the increment and must be added to {@link #objects},
      * if possible.<br>
@@ -272,14 +241,12 @@ public class COSIncrement implements Iterable<COSBase>
      * @param object The {@link COSBase} to add to {@link #objects}.
      * @see #objects
      */
-    private void add(COSBase object)
-    {
-        if(object != null)
-        {
+    private void add(COSBase object) {
+        if (object != null) {
             objects.add(object);
         }
     }
-    
+
     /**
      * The given {@link COSObject} has been processed, or is being processed. It shall be added to
      * {@link #processedObjects} to skip it, should it be encountered again.<br>
@@ -288,14 +255,12 @@ public class COSIncrement implements Iterable<COSBase>
      * @param base The {@link COSObject} to add to {@link #processedObjects}.
      * @see #processedObjects
      */
-    private void addProcessedObject(COSObject base)
-    {
-        if(base != null)
-        {
+    private void addProcessedObject(COSObject base) {
+        if (base != null) {
             processedObjects.add(base);
         }
     }
-    
+
     /**
      * The given {@link COSBase}s are not fit for inclusion in an increment and shall be added to {@link #excluded}.<br>
      * {@code null} values shall be ignored.
@@ -304,15 +269,13 @@ public class COSIncrement implements Iterable<COSBase>
      * @return The {@link COSIncrement} itself, to allow method chaining.
      * @see #excluded
      */
-    public COSIncrement exclude(COSBase... base)
-    {
-        if(base != null)
-        {
+    public COSIncrement exclude(COSBase... base) {
+        if (base != null) {
             excluded.addAll(Arrays.asList(base));
         }
         return this;
     }
-    
+
     /**
      * Returns {@code true}, if the given {@link COSBase} has been excluded from the increment, and hence is contained
      * in {@link #excluded}.
@@ -322,11 +285,10 @@ public class COSIncrement implements Iterable<COSBase>
      * in {@link #excluded}.
      * @see #excluded
      */
-    private boolean isExcluded(COSBase base)
-    {
+    private boolean isExcluded(COSBase base) {
         return excluded.contains(base);
     }
-    
+
     /**
      * Returns all indirect {@link COSBase}s, that shall be written to an increment as top level {@link COSObject}s.<br>
      * Calling this method will cause the increment to be initialized.
@@ -334,25 +296,22 @@ public class COSIncrement implements Iterable<COSBase>
      * @return All indirect {@link COSBase}s, that shall be written to an increment as top level {@link COSObject}s.
      * @see #objects
      */
-    public Set<COSBase> getObjects()
-    {
-        if(!initialized && incrementOrigin != null)
-        {
+    public Set<COSBase> getObjects() {
+        if (!initialized && incrementOrigin != null) {
             collect(incrementOrigin.getCOSObject());
             initialized = true;
         }
         return objects;
     }
-    
+
     /**
      * Return an iterator for the determined {@link #objects} contained in this {@link COSIncrement}.
      *
      * @return An iterator for the determined {@link #objects} contained in this {@link COSIncrement}.
      */
     @Override
-    public Iterator<COSBase> iterator()
-    {
+    public Iterator<COSBase> iterator() {
         return getObjects().iterator();
     }
-    
+
 }

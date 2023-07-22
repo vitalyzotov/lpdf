@@ -29,8 +29,7 @@ import java.util.Map;
  *
  * @author Christian Appl
  */
-public class COSObjectPool
-{
+public class COSObjectPool {
     private final Map<COSObjectKey, COSBase> keyPool = new HashMap<>();
     private final Map<COSBase, COSObjectKey> objectPool = new HashMap<>();
 
@@ -43,8 +42,7 @@ public class COSObjectPool
      *
      * @param highestXRefObjectNumber The highest known object number.
      */
-    public COSObjectPool(long highestXRefObjectNumber)
-    {
+    public COSObjectPool(long highestXRefObjectNumber) {
         this.highestXRefObjectNumber = Math.max(this.highestXRefObjectNumber,
                 highestXRefObjectNumber);
     }
@@ -52,29 +50,24 @@ public class COSObjectPool
     /**
      * Update the key and object maps.
      *
-     * @param key The key, that shall be added.
+     * @param key    The key, that shall be added.
      * @param object The object, that shall be added.
      * @return The actual key, the object has been added for.
      */
-    public COSObjectKey put(COSObjectKey key, COSBase object)
-    {
+    public COSObjectKey put(COSObjectKey key, COSBase object) {
         // to avoid to mixup indirect COSInteger objects holding the same value we have to check
         // if the given key is the same than the key which is stored for the "same" base object wihtin the object pool
         // the same is always true for COSFloat, COSBoolean and COSName and under certain circumstances for the remainig
         // types as well
-        if (object == null || (contains(object) && getKey(object).equals(key)))
-        {
+        if (object == null || (contains(object) && getKey(object).equals(key))) {
             return null;
         }
         COSObjectKey actualKey = key;
-        if (actualKey == null || contains(actualKey))
-        {
+        if (actualKey == null || contains(actualKey)) {
             highestXRefObjectNumber++;
             actualKey = new COSObjectKey(highestXRefObjectNumber, 0);
             object.setKey(actualKey);
-        }
-        else
-        {
+        } else {
             highestXRefObjectNumber = Math.max(key.getNumber(), highestXRefObjectNumber);
         }
         keyPool.put(actualKey, object);
@@ -90,15 +83,12 @@ public class COSObjectPool
      * @return key The {@link COSObjectKey}, that matches the registered {@link COSBase}, or null if such an object is
      * not registered.
      */
-    public COSObjectKey getKey(COSBase object)
-    {
+    public COSObjectKey getKey(COSBase object) {
         COSObjectKey key = null;
-        if (object instanceof COSObject)
-        {
+        if (object instanceof COSObject) {
             key = objectPool.get(((COSObject) object).getObject());
         }
-        if (key == null)
-        {
+        if (key == null) {
             return objectPool.get(object);
         }
         return key;
@@ -110,8 +100,7 @@ public class COSObjectPool
      * @param key The {@link COSObjectKey} that shall be checked for a registered {@link COSBase}.
      * @return True, if a {@link COSBase} is registered for the given {@link COSObjectKey}.
      */
-    public boolean contains(COSObjectKey key)
-    {
+    public boolean contains(COSObjectKey key) {
         return keyPool.containsKey(key);
     }
 
@@ -123,8 +112,7 @@ public class COSObjectPool
      * @return The {@link COSBase}, that is registered for the given {@link COSObjectKey}, or null if no object is
      * registered for that key.
      */
-    public COSBase getObject(COSObjectKey key)
-    {
+    public COSBase getObject(COSObjectKey key) {
         return keyPool.get(key);
     }
 
@@ -134,8 +122,7 @@ public class COSObjectPool
      * @param object The {@link COSBase} that shall be checked.
      * @return True, if such a {@link COSBase} is registered in this pool.
      */
-    public boolean contains(COSBase object)
-    {
+    public boolean contains(COSBase object) {
         return (object instanceof COSObject
                 && objectPool.containsKey(((COSObject) object).getObject()))
                 || objectPool.containsKey(object);
@@ -148,8 +135,7 @@ public class COSObjectPool
      * @return The highest known object number (see: {@link COSObjectKey} for further information), that is currently
      * registered in this pool.
      */
-    public long getHighestXRefObjectNumber()
-    {
+    public long getHighestXRefObjectNumber() {
         return highestXRefObjectNumber;
     }
 }

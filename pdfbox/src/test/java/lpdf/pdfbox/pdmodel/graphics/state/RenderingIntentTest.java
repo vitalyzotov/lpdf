@@ -16,15 +16,13 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.state;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class RenderingIntentTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class RenderingIntentTest {
     @Test
-    void fromStringInputNotNullOutputNotNull()
-    {
+    void fromStringInputNotNullOutputNotNull() {
         // Arrange
         final String value = "AbsoluteColorimetric";
 
@@ -36,8 +34,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull2()
-    {
+    void fromStringInputNotNullOutputNotNull2() {
         // Arrange
         final String value = "RelativeColorimetric";
 
@@ -49,8 +46,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull3()
-    {
+    void fromStringInputNotNullOutputNotNull3() {
         // Arrange
         final String value = "Perceptual";
 
@@ -62,8 +58,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull4()
-    {
+    void fromStringInputNotNullOutputNotNull4() {
         // Arrange
         final String value = "Saturation";
 
@@ -75,8 +70,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull5()
-    {
+    void fromStringInputNotNullOutputNotNull5() {
         // Arrange
         final String value = "";
 
@@ -88,8 +82,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void stringValueOutputNotNull()
-    {
+    void stringValueOutputNotNull() {
         // Arrange
         final RenderingIntent objectUnderTest = RenderingIntent.ABSOLUTE_COLORIMETRIC;
 
@@ -101,8 +94,7 @@ class RenderingIntentTest
     }
 
     @Test
-    void testIsFill()
-    {
+    void testIsFill() {
         // Arrange
         final RenderingMode objectUnderTest = RenderingMode.FILL;
 

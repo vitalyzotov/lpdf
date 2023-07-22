@@ -19,13 +19,9 @@
 
 package lpdf.io;
 
-import static java.lang.invoke.MethodHandles.constant;
-import static java.lang.invoke.MethodHandles.dropArguments;
-import static java.lang.invoke.MethodHandles.filterReturnValue;
-import static java.lang.invoke.MethodHandles.guardWithTest;
-import static java.lang.invoke.MethodHandles.lookup;
-import static java.lang.invoke.MethodType.methodType;
-import static java.util.Objects.nonNull;
+import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -34,7 +30,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles.Lookup;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
@@ -44,21 +39,23 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
+import static java.lang.invoke.MethodHandles.constant;
+import static java.lang.invoke.MethodHandles.dropArguments;
+import static java.lang.invoke.MethodHandles.filterReturnValue;
+import static java.lang.invoke.MethodHandles.guardWithTest;
+import static java.lang.invoke.MethodHandles.lookup;
+import static java.lang.invoke.MethodType.methodType;
+import static java.util.Objects.nonNull;
 
 /**
  * This class contains various I/O-related methods.
  */
-public final class IOUtils
-{
+public final class IOUtils {
 
     //TODO PDFBox should really use Apache Commons IO.
     private static final Optional<Consumer<ByteBuffer>> UNMAPPER;
 
-    static
-    {
+    static {
         UNMAPPER = Optional.ofNullable(AccessController
                 .doPrivileged((PrivilegedAction<Consumer<ByteBuffer>>) IOUtils::unmapper));
     }
@@ -68,19 +65,18 @@ public final class IOUtils
      */
     private static final Logger LOG = LoggerFactory.getLogger(IOUtils.class);
 
-    private IOUtils()
-    {
+    private IOUtils() {
         //Utility class. Don't instantiate.
     }
 
     /**
      * Reads the input stream and returns its contents as a byte array.
+     *
      * @param in the input stream to read from.
      * @return the byte array
      * @throws IOException if an I/O error occurs
      */
-    public static byte[] toByteArray(InputStream in) throws IOException
-    {
+    public static byte[] toByteArray(InputStream in) throws IOException {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         copy(in, baout);
         return baout.toByteArray();
@@ -88,18 +84,17 @@ public final class IOUtils
 
     /**
      * Copies all the contents from the given input stream to the given output stream.
-     * @param input the input stream
+     *
+     * @param input  the input stream
      * @param output the output stream
      * @return the number of bytes that have been copied
      * @throws IOException if an I/O error occurs
      */
-    public static long copy(InputStream input, OutputStream output) throws IOException
-    {
+    public static long copy(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[4096];
         long count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer)))
-        {
+        while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -110,20 +105,18 @@ public final class IOUtils
      * Populates the given buffer with data read from the input stream. If the data doesn't
      * fit the buffer, only the data that fits in the buffer is read. If the data is less than
      * fits in the buffer, the buffer is not completely filled.
-     * @param in the input stream to read from
+     *
+     * @param in     the input stream to read from
      * @param buffer the buffer to fill
      * @return the number of bytes written to the buffer
      * @throws IOException if an I/O error occurs
      */
-    public static long populateBuffer(InputStream in, byte[] buffer) throws IOException
-    {
+    public static long populateBuffer(InputStream in, byte[] buffer) throws IOException {
         int remaining = buffer.length;
-        while (remaining > 0)
-        {
+        while (remaining > 0) {
             int bufferWritePos = buffer.length - remaining;
             int bytesRead = in.read(buffer, bufferWritePos, remaining);
-            if (bytesRead < 0)
-            {
+            if (bytesRead < 0) {
                 break; //EOD
             }
             remaining -= bytesRead;
@@ -136,17 +129,12 @@ public final class IOUtils
      *
      * @param closeable to be closed
      */
-    public static void closeQuietly(Closeable closeable)
-    {
-        try
-        {
-            if (closeable != null)
-            {
+    public static void closeQuietly(Closeable closeable) {
+        try {
+            if (closeable != null) {
                 closeable.close();
             }
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             LOG.debug("An exception occurred while trying to close - ignoring", ioe);
             // ignore
         }
@@ -157,24 +145,19 @@ public final class IOUtils
      *
      * <p>An exception is only returned if the IOException passed in is null.
      *
-     * @param closeable to be closed
-     * @param logger the logger to be used so that logging appears under that log instance
-     * @param resourceName the name to appear in the log output
+     * @param closeable        to be closed
+     * @param logger           the logger to be used so that logging appears under that log instance
+     * @param resourceName     the name to appear in the log output
      * @param initialException if set, this exception will be returned even where there is another
-     * exception while closing the IO resource
+     *                         exception while closing the IO resource
      * @return the IOException is there was any but only if initialException is null
      */
-    public static IOException closeAndLogException(Closeable closeable, Logger logger, String resourceName, IOException initialException)
-    {
-        try
-        {
+    public static IOException closeAndLogException(Closeable closeable, Logger logger, String resourceName, IOException initialException) {
+        try {
             closeable.close();
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             logger.warn("Error closing " + resourceName, ioe);
-            if (initialException == null)
-            {
+            if (initialException == null) {
                 return ioe;
             }
         }
@@ -189,17 +172,12 @@ public final class IOUtils
      *
      * @param buf the buffer to be unmapped
      */
-    public static void unmap(ByteBuffer buf)
-    {
-        try
-        {
-            if (buf != null)
-            {
+    public static void unmap(ByteBuffer buf) {
+        try {
+            if (buf != null) {
                 UNMAPPER.ifPresent(u -> u.accept(buf));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             LOG.error("Unable to unmap ByteBuffer.", e);
         }
     }
@@ -209,13 +187,10 @@ public final class IOUtils
      *
      * @return
      */
-    private static Consumer<ByteBuffer> unmapper()
-    {
+    private static Consumer<ByteBuffer> unmapper() {
         final Lookup lookup = lookup();
-        try
-        {
-            try
-            {
+        try {
+            try {
                 // *** sun.misc.Unsafe unmapping (Java 9+) ***
                 final Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
                 // first check if Unsafe has the right method, otherwise we can give up
@@ -227,15 +202,11 @@ public final class IOUtils
                 f.setAccessible(true);
                 final Object theUnsafe = f.get(null);
                 return newBufferCleaner(ByteBuffer.class, unmapper.bindTo(theUnsafe));
-            }
-            catch (SecurityException se)
-            {
+            } catch (SecurityException se) {
                 // rethrow to report errors correctly (we need to catch it here, as we also catch RuntimeException
                 // below!):
                 throw se;
-            }
-            catch (ReflectiveOperationException | RuntimeException e)
-            {
+            } catch (ReflectiveOperationException | RuntimeException e) {
                 // *** sun.misc.Cleaner unmapping (Java 8) ***
                 final Class<?> directBufferClass = Class.forName("java.nio.DirectByteBuffer");
 
@@ -260,52 +231,41 @@ public final class IOUtils
                         constant(Void.class, null).asType(methodType(void.class)), 0, cleanerClass);
                 final MethodHandle unmapper = filterReturnValue(directBufferCleanerMethod,
                         guardWithTest(nonNullTest, cleanMethod, noop))
-                                .asType(methodType(void.class, ByteBuffer.class));
+                        .asType(methodType(void.class, ByteBuffer.class));
                 return newBufferCleaner(directBufferClass, unmapper);
             }
-        }
-        catch (SecurityException se)
-        {
+        } catch (SecurityException se) {
             LOG.error(
                     "Unmapping is not supported because of missing permissions. Please grant at least the following permissions: RuntimePermission(\"accessClassInPackage.sun.misc\") "
                             + " and ReflectPermission(\"suppressAccessChecks\")",
                     se);
 
-        }
-        catch (ReflectiveOperationException | RuntimeException e)
-        {
+        } catch (ReflectiveOperationException | RuntimeException e) {
             LOG.error("Unmapping is not supported.", e);
         }
         return null;
     }
 
     private static Consumer<ByteBuffer> newBufferCleaner(final Class<?> unmappableBufferClass,
-            final MethodHandle unmapper)
-    {
+                                                         final MethodHandle unmapper) {
         assert Objects.equals(methodType(void.class, ByteBuffer.class), unmapper.type());
         return (ByteBuffer buffer) -> {
-            if (!buffer.isDirect())
-            {
+            if (!buffer.isDirect()) {
                 throw new IllegalArgumentException("unmapping only works with direct buffers");
             }
-            if (!unmappableBufferClass.isInstance(buffer))
-            {
+            if (!unmappableBufferClass.isInstance(buffer)) {
                 throw new IllegalArgumentException(
                         "buffer is not an instance of " + unmappableBufferClass.getName());
             }
             final Throwable e = AccessController.doPrivileged((PrivilegedAction<Throwable>) () -> {
-                try
-                {
+                try {
                     unmapper.invokeExact(buffer);
                     return null;
-                }
-                catch (Throwable t)
-                {
+                } catch (Throwable t) {
                     return t;
                 }
             });
-            if (nonNull(e))
-            {
+            if (nonNull(e)) {
                 LOG.error("Unable to unmap the mapped buffer", e);
             }
         };
@@ -317,8 +277,7 @@ public final class IOUtils
      *
      * @return a function to create an instance of a memory only StreamCache using unrestricted main memory
      */
-    public static StreamCacheCreateFunction createMemoryOnlyStreamCache()
-    {
+    public static StreamCacheCreateFunction createMemoryOnlyStreamCache() {
         return MemoryUsageSetting.setupMainMemoryOnly().streamCache;
     }
 
@@ -328,8 +287,7 @@ public final class IOUtils
      *
      * @return a function to create an instance of a temp file only StreamCache using unrestricted size
      */
-    public static StreamCacheCreateFunction createTempFileOnlyStreamCache()
-    {
+    public static StreamCacheCreateFunction createTempFileOnlyStreamCache() {
         return MemoryUsageSetting.setupTempFileOnly().streamCache;
     }
 }

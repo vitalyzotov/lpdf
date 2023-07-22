@@ -21,8 +21,7 @@ package lpdf.fontbox.cff;
  *
  * @author John Hewson
  */
-public interface CFFCharset
-{
+public interface CFFCharset {
     /**
      * Indicates if the charset belongs to a CID font.
      *
@@ -33,8 +32,8 @@ public interface CFFCharset
     /**
      * Adds a new GID/SID/name combination to the charset.
      *
-     * @param gid GID
-     * @param sid SID
+     * @param gid  GID
+     * @param sid  SID
      * @param name the postscript name of the glyph
      */
     public abstract void addSID(int gid, int sid, String name);

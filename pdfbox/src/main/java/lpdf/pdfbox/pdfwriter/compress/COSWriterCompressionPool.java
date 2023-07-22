@@ -16,14 +16,6 @@
  */
 package lpdf.pdfbox.pdfwriter.compress;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import lpdf.pdfbox.pdfparser.PDFXRefStream;
-import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -32,14 +24,21 @@ import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSObject;
 import lpdf.pdfbox.cos.COSObjectKey;
 import lpdf.pdfbox.cos.COSStream;
+import lpdf.pdfbox.pdfparser.PDFXRefStream;
+import lpdf.pdfbox.pdmodel.PDDocument;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * An instance of this class compresses the contents of a given {@link PDDocument}.
  *
  * @author Christian Appl
  */
-public class COSWriterCompressionPool
-{
+public class COSWriterCompressionPool {
 
     public static final float MINIMUM_SUPPORTED_VERSION = 1.6f;
 
@@ -65,13 +64,12 @@ public class COSWriterCompressionPool
      * {@link COSWriterObjectStream}s</li>
      * </ul>
      *
-     * @param document The document, that shall be compressed.
+     * @param document   The document, that shall be compressed.
      * @param parameters The configuration of the compression operations, that shall be applied.
      * @throws IOException Shall be thrown if a compression operation failed.
      */
     public COSWriterCompressionPool(PDDocument document, CompressParameters parameters)
-            throws IOException
-    {
+            throws IOException {
         this.document = document;
         this.parameters = parameters != null ? parameters : new CompressParameters();
         objectPool = new COSObjectPool(document.getDocument().getHighestXRefObjectNumber());
@@ -92,11 +90,10 @@ public class COSWriterCompressionPool
      * method shall determine an appropriate key, for yet unregistered objects, to register them. Depending on the type
      * of object, it shall either be appended as-is or shall be appended to a compressed {@link COSWriterObjectStream}.
      *
-     * @param key The {@link COSObjectKey} that shall be used as the {@link COSBase}s ID, if possible.
+     * @param key  The {@link COSObjectKey} that shall be used as the {@link COSBase}s ID, if possible.
      * @param base The {@link COSBase}, that shall be registered in this pool.
      */
-    private COSBase addObjectToPool(COSObjectKey key, COSBase base)
-    {
+    private COSBase addObjectToPool(COSObjectKey key, COSBase base) {
         // Drop hollow objects.
         COSBase current = base instanceof COSObject ? ((COSObject) base).getObject() : base;
         // to avoid to mixup indirect COSInteger objects holding the same value we have to check
@@ -105,8 +102,7 @@ public class COSWriterCompressionPool
         // types as well
         if (current == null //
                 || (key != null && objectPool.contains(key)) //
-                || (key == null && objectPool.contains(current)))
-        {
+                || (key == null && objectPool.contains(current))) {
             return current;
         }
 
@@ -118,13 +114,11 @@ public class COSWriterCompressionPool
         if ((key != null && key.getGeneration() != 0)
                 || current instanceof COSStream
                 || (document.getEncryption() != null
-                        && current == document.getEncryption().getCOSObject())
+                && current == document.getEncryption().getCOSObject())
                 || current == this.document.getDocument().getTrailer()
-                        .getCOSDictionary(COSName.ROOT))
-        {
+                .getCOSDictionary(COSName.ROOT)) {
             COSObjectKey actualKey = objectPool.put(key, current);
-            if (actualKey == null)
-            {
+            if (actualKey == null) {
                 return current;
             }
             topLevelObjects.add(actualKey);
@@ -133,8 +127,7 @@ public class COSWriterCompressionPool
 
         // Determine the object key.
         COSObjectKey actualKey = objectPool.put(key, current);
-        if (actualKey == null)
-        {
+        if (actualKey == null) {
             return current;
         }
 
@@ -149,53 +142,38 @@ public class COSWriterCompressionPool
      * @param current The object to be added for compressing.
      * @throws IOException Shall be thrown, if compressing the object failed.
      */
-    private void addStructure(COSBase current) throws IOException
-    {
+    private void addStructure(COSBase current) throws IOException {
         COSBase base = current;
         if (current instanceof COSStream
-                || (current instanceof COSDictionary && !current.isDirect()))
-        {
+                || (current instanceof COSDictionary && !current.isDirect())) {
             base = addObjectToPool(base.getKey(), current);
-        }
-        else if (current instanceof COSObject)
-        {
+        } else if (current instanceof COSObject) {
             base = ((COSObject) current).getObject();
-            if (base != null)
-            {
+            if (base != null) {
                 base = addObjectToPool(current.getKey(), current);
             }
         }
-        if (base instanceof COSArray)
-        {
+        if (base instanceof COSArray) {
             addElements(((COSArray) base).iterator());
-        }
-        else if (base instanceof COSDictionary)
-        {
+        } else if (base instanceof COSDictionary) {
             addElements(((COSDictionary) base).getValues().iterator());
         }
     }
 
-    private void addElements(Iterator<COSBase> elements) throws IOException
-    {
-        while (elements.hasNext())
-        {
+    private void addElements(Iterator<COSBase> elements) throws IOException {
+        while (elements.hasNext()) {
             COSBase value = elements.next();
             if (value instanceof COSArray
                     || (value instanceof COSDictionary
-                    && !allDirectObjects.contains(value)))
-            {
+                    && !allDirectObjects.contains(value))) {
                 allDirectObjects.add(value);
                 addStructure(value);
-            }
-            else if (value instanceof COSObject)
-            {
+            } else if (value instanceof COSObject) {
                 COSObject cosObject = (COSObject) value;
-                if (cosObject.getKey() != null && objectPool.contains(cosObject.getKey()))
-                {
+                if (cosObject.getKey() != null && objectPool.contains(cosObject.getKey())) {
                     continue;
                 }
-                if (cosObject.getObject() != null)
-                {
+                if (cosObject.getObject() != null) {
                     addStructure(value);
                 }
             }
@@ -208,8 +186,7 @@ public class COSWriterCompressionPool
      *
      * @return A list of all top level {@link COSBase}s.
      */
-    public List<COSObjectKey> getTopLevelObjects()
-    {
+    public List<COSObjectKey> getTopLevelObjects() {
         return topLevelObjects;
     }
 
@@ -220,8 +197,7 @@ public class COSWriterCompressionPool
      *
      * @return A list of all {@link COSBase}s, that can be added to an object stream.
      */
-    public List<COSObjectKey> getObjectStreamObjects()
-    {
+    public List<COSObjectKey> getObjectStreamObjects() {
         return objectStreamObjects;
     }
 
@@ -231,8 +207,7 @@ public class COSWriterCompressionPool
      * @param object The object, that shall be checked.
      * @return True, if the given {@link COSBase} is a registered object of this compression pool.
      */
-    public boolean contains(COSBase object)
-    {
+    public boolean contains(COSBase object) {
         return objectPool.contains(object);
     }
 
@@ -243,8 +218,7 @@ public class COSWriterCompressionPool
      * @return The {@link COSObjectKey}, that is registered for the given {@link COSBase} in this compression pool, if
      * such an object is contained.
      */
-    public COSObjectKey getKey(COSBase object)
-    {
+    public COSObjectKey getKey(COSBase object) {
         return objectPool.getKey(object);
     }
 
@@ -255,8 +229,7 @@ public class COSWriterCompressionPool
      * @return The {@link COSBase}, that is registered for the given {@link COSObjectKey} in this compression pool, if
      * such an object is contained.
      */
-    public COSBase getObject(COSObjectKey key)
-    {
+    public COSBase getObject(COSObjectKey key) {
         return objectPool.getObject(key);
     }
 
@@ -265,8 +238,7 @@ public class COSWriterCompressionPool
      *
      * @return The highest object number, that is registered in this compression pool.
      */
-    public long getHighestXRefObjectNumber()
-    {
+    public long getHighestXRefObjectNumber() {
         return objectPool.getHighestXRefObjectNumber();
     }
 
@@ -278,15 +250,12 @@ public class COSWriterCompressionPool
      *
      * @return The created {@link COSWriterObjectStream}s for all currently registered compressible objects.
      */
-    public List<COSWriterObjectStream> createObjectStreams()
-    {
+    public List<COSWriterObjectStream> createObjectStreams() {
         List<COSWriterObjectStream> objectStreams = new ArrayList<>();
         COSWriterObjectStream objectStream = null;
-        for (int i = 0; i < objectStreamObjects.size(); i++)
-        {
+        for (int i = 0; i < objectStreamObjects.size(); i++) {
             COSObjectKey key = objectStreamObjects.get(i);
-            if (objectStream == null || (i % parameters.getObjectStreamSize()) == 0)
-            {
+            if (objectStream == null || (i % parameters.getObjectStreamSize()) == 0) {
                 objectStream = new COSWriterObjectStream(this);
                 objectStreams.add(objectStream);
             }

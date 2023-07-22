@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -27,32 +24,29 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
 
+import java.io.IOException;
+import java.util.List;
+
 
 /**
  * M: Set miter limit.
- *
  */
-public class SetLineMiterLimit extends OperatorProcessor
-{
-    public SetLineMiterLimit(PDFStreamEngine context)
-    {
+public class SetLineMiterLimit extends OperatorProcessor {
+    public SetLineMiterLimit(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
-        COSNumber miterLimit = (COSNumber)arguments.get( 0 );
+        COSNumber miterLimit = (COSNumber) arguments.get(0);
         getContext().getGraphicsState().setMiterLimit(miterLimit.floatValue());
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_LINE_MITERLIMIT;
     }
 }

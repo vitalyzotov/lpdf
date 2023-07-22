@@ -20,15 +20,15 @@ public class RgbColor {
     public RgbColor(int r, int g, int b, int a) {
         value = ((a & 0xFF) << 24) |
                 ((r & 0xFF) << 16) |
-                ((g & 0xFF) << 8)  |
+                ((g & 0xFF) << 8) |
                 ((b & 0xFF) << 0);
-        testColorValueRange(r,g,b,a);
+        testColorValueRange(r, g, b, a);
     }
 
 
     public RgbColor(float r, float g, float b) {
-        this( (int) (r*255+0.5), (int) (g*255+0.5), (int) (b*255+0.5));
-        testColorValueRange(r,g,b,1.0f);
+        this((int) (r * 255 + 0.5), (int) (g * 255 + 0.5), (int) (b * 255 + 0.5));
+        testColorValueRange(r, g, b, 1.0f);
         frgbvalue = new float[3];
         frgbvalue[0] = r;
         frgbvalue[1] = g;
@@ -63,9 +63,9 @@ public class RgbColor {
             f = compArray;
         }
         if (frgbvalue == null) {
-            f[0] = ((float)getRed())/255f;
-            f[1] = ((float)getGreen())/255f;
-            f[2] = ((float)getBlue())/255f;
+            f[0] = ((float) getRed()) / 255f;
+            f[1] = ((float) getGreen()) / 255f;
+            f[2] = ((float) getBlue()) / 255f;
         } else {
             f[0] = frgbvalue[0];
             f[1] = frgbvalue[1];
@@ -77,23 +77,23 @@ public class RgbColor {
     private static void testColorValueRange(float r, float g, float b, float a) {
         boolean rangeError = false;
         String badComponentString = "";
-        if ( a < 0.0 || a > 1.0) {
+        if (a < 0.0 || a > 1.0) {
             rangeError = true;
             badComponentString = badComponentString + " Alpha";
         }
-        if ( r < 0.0 || r > 1.0) {
+        if (r < 0.0 || r > 1.0) {
             rangeError = true;
             badComponentString = badComponentString + " Red";
         }
-        if ( g < 0.0 || g > 1.0) {
+        if (g < 0.0 || g > 1.0) {
             rangeError = true;
             badComponentString = badComponentString + " Green";
         }
-        if ( b < 0.0 || b > 1.0) {
+        if (b < 0.0 || b > 1.0) {
             rangeError = true;
             badComponentString = badComponentString + " Blue";
         }
-        if ( rangeError == true ) {
+        if (rangeError == true) {
             throw new IllegalArgumentException("Color parameter outside of expected range:"
                     + badComponentString);
         }
@@ -103,23 +103,23 @@ public class RgbColor {
         boolean rangeError = false;
         String badComponentString = "";
 
-        if ( a < 0 || a > 255) {
+        if (a < 0 || a > 255) {
             rangeError = true;
             badComponentString = badComponentString + " Alpha";
         }
-        if ( r < 0 || r > 255) {
+        if (r < 0 || r > 255) {
             rangeError = true;
             badComponentString = badComponentString + " Red";
         }
-        if ( g < 0 || g > 255) {
+        if (g < 0 || g > 255) {
             rangeError = true;
             badComponentString = badComponentString + " Green";
         }
-        if ( b < 0 || b > 255) {
+        if (b < 0 || b > 255) {
             rangeError = true;
             badComponentString = badComponentString + " Blue";
         }
-        if ( rangeError == true ) {
+        if (rangeError == true) {
             throw new IllegalArgumentException("Color parameter outside of expected range:"
                     + badComponentString);
         }

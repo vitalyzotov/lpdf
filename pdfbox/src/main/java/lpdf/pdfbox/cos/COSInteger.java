@@ -25,8 +25,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Ben Litchfield
  */
-public final class COSInteger extends COSNumber
-{
+public final class COSInteger extends COSNumber {
 
     /**
      * The lowest integer to be kept in the {@link #STATIC} array.
@@ -46,27 +45,31 @@ public final class COSInteger extends COSNumber
 
     /**
      * Constant for the number zero.
+     *
      * @since Apache PDFBox 1.1.0
      */
-    public static final COSInteger ZERO = get(0); 
+    public static final COSInteger ZERO = get(0);
 
     /**
      * Constant for the number one.
+     *
      * @since Apache PDFBox 1.1.0
      */
-    public static final COSInteger ONE = get(1); 
+    public static final COSInteger ONE = get(1);
 
     /**
      * Constant for the number two.
+     *
      * @since Apache PDFBox 1.1.0
      */
-    public static final COSInteger TWO = get(2); 
+    public static final COSInteger TWO = get(2);
 
     /**
      * Constant for the number three.
+     *
      * @since Apache PDFBox 1.1.0
      */
-    public static final COSInteger THREE = get(3); 
+    public static final COSInteger THREE = get(3);
 
     /**
      * Constant for an out of range value which is bigger than Log.MAX_VALUE.
@@ -84,14 +87,11 @@ public final class COSInteger extends COSNumber
      * @param val integer value
      * @return COSInteger instance
      */
-    public static COSInteger get(long val)
-    {
-        if (LOW <= val && val <= HIGH)
-        {
+    public static COSInteger get(long val) {
+        if (LOW <= val && val <= HIGH) {
             int index = (int) val - LOW;
             // no synchronization needed
-            if (STATIC[index] == null)
-            {
+            if (STATIC[index] == null) {
                 STATIC[index] = new COSInteger(val, true);
             }
             return STATIC[index];
@@ -99,8 +99,7 @@ public final class COSInteger extends COSNumber
         return new COSInteger(val, true);
     }
 
-    private static COSInteger getInvalid(boolean maxValue)
-    {
+    private static COSInteger getInvalid(boolean maxValue) {
         return maxValue ? new COSInteger(Long.MAX_VALUE, false)
                 : new COSInteger(Long.MIN_VALUE, false);
     }
@@ -111,11 +110,10 @@ public final class COSInteger extends COSNumber
     /**
      * constructor.
      *
-     * @param val The integer value of this object.
+     * @param val   The integer value of this object.
      * @param valid indicates if the value is valid.
      */
-    private COSInteger(long val, boolean valid)
-    {
+    private COSInteger(long val, boolean valid) {
         value = val;
         isValid = valid;
     }
@@ -124,27 +122,24 @@ public final class COSInteger extends COSNumber
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o)
-    {
-        return o instanceof COSInteger && ((COSInteger)o).intValue() == intValue();
+    public boolean equals(Object o) {
+        return o instanceof COSInteger && ((COSInteger) o).intValue() == intValue();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         //taken from java.lang.Long
-        return (int)(value ^ (value >> 32));
+        return (int) (value ^ (value >> 32));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "COSInt{" + value + "}";
     }
 
@@ -154,8 +149,7 @@ public final class COSInteger extends COSNumber
      * @return The float value of this object.
      */
     @Override
-    public float floatValue()
-    {
+    public float floatValue() {
         return value;
     }
 
@@ -166,9 +160,8 @@ public final class COSInteger extends COSNumber
      * @return The int value of this object,
      */
     @Override
-    public int intValue()
-    {
-        return (int)value;
+    public int intValue() {
+        return (int) value;
     }
 
     /**
@@ -178,18 +171,16 @@ public final class COSInteger extends COSNumber
      * @return The int value of this object,
      */
     @Override
-    public long longValue()
-    {
+    public long longValue() {
         return value;
     }
 
     /**
      * Indicates whether this instance represents a valid value.
-     * 
+     *
      * @return true if the value is valid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return isValid;
     }
 
@@ -200,8 +191,7 @@ public final class COSInteger extends COSNumber
      * @throws IOException If an error occurs while visiting this object.
      */
     @Override
-    public void accept(ICOSVisitor visitor) throws IOException
-    {
+    public void accept(ICOSVisitor visitor) throws IOException {
         visitor.visitFromInt(this);
     }
 
@@ -211,8 +201,7 @@ public final class COSInteger extends COSNumber
      * @param output The stream to write to.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writePDF( OutputStream output ) throws IOException
-    {
+    public void writePDF(OutputStream output) throws IOException {
         output.write(String.valueOf(value).getBytes(StandardCharsets.ISO_8859_1));
     }
 

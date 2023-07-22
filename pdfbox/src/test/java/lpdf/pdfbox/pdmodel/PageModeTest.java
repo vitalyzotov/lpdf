@@ -16,16 +16,14 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Test;
-
-class PageModeTest
-{
+class PageModeTest {
     @Test
-    void fromStringInputNotNullOutputNotNull()
-    {
+    void fromStringInputNotNullOutputNotNull() {
         // Arrange
         final String value = "FullScreen";
 
@@ -37,8 +35,7 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull2()
-    {
+    void fromStringInputNotNullOutputNotNull2() {
         // Arrange
         final String value = "UseThumbs";
 
@@ -50,8 +47,7 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull3()
-    {
+    void fromStringInputNotNullOutputNotNull3() {
         // Arrange
         final String value = "UseOC";
 
@@ -63,8 +59,7 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull4()
-    {
+    void fromStringInputNotNullOutputNotNull4() {
         // Arrange
         final String value = "UseNone";
 
@@ -76,8 +71,7 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull5()
-    {
+    void fromStringInputNotNullOutputNotNull5() {
         // Arrange
         final String value = "UseAttachments";
 
@@ -89,8 +83,7 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputNotNull6()
-    {
+    void fromStringInputNotNullOutputNotNull6() {
         // Arrange
         final String value = "UseOutlines";
 
@@ -102,20 +95,17 @@ class PageModeTest
     }
 
     @Test
-    void fromStringInputNotNullOutputIllegalArgumentException()
-    {
+    void fromStringInputNotNullOutputIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> PageMode.fromString(""));
     }
 
     @Test
-    void fromStringInputNotNullOutputIllegalArgumentException2()
-    {
+    void fromStringInputNotNullOutputIllegalArgumentException2() {
         assertThrows(IllegalArgumentException.class, () -> PageMode.fromString("Dulacb`ecj"));
     }
 
     @Test
-    void stringValueOutputNotNull()
-    {
+    void stringValueOutputNotNull() {
         // Arrange
         final PageMode objectUnderTest = PageMode.USE_OPTIONAL_CONTENT;
 

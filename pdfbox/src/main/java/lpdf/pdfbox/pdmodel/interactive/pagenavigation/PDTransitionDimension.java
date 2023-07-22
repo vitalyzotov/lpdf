@@ -21,10 +21,8 @@ package lpdf.pdfbox.pdmodel.interactive.pagenavigation;
  * {@link PDTransitionStyle#Blinds}.
  *
  * @author Andrea Vacondio
- *
  */
-public enum PDTransitionDimension
-{
+public enum PDTransitionDimension {
     /**
      * Horizontal
      */

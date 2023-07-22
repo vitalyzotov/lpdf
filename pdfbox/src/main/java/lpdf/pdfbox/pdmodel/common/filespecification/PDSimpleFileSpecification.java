@@ -24,17 +24,14 @@ import lpdf.pdfbox.cos.COSString;
  *
  * @author Ben Litchfield
  */
-public class PDSimpleFileSpecification extends PDFileSpecification
-{
+public class PDSimpleFileSpecification extends PDFileSpecification {
     private COSString file;
 
     /**
      * Constructor.
-     *
      */
-    public PDSimpleFileSpecification()
-    {
-        file = new COSString( "" );
+    public PDSimpleFileSpecification() {
+        file = new COSString("");
     }
 
     /**
@@ -42,8 +39,7 @@ public class PDSimpleFileSpecification extends PDFileSpecification
      *
      * @param fileName The file that this spec represents.
      */
-    public PDSimpleFileSpecification( COSString fileName )
-    {
+    public PDSimpleFileSpecification(COSString fileName) {
         file = fileName;
     }
 
@@ -53,9 +49,8 @@ public class PDSimpleFileSpecification extends PDFileSpecification
      * @return The file name.
      */
     @Override
-    public String getFile()
-    {
-    return file.getString();
+    public String getFile() {
+        return file.getString();
     }
 
     /**
@@ -64,9 +59,8 @@ public class PDSimpleFileSpecification extends PDFileSpecification
      * @param fileName The name of the file.
      */
     @Override
-    public void setFile( String fileName )
-    {
-    file = new COSString( fileName );
+    public void setFile(String fileName) {
+        file = new COSString(fileName);
     }
 
     /**
@@ -75,8 +69,7 @@ public class PDSimpleFileSpecification extends PDFileSpecification
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return file;
     }
 

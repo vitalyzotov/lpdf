@@ -17,21 +17,19 @@
 
 package lpdf.fontbox.ttf.gsub;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GlyphArraySplitterRegexImplTest
-{
+class GlyphArraySplitterRegexImplTest {
 
     @Test
-    void testSplit_1()
-    {
+    void testSplit_1() {
         // given
         Set<List<Integer>> matchers = new HashSet<>(Arrays.asList(Arrays.asList(84, 93),
                 Arrays.asList(102, 82), Arrays.asList(104, 87)));
@@ -47,8 +45,7 @@ class GlyphArraySplitterRegexImplTest
     }
 
     @Test
-    void testSplit_2()
-    {
+    void testSplit_2() {
 
         // given
         Set<List<Integer>> matchers = new HashSet<>(
@@ -65,8 +62,7 @@ class GlyphArraySplitterRegexImplTest
     }
 
     @Test
-    void testSplit_3()
-    {
+    void testSplit_3() {
 
         // given
         Set<List<Integer>> matchers = new HashSet<>(
@@ -83,8 +79,7 @@ class GlyphArraySplitterRegexImplTest
     }
 
     @Test
-    void testSplit_4()
-    {
+    void testSplit_4() {
 
         // given
         Set<List<Integer>> matchers = new HashSet<>(

@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Michael Traut
  */
-public interface ICOSVisitor
-{
+public interface ICOSVisitor {
     /**
      * Notification of visit to Array object.
      *

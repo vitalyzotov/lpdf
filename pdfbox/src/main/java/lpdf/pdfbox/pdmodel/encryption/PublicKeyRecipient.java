@@ -21,13 +21,10 @@ import java.security.cert.X509Certificate;
 /**
  * Represents a recipient in the public key protection policy.
  *
- * @see PublicKeyProtectionPolicy
- *
  * @author Benoit Guillon
- *
+ * @see PublicKeyProtectionPolicy
  */
-public class PublicKeyRecipient
-{
+public class PublicKeyRecipient {
     private X509Certificate x509;
 
     private AccessPermission permission;
@@ -37,8 +34,7 @@ public class PublicKeyRecipient
      *
      * @return The X509 certificate
      */
-    public X509Certificate getX509()
-    {
+    public X509Certificate getX509() {
         return x509;
     }
 
@@ -47,8 +43,7 @@ public class PublicKeyRecipient
      *
      * @param aX509 The X509 certificate
      */
-    public void setX509(X509Certificate aX509)
-    {
+    public void setX509(X509Certificate aX509) {
         this.x509 = aX509;
     }
 
@@ -57,8 +52,7 @@ public class PublicKeyRecipient
      *
      * @return The access permission object.
      */
-    public AccessPermission getPermission()
-    {
+    public AccessPermission getPermission() {
         return permission;
     }
 
@@ -67,8 +61,7 @@ public class PublicKeyRecipient
      *
      * @param permissions The permission to set.
      */
-    public void setPermission(AccessPermission permissions)
-    {
+    public void setPermission(AccessPermission permissions) {
         this.permission = permissions;
     }
 }

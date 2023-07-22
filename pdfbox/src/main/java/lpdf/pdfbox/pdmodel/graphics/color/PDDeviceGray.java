@@ -18,46 +18,40 @@ package lpdf.pdfbox.pdmodel.graphics.color;
 
 import lpdf.pdfbox.cos.COSName;
 
-import java.io.IOException;
-
 /**
  * A color space with black, white, and intermediate shades of gray.
  *
  * @author Ben Litchfield
  * @author John Hewson
  */
-public final class PDDeviceGray extends PDDeviceColorSpace
-{
-    /** The single instance of this class. */
+public final class PDDeviceGray extends PDDeviceColorSpace {
+    /**
+     * The single instance of this class.
+     */
     public static final PDDeviceGray INSTANCE = new PDDeviceGray();
 
-    private final PDColor initialColor = new PDColor(new float[] { 0 }, this);
+    private final PDColor initialColor = new PDColor(new float[]{0}, this);
 
-    private PDDeviceGray()
-    {
+    private PDDeviceGray() {
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.DEVICEGRAY.getName();
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 1;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1 };
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return initialColor;
     }
 

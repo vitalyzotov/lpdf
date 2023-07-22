@@ -17,16 +17,14 @@
 package lpdf.pdfbox.pdmodel.graphics.color;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSStream;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
-import lpdf.pdfbox.pdmodel.common.PDStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An Output Intent describes the colour reproduction characteristics of a possible output
@@ -36,12 +34,10 @@ import lpdf.pdfbox.pdmodel.common.PDStream;
  *
  * @author Guillaume Bailleul
  */
-public final class PDOutputIntent implements COSObjectable
-{
+public final class PDOutputIntent implements COSObjectable {
     private final COSDictionary dictionary;
 
-    public PDOutputIntent(PDDocument doc, InputStream colorProfile) throws IOException
-    {
+    public PDOutputIntent(PDDocument doc, InputStream colorProfile) throws IOException {
         dictionary = new COSDictionary();
         dictionary.setItem(COSName.TYPE, COSName.OUTPUT_INTENT);
         dictionary.setItem(COSName.S, COSName.GTS_PDFA1);
@@ -49,59 +45,48 @@ public final class PDOutputIntent implements COSObjectable
 //        dictionary.setItem(COSName.DEST_OUTPUT_PROFILE, destOutputIntent);
     }
 
-    public PDOutputIntent(COSDictionary dictionary)
-    {
+    public PDOutputIntent(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
-    public COSStream getDestOutputIntent()
-    {
+    public COSStream getDestOutputIntent() {
         return dictionary.getCOSStream(COSName.DEST_OUTPUT_PROFILE);
     }
 
-    public String getInfo()
-    {
+    public String getInfo() {
         return dictionary.getString(COSName.INFO);
     }
 
-    public void setInfo(String value)
-    {
+    public void setInfo(String value) {
         dictionary.setString(COSName.INFO, value);
     }
 
-    public String getOutputCondition()
-    {
+    public String getOutputCondition() {
         return dictionary.getString(COSName.OUTPUT_CONDITION);
     }
 
-    public void setOutputCondition(String value)
-    {
+    public void setOutputCondition(String value) {
         dictionary.setString(COSName.OUTPUT_CONDITION, value);
     }
 
-    public String getOutputConditionIdentifier()
-    {
+    public String getOutputConditionIdentifier() {
         return dictionary.getString(COSName.OUTPUT_CONDITION_IDENTIFIER);
     }
 
-    public void setOutputConditionIdentifier(String value)
-    {
+    public void setOutputConditionIdentifier(String value) {
         dictionary.setString(COSName.OUTPUT_CONDITION_IDENTIFIER, value);
     }
 
-    public String getRegistryName()
-    {
+    public String getRegistryName() {
         return dictionary.getString(COSName.REGISTRY_NAME);
     }
 
-    public void setRegistryName(String value)
-    {
+    public void setRegistryName(String value) {
         dictionary.setString(COSName.REGISTRY_NAME, value);
     }
 

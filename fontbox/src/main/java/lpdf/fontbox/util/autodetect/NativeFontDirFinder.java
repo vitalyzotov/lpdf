@@ -17,18 +17,17 @@
 
 package lpdf.fontbox.util.autodetect;
 
-import java.io.File;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Native font finder base class. This class is based on a class provided by Apache FOP. see
  * org.apache.fop.fonts.autodetect.NativeFontDirFinder
  */
-public abstract class NativeFontDirFinder implements FontDirFinder
-{
+public abstract class NativeFontDirFinder implements FontDirFinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(NativeFontDirFinder.class);
 
@@ -38,24 +37,17 @@ public abstract class NativeFontDirFinder implements FontDirFinder
      * @return list of natively existing font directories {@inheritDoc}
      */
     @Override
-    public List<File> find()
-    {
+    public List<File> find() {
         List<File> fontDirList = new java.util.ArrayList<>();
         String[] searchableDirectories = getSearchableDirectories();
-        if (searchableDirectories != null)
-        {
-            for (String searchableDirectorie : searchableDirectories)
-            {
+        if (searchableDirectories != null) {
+            for (String searchableDirectorie : searchableDirectories) {
                 File fontDir = new File(searchableDirectorie);
-                try
-                {
-                    if (fontDir.exists() && fontDir.canRead())
-                    {
+                try {
+                    if (fontDir.exists() && fontDir.canRead()) {
                         fontDirList.add(fontDir);
                     }
-                }
-                catch (SecurityException e)
-                {
+                } catch (SecurityException e) {
                     LOG.debug("Couldn't get native font directories - ignoring", e);
                     // should continue if this fails
                 }

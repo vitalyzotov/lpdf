@@ -22,26 +22,22 @@ import java.util.Stack;
 
 /**
  * Provides the stack operators such as "pop" and "dup".
- *
  */
-class StackOperators
-{
+class StackOperators {
 
-    private StackOperators()
-    {
+    private StackOperators() {
         // Private constructor.
     }
 
-    /** Implements the "copy" operator. */
-    static class Copy implements Operator
-    {
+    /**
+     * Implements the "copy" operator.
+     */
+    static class Copy implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
-            int n = ((Number)stack.pop()).intValue();
-            if (n > 0)
-            {
+            int n = ((Number) stack.pop()).intValue();
+            if (n > 0) {
                 int size = stack.size();
                 //Need to copy to a new list to avoid ConcurrentModificationException
                 List<Object> copy = new java.util.ArrayList<>(
@@ -52,24 +48,24 @@ class StackOperators
 
     }
 
-    /** Implements the "dup" operator. */
-    static class Dup implements Operator
-    {
+    /**
+     * Implements the "dup" operator.
+     */
+    static class Dup implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
             stack.push(stack.peek());
         }
 
     }
 
-    /** Implements the "exch" operator. */
-    static class Exch implements Operator
-    {
+    /**
+     * Implements the "exch" operator.
+     */
+    static class Exch implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
             Object any2 = stack.pop();
             Object any1 = stack.pop();
@@ -79,16 +75,15 @@ class StackOperators
 
     }
 
-    /** Implements the "index" operator. */
-    static class Index implements Operator
-    {
+    /**
+     * Implements the "index" operator.
+     */
+    static class Index implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
-            int n = ((Number)stack.pop()).intValue();
-            if (n < 0)
-            {
+            int n = ((Number) stack.pop()).intValue();
+            if (n < 0) {
                 throw new IllegalArgumentException("rangecheck: " + n);
             }
             int size = stack.size();
@@ -97,63 +92,54 @@ class StackOperators
 
     }
 
-    /** Implements the "pop" operator. */
-    static class Pop implements Operator
-    {
+    /**
+     * Implements the "pop" operator.
+     */
+    static class Pop implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
             stack.pop();
         }
 
     }
 
-    /** Implements the "roll" operator. */
-    static class Roll implements Operator
-    {
+    /**
+     * Implements the "roll" operator.
+     */
+    static class Roll implements Operator {
         @Override
-        public void execute(ExecutionContext context)
-        {
+        public void execute(ExecutionContext context) {
             Stack<Object> stack = context.getStack();
-            int j = ((Number)stack.pop()).intValue();
-            int n = ((Number)stack.pop()).intValue();
-            if (j == 0)
-            {
+            int j = ((Number) stack.pop()).intValue();
+            int n = ((Number) stack.pop()).intValue();
+            if (j == 0) {
                 return; //Nothing to do
             }
-            if (n < 0)
-            {
+            if (n < 0) {
                 throw new IllegalArgumentException("rangecheck: " + n);
             }
 
             LinkedList<Object> rolled = new LinkedList<>();
             LinkedList<Object> moved = new LinkedList<>();
-            if (j < 0)
-            {
+            if (j < 0) {
                 //negative roll
                 int n1 = n + j;
-                for (int i = 0; i < n1; i++)
-                {
+                for (int i = 0; i < n1; i++) {
                     moved.addFirst(stack.pop());
                 }
-                for (int i = j; i < 0; i++)
-                {
+                for (int i = j; i < 0; i++) {
                     rolled.addFirst(stack.pop());
                 }
                 stack.addAll(moved);
                 stack.addAll(rolled);
-            }
-            else
-            {
+            } else {
                 //positive roll
                 int n1 = n - j;
-                for (int i = j; i > 0; i--)
-                {
+                for (int i = j; i > 0; i--) {
                     rolled.addFirst(stack.pop());
                 }
-                for (int i = 0; i < n1; i++)
-                {
+                for (int i = 0; i < n1; i++) {
                     moved.addFirst(stack.pop());
                 }
                 stack.addAll(rolled);

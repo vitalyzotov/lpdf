@@ -22,18 +22,15 @@ import lpdf.pdfbox.cos.COSDictionary;
  * A wrapper for a COS dictionary.
  *
  * @author Johannes Koch
- *
  */
-public class PDDictionaryWrapper implements COSObjectable
-{
+public class PDDictionaryWrapper implements COSObjectable {
 
     private final COSDictionary dictionary;
 
     /**
      * Default constructor
      */
-    public PDDictionaryWrapper()
-    {
+    public PDDictionaryWrapper() {
         this.dictionary = new COSDictionary();
     }
 
@@ -42,8 +39,7 @@ public class PDDictionaryWrapper implements COSObjectable
      *
      * @param dictionary the dictionary
      */
-    public PDDictionaryWrapper(COSDictionary dictionary)
-    {
+    public PDDictionaryWrapper(COSDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
@@ -51,28 +47,23 @@ public class PDDictionaryWrapper implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return this.dictionary;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj instanceof PDDictionaryWrapper)
-        {
+        if (obj instanceof PDDictionaryWrapper) {
             return this.dictionary.equals(((PDDictionaryWrapper) obj).dictionary);
         }
         return false;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return this.dictionary.hashCode();
     }
 

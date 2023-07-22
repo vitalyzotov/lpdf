@@ -16,35 +16,31 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * n End the path.
  *
  * @author Ben Litchfield
  */
-public final class EndPath extends GraphicsOperatorProcessor
-{
-    public EndPath(PDFGraphicsStreamEngine context)
-    {
+public final class EndPath extends GraphicsOperatorProcessor {
+    public EndPath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
         getGraphicsContext().endPath();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.ENDPATH;
     }
 }

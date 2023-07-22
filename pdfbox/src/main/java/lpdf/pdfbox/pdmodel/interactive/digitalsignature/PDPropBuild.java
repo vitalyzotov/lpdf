@@ -22,24 +22,21 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * A signature build dictionary as specified in the PDF Signature Build Dictionary Specification.
- *
+ * <p>
  * The signature build properties dictionary provides signature properties for the software
  * application that was used to create the signature.
  *
+ * @author Thomas Chojecki
  * @see <a href="http://partners.adobe.com/public/developer/en/acrobat/Acrobat_Signature_BuiladDict.pdf">
  * http://partners.adobe.com/public/developer/en/acrobat/Acrobat_Signature_BuiladDict.pdf</a>
- *
- * @author Thomas Chojecki
  */
-public class PDPropBuild implements COSObjectable
-{
+public class PDPropBuild implements COSObjectable {
     private final COSDictionary dictionary;
 
     /**
      * Default constructor.
      */
-    public PDPropBuild()
-    {
+    public PDPropBuild() {
         dictionary = new COSDictionary();
         dictionary.setDirect(true); // the specification claim to use direct objects
     }
@@ -49,8 +46,7 @@ public class PDPropBuild implements COSObjectable
      *
      * @param dict The signature dictionary.
      */
-    public PDPropBuild(COSDictionary dict)
-    {
+    public PDPropBuild(COSDictionary dict) {
         dictionary = dict;
         dictionary.setDirect(true); // the specification claim to use direct objects
     }
@@ -61,8 +57,7 @@ public class PDPropBuild implements COSObjectable
      * @return The COS dictionary that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -72,12 +67,10 @@ public class PDPropBuild implements COSObjectable
      *
      * @return the Filter as PDPropBuildFilter object
      */
-    public PDPropBuildDataDict getFilter()
-    {
+    public PDPropBuildDataDict getFilter() {
         PDPropBuildDataDict filter = null;
         COSDictionary filterDic = dictionary.getCOSDictionary(COSName.FILTER);
-        if (filterDic != null)
-        {
+        if (filterDic != null) {
             filter = new PDPropBuildDataDict(filterDic);
         }
         return filter;
@@ -89,8 +82,7 @@ public class PDPropBuild implements COSObjectable
      *
      * @param filter is the PDPropBuildFilter
      */
-    public void setPDPropBuildFilter(PDPropBuildDataDict filter)
-    {
+    public void setPDPropBuildFilter(PDPropBuildDataDict filter) {
         dictionary.setItem(COSName.FILTER, filter);
     }
 
@@ -100,12 +92,10 @@ public class PDPropBuild implements COSObjectable
      *
      * @return the PubSec as PDPropBuildPubSec object
      */
-    public PDPropBuildDataDict getPubSec()
-    {
+    public PDPropBuildDataDict getPubSec() {
         PDPropBuildDataDict pubSec = null;
         COSDictionary pubSecDic = dictionary.getCOSDictionary(COSName.PUB_SEC);
-        if (pubSecDic != null)
-        {
+        if (pubSecDic != null) {
             pubSec = new PDPropBuildDataDict(pubSecDic);
         }
         return pubSec;
@@ -116,8 +106,7 @@ public class PDPropBuild implements COSObjectable
      *
      * @param pubSec is the PDPropBuildPubSec
      */
-    public void setPDPropBuildPubSec(PDPropBuildDataDict pubSec)
-    {
+    public void setPDPropBuildPubSec(PDPropBuildDataDict pubSec) {
         dictionary.setItem(COSName.PUB_SEC, pubSec);
     }
 
@@ -127,12 +116,10 @@ public class PDPropBuild implements COSObjectable
      *
      * @return the App as PDPropBuildApp object
      */
-    public PDPropBuildDataDict getApp()
-    {
+    public PDPropBuildDataDict getApp() {
         PDPropBuildDataDict app = null;
         COSDictionary appDic = dictionary.getCOSDictionary(COSName.APP);
-        if (appDic != null)
-        {
+        if (appDic != null) {
             app = new PDPropBuildDataDict(appDic);
         }
         return app;
@@ -144,8 +131,7 @@ public class PDPropBuild implements COSObjectable
      *
      * @param app is the PDPropBuildApp
      */
-    public void setPDPropBuildApp(PDPropBuildDataDict app)
-    {
+    public void setPDPropBuildApp(PDPropBuildDataDict app) {
         dictionary.setItem(COSName.APP, app);
     }
 }

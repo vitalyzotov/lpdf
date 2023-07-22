@@ -27,15 +27,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDAnnotationAdditionalActions implements COSObjectable
-{
+public class PDAnnotationAdditionalActions implements COSObjectable {
     private final COSDictionary actions;
 
     /**
      * Default constructor.
      */
-    public PDAnnotationAdditionalActions()
-    {
+    public PDAnnotationAdditionalActions() {
         actions = new COSDictionary();
     }
 
@@ -44,8 +42,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param a The action dictionary.
      */
-    public PDAnnotationAdditionalActions( COSDictionary a )
-    {
+    public PDAnnotationAdditionalActions(COSDictionary a) {
         actions = a;
     }
 
@@ -55,8 +52,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return actions;
     }
 
@@ -66,8 +62,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The E entry of annotation's additional actions dictionary.
      */
-    public PDAction getE()
-    {
+    public PDAction getE() {
         COSDictionary e = actions.getCOSDictionary(COSName.E);
         return e != null ? PDActionFactory.createAction(e) : null;
     }
@@ -78,8 +73,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param e The action to be performed.
      */
-    public void setE( PDAction e )
-    {
+    public void setE(PDAction e) {
         actions.setItem(COSName.E, e);
     }
 
@@ -89,8 +83,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The X entry of annotation's additional actions dictionary.
      */
-    public PDAction getX()
-    {
+    public PDAction getX() {
         COSDictionary x = actions.getCOSDictionary(COSName.X);
         return x != null ? PDActionFactory.createAction(x) : null;
     }
@@ -101,8 +94,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param x The action to be performed.
      */
-    public void setX( PDAction x )
-    {
+    public void setX(PDAction x) {
         actions.setItem(COSName.X, x);
     }
 
@@ -113,8 +105,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The d entry of annotation's additional actions dictionary.
      */
-    public PDAction getD()
-    {
+    public PDAction getD() {
         COSDictionary d = actions.getCOSDictionary(COSName.D);
         return d != null ? PDActionFactory.createAction(d) : null;
     }
@@ -126,9 +117,8 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param d The action to be performed.
      */
-    public void setD( PDAction d )
-    {
-        actions.setItem( COSName.D, d );
+    public void setD(PDAction d) {
+        actions.setItem(COSName.D, d);
     }
 
     /**
@@ -138,8 +128,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The U entry of annotation's additional actions dictionary.
      */
-    public PDAction getU()
-    {
+    public PDAction getU() {
         COSDictionary u = actions.getCOSDictionary(COSName.U);
         return u != null ? PDActionFactory.createAction(u) : null;
     }
@@ -151,8 +140,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param u The action to be performed.
      */
-    public void setU( PDAction u )
-    {
+    public void setU(PDAction u) {
         actions.setItem(COSName.U, u);
     }
 
@@ -162,10 +150,9 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The Fo entry of annotation's additional actions dictionary.
      */
-    public PDAction getFo()
-    {
+    public PDAction getFo() {
         COSDictionary fo = actions.getCOSDictionary(COSName.FO);
-        return fo != null ? PDActionFactory.createAction( fo ) : null;
+        return fo != null ? PDActionFactory.createAction(fo) : null;
     }
 
     /**
@@ -174,8 +161,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param fo The action to be performed.
      */
-    public void setFo( PDAction fo )
-    {
+    public void setFo(PDAction fo) {
         actions.setItem(COSName.FO, fo);
     }
 
@@ -186,8 +172,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The Bl entry of annotation's additional actions dictionary.
      */
-    public PDAction getBl()
-    {
+    public PDAction getBl() {
         COSDictionary bl = actions.getCOSDictionary(COSName.BL);
         return bl != null ? PDActionFactory.createAction(bl) : null;
     }
@@ -199,8 +184,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param bl The action to be performed.
      */
-    public void setBl( PDAction bl )
-    {
+    public void setBl(PDAction bl) {
         actions.setItem(COSName.BL, bl);
     }
 
@@ -212,8 +196,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The PO entry of annotation's additional actions dictionary.
      */
-    public PDAction getPO()
-    {
+    public PDAction getPO() {
         COSDictionary po = actions.getCOSDictionary(COSName.PO);
         return po != null ? PDActionFactory.createAction(po) : null;
     }
@@ -226,8 +209,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param po The action to be performed.
      */
-    public void setPO( PDAction po )
-    {
+    public void setPO(PDAction po) {
         actions.setItem(COSName.PO, po);
     }
 
@@ -238,8 +220,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The PC entry of annotation's additional actions dictionary.
      */
-    public PDAction getPC()
-    {
+    public PDAction getPC() {
         COSDictionary pc = actions.getCOSDictionary(COSName.PC);
         return pc != null ? PDActionFactory.createAction(pc) : null;
     }
@@ -251,8 +232,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param pc The action to be performed.
      */
-    public void setPC( PDAction pc )
-    {
+    public void setPC(PDAction pc) {
         actions.setItem(COSName.PC, pc);
     }
 
@@ -262,8 +242,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The PV entry of annotation's additional actions dictionary.
      */
-    public PDAction getPV()
-    {
+    public PDAction getPV() {
         COSDictionary pv = actions.getCOSDictionary(COSName.PV);
         return pv != null ? PDActionFactory.createAction(pv) : null;
     }
@@ -274,8 +253,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param pv The action to be performed.
      */
-    public void setPV( PDAction pv )
-    {
+    public void setPV(PDAction pv) {
         actions.setItem(COSName.PV, pv);
     }
 
@@ -285,8 +263,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @return The PI entry of annotation's additional actions dictionary.
      */
-    public PDAction getPI()
-    {
+    public PDAction getPI() {
         COSDictionary pi = actions.getCOSDictionary(COSName.PI);
         return pi != null ? PDActionFactory.createAction(pi) : null;
     }
@@ -297,8 +274,7 @@ public class PDAnnotationAdditionalActions implements COSObjectable
      *
      * @param pi The action to be performed.
      */
-    public void setPI( PDAction pi )
-    {
+    public void setPI(PDAction pi) {
         actions.setItem(COSName.PI, pi);
     }
 }

@@ -30,8 +30,7 @@ import java.io.IOException;
  * @author Panagiotis Toumasis
  * @author Tilman Hausherr
  */
-public class PDActionEmbeddedGoTo extends PDAction
-{
+public class PDActionEmbeddedGoTo extends PDAction {
     /**
      * This type of action this object represents.
      */
@@ -40,8 +39,7 @@ public class PDActionEmbeddedGoTo extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionEmbeddedGoTo()
-    {
+    public PDActionEmbeddedGoTo() {
         setSubType(SUB_TYPE);
     }
 
@@ -50,8 +48,7 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionEmbeddedGoTo(COSDictionary a)
-    {
+    public PDActionEmbeddedGoTo(COSDictionary a) {
         super(a);
     }
 
@@ -59,11 +56,9 @@ public class PDActionEmbeddedGoTo extends PDAction
      * This will get the file in which the destination is located.
      *
      * @return The F entry of the specific embedded go-to action dictionary.
-     *
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
+    public PDFileSpecification getFile() throws IOException {
         return PDFileSpecification.createFS(getCOSObject().getDictionaryObject(COSName.F));
     }
 
@@ -72,8 +67,7 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile(PDFileSpecification fs)
-    {
+    public void setFile(PDFileSpecification fs) {
         getCOSObject().setItem(COSName.F, fs);
     }
 
@@ -83,10 +77,8 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @return A flag specifying how to open the destination document.
      */
-    public OpenMode getOpenInNewWindow()
-    {
-        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean)
-        {
+    public OpenMode getOpenInNewWindow() {
+        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean) {
             COSBoolean b = (COSBoolean) getCOSObject().getDictionaryObject(COSName.NEW_WINDOW);
             return b.getValue() ? OpenMode.NEW_WINDOW : OpenMode.SAME_WINDOW;
         }
@@ -98,15 +90,12 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @param value The flag value.
      */
-    public void setOpenInNewWindow(OpenMode value)
-    {
-        if (null == value)
-        {
+    public void setOpenInNewWindow(OpenMode value) {
+        if (null == value) {
             getCOSObject().removeItem(COSName.NEW_WINDOW);
             return;
         }
-        switch (value)
-        {
+        switch (value) {
             case USER_PREFERENCE:
                 getCOSObject().removeItem(COSName.NEW_WINDOW);
                 break;
@@ -127,8 +116,7 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @return the target directory or null if there is none.
      */
-    public PDTargetDirectory getTargetDirectory()
-    {
+    public PDTargetDirectory getTargetDirectory() {
         COSDictionary targetDict = getCOSObject().getCOSDictionary(COSName.T);
         return targetDict != null ? new PDTargetDirectory(targetDict) : null;
     }
@@ -138,8 +126,7 @@ public class PDActionEmbeddedGoTo extends PDAction
      *
      * @param targetDirectory the target directory
      */
-    public void setTargetDirectory(PDTargetDirectory targetDirectory)
-    {
+    public void setTargetDirectory(PDTargetDirectory targetDirectory) {
         getCOSObject().setItem(COSName.T, targetDirectory);
     }
 }

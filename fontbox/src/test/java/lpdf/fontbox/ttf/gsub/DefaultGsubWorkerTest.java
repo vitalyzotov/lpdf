@@ -16,25 +16,24 @@ package lpdf.fontbox.ttf.gsub;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Vladimir Plizga
  */
-class DefaultGsubWorkerTest
-{
+class DefaultGsubWorkerTest {
 
     @Test
     @DisplayName("Transformation result is actually a read-only version of the argument")
-    void applyTransforms()
-    {
+    void applyTransforms() {
         // given
         DefaultGsubWorker sut = new DefaultGsubWorker();
         List<Integer> originalGlyphIds = Arrays.asList(1, 2, 3, 4, 5);

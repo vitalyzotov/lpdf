@@ -21,14 +21,12 @@ package lpdf.fontbox.cff;
  *
  * @author Villu Ruusmann
  */
-public final class CFFExpertEncoding extends CFFEncoding
-{
+public final class CFFExpertEncoding extends CFFEncoding {
 
     private static final int CHAR_CODE = 0;
     private static final int CHAR_SID = 1;
 
-    private CFFExpertEncoding()
-    {
+    private CFFExpertEncoding() {
         // Table of character codes and their corresponding sid.
         int[][] cffExpertEncodingTable = {
                 {0, 0},
@@ -289,18 +287,17 @@ public final class CFFExpertEncoding extends CFFEncoding
                 {255, 378}
         };
 
-        for (int[] encodingEntry : cffExpertEncodingTable)
-        {
+        for (int[] encodingEntry : cffExpertEncodingTable) {
             add(encodingEntry[CHAR_CODE], encodingEntry[CHAR_SID]);
         }
     }
 
     /**
      * Returns an instance of the CFFExportEncoding class.
+     *
      * @return an instance of CFFExportEncoding
      */
-    public static CFFExpertEncoding getInstance()
-    {
+    public static CFFExpertEncoding getInstance() {
         return CFFExpertEncoding.INSTANCE;
     }
 

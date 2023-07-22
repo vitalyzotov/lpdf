@@ -24,8 +24,7 @@ import java.util.Map;
  *
  * @author Valery Bokov
  */
-class CFFCharsetCID implements CFFCharset
-{
+class CFFCharsetCID implements CFFCharset {
 
     private static final String EXCEPTION_MESSAGE = "Not a Type 1-equivalent font";
 
@@ -35,65 +34,54 @@ class CFFCharsetCID implements CFFCharset
     private final Map<Integer, Integer> gidToCid = new HashMap<>();
 
     @Override
-    public boolean isCIDFont()
-    {
+    public boolean isCIDFont() {
         return true;
     }
 
     @Override
-    public void addSID(int gid, int sid, String name)
-    {
+    public void addSID(int gid, int sid, String name) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public void addCID(int gid, int cid)
-    {
+    public void addCID(int gid, int cid) {
         sidOrCidToGid.put(cid, gid);
         gidToCid.put(gid, cid);
     }
 
     @Override
-    public int getSIDForGID(int sid)
-    {
+    public int getSIDForGID(int sid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public int getGIDForSID(int sid)
-    {
+    public int getGIDForSID(int sid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public int getGIDForCID(int cid)
-    {
+    public int getGIDForCID(int cid) {
         Integer gid = sidOrCidToGid.get(cid);
-        if (gid == null)
-        {
+        if (gid == null) {
             return 0;
         }
         return gid;
     }
 
     @Override
-    public int getSID(String name)
-    {
+    public int getSID(String name) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public String getNameForGID(int gid)
-    {
+    public String getNameForGID(int gid) {
         throw new IllegalStateException(EXCEPTION_MESSAGE);
     }
 
     @Override
-    public int getCIDForGID(int gid)
-    {
+    public int getCIDForGID(int gid) {
         Integer cid = gidToCid.get(gid);
-        if (cid != null)
-        {
+        if (cid != null) {
             return cid;
         }
         return 0;

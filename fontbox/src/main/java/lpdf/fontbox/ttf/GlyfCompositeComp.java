@@ -24,8 +24,7 @@ import java.io.IOException;
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics. see
  * http://xmlgraphics.apache.org/batik/ for further details.
  */
-public class GlyfCompositeComp
-{
+public class GlyfCompositeComp {
 
     // Flags for composite glyphs.
 
@@ -87,34 +86,27 @@ public class GlyfCompositeComp
      * @param bais the stream to be read
      * @throws IOException is thrown if something went wrong
      */
-    GlyfCompositeComp(TTFDataStream bais) throws IOException
-    {
+    GlyfCompositeComp(TTFDataStream bais) throws IOException {
         flags = bais.readSignedShort();
         glyphIndex = bais.readUnsignedShort();// number of glyph in a font is uint16
 
         // Get the arguments as just their raw values
-        if ((flags & ARG_1_AND_2_ARE_WORDS) != 0)
-        {
+        if ((flags & ARG_1_AND_2_ARE_WORDS) != 0) {
             // If this is set, the arguments are 16-bit (uint16 or int16)
             argument1 = bais.readSignedShort();
             argument2 = bais.readSignedShort();
-        }
-        else
-        {
+        } else {
             // otherwise, they are bytes (uint8 or int8).
             argument1 = (short) bais.readSignedByte();
             argument2 = (short) bais.readSignedByte();
         }
 
         // Assign the arguments according to the flags
-        if ((flags & ARGS_ARE_XY_VALUES) != 0)
-        {
+        if ((flags & ARGS_ARE_XY_VALUES) != 0) {
             // If this is set, the arguments are signed xy values
             xtranslate = argument1;
             ytranslate = argument2;
-        }
-        else
-        {
+        } else {
             // otherwise, they are unsigned point numbers.
             //TODO why unused?
             // https://docs.microsoft.com/en-us/typography/opentype/spec/glyf
@@ -127,20 +119,15 @@ public class GlyfCompositeComp
         }
 
         // Get the scale values (if any)
-        if ((flags & WE_HAVE_A_SCALE) != 0)
-        {
+        if ((flags & WE_HAVE_A_SCALE) != 0) {
             int i = bais.readSignedShort();
             xscale = yscale = i / (double) 0x4000;
-        }
-        else if ((flags & WE_HAVE_AN_X_AND_Y_SCALE) != 0)
-        {
+        } else if ((flags & WE_HAVE_AN_X_AND_Y_SCALE) != 0) {
             short i = bais.readSignedShort();
             xscale = i / (double) 0x4000;
             i = bais.readSignedShort();
             yscale = i / (double) 0x4000;
-        }
-        else if ((flags & WE_HAVE_A_TWO_BY_TWO) != 0)
-        {
+        } else if ((flags & WE_HAVE_A_TWO_BY_TWO) != 0) {
             int i = bais.readSignedShort();
             xscale = i / (double) 0x4000;
             i = bais.readSignedShort();
@@ -157,8 +144,7 @@ public class GlyfCompositeComp
      *
      * @param idx the first index
      */
-    protected void setFirstIndex(int idx)
-    {
+    protected void setFirstIndex(int idx) {
         firstIndex = idx;
     }
 
@@ -167,8 +153,7 @@ public class GlyfCompositeComp
      *
      * @return the first index.
      */
-    public int getFirstIndex()
-    {
+    public int getFirstIndex() {
         return firstIndex;
     }
 
@@ -177,8 +162,7 @@ public class GlyfCompositeComp
      *
      * @param idx the index of the first contour
      */
-    protected void setFirstContour(int idx)
-    {
+    protected void setFirstContour(int idx) {
         firstContour = idx;
     }
 
@@ -187,8 +171,7 @@ public class GlyfCompositeComp
      *
      * @return the index of the first contour.
      */
-    public int getFirstContour()
-    {
+    public int getFirstContour() {
         return firstContour;
     }
 
@@ -197,8 +180,7 @@ public class GlyfCompositeComp
      *
      * @return argument 1.
      */
-    public short getArgument1()
-    {
+    public short getArgument1() {
         return argument1;
     }
 
@@ -207,8 +189,7 @@ public class GlyfCompositeComp
      *
      * @return argument 2.
      */
-    public short getArgument2()
-    {
+    public short getArgument2() {
         return argument2;
     }
 
@@ -217,8 +198,7 @@ public class GlyfCompositeComp
      *
      * @return the flags.
      */
-    public short getFlags()
-    {
+    public short getFlags() {
         return flags;
     }
 
@@ -227,8 +207,7 @@ public class GlyfCompositeComp
      *
      * @return index of the first contour.
      */
-    public int getGlyphIndex()
-    {
+    public int getGlyphIndex() {
         return glyphIndex;
     }
 
@@ -237,8 +216,7 @@ public class GlyfCompositeComp
      *
      * @return the scale-01 value.
      */
-    public double getScale01()
-    {
+    public double getScale01() {
         return scale01;
     }
 
@@ -247,8 +225,7 @@ public class GlyfCompositeComp
      *
      * @return the scale-10 value.
      */
-    public double getScale10()
-    {
+    public double getScale10() {
         return scale10;
     }
 
@@ -257,8 +234,7 @@ public class GlyfCompositeComp
      *
      * @return the x-scaling value.
      */
-    public double getXScale()
-    {
+    public double getXScale() {
         return xscale;
     }
 
@@ -267,8 +243,7 @@ public class GlyfCompositeComp
      *
      * @return the y-scaling value.
      */
-    public double getYScale()
-    {
+    public double getYScale() {
         return yscale;
     }
 
@@ -277,8 +252,7 @@ public class GlyfCompositeComp
      *
      * @return the x-translation value.
      */
-    public int getXTranslate()
-    {
+    public int getXTranslate() {
         return xtranslate;
     }
 
@@ -287,8 +261,7 @@ public class GlyfCompositeComp
      *
      * @return the y-translation value.
      */
-    public int getYTranslate()
-    {
+    public int getYTranslate() {
         return ytranslate;
     }
 
@@ -299,8 +272,7 @@ public class GlyfCompositeComp
      * @param y The y-coordinate of the point to transform
      * @return The transformed x-coordinate
      */
-    public int scaleX(int x, int y)
-    {
+    public int scaleX(int x, int y) {
         return Math.round((float) (x * xscale + y * scale10));
     }
 
@@ -311,8 +283,7 @@ public class GlyfCompositeComp
      * @param y The y-coordinate of the point to transform
      * @return The transformed y-coordinate
      */
-    public int scaleY(int x, int y)
-    {
+    public int scaleY(int x, int y) {
         return Math.round((float) (x * scale01 + y * yscale));
     }
 }

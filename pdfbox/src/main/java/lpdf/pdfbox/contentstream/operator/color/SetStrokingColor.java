@@ -26,46 +26,43 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
  *
  * @author John Hewson
  */
-public class SetStrokingColor extends SetColor
-{
-    public SetStrokingColor(PDFStreamEngine context)
-    {
+public class SetStrokingColor extends SetColor {
+    public SetStrokingColor(PDFStreamEngine context) {
         super(context);
     }
 
     /**
      * Returns the stroking color.
+     *
      * @return The stroking color.
      */
     @Override
-    protected PDColor getColor()
-    {
+    protected PDColor getColor() {
         return getContext().getGraphicsState().getStrokingColor();
     }
 
     /**
      * Sets the stroking color.
+     *
      * @param color The new stroking color.
      */
     @Override
-    protected void setColor(PDColor color)
-    {
+    protected void setColor(PDColor color) {
         getContext().getGraphicsState().setStrokingColor(color);
     }
 
     /**
      * Returns the stroking color space.
+     *
      * @return The stroking color space.
      */
     @Override
-    protected PDColorSpace getColorSpace()
-    {
+    protected PDColorSpace getColorSpace() {
         return getContext().getGraphicsState().getStrokingColorSpace();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.STROKING_COLOR;
     }
 }

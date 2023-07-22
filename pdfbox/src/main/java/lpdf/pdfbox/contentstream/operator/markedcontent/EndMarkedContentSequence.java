@@ -16,36 +16,32 @@
  */
 package lpdf.pdfbox.contentstream.operator.markedcontent;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * EMC : Ends a marked-content sequence begun by BMC or BDC.
  *
  * @author Johannes Koch
  */
-public class EndMarkedContentSequence extends OperatorProcessor
-{
-    public EndMarkedContentSequence(PDFStreamEngine context)
-    {
+public class EndMarkedContentSequence extends OperatorProcessor {
+    public EndMarkedContentSequence(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         getContext().endMarkedContentSequence();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.END_MARKED_CONTENT;
     }
 }

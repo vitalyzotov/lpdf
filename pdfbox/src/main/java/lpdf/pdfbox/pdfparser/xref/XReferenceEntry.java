@@ -25,8 +25,7 @@ import lpdf.pdfbox.pdfparser.PDFXRefStream;
  *
  * @author Christian Appl
  */
-public interface XReferenceEntry extends Comparable<XReferenceEntry>
-{
+public interface XReferenceEntry extends Comparable<XReferenceEntry> {
 
     /**
      * Returns the {@link XReferenceType} of this crossreference stream entry.

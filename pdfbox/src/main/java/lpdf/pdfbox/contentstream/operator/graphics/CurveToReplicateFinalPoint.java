@@ -16,58 +16,51 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
 import lpdf.harmony.awt.geom.Point2D;
-
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * y Append curved segment to path with final point replicated.
  *
  * @author Ben Litchfield
  */
-public final class CurveToReplicateFinalPoint extends GraphicsOperatorProcessor
-{
-    public CurveToReplicateFinalPoint(PDFGraphicsStreamEngine context)
-    {
+public final class CurveToReplicateFinalPoint extends GraphicsOperatorProcessor {
+    public CurveToReplicateFinalPoint(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.size() < 4)
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.size() < 4) {
             throw new MissingOperandException(operator, operands);
         }
-        if (!checkArrayTypesClass(operands, COSNumber.class))
-        {
+        if (!checkArrayTypesClass(operands, COSNumber.class)) {
             return;
         }
-        COSNumber x1 = (COSNumber)operands.get(0);
-        COSNumber y1 = (COSNumber)operands.get(1);
-        COSNumber x3 = (COSNumber)operands.get(2);
-        COSNumber y3 = (COSNumber)operands.get(3);
+        COSNumber x1 = (COSNumber) operands.get(0);
+        COSNumber y1 = (COSNumber) operands.get(1);
+        COSNumber x3 = (COSNumber) operands.get(2);
+        COSNumber y3 = (COSNumber) operands.get(3);
 
         PDFGraphicsStreamEngine context = getGraphicsContext();
         Point2D.Float point1 = context.transformedPoint(x1.floatValue(), y1.floatValue());
         Point2D.Float point3 = context.transformedPoint(x3.floatValue(), y3.floatValue());
 
         context.curveTo(point1.x, point1.y,
-                        point3.x, point3.y,
-                        point3.x, point3.y);
+                point3.x, point3.y,
+                point3.x, point3.y);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CURVE_TO_REPLICATE_FINAL_POINT;
     }
 }

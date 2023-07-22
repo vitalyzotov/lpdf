@@ -17,30 +17,27 @@
 
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-
 import lpdf.fontbox.ttf.gsub.GSUBTablePrintUtil;
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.io.RandomAccessReadBuffer;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * This class is to be used mainly for debugging purposes. Prints the GSUB Feature table for debugging.
  *
  * @author Palash Ray
  */
-public class GSUBTableDebugger
-{
+public class GSUBTableDebugger {
 
     private static final String LOHIT_BENGALI_FONT_FILE = "/ttf/Lohit-Bengali.ttf";
 
     @Test
-    void printLohitBengaliTTF()
-    {
-        try
-        {
+    void printLohitBengaliTTF() {
+        try {
             RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(
                     GSUBTableDebugger.class.getResourceAsStream(LOHIT_BENGALI_FONT_FILE));
             RandomAccessReadDataStream randomAccessReadBufferDataStream = new RandomAccessReadDataStream(
@@ -59,9 +56,7 @@ public class GSUBTableDebugger
             GsubData gsubData = glyphSubstitutionTable.getGsubData();
             new GSUBTablePrintUtil().printCharacterToGlyph(gsubData,
                     trueTypeFont.getUnicodeCmapLookup());
-        }
-        catch (IOException exception)
-        {
+        } catch (IOException exception) {
             fail(exception);
         }
     }

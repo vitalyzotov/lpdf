@@ -16,32 +16,29 @@
 
 package lpdf.io;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
  * Unittest for {@link RandomAccessReadView}
  */
-class RandomAccessReadViewTest
-{
+class RandomAccessReadViewTest {
     @Test
-    void testPositionSkip() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testPositionSkip() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(
                 new ByteArrayInputStream(values));
              RandomAccessReadView randomAccessReadView = new RandomAccessReadView(
-                randomAccessSource, 10, 20))
-        {
+                     randomAccessSource, 10, 20)) {
             assertEquals(0, randomAccessReadView.getPosition());
             assertEquals(10, randomAccessReadView.peek());
             randomAccessReadView.skip(5);
@@ -51,13 +48,11 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testPositionRead() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testPositionRead() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(
-                new ByteArrayInputStream(values)))
-        {
+                new ByteArrayInputStream(values))) {
             RandomAccessReadView randomAccessReadView =
                     new RandomAccessReadView(randomAccessSource, 10, 20);
 
@@ -76,19 +71,17 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testSeekEOF() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testSeekEOF() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         RandomAccessReadView randomAccessReadView;
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(
-                new ByteArrayInputStream(values)))
-        {
+                new ByteArrayInputStream(values))) {
             randomAccessReadView = new RandomAccessReadView(randomAccessSource, 10, 20);
             randomAccessReadView.seek(3);
             assertEquals(3, randomAccessReadView.getPosition());
             Assertions.assertThrows(IOException.class, () -> randomAccessReadView.seek(-1),
-                "seek should have thrown an IOException");
+                    "seek should have thrown an IOException");
             assertFalse(randomAccessReadView.isEOF());
             randomAccessReadView.seek(20);
             assertTrue(randomAccessReadView.isEOF());
@@ -101,15 +94,13 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testPositionReadBytes() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testPositionReadBytes() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource =
-                new RandomAccessReadBuffer(new ByteArrayInputStream(values));
+                     new RandomAccessReadBuffer(new ByteArrayInputStream(values));
              RandomAccessReadView randomAccessReadView =
-                     new RandomAccessReadView(randomAccessSource, 10, 20))
-        {
+                     new RandomAccessReadView(randomAccessSource, 10, 20)) {
             assertEquals(0, randomAccessReadView.getPosition());
             byte[] buffer = new byte[4];
             randomAccessReadView.read(buffer);
@@ -127,15 +118,13 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testPositionPeek() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testPositionPeek() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource =
-                new RandomAccessReadBuffer(new ByteArrayInputStream(values));
+                     new RandomAccessReadBuffer(new ByteArrayInputStream(values));
              RandomAccessReadView randomAccessReadView =
-                new RandomAccessReadView(randomAccessSource, 10, 20))
-        {
+                     new RandomAccessReadView(randomAccessSource, 10, 20)) {
             assertEquals(0, randomAccessReadView.getPosition());
             randomAccessReadView.skip(6);
             assertEquals(6, randomAccessReadView.getPosition());
@@ -146,15 +135,13 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testPositionUnreadBytes() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testPositionUnreadBytes() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource =
-                new RandomAccessReadBuffer(new ByteArrayInputStream(values));
+                     new RandomAccessReadBuffer(new ByteArrayInputStream(values));
              RandomAccessReadView randomAccessReadView =
-                new RandomAccessReadView(randomAccessSource, 10, 20))
-        {
+                     new RandomAccessReadView(randomAccessSource, 10, 20)) {
             assertEquals(0, randomAccessReadView.getPosition());
             randomAccessReadView.read();
             randomAccessReadView.read();
@@ -176,20 +163,16 @@ class RandomAccessReadViewTest
     }
 
     @Test
-    void testCreateView() throws IOException
-    {
-        byte[] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                20 };
+    void testCreateView() throws IOException {
+        byte[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                20};
         try (RandomAccessReadBuffer randomAccessSource = new RandomAccessReadBuffer(
                 new ByteArrayInputStream(values));
              RandomAccessReadView randomAccessReadView =
-                new RandomAccessReadView(randomAccessSource, 10, 20))
-        {
+                     new RandomAccessReadView(randomAccessSource, 10, 20)) {
             randomAccessReadView.createView(0, 20);
             fail("CreateView() should have throw an IOException");
-        }
-        catch (IOException exception)
-        {
+        } catch (IOException exception) {
 
         }
     }

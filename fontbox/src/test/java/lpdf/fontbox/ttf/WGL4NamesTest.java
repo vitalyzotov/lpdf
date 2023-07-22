@@ -17,26 +17,23 @@
 
 package lpdf.fontbox.ttf;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.jupiter.api.Test;
-
-class WGL4NamesTest
-{
+class WGL4NamesTest {
 
     @Test
-    void testAllNames()
-    {
+    void testAllNames() {
         String[] allNames = WGL4Names.getAllNames();
         assertNotNull(allNames);
         assertEquals(WGL4Names.NUMBER_OF_MAC_GLYPHS, allNames.length);
     }
 
     @Test
-    void testGetGlyphName()
-    {
+    void testGetGlyphName() {
         assertEquals(".notdef", WGL4Names.getGlyphName(0));
         assertEquals("equal", WGL4Names.getGlyphName(32));
         assertEquals("h", WGL4Names.getGlyphName(75));
@@ -48,8 +45,7 @@ class WGL4NamesTest
     }
 
     @Test
-    void testGlyphIndices()
-    {
+    void testGlyphIndices() {
         assertEquals(0, WGL4Names.getGlyphIndex(".notdef"));
         assertEquals(32, WGL4Names.getGlyphIndex("equal"));
         assertEquals(75, WGL4Names.getGlyphIndex("h"));

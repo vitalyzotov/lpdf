@@ -16,17 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.common;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.TreeMap;
-import java.util.Map.Entry;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -34,13 +23,23 @@ import lpdf.pdfbox.cos.COSInteger;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.PDDocument;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableSet;
+import java.util.NoSuchElementException;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 /**
  * Represents the page label dictionary of a document.
  *
  * @author Igor Podolskiy
  */
-public class PDPageLabels implements COSObjectable
-{
+public class PDPageLabels implements COSObjectable {
 
     private final Map<Integer, PDPageLabelRange> labels;
 
@@ -55,12 +54,10 @@ public class PDPageLabels implements COSObjectable
      * {@link lpdf.pdfbox.pdmodel.PDDocumentCatalog#setPageLabels(PDPageLabels)}.
      * </p>
      *
-     * @param document
-     *            The document the page label dictionary is created for.
+     * @param document The document the page label dictionary is created for.
      * @see lpdf.pdfbox.pdmodel.PDDocumentCatalog#setPageLabels(PDPageLabels)
      */
-    public PDPageLabels(PDDocument document)
-    {
+    public PDPageLabels(PDDocument document) {
         labels = new TreeMap<>();
         this.doc = document;
         PDPageLabelRange defaultRange = new PDPageLabelRange();
@@ -78,44 +75,32 @@ public class PDPageLabels implements COSObjectable
      * {@link lpdf.pdfbox.pdmodel.PDDocumentCatalog#setPageLabels(PDPageLabels)}.
      * </p>
      *
-     * @param document
-     *            The document the page label dictionary is created for.
-     * @param dict
-     *            an existing page label dictionary
+     * @param document The document the page label dictionary is created for.
+     * @param dict     an existing page label dictionary
+     * @throws IOException If something goes wrong during the number tree conversion.
      * @see lpdf.pdfbox.pdmodel.PDDocumentCatalog#setPageLabels(PDPageLabels)
-     * @throws IOException
-     *             If something goes wrong during the number tree conversion.
      */
-    public PDPageLabels(PDDocument document, COSDictionary dict) throws IOException
-    {
+    public PDPageLabels(PDDocument document, COSDictionary dict) throws IOException {
         this(document);
-        if (dict == null)
-        {
+        if (dict == null) {
             return;
         }
         PDNumberTreeNode root = new PDNumberTreeNode(dict, PDPageLabelRange.class);
         findLabels(root);
     }
 
-    private void findLabels(PDNumberTreeNode node) throws IOException
-    {
+    private void findLabels(PDNumberTreeNode node) throws IOException {
         List<PDNumberTreeNode> kids = node.getKids();
-        if (node.getKids() != null)
-        {
-            for (PDNumberTreeNode kid : kids)
-            {
+        if (node.getKids() != null) {
+            for (PDNumberTreeNode kid : kids) {
                 findLabels(kid);
             }
-        }
-        else
-        {
-            Map<Integer,COSObjectable> numbers = node.getNumbers();
-            if (numbers != null)
-            {
+        } else {
+            Map<Integer, COSObjectable> numbers = node.getNumbers();
+            if (numbers != null) {
                 numbers.forEach((key, pageLabelRange) ->
                 {
-                    if (key >= 0)
-                    {
+                    if (key >= 0) {
                         labels.put(key, (PDPageLabelRange) pageLabelRange);
                     }
                 });
@@ -135,8 +120,7 @@ public class PDPageLabels implements COSObjectable
      *
      * @return the number of page label ranges.
      */
-    public int getPageRangeCount()
-    {
+    public int getPageRangeCount() {
         return labels.size();
     }
 
@@ -144,31 +128,25 @@ public class PDPageLabels implements COSObjectable
      * Returns the page label range starting at the given page, or {@code null}
      * if no such range is defined.
      *
-     * @param startPage
-     *            the 0-based page index representing the start page of the page
-     *            range the item is defined for.
+     * @param startPage the 0-based page index representing the start page of the page
+     *                  range the item is defined for.
      * @return the page label range or {@code null} if no label range is defined
-     *         for the given start page.
+     * for the given start page.
      */
-    public PDPageLabelRange getPageLabelRange(int startPage)
-    {
+    public PDPageLabelRange getPageLabelRange(int startPage) {
         return labels.get(startPage);
     }
 
     /**
      * Sets the page label range beginning at the specified start page.
      *
-     * @param startPage
-     *            the 0-based index of the page representing the start of the
-     *            page label range.
-     * @param item
-     *            the page label item to set.
+     * @param startPage the 0-based index of the page representing the start of the
+     *                  page label range.
+     * @param item      the page label item to set.
      * @throws IllegalArgumentException if the startPage parameter is &lt; 0.
      */
-    public void setLabelItem(int startPage, PDPageLabelRange item)
-    {
-        if (startPage < 0)
-        {
+    public void setLabelItem(int startPage, PDPageLabelRange item) {
+        if (startPage < 0) {
             throw new IllegalArgumentException("startPage parameter of setLabelItem may not be < 0");
         }
         labels.put(startPage, item);
@@ -178,8 +156,7 @@ public class PDPageLabels implements COSObjectable
      * {@inheritDoc}
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         COSArray arr = new COSArray();
         labels.forEach((key, value) ->
         {
@@ -205,8 +182,7 @@ public class PDPageLabels implements COSObjectable
      *
      * @return a mapping from labels to 0-based page indices.
      */
-    public Map<String, Integer> getPageIndicesByLabels()
-    {
+    public Map<String, Integer> getPageIndicesByLabels() {
         int numberOfPages = doc.getNumberOfPages();
         final Map<String, Integer> labelMap = new HashMap<>(numberOfPages);
         computeLabels((pageIndex, label) -> labelMap.put(label, pageIndex), numberOfPages);
@@ -220,14 +196,12 @@ public class PDPageLabels implements COSObjectable
      *
      * @return an array mapping from 0-based page indices to labels.
      */
-    public String[] getLabelsByPageIndices()
-    {
+    public String[] getLabelsByPageIndices() {
         final int numberOfPages = doc.getNumberOfPages();
         final String[] map = new String[numberOfPages];
         computeLabels((pageIndex, label) ->
         {
-            if (pageIndex < numberOfPages)
-            {
+            if (pageIndex < numberOfPages) {
                 map[pageIndex] = label;
             }
         }, numberOfPages);
@@ -239,8 +213,7 @@ public class PDPageLabels implements COSObjectable
      *
      * @return set of page indices.
      */
-    public NavigableSet<Integer> getPageIndices()
-    {
+    public NavigableSet<Integer> getPageIndices() {
         return new TreeSet<>(labels.keySet());
     }
 
@@ -249,29 +222,24 @@ public class PDPageLabels implements COSObjectable
      *
      * @author Igor Podolskiy
      */
-    private interface LabelHandler
-    {
+    private interface LabelHandler {
         void newLabel(int pageIndex, String label);
     }
 
-    private void computeLabels(LabelHandler handler, int numberOfPages)
-    {
+    private void computeLabels(LabelHandler handler, int numberOfPages) {
         Iterator<Entry<Integer, PDPageLabelRange>> iterator =
-            labels.entrySet().iterator();
-        if (!iterator.hasNext())
-        {
+                labels.entrySet().iterator();
+        if (!iterator.hasNext()) {
             return;
         }
         int pageIndex = 0;
         Entry<Integer, PDPageLabelRange> lastEntry = iterator.next();
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             Entry<Integer, PDPageLabelRange> entry = iterator.next();
             int numPages = entry.getKey() - lastEntry.getKey();
             LabelGenerator gen = new LabelGenerator(lastEntry.getValue(),
                     numPages);
-            while (gen.hasNext())
-            {
+            while (gen.hasNext()) {
                 handler.newLabel(pageIndex, gen.next());
                 pageIndex++;
             }
@@ -279,8 +247,7 @@ public class PDPageLabels implements COSObjectable
         }
         LabelGenerator gen = new LabelGenerator(lastEntry.getValue(),
                 numberOfPages - lastEntry.getKey());
-        while (gen.hasNext())
-        {
+        while (gen.hasNext()) {
             handler.newLabel(pageIndex, gen.next());
             pageIndex++;
         }
@@ -290,62 +257,50 @@ public class PDPageLabels implements COSObjectable
      * Generates the labels in a page range.
      *
      * @author Igor Podolskiy
-     *
      */
-    private static class LabelGenerator implements Iterator<String>
-    {
+    private static class LabelGenerator implements Iterator<String> {
         private final PDPageLabelRange labelInfo;
         private final int numPages;
         private int currentPage;
 
-        LabelGenerator(PDPageLabelRange label, int pages)
-        {
+        LabelGenerator(PDPageLabelRange label, int pages) {
             this.labelInfo = label;
             this.numPages = pages;
             this.currentPage = 0;
         }
 
         @Override
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return currentPage < numPages;
         }
 
         @Override
-        public String next()
-        {
-            if (!hasNext())
-            {
+        public String next() {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             StringBuilder buf = new StringBuilder();
             String label = labelInfo.getPrefix();
-            if (label != null)
-            {
+            if (label != null) {
                 // there may be some labels with some null bytes at the end
                 // which will lead to an incomplete output, see PDFBOX-1047
                 int index = label.indexOf(0);
-                if (index > -1)
-                {
+                if (index > -1) {
                     label = label.substring(0, index);
                 }
                 buf.append(label);
             }
             String style = labelInfo.getStyle();
-            if (style != null)
-            {
+            if (style != null) {
                 buf.append(getNumber(labelInfo.getStart() + currentPage, style));
             }
             currentPage++;
             return buf.toString();
         }
 
-        private String getNumber(int pageIndex, String style)
-        {
-            if (style != null)
-            {
-                switch (style)
-                {
+        private String getNumber(int pageIndex, String style) {
+            if (style != null) {
+                switch (style) {
                     case PDPageLabelRange.STYLE_DECIMAL:
                         return Integer.toString(pageIndex);
                     case PDPageLabelRange.STYLE_LETTERS_LOWER:
@@ -367,18 +322,16 @@ public class PDPageLabels implements COSObjectable
         /**
          * Lookup table used by the {@link #makeRomanLabel(int)} method.
          */
-        private static final String[][] ROMANS = new String[][] {
-            { "", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix" },
-            { "", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc" },
-            { "", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm" }
+        private static final String[][] ROMANS = new String[][]{
+                {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"},
+                {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"},
+                {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"}
         };
 
-        private static String makeRomanLabel(int pageIndex)
-        {
+        private static String makeRomanLabel(int pageIndex) {
             StringBuilder buf = new StringBuilder();
             int power = 0;
-            while (power < 3 && pageIndex > 0)
-            {
+            while (power < 3 && pageIndex > 0) {
                 buf.insert(0, ROMANS[power][pageIndex % 10]);
                 pageIndex /= 10;
                 power++;
@@ -390,8 +343,7 @@ public class PDPageLabels implements COSObjectable
             // but those don't occur too often (and the numbers in those cases
             // would be incomprehensible even if we and Adobe
             // used strict Roman rules).
-            for (int i = 0; i < pageIndex; i++)
-            {
+            for (int i = 0; i < pageIndex; i++) {
                 buf.insert(0, 'm');
             }
             return buf.toString();
@@ -401,21 +353,18 @@ public class PDPageLabels implements COSObjectable
          * a..z, aa..zz, aaa..zzz ... labeling as described in PDF32000-1:2008,
          * Table 159, Page 375.
          */
-        private static String makeLetterLabel(int num)
-        {
+        private static String makeLetterLabel(int num) {
             StringBuilder buf = new StringBuilder();
             int numLetters = num / 26 + Integer.signum(num % 26);
             int letter = num % 26 + 26 * (1 - Integer.signum(num % 26)) + 'a' - 1;
-            for (int i = 0; i < numLetters; i++)
-            {
+            for (int i = 0; i < numLetters; i++) {
                 buf.appendCodePoint(letter);
             }
             return buf.toString();
         }
 
         @Override
-        public void remove()
-        {
+        public void remove() {
             // This is a generator, no removing allowed.
             throw new UnsupportedOperationException();
         }

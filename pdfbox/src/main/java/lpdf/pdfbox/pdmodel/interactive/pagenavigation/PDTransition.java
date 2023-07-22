@@ -28,16 +28,13 @@ import lpdf.pdfbox.pdmodel.common.PDDictionaryWrapper;
  * Represents a page transition as defined in paragraph 12.4.4.1 of PDF 32000-1:2008
  *
  * @author Andrea Vacondio
- *
  */
-public final class PDTransition extends PDDictionaryWrapper
-{
+public final class PDTransition extends PDDictionaryWrapper {
 
     /**
      * creates a new transition with default "replace" style {@link PDTransitionStyle#R}
      */
-    public PDTransition()
-    {
+    public PDTransition() {
         this(PDTransitionStyle.R);
     }
 
@@ -46,8 +43,7 @@ public final class PDTransition extends PDDictionaryWrapper
      *
      * @param style the style to be used to create the new transition
      */
-    public PDTransition(PDTransitionStyle style)
-    {
+    public PDTransition(PDTransitionStyle style) {
         super();
         getCOSObject().setName(COSName.TYPE, COSName.TRANS.getName());
         getCOSObject().setName(COSName.S, style.name());
@@ -58,8 +54,7 @@ public final class PDTransition extends PDDictionaryWrapper
      *
      * @param dictionary the dictionary to be used for the new transition
      */
-    public PDTransition(COSDictionary dictionary)
-    {
+    public PDTransition(COSDictionary dictionary) {
         super(dictionary);
     }
 
@@ -67,8 +62,7 @@ public final class PDTransition extends PDDictionaryWrapper
      * @return the style for this transition
      * @see PDTransitionStyle#valueOf(String)
      */
-    public String getStyle()
-    {
+    public String getStyle() {
         return getCOSObject().getNameAsString(COSName.S, PDTransitionStyle.R.name());
     }
 
@@ -77,8 +71,7 @@ public final class PDTransition extends PDDictionaryWrapper
      * {@link PDTransitionDimension#H} if no dimension is found.
      * @see PDTransitionDimension
      */
-    public String getDimension()
-    {
+    public String getDimension() {
         return getCOSObject().getNameAsString(COSName.DM, PDTransitionDimension.H.name());
     }
 
@@ -88,8 +81,7 @@ public final class PDTransition extends PDDictionaryWrapper
      *
      * @param dimension the dimension in which the specified transition effect shall occur
      */
-    public void setDimension(PDTransitionDimension dimension)
-    {
+    public void setDimension(PDTransitionDimension dimension) {
         getCOSObject().setName(COSName.DM, dimension.name());
     }
 
@@ -98,8 +90,7 @@ public final class PDTransition extends PDDictionaryWrapper
      * if no motion is found.
      * @see PDTransitionMotion
      */
-    public String getMotion()
-    {
+    public String getMotion() {
         return getCOSObject().getNameAsString(COSName.M, PDTransitionMotion.I.name());
     }
 
@@ -109,8 +100,7 @@ public final class PDTransition extends PDDictionaryWrapper
      *
      * @param motion the direction of motion for the specified transition effect
      */
-    public void setMotion(PDTransitionMotion motion)
-    {
+    public void setMotion(PDTransitionMotion motion) {
         getCOSObject().setName(COSName.M, motion.name());
     }
 
@@ -119,11 +109,9 @@ public final class PDTransition extends PDDictionaryWrapper
      * or {@link COSName#NONE}. Default to {@link COSInteger#ZERO}
      * @see PDTransitionDirection
      */
-    public COSBase getDirection()
-    {
+    public COSBase getDirection() {
         COSBase item = getCOSObject().getItem(COSName.DI);
-        if (item == null)
-        {
+        if (item == null) {
             return COSInteger.ZERO;
         }
         return item;
@@ -136,24 +124,21 @@ public final class PDTransition extends PDDictionaryWrapper
      *
      * @param direction the direction in which the specified transition effect shall move
      */
-    public void setDirection(PDTransitionDirection direction)
-    {
+    public void setDirection(PDTransitionDirection direction) {
         getCOSObject().setItem(COSName.DI, direction.getCOSBase());
     }
 
     /**
      * @return The duration in seconds of the transition effect or the default 1 if no duration is found.
      */
-    public float getDuration()
-    {
+    public float getDuration() {
         return getCOSObject().getFloat(COSName.D, 1);
     }
 
     /**
      * @param duration The duration of the transition effect, in seconds.
      */
-    public void setDuration(float duration)
-    {
+    public void setDuration(float duration) {
         getCOSObject().setItem(COSName.D, new COSFloat(duration));
     }
 
@@ -161,17 +146,15 @@ public final class PDTransition extends PDDictionaryWrapper
      * @return The starting or ending scale at which the changes shall be drawn or the default 1 if no scale is found.
      * Only for {@link PDTransitionStyle#Fly}.
      */
-    public float getFlyScale()
-    {
+    public float getFlyScale() {
         return getCOSObject().getFloat(COSName.SS, 1);
     }
 
     /**
      * @param scale The starting or ending scale at which the changes shall be drawn. Only for
-     * {@link PDTransitionStyle#Fly}.
+     *              {@link PDTransitionStyle#Fly}.
      */
-    public void setFlyScale(float scale)
-    {
+    public void setFlyScale(float scale) {
         getCOSObject().setItem(COSName.SS, new COSFloat(scale));
     }
 
@@ -179,17 +162,15 @@ public final class PDTransition extends PDDictionaryWrapper
      * @return true if the area that shall be flown in is rectangular and opaque. Default is false. Only for
      * {@link PDTransitionStyle#Fly}.
      */
-    public boolean isFlyAreaOpaque()
-    {
+    public boolean isFlyAreaOpaque() {
         return getCOSObject().getBoolean(COSName.B, false);
     }
 
     /**
      * @param opaque If true, the area that shall be flown in is rectangular and opaque. Only for
-     * {@link PDTransitionStyle#Fly}.
+     *               {@link PDTransitionStyle#Fly}.
      */
-    public void setFlyAreaOpaque(boolean opaque)
-    {
+    public void setFlyAreaOpaque(boolean opaque) {
         getCOSObject().setItem(COSName.B, COSBoolean.getBoolean(opaque));
     }
 }

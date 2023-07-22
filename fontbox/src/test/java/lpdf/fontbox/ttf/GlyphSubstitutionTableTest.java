@@ -16,9 +16,12 @@
  */
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import lpdf.fontbox.ttf.model.GsubData;
+import lpdf.fontbox.ttf.model.Language;
+import lpdf.fontbox.ttf.model.MapBackedScriptFeature;
+import lpdf.fontbox.ttf.model.ScriptFeature;
+import lpdf.io.RandomAccessReadBuffer;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,15 +34,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import lpdf.fontbox.ttf.model.GsubData;
-import lpdf.fontbox.ttf.model.Language;
-import lpdf.fontbox.ttf.model.MapBackedScriptFeature;
-import lpdf.fontbox.ttf.model.ScriptFeature;
-import lpdf.io.RandomAccessReadBuffer;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class GlyphSubstitutionTableTest
-{
+class GlyphSubstitutionTableTest {
 
     static final int DATA_POSITION_FOR_GSUB_TABLE = 120544;
 
@@ -47,8 +46,7 @@ class GlyphSubstitutionTableTest
             "blwf", "blws", "half", "haln", "init", "nukt", "pres", "pstf", "rphf", "vatu");
 
     @Test
-    void testGetGsubData() throws IOException
-    {
+    void testGetGsubData() throws IOException {
         // given
         RandomAccessReadBuffer randomAccessReadBuffer = new RandomAccessReadBuffer(
                 GSUBTableDebugger.class.getResourceAsStream("/ttf/Lohit-Bengali.ttf"));
@@ -72,8 +70,7 @@ class GlyphSubstitutionTableTest
 
         String templatePathToFile = "/gsub/lohit_bengali/bng2/%s.txt";
 
-        for (String featureName : EXPECTED_FEATURE_NAMES)
-        {
+        for (String featureName : EXPECTED_FEATURE_NAMES) {
             System.out.println("******* Testing feature: " + featureName);
             Map<List<Integer>, Integer> expectedGsubTableRawData = getExpectedGsubTableRawData(
                     String.format(templatePathToFile, featureName));
@@ -85,41 +82,33 @@ class GlyphSubstitutionTableTest
     }
 
     private Map<List<Integer>, Integer> getExpectedGsubTableRawData(String pathToResource)
-            throws IOException
-    {
+            throws IOException {
         Map<List<Integer>, Integer> gsubData = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(
-             new InputStreamReader(TestTTFParser.class.getResourceAsStream(pathToResource))))
-        {
-            while (true)
-            {
+                new InputStreamReader(TestTTFParser.class.getResourceAsStream(pathToResource)))) {
+            while (true) {
                 String line = br.readLine();
 
-                if (line == null)
-                {
+                if (line == null) {
                     break;
                 }
 
-                if (line.trim().length() == 0)
-                {
+                if (line.trim().length() == 0) {
                     continue;
                 }
 
-                if (line.startsWith("#"))
-                {
+                if (line.startsWith("#")) {
                     continue;
                 }
                 String[] lineSplittedByKeyValue = line.split("=");
 
-                if (lineSplittedByKeyValue.length != 2)
-                {
+                if (lineSplittedByKeyValue.length != 2) {
                     throw new IllegalArgumentException("invalid format");
                 }
 
                 List<Integer> oldGlyphIds = new ArrayList<>();
-                for (String value : lineSplittedByKeyValue[0].split(","))
-                {
+                for (String value : lineSplittedByKeyValue[0].split(",")) {
                     oldGlyphIds.add(Integer.valueOf(value));
                 }
 

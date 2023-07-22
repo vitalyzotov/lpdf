@@ -21,8 +21,7 @@ package lpdf.pdfbox.pdmodel.interactive.action;
  *
  * @author Tilman Hausherr
  */
-public enum OpenMode
-{
+public enum OpenMode {
     /**
      * The viewer application should behave in accordance with the current user preference.
      */

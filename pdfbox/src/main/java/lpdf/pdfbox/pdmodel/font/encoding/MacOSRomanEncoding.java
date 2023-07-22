@@ -22,8 +22,7 @@ import lpdf.pdfbox.cos.COSBase;
  * This is the Mac OS Roman encoding, which is similar to the
  * MacRomanEncoding with the addition of 15 entries
  */
-public class MacOSRomanEncoding extends MacRomanEncoding
-{
+public class MacOSRomanEncoding extends MacRomanEncoding {
     /**
      * Table of octal character codes and their corresponding names
      * on top of {@link MacRomanEncoding}.
@@ -57,19 +56,16 @@ public class MacOSRomanEncoding extends MacRomanEncoding
     /**
      * Constructor.
      */
-    public MacOSRomanEncoding()
-    {
+    public MacOSRomanEncoding() {
         // differences and additions to MacRomanEncoding
-        for (Object[] encodingEntry : MAC_OS_ROMAN_ENCODING_TABLE)
-        {
+        for (Object[] encodingEntry : MAC_OS_ROMAN_ENCODING_TABLE) {
             add((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
 
     }
 
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return null;
     }
 }

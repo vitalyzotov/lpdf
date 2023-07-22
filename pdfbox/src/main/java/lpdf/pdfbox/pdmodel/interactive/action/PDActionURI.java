@@ -16,11 +16,12 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.action;
 
-import java.nio.charset.StandardCharsets;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSString;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * This represents a URI action that can be executed in a PDF document.
@@ -28,8 +29,7 @@ import lpdf.pdfbox.cos.COSString;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDActionURI extends PDAction
-{
+public class PDActionURI extends PDAction {
     /**
      * This type of action this object represents.
      */
@@ -38,8 +38,7 @@ public class PDActionURI extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionURI()
-    {
+    public PDActionURI() {
         setSubType(SUB_TYPE);
     }
 
@@ -48,8 +47,7 @@ public class PDActionURI extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionURI(COSDictionary a)
-    {
+    public PDActionURI(COSDictionary a) {
         super(a);
     }
 
@@ -59,22 +57,17 @@ public class PDActionURI extends PDAction
      *
      * @return The URI entry of the specific URI action dictionary or null if there isn't any.
      */
-    public String getURI()
-    {
+    public String getURI() {
         COSBase base = action.getDictionaryObject(COSName.URI);
-        if (base instanceof COSString)
-        {
+        if (base instanceof COSString) {
             byte[] bytes = ((COSString) base).getBytes();
-            if (bytes.length >= 2)
-            {
+            if (bytes.length >= 2) {
                 // UTF-16 (BE)
-                if ((bytes[0] & 0xFF) == 0xFE && (bytes[1] & 0xFF) == 0xFF)
-                {
+                if ((bytes[0] & 0xFF) == 0xFE && (bytes[1] & 0xFF) == 0xFF) {
                     return action.getString(COSName.URI);
                 }
                 // UTF-16 (LE)
-                if ((bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xFF) == 0xFE)
-                {
+                if ((bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xFF) == 0xFE) {
                     return action.getString(COSName.URI);
                 }
             }
@@ -89,8 +82,7 @@ public class PDActionURI extends PDAction
      *
      * @param uri The uniform resource identifier.
      */
-    public void setURI(String uri)
-    {
+    public void setURI(String uri) {
         action.setString(COSName.URI, uri);
     }
 
@@ -103,8 +95,7 @@ public class PDActionURI extends PDAction
      * @return A flag specifying whether to track the mouse position when the
      * URI is resolved.
      */
-    public boolean shouldTrackMousePosition()
-    {
+    public boolean shouldTrackMousePosition() {
         return this.action.getBoolean("IsMap", false);
     }
 
@@ -114,8 +105,7 @@ public class PDActionURI extends PDAction
      *
      * @param value The flag value.
      */
-    public void setTrackMousePosition(boolean value)
-    {
+    public void setTrackMousePosition(boolean value) {
         this.action.setBoolean("IsMap", value);
     }
 }

@@ -26,8 +26,7 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author Evgeniy Muravitskiy
  */
-public class PDActionHide extends PDAction
-{
+public class PDActionHide extends PDAction {
 
     /**
      * This type of action this object represents.
@@ -37,8 +36,7 @@ public class PDActionHide extends PDAction
     /**
      * Default Constructor
      */
-    public PDActionHide()
-    {
+    public PDActionHide() {
         setSubType(SUB_TYPE);
     }
 
@@ -47,8 +45,7 @@ public class PDActionHide extends PDAction
      *
      * @param a the action dictionary
      */
-    public PDActionHide(COSDictionary a)
-    {
+    public PDActionHide(COSDictionary a) {
         super(a);
     }
 
@@ -57,8 +54,7 @@ public class PDActionHide extends PDAction
      *
      * @return The T entry of the specific thread action dictionary.
      */
-    public COSBase getT()
-    {
+    public COSBase getT() {
         // Dictionary, String or Array
         return this.action.getDictionaryObject(COSName.T);
     }
@@ -66,8 +62,7 @@ public class PDActionHide extends PDAction
     /**
      * @param t annotation or annotations
      */
-    public void setT(COSBase t)
-    {
+    public void setT(COSBase t) {
         this.action.setItem(COSName.T, t);
     }
 
@@ -76,16 +71,14 @@ public class PDActionHide extends PDAction
      *
      * @return true if annotation is hidden
      */
-    public boolean getH()
-    {
+    public boolean getH() {
         return this.action.getBoolean(COSName.H, true);
     }
 
     /**
      * @param h hide flag
      */
-    public void setH(boolean h)
-    {
+    public void setH(boolean h) {
         this.action.setItem(COSName.H, COSBoolean.getBoolean(h));
     }
 

@@ -16,39 +16,34 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * ': Move to the next line and show text.
  *
  * @author Laurent Huault
  */
-public class ShowTextLine extends OperatorProcessor
-{
-    public ShowTextLine(PDFStreamEngine context)
-    {
+public class ShowTextLine extends OperatorProcessor {
+    public ShowTextLine(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDFStreamEngine context = getContext();
         context.processOperator(OperatorName.NEXT_LINE, null);
         context.processOperator(OperatorName.SHOW_TEXT, arguments);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SHOW_TEXT_LINE;
     }
 }

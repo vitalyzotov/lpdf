@@ -23,47 +23,39 @@ package lpdf.fontbox.ttf.table.common;
  * Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class LookupTable
-{
+public class LookupTable {
     private final int lookupType;
     private final int lookupFlag;
     private final int markFilteringSet;
     private final LookupSubTable[] subTables;
 
     public LookupTable(int lookupType, int lookupFlag, int markFilteringSet,
-            LookupSubTable[] subTables)
-    {
+                       LookupSubTable[] subTables) {
         this.lookupType = lookupType;
         this.lookupFlag = lookupFlag;
         this.markFilteringSet = markFilteringSet;
         this.subTables = subTables;
     }
 
-    public int getLookupType()
-    {
+    public int getLookupType() {
         return lookupType;
     }
 
-    public int getLookupFlag()
-    {
+    public int getLookupFlag() {
         return lookupFlag;
     }
 
-    public int getMarkFilteringSet()
-    {
+    public int getMarkFilteringSet() {
         return markFilteringSet;
     }
 
-    public LookupSubTable[] getSubTables()
-    {
+    public LookupSubTable[] getSubTables() {
         return subTables;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("LookupTable[lookupType=%d,lookupFlag=%d,markFilteringSet=%d]",
                 lookupType, lookupFlag, markFilteringSet);
     }

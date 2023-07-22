@@ -21,30 +21,30 @@ package lpdf.fontbox.afm;
  *
  * @author Ben Litchfield
  */
-public class Ligature
-{
+public class Ligature {
     private final String successor;
     private final String liga;
 
-    public Ligature(String successor, String ligature)
-    {
+    public Ligature(String successor, String ligature) {
         this.successor = successor;
         this.liga = ligature;
     }
 
-    /** Getter for property ligature.
+    /**
+     * Getter for property ligature.
+     *
      * @return Value of property ligature.
      */
-    public String getLigature()
-    {
+    public String getLigature() {
         return liga;
     }
 
-    /** Getter for property successor.
+    /**
+     * Getter for property successor.
+     *
      * @return Value of property successor.
      */
-    public String getSuccessor()
-    {
+    public String getSuccessor() {
         return successor;
     }
 

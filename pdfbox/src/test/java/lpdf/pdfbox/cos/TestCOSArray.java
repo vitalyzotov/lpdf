@@ -16,25 +16,23 @@
 
 package lpdf.pdfbox.cos;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
  * Unittests for {@link COSArray}
  */
-class TestCOSArray
-{
+class TestCOSArray {
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         COSArray cosArray = new COSArray();
         assertEquals(0, cosArray.size());
         Assertions.assertThrows(IllegalArgumentException.class, () -> new COSArray(null),
@@ -48,8 +46,7 @@ class TestCOSArray
     }
 
     @Test
-    void testConvertString2COSNameAndBack()
-    {
+    void testConvertString2COSNameAndBack() {
         COSArray cosArray = COSArray.ofCOSNames(
                 Arrays.asList(COSName.A.getName(), COSName.B.getName(), COSName.C.getName()));
         assertEquals(3, cosArray.size());
@@ -65,8 +62,7 @@ class TestCOSArray
     }
 
     @Test
-    void testConvertString2COSStringAndBack()
-    {
+    void testConvertString2COSStringAndBack() {
         COSArray cosArray = COSArray
                 .ofCOSStrings(Arrays.asList("A", "B", "C"));
         assertEquals(3, cosArray.size());
@@ -82,8 +78,7 @@ class TestCOSArray
     }
 
     @Test
-    void testConvertInteger2COSStringAndBack()
-    {
+    void testConvertInteger2COSStringAndBack() {
         COSArray cosArray = COSArray.ofCOSIntegers(Arrays.asList(1, 2, 3));
         assertEquals(3, cosArray.size());
         assertEquals(1, cosArray.getInt(0));
@@ -110,9 +105,8 @@ class TestCOSArray
     }
 
     @Test
-    void testConvertFloat2COSStringAndBack()
-    {
-        float[] floatArrayStart = new float[] { 1.0f, 0.1f, 0.02f };
+    void testConvertFloat2COSStringAndBack() {
+        float[] floatArrayStart = new float[]{1.0f, 0.1f, 0.02f};
         COSArray cosArray = new COSArray();
         cosArray.setFloatArray(floatArrayStart);
 
@@ -148,13 +142,12 @@ class TestCOSArray
 
         floatArrayEnd = cosArray.toFloatArray();
         // due to the null value the second value of the array is set to 0
-        assertArrayEquals(new float[] { 1.0f, 0f, 0.02f }, floatArrayEnd, 0);
+        assertArrayEquals(new float[]{1.0f, 0f, 0.02f}, floatArrayEnd, 0);
 
     }
 
     @Test
-    void testGetSetName()
-    {
+    void testGetSetName() {
         COSArray cosArray = new COSArray();
         cosArray.growToSize(3);
         cosArray.setName(0, "A");
@@ -175,8 +168,7 @@ class TestCOSArray
     }
 
     @Test
-    void testGetSetInt()
-    {
+    void testGetSetInt() {
         COSArray cosArray = new COSArray();
         cosArray.growToSize(3);
         cosArray.setInt(0, 0);
@@ -197,8 +189,7 @@ class TestCOSArray
     }
 
     @Test
-    void testGetSetString()
-    {
+    void testGetSetString() {
         COSArray cosArray = new COSArray();
         cosArray.growToSize(3);
         cosArray.setString(0, "Test1");
@@ -219,8 +210,7 @@ class TestCOSArray
     }
 
     @Test
-    void testRemove()
-    {
+    void testRemove() {
         COSArray cosArray = COSArray
                 .ofCOSIntegers(Arrays.asList(1, 2, 3, 4, 5, 6));
         cosArray.clear();
@@ -257,8 +247,7 @@ class TestCOSArray
     }
 
     @Test
-    void testGrowToSize()
-    {
+    void testGrowToSize() {
         COSArray cosArray = new COSArray();
         assertEquals(0, cosArray.size());
         cosArray.growToSize(2);
@@ -278,8 +267,7 @@ class TestCOSArray
     }
 
     @Test
-    void testToList()
-    {
+    void testToList() {
         COSArray cosArray = COSArray
                 .ofCOSIntegers(Arrays.asList(0, 1, 2, 3, 4, 5));
         List<? extends COSBase> list = cosArray.toList();

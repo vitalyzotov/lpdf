@@ -17,27 +17,24 @@
 
 package lpdf.fontbox.ttf.gsub;
 
+import lpdf.fontbox.ttf.CmapLookup;
+import lpdf.fontbox.ttf.model.GsubData;
+import lpdf.fontbox.ttf.model.ScriptFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.fontbox.ttf.CmapLookup;
-import lpdf.fontbox.ttf.model.GsubData;
-import lpdf.fontbox.ttf.model.ScriptFeature;
-
 /**
- *
  * Latin-specific implementation of GSUB system
  *
  * @author Palash Ray
  * @author Tilman Hausherr
- *
  */
-public class GsubWorkerForLatin implements GsubWorker
-{
+public class GsubWorkerForLatin implements GsubWorker {
     private static final Logger LOG = LoggerFactory.getLogger(GsubWorkerForLatin.class);
 
     /**
@@ -49,21 +46,17 @@ public class GsubWorkerForLatin implements GsubWorker
     private final CmapLookup cmapLookup;
     private final GsubData gsubData;
 
-    GsubWorkerForLatin(CmapLookup cmapLookup, GsubData gsubData)
-    {
+    GsubWorkerForLatin(CmapLookup cmapLookup, GsubData gsubData) {
         this.cmapLookup = cmapLookup;
         this.gsubData = gsubData;
     }
 
     @Override
-    public List<Integer> applyTransforms(List<Integer> originalGlyphIds)
-    {
+    public List<Integer> applyTransforms(List<Integer> originalGlyphIds) {
         List<Integer> intermediateGlyphsFromGsub = originalGlyphIds;
 
-        for (String feature : FEATURES_IN_ORDER)
-        {
-            if (!gsubData.isFeatureSupported(feature))
-            {
+        for (String feature : FEATURES_IN_ORDER) {
+            if (!gsubData.isFeatureSupported(feature)) {
                 LOG.debug("the feature " + feature + " was not found");
                 continue;
             }
@@ -80,10 +73,8 @@ public class GsubWorkerForLatin implements GsubWorker
     }
 
     private List<Integer> applyGsubFeature(ScriptFeature scriptFeature,
-            List<Integer> originalGlyphs)
-    {
-        if (scriptFeature.getAllGlyphIdsForSubstitution().isEmpty())
-        {
+                                           List<Integer> originalGlyphs) {
+        if (scriptFeature.getAllGlyphIdsForSubstitution().isEmpty()) {
             LOG.debug("getAllGlyphIdsForSubstitution() for " + scriptFeature.getName() + " is empty");
             return originalGlyphs;
         }
@@ -94,16 +85,12 @@ public class GsubWorkerForLatin implements GsubWorker
         List<List<Integer>> tokens = glyphArraySplitter.split(originalGlyphs);
         List<Integer> gsubProcessedGlyphs = new ArrayList<>();
 
-        for (List<Integer> chunk : tokens)
-        {
-            if (scriptFeature.canReplaceGlyphs(chunk))
-            {
+        for (List<Integer> chunk : tokens) {
+            if (scriptFeature.canReplaceGlyphs(chunk)) {
                 // gsub system kicks in, you get the glyphId directly
                 int glyphId = scriptFeature.getReplacementForGlyphs(chunk);
                 gsubProcessedGlyphs.add(glyphId);
-            }
-            else
-            {
+            } else {
                 gsubProcessedGlyphs.addAll(chunk);
             }
         }

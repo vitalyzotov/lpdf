@@ -16,36 +16,30 @@
  */
 package lpdf.pdfbox.multipdf;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.File;
-
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test suite for PageExtractor.
- *
+ * <p>
  * This is just some simple tests based on a test document.  It merely ensures
  * that the correct number of pages are extracted as this is virtually the only
  * thing which could go wrong when coping pages from one PDF to a new one.
  *
  * @author Adam Nichols
  */
-class PageExtractorTest
-{
+class PageExtractorTest {
 
-    private void closeDoc(PDDocument doc)
-    {
-        if(doc != null)
-        {
-            try
-            {
+    private void closeDoc(PDDocument doc) {
+        if (doc != null) {
+            try {
                 doc.close();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 /* Can't do much about this... */
             }
         }
@@ -55,12 +49,10 @@ class PageExtractorTest
      * Test of extract method, of class lpdf.pdfbox.util.PageExtractor.
      */
     @Test
-    void testExtract() throws Exception
-    {
+    void testExtract() throws Exception {
         PDDocument sourcePdf = null;
         PDDocument result = null;
-        try
-        {
+        try {
             // this should work for most users
             sourcePdf = Loader.loadPDF(new File("src/test/resources/input/cweb.pdf"));
             PageExtractor instance = new PageExtractor(sourcePdf);
@@ -87,9 +79,7 @@ class PageExtractorTest
             result = instance.extract();
             assertEquals(0, result.getNumberOfPages());
             closeDoc(result);
-        }
-        finally
-        {
+        } finally {
             closeDoc(sourcePdf);
             closeDoc(result);
         }

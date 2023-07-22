@@ -25,8 +25,7 @@ import java.util.Map;
  *
  * @author Ben Litchfield
  */
-public abstract class Encoding
-{
+public abstract class Encoding {
     /**
      * This is a mapping from a character code to a character name.
      */
@@ -43,10 +42,9 @@ public abstract class Encoding
      * @param code The character code that matches the character.
      * @param name The name of the character.
      */
-    protected void addCharacterEncoding( int code, String name )
-    {
-        codeToName.put( code, name );
-        nameToCode.put( name, code );
+    protected void addCharacterEncoding(int code, String name) {
+        codeToName.put(code, name);
+        nameToCode.put(name, code);
     }
 
     /**
@@ -55,9 +53,8 @@ public abstract class Encoding
      * @param name The name of the character.
      * @return The code for the character or null if it is not in the encoding.
      */
-    public Integer getCode( String name )
-    {
-        return nameToCode.get( name );
+    public Integer getCode(String name) {
+        return nameToCode.get(name);
     }
 
     /**
@@ -67,11 +64,9 @@ public abstract class Encoding
      * @param code The character code.
      * @return The name of the character, or ".notdef" if the bame doesn't exist.
      */
-    public String getName( int code )
-    {
-        String name = codeToName.get( code );
-        if (name != null)
-        {
+    public String getName(int code) {
+        String name = codeToName.get(code);
+        if (name != null) {
             return name;
         }
         return ".notdef";
@@ -82,8 +77,7 @@ public abstract class Encoding
      *
      * @return the Code2Name map
      */
-    public Map<Integer, String> getCodeToNameMap()
-    {
+    public Map<Integer, String> getCodeToNameMap() {
         return Collections.unmodifiableMap(codeToName);
     }
 }

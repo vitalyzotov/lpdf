@@ -16,50 +16,38 @@
  */
 package lpdf.pdfbox.pdmodel.common.filespecification;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSString;
-
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
+
+import java.io.IOException;
 
 /**
  * This represents a file specification.
  *
  * @author Ben Litchfield
  */
-public abstract class PDFileSpecification implements COSObjectable
-{
+public abstract class PDFileSpecification implements COSObjectable {
 
     /**
      * A file specification can either be a COSString or a COSDictionary.  This
      * will create the file specification either way.
      *
      * @param base The cos object that describes the fs.
-     *
      * @return The file specification for the COSBase object.
-     *
      * @throws IOException If there is an error creating the file spec.
      */
-    public static PDFileSpecification createFS( COSBase base ) throws IOException
-    {
+    public static PDFileSpecification createFS(COSBase base) throws IOException {
         PDFileSpecification retval = null;
-        if( base == null )
-        {
+        if (base == null) {
             //then simply return null
-        }
-        else if( base instanceof COSString )
-        {
-            retval = new PDSimpleFileSpecification( (COSString)base );
-        }
-        else if( base instanceof COSDictionary )
-        {
-            retval = new PDComplexFileSpecification( (COSDictionary)base );
-        }
-        else
-        {
-            throw new IOException( "Error: Unknown file specification " + base );
+        } else if (base instanceof COSString) {
+            retval = new PDSimpleFileSpecification((COSString) base);
+        } else if (base instanceof COSDictionary) {
+            retval = new PDComplexFileSpecification((COSDictionary) base);
+        } else {
+            throw new IOException("Error: Unknown file specification " + base);
         }
         return retval;
     }
@@ -76,5 +64,5 @@ public abstract class PDFileSpecification implements COSObjectable
      *
      * @param file The name of the file.
      */
-    public abstract void setFile( String file );
+    public abstract void setFile(String file);
 }

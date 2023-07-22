@@ -16,32 +16,29 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSFloat;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * T*: Move to start of next text line.
  *
  * @author Laurent Huault
  */
-public class NextLine extends OperatorProcessor
-{
-    public NextLine(PDFStreamEngine context)
-    {
+public class NextLine extends OperatorProcessor {
+    public NextLine(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         //move to start of next text line
         List<COSBase> args = new ArrayList<>(2);
         args.add(new COSFloat(0f));
@@ -54,8 +51,7 @@ public class NextLine extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.NEXT_LINE;
     }
 }

@@ -18,9 +18,7 @@ package lpdf.pdfbox.pdmodel.common;
 
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSStream;
-
 import lpdf.pdfbox.pdmodel.PDDocument;
-
 
 
 /**
@@ -29,17 +27,15 @@ import lpdf.pdfbox.pdmodel.PDDocument;
  *
  * @author Ben Litchfield
  */
-public class PDObjectStream extends PDStream
-{
+public class PDObjectStream extends PDStream {
 
     /**
      * Constructor.
      *
      * @param str The stream parameter.
      */
-    public PDObjectStream( COSStream str )
-    {
-        super( str );
+    public PDObjectStream(COSStream str) {
+        super(str);
     }
 
     /**
@@ -48,11 +44,10 @@ public class PDObjectStream extends PDStream
      * @param document The document that the stream will be part of.
      * @return A new stream object.
      */
-    public static PDObjectStream createStream( PDDocument document )
-    {
+    public static PDObjectStream createStream(PDDocument document) {
         COSStream cosStream = document.getDocument().createCOSStream();
-        PDObjectStream strm = new PDObjectStream( cosStream );
-        strm.getCOSObject().setItem( COSName.TYPE, COSName.OBJ_STM );
+        PDObjectStream strm = new PDObjectStream(cosStream);
+        strm.getCOSObject().setItem(COSName.TYPE, COSName.OBJ_STM);
         return strm;
     }
 
@@ -61,9 +56,8 @@ public class PDObjectStream extends PDStream
      *
      * @return The type of this object.
      */
-    public String getType()
-    {
-        return getCOSObject().getNameAsString( COSName.TYPE );
+    public String getType() {
+        return getCOSObject().getNameAsString(COSName.TYPE);
     }
 
     /**
@@ -71,9 +65,8 @@ public class PDObjectStream extends PDStream
      *
      * @return The number of compressed objects.
      */
-    public int getNumberOfObjects()
-    {
-        return getCOSObject().getInt( COSName.N, 0 );
+    public int getNumberOfObjects() {
+        return getCOSObject().getInt(COSName.N, 0);
     }
 
     /**
@@ -81,9 +74,8 @@ public class PDObjectStream extends PDStream
      *
      * @param n The new number of objects.
      */
-    public void setNumberOfObjects( int n )
-    {
-        getCOSObject().setInt( COSName.N, n );
+    public void setNumberOfObjects(int n) {
+        getCOSObject().setInt(COSName.N, n);
     }
 
     /**
@@ -91,9 +83,8 @@ public class PDObjectStream extends PDStream
      *
      * @return The byte offset to the first object.
      */
-    public int getFirstByteOffset()
-    {
-        return getCOSObject().getInt( COSName.FIRST, 0 );
+    public int getFirstByteOffset() {
+        return getCOSObject().getInt(COSName.FIRST, 0);
     }
 
     /**
@@ -101,9 +92,8 @@ public class PDObjectStream extends PDStream
      *
      * @param n The byte offset to the first object.
      */
-    public void setFirstByteOffset( int n )
-    {
-        getCOSObject().setInt( COSName.FIRST, n );
+    public void setFirstByteOffset(int n) {
+        getCOSObject().setInt(COSName.FIRST, n);
     }
 
     /**
@@ -112,8 +102,7 @@ public class PDObjectStream extends PDStream
      *
      * @return The object that this stream is an extension.
      */
-    public PDObjectStream getExtends()
-    {
+    public PDObjectStream getExtends() {
         COSStream stream = getCOSObject().getCOSStream(COSName.EXTENDS);
         return stream != null ? new PDObjectStream(stream) : null;
     }
@@ -124,8 +113,7 @@ public class PDObjectStream extends PDStream
      *
      * @param stream The object stream extension.
      */
-    public void setExtends( PDObjectStream stream )
-    {
-        getCOSObject().setItem( COSName.EXTENDS, stream );
+    public void setExtends(PDObjectStream stream) {
+        getCOSObject().setItem(COSName.EXTENDS, stream);
     }
 }

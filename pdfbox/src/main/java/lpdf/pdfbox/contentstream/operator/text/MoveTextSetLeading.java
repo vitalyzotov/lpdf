@@ -16,44 +16,38 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSFloat;
-import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSFloat;
+import lpdf.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TD: Move text position and set leading.
  *
  * @author Laurent Huault
  */
-public class MoveTextSetLeading extends OperatorProcessor
-{
-    public MoveTextSetLeading(PDFStreamEngine context)
-    {
+public class MoveTextSetLeading extends OperatorProcessor {
+    public MoveTextSetLeading(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.size() < 2)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.size() < 2) {
             throw new MissingOperandException(operator, arguments);
         }
 
         //move text position and set leading
         COSBase base1 = arguments.get(1);
-        if (!(base1 instanceof COSNumber))
-        {
+        if (!(base1 instanceof COSNumber)) {
             return;
         }
         COSNumber y = (COSNumber) base1;
@@ -66,8 +60,7 @@ public class MoveTextSetLeading extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.MOVE_TEXT_SET_LEADING;
     }
 }

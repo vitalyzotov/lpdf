@@ -26,22 +26,18 @@ import java.util.TreeSet;
  * This is an in-efficient implementation based on regex, which helps split the array.
  *
  * @author Palash Ray
- *
  */
-public class GlyphArraySplitterRegexImpl implements GlyphArraySplitter
-{
+public class GlyphArraySplitterRegexImpl implements GlyphArraySplitter {
     private static final String GLYPH_ID_SEPARATOR = "_";
 
     private final CompoundCharacterTokenizer compoundCharacterTokenizer;
 
-    public GlyphArraySplitterRegexImpl(Set<List<Integer>> matchers)
-    {
+    public GlyphArraySplitterRegexImpl(Set<List<Integer>> matchers) {
         compoundCharacterTokenizer = new CompoundCharacterTokenizer(getMatchersAsStrings(matchers));
     }
 
     @Override
-    public List<List<Integer>> split(List<Integer> glyphIds)
-    {
+    public List<List<Integer>> split(List<Integer> glyphIds) {
         String originalGlyphsAsText = convertGlyphIdsToString(glyphIds);
         List<String> tokens = compoundCharacterTokenizer.tokenize(originalGlyphsAsText);
 
@@ -50,14 +46,12 @@ public class GlyphArraySplitterRegexImpl implements GlyphArraySplitter
         return modifiedGlyphs;
     }
 
-    private Set<String> getMatchersAsStrings(Set<List<Integer>> matchers)
-    {
+    private Set<String> getMatchersAsStrings(Set<List<Integer>> matchers) {
         Set<String> stringMatchers = new TreeSet<>((String s1, String s2) ->
         {
             // comparator to ensure that strings with the same beginning
             // put the larger string first
-            if (s1.length() == s2.length())
-            {
+            if (s1.length() == s2.length()) {
                 return s2.compareTo(s1);
             }
             return s2.length() - s1.length();
@@ -66,23 +60,19 @@ public class GlyphArraySplitterRegexImpl implements GlyphArraySplitter
         return stringMatchers;
     }
 
-    private String convertGlyphIdsToString(List<Integer> glyphIds)
-    {
+    private String convertGlyphIdsToString(List<Integer> glyphIds) {
         StringBuilder sb = new StringBuilder(20);
         sb.append(GLYPH_ID_SEPARATOR);
         glyphIds.forEach(glyphId -> sb.append(glyphId).append(GLYPH_ID_SEPARATOR));
         return sb.toString();
     }
 
-    private List<Integer> convertGlyphIdsToList(String glyphIdsAsString)
-    {
+    private List<Integer> convertGlyphIdsToList(String glyphIdsAsString) {
         List<Integer> gsubProcessedGlyphsIds = new ArrayList<>();
 
-        for (String glyphId : glyphIdsAsString.split(GLYPH_ID_SEPARATOR))
-        {
+        for (String glyphId : glyphIdsAsString.split(GLYPH_ID_SEPARATOR)) {
             glyphId = glyphId.trim();
-            if (glyphId.isEmpty())
-            {
+            if (glyphId.isEmpty()) {
                 continue;
             }
             gsubProcessedGlyphsIds.add(Integer.valueOf(glyphId));

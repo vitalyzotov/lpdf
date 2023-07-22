@@ -16,25 +16,26 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.image;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.filter.DecodeOptions;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 /**
  * An image in a PDF document.
  *
  * @author John Hewson
  */
-public interface PDImage extends COSObjectable
-{
+public interface PDImage extends COSObjectable {
     /**
      * Returns an InputStream containing the image data, irrespective of whether this is an
      * inline image or an image XObject.
+     *
      * @return Decoded stream
      * @throws IOException if the data could not be read.
      */
@@ -43,6 +44,7 @@ public interface PDImage extends COSObjectable
     /**
      * Returns an InputStream containing the image data, irrespective of whether this is an
      * inline image or an image XObject. The given filters will not be decoded.
+     *
      * @param stopFilters A list of filters to stop decoding at.
      * @return Decoded stream
      * @throws IOException if the data could not be read.
@@ -76,6 +78,7 @@ public interface PDImage extends COSObjectable
     /**
      * Sets whether or not the image is a stencil.
      * This corresponds to the {@code ImageMask} entry in the image stream's dictionary.
+     *
      * @param isStencil True to make the image a stencil.
      */
     void setStencil(boolean isStencil);
@@ -89,6 +92,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Set the number of bits per component.
+     *
      * @param bitsPerComponent The number of bits per component.
      */
     void setBitsPerComponent(int bitsPerComponent);
@@ -103,6 +107,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Sets the color space for this image.
+     *
      * @param colorSpace The color space for this image.
      */
     void setColorSpace(PDColorSpace colorSpace);
@@ -116,6 +121,7 @@ public interface PDImage extends COSObjectable
 
     /**
      * Sets the height of the image.
+     *
      * @param height The height of the image.
      */
     void setHeight(int height);
@@ -129,13 +135,15 @@ public interface PDImage extends COSObjectable
 
     /**
      * Sets the width of the image.
+     *
      * @param width The width of the image.
      */
     void setWidth(int width);
 
     /**
      * Sets the decode array.
-     * @param decode  the new decode array.
+     *
+     * @param decode the new decode array.
      */
     void setDecode(COSArray decode);
 

@@ -24,8 +24,7 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author Ben Litchfield
  */
-public class MacRomanEncoding extends Encoding
-{
+public class MacRomanEncoding extends Encoding {
     /**
      * Table of octal character codes and their corresponding names.
      */
@@ -240,7 +239,7 @@ public class MacRomanEncoding extends Encoding
             // adding an additional mapping as defined in Appendix D of the pdf spec
             {0312, "nbspace"}
     };
-    
+
     /**
      * Singleton instance of this class.
      *
@@ -251,23 +250,19 @@ public class MacRomanEncoding extends Encoding
     /**
      * Constructor.
      */
-    protected MacRomanEncoding()
-    {
-        for (Object[] encodingEntry : MAC_ROMAN_ENCODING_TABLE)
-        {
+    protected MacRomanEncoding() {
+        for (Object[] encodingEntry : MAC_ROMAN_ENCODING_TABLE) {
             add((Integer) encodingEntry[CHAR_CODE], encodingEntry[CHAR_NAME].toString());
         }
     }
-    
+
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return COSName.MAC_ROMAN_ENCODING;
     }
 
     @Override
-    public String getEncodingName()
-    {
+    public String getEncodingName() {
         return "MacRomanEncoding";
     }
 }

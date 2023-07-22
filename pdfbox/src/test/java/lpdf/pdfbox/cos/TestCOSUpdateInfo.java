@@ -17,23 +17,21 @@
 
 package lpdf.pdfbox.cos;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class for {@link COSUpdateInfo}.
  */
-class TestCOSUpdateInfo
-{
+class TestCOSUpdateInfo {
 
     /**
      * Tests isNeedToBeUpdate() and setNeedToBeUpdate() - tests the getter/setter methods.
      */
     @Test
-    void testIsSetNeedToBeUpdate()
-    {
+    void testIsSetNeedToBeUpdate() {
         COSDocumentState origin = new COSDocumentState();
         origin.setParsing(false);
         // COSDictionary

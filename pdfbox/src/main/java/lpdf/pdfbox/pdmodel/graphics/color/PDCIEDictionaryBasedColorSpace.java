@@ -27,8 +27,7 @@ import lpdf.pdfbox.cos.COSName;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpace
-{
+public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpace {
     protected final COSDictionary dictionary;
 
     //private static final ColorSpace CIEXYZ = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
@@ -40,8 +39,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
     protected float wpY = 1;
     protected float wpZ = 1;
 
-    protected PDCIEDictionaryBasedColorSpace(COSName cosName)
-    {
+    protected PDCIEDictionaryBasedColorSpace(COSName cosName) {
         array = new COSArray();
         dictionary = new COSDictionary();
         array.add(cosName);
@@ -55,8 +53,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      *
      * @param rgb the cos array which represents this color space
      */
-    protected PDCIEDictionaryBasedColorSpace(COSArray rgb)
-    {
+    protected PDCIEDictionaryBasedColorSpace(COSArray rgb) {
         array = rgb;
         dictionary = (COSDictionary) array.getObject(1);
 
@@ -68,15 +65,13 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      *
      * @return true if the current point is the white point.
      */
-    protected boolean isWhitePoint()
-    {
-        return  Float.compare(wpX, 1) == 0 &&
+    protected boolean isWhitePoint() {
+        return Float.compare(wpX, 1) == 0 &&
                 Float.compare(wpY, 1) == 0 &&
-                Float.compare(wpZ, 1)  == 0;
+                Float.compare(wpZ, 1) == 0;
     }
 
-    private void fillWhitepointCache(PDTristimulus whitepoint)
-    {
+    private void fillWhitepointCache(PDTristimulus whitepoint) {
         wpX = whitepoint.getX();
         wpY = whitepoint.getY();
         wpZ = whitepoint.getZ();
@@ -89,11 +84,9 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      *
      * @return the whitepoint tristimulus
      */
-    public final PDTristimulus getWhitepoint()
-    {
+    public final PDTristimulus getWhitepoint() {
         COSArray wp = dictionary.getCOSArray(COSName.WHITE_POINT);
-        if (wp == null)
-        {
+        if (wp == null) {
             wp = new COSArray();
             wp.add(new COSFloat(1.0f));
             wp.add(new COSFloat(1.0f));
@@ -109,11 +102,9 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      *
      * @return the blackpoint tristimulus
      */
-    public final PDTristimulus getBlackPoint()
-    {
+    public final PDTristimulus getBlackPoint() {
         COSArray bp = dictionary.getCOSArray(COSName.BLACK_POINT);
-        if (bp == null)
-        {
+        if (bp == null) {
             bp = new COSArray();
             bp.add(new COSFloat(0.0f));
             bp.add(new COSFloat(0.0f));
@@ -129,10 +120,8 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      * @param whitepoint the whitepoint tristimulus.
      * @throws IllegalArgumentException if null is passed as argument.
      */
-    public void setWhitePoint(PDTristimulus whitepoint)
-    {
-        if (whitepoint == null)
-        {
+    public void setWhitePoint(PDTristimulus whitepoint) {
+        if (whitepoint == null) {
             throw new IllegalArgumentException("Whitepoint may not be null");
         }
         dictionary.setItem(COSName.WHITE_POINT, whitepoint);
@@ -144,8 +133,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
      *
      * @param blackpoint the BlackPoint tristimulus
      */
-    public void setBlackPoint(PDTristimulus blackpoint)
-    {
+    public void setBlackPoint(PDTristimulus blackpoint) {
         dictionary.setItem(COSName.BLACK_POINT, blackpoint);
     }
 

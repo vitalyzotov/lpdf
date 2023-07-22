@@ -17,20 +17,18 @@
 
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
-
 import lpdf.io.RandomAccessRead;
+
+import java.io.IOException;
 
 /**
  * OpenType font file parser.
  */
-public final class OTFParser extends TTFParser
-{
+public final class OTFParser extends TTFParser {
     /**
      * Constructor.
      */
-    public OTFParser()
-    {
+    public OTFParser() {
         super();
     }
 
@@ -39,35 +37,29 @@ public final class OTFParser extends TTFParser
      *
      * @param isEmbedded true if the font is embedded in PDF
      */
-    public OTFParser(boolean isEmbedded)
-    {
+    public OTFParser(boolean isEmbedded) {
         super(isEmbedded);
     }
 
     @Override
-    public OpenTypeFont parse(RandomAccessRead randomAccessRead) throws IOException
-    {
+    public OpenTypeFont parse(RandomAccessRead randomAccessRead) throws IOException {
         return (OpenTypeFont) super.parse(randomAccessRead);
     }
 
     @Override
-    OpenTypeFont parse(TTFDataStream raf) throws IOException
-    {
-        return (OpenTypeFont)super.parse(raf);
+    OpenTypeFont parse(TTFDataStream raf) throws IOException {
+        return (OpenTypeFont) super.parse(raf);
     }
 
     @Override
-    OpenTypeFont newFont(TTFDataStream raf)
-    {
+    OpenTypeFont newFont(TTFDataStream raf) {
         return new OpenTypeFont(raf);
     }
 
     @Override
-    protected TTFTable readTable(String tag)
-    {
+    protected TTFTable readTable(String tag) {
         // todo: this is a stub, a full implementation is needed
-        switch (tag)
-        {
+        switch (tag) {
             case "BASE":
             case "GDEF":
             case "GPOS":
@@ -82,8 +74,7 @@ public final class OTFParser extends TTFParser
     }
 
     @Override
-    protected boolean allowCFF()
-    {
+    protected boolean allowCFF() {
         return true;
     }
 }

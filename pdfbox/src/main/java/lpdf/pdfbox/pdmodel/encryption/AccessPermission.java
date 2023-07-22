@@ -30,24 +30,21 @@ package lpdf.pdfbox.pdmodel.encryption;
  * <li>assemble the document</li>
  * <li>print in degraded quality</li>
  * </ul>
- *
+ * <p>
  * This class can be used to protect a document by assigning access permissions to recipients.
  * In this case, it must be used with a specific ProtectionPolicy.
- *
- *
+ * <p>
+ * <p>
  * When a document is decrypted, it has a currentAccessPermission property which is the access permissions
  * granted to the user who decrypted the document.
  *
- * @see ProtectionPolicy
- * @see lpdf.pdfbox.pdmodel.PDDocument#getCurrentAccessPermission()
- *
  * @author Ben Litchfield
  * @author Benoit Guillon
- *
+ * @see ProtectionPolicy
+ * @see lpdf.pdfbox.pdmodel.PDDocument#getCurrentAccessPermission()
  */
 
-public class AccessPermission
-{
+public class AccessPermission {
 
     private static final int DEFAULT_PERMISSIONS = ~3; //bits 0 & 1 need to be zero
     private static final int PRINT_BIT = 3;
@@ -67,8 +64,7 @@ public class AccessPermission
      * Create a new access permission object.
      * By default, all permissions are granted.
      */
-    public AccessPermission()
-    {
+    public AccessPermission() {
         bytes = DEFAULT_PERMISSIONS;
     }
 
@@ -79,8 +75,7 @@ public class AccessPermission
      * @param b the bytes as defined in PDF specs
      */
 
-    public AccessPermission(byte[] b)
-    {
+    public AccessPermission(byte[] b) {
         bytes = 0;
         bytes |= b[0] & 0xFF;
         bytes <<= 8;
@@ -96,33 +91,25 @@ public class AccessPermission
      *
      * @param permissions The permission bits.
      */
-    public AccessPermission( int permissions )
-    {
+    public AccessPermission(int permissions) {
         bytes = permissions;
     }
 
-    private boolean isPermissionBitOn( int bit )
-    {
-        return (bytes & (1 << (bit-1))) != 0;
+    private boolean isPermissionBitOn(int bit) {
+        return (bytes & (1 << (bit - 1))) != 0;
     }
 
-    private boolean setPermissionBit( int bit, boolean value )
-    {
+    private boolean setPermissionBit(int bit, boolean value) {
         int permissions = bytes;
-        if( value )
-        {
-            permissions = permissions | (1 << (bit-1));
-        }
-        else
-        {
+        if (value) {
+            permissions = permissions | (1 << (bit - 1));
+        } else {
             permissions = permissions & (~(1 << (bit - 1)));
         }
         bytes = permissions;
 
-        return (bytes & (1 << (bit-1))) != 0;
+        return (bytes & (1 << (bit - 1))) != 0;
     }
-
-
 
 
     /**
@@ -131,8 +118,7 @@ public class AccessPermission
      *
      * @return true if the access permission does not restrict the use of the document
      */
-    public boolean isOwnerPermission()
-    {
+    public boolean isOwnerPermission() {
         return (this.canAssembleDocument()
                 && this.canExtractContent()
                 && this.canExtractForAccessibility()
@@ -141,7 +127,7 @@ public class AccessPermission
                 && this.canModifyAnnotations()
                 && this.canPrint()
                 && this.canPrintFaithful()
-                );
+        );
     }
 
     /**
@@ -150,8 +136,7 @@ public class AccessPermission
      * @return A standard owner access permission set.
      */
 
-    public static AccessPermission getOwnerAccessPermission()
-    {
+    public static AccessPermission getOwnerAccessPermission() {
         AccessPermission ret = new AccessPermission();
         ret.setCanAssembleDocument(true);
         ret.setCanExtractContent(true);
@@ -173,13 +158,11 @@ public class AccessPermission
      * @return the integer representing access permissions
      */
 
-    public int getPermissionBytesForPublicKey()
-    {
+    public int getPermissionBytesForPublicKey() {
         setPermissionBit(1, true);
         setPermissionBit(7, false);
         setPermissionBit(8, false);
-        for(int i=13; i<=32; i++)
-        {
+        for (int i = 13; i <= 32; i++) {
             setPermissionBit(i, false);
         }
         return bytes;
@@ -192,8 +175,7 @@ public class AccessPermission
      *
      * @return the integer representing the access permissions
      */
-    public int getPermissionBytes()
-    {
+    public int getPermissionBytes() {
         return bytes;
     }
 
@@ -202,9 +184,8 @@ public class AccessPermission
      *
      * @return true If supplied with the user password they are allowed to print.
      */
-    public boolean canPrint()
-    {
-        return isPermissionBitOn( PRINT_BIT );
+    public boolean canPrint() {
+        return isPermissionBitOn(PRINT_BIT);
     }
 
     /**
@@ -214,11 +195,9 @@ public class AccessPermission
      *
      * @param allowPrinting A boolean determining if the user can print.
      */
-    public void setCanPrint( boolean allowPrinting )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( PRINT_BIT, allowPrinting );
+    public void setCanPrint(boolean allowPrinting) {
+        if (!readOnly) {
+            setPermissionBit(PRINT_BIT, allowPrinting);
         }
     }
 
@@ -227,9 +206,8 @@ public class AccessPermission
      *
      * @return true If supplied with the user password they are allowed to modify the document
      */
-    public boolean canModify()
-    {
-        return isPermissionBitOn( MODIFICATION_BIT );
+    public boolean canModify() {
+        return isPermissionBitOn(MODIFICATION_BIT);
     }
 
     /**
@@ -239,11 +217,9 @@ public class AccessPermission
      *
      * @param allowModifications A boolean determining if the user can modify the document.
      */
-    public void setCanModify( boolean allowModifications )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( MODIFICATION_BIT, allowModifications );
+    public void setCanModify(boolean allowModifications) {
+        if (!readOnly) {
+            setPermissionBit(MODIFICATION_BIT, allowModifications);
         }
     }
 
@@ -251,11 +227,10 @@ public class AccessPermission
      * This will tell if the user can extract text and images from the PDF document.
      *
      * @return true If supplied with the user password they are allowed to extract content
-     *              from the PDF document
+     * from the PDF document
      */
-    public boolean canExtractContent()
-    {
-        return isPermissionBitOn( EXTRACT_BIT );
+    public boolean canExtractContent() {
+        return isPermissionBitOn(EXTRACT_BIT);
     }
 
     /**
@@ -266,11 +241,9 @@ public class AccessPermission
      * @param allowExtraction A boolean determining if the user can extract content
      *                        from the document.
      */
-    public void setCanExtractContent( boolean allowExtraction )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( EXTRACT_BIT, allowExtraction );
+    public void setCanExtractContent(boolean allowExtraction) {
+        if (!readOnly) {
+            setPermissionBit(EXTRACT_BIT, allowExtraction);
         }
     }
 
@@ -283,9 +256,8 @@ public class AccessPermission
      *
      * @return true If supplied with the user password they are allowed to modify annotations.
      */
-    public boolean canModifyAnnotations()
-    {
-        return isPermissionBitOn( MODIFY_ANNOTATIONS_BIT );
+    public boolean canModifyAnnotations() {
+        return isPermissionBitOn(MODIFY_ANNOTATIONS_BIT);
     }
 
     /**
@@ -299,11 +271,9 @@ public class AccessPermission
      *
      * @param allowAnnotationModification A boolean determining the new setting.
      */
-    public void setCanModifyAnnotations( boolean allowAnnotationModification )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( MODIFY_ANNOTATIONS_BIT, allowAnnotationModification );
+    public void setCanModifyAnnotations(boolean allowAnnotationModification) {
+        if (!readOnly) {
+            setPermissionBit(MODIFY_ANNOTATIONS_BIT, allowAnnotationModification);
         }
     }
 
@@ -313,9 +283,8 @@ public class AccessPermission
      *
      * @return true If supplied with the user password they are allowed to fill in form fields.
      */
-    public boolean canFillInForm()
-    {
-        return isPermissionBitOn( FILL_IN_FORM_BIT );
+    public boolean canFillInForm() {
+        return isPermissionBitOn(FILL_IN_FORM_BIT);
     }
 
     /**
@@ -323,16 +292,14 @@ public class AccessPermission
      * {@link #canModifyAnnotations() canModifyAnnotations()} returns false. Therefore, if you want
      * to prevent a user from filling in interactive form fields, you need to call
      * {@link #setCanModifyAnnotations(boolean) setCanModifyAnnotations(false)} as well.
-     *<p>
+     * <p>
      * This method will have no effect if the object is in read only mode.
      *
      * @param allowFillingInForm A boolean determining if the user can fill in interactive forms.
      */
-    public void setCanFillInForm( boolean allowFillingInForm )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( FILL_IN_FORM_BIT, allowFillingInForm );
+    public void setCanFillInForm(boolean allowFillingInForm) {
+        if (!readOnly) {
+            setPermissionBit(FILL_IN_FORM_BIT, allowFillingInForm);
         }
     }
 
@@ -341,11 +308,10 @@ public class AccessPermission
      * for accessibility purposes.
      *
      * @return true If supplied with the user password they are allowed to extract content
-     *              from the PDF document
+     * from the PDF document
      */
-    public boolean canExtractForAccessibility()
-    {
-        return isPermissionBitOn( EXTRACT_FOR_ACCESSIBILITY_BIT );
+    public boolean canExtractForAccessibility() {
+        return isPermissionBitOn(EXTRACT_FOR_ACCESSIBILITY_BIT);
     }
 
     /**
@@ -356,11 +322,9 @@ public class AccessPermission
      * @param allowExtraction A boolean determining if the user can extract content
      *                        from the document.
      */
-    public void setCanExtractForAccessibility( boolean allowExtraction )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( EXTRACT_FOR_ACCESSIBILITY_BIT, allowExtraction );
+    public void setCanExtractForAccessibility(boolean allowExtraction) {
+        if (!readOnly) {
+            setPermissionBit(EXTRACT_FOR_ACCESSIBILITY_BIT, allowExtraction);
         }
     }
 
@@ -369,9 +333,8 @@ public class AccessPermission
      *
      * @return true If supplied with the user password they are allowed to assemble the document.
      */
-    public boolean canAssembleDocument()
-    {
-        return isPermissionBitOn( ASSEMBLE_DOCUMENT_BIT );
+    public boolean canAssembleDocument() {
+        return isPermissionBitOn(ASSEMBLE_DOCUMENT_BIT);
     }
 
     /**
@@ -381,11 +344,9 @@ public class AccessPermission
      *
      * @param allowAssembly A boolean determining if the user can assemble the document.
      */
-    public void setCanAssembleDocument( boolean allowAssembly )
-    {
-        if(!readOnly)
-        {
-            setPermissionBit( ASSEMBLE_DOCUMENT_BIT, allowAssembly );
+    public void setCanAssembleDocument(boolean allowAssembly) {
+        if (!readOnly) {
+            setPermissionBit(ASSEMBLE_DOCUMENT_BIT, allowAssembly);
         }
     }
 
@@ -396,8 +357,7 @@ public class AccessPermission
      * @return true If supplied with the user password they are allowed to print the document in a
      * faithful format.
      */
-    public boolean canPrintFaithful()
-    {
+    public boolean canPrintFaithful() {
         return isPermissionBitOn(FAITHFUL_PRINT_BIT);
     }
 
@@ -408,12 +368,10 @@ public class AccessPermission
      * This method will have no effect if the object is in read only mode.
      *
      * @param canPrintFaithful A boolean determining if the user can print the document in a
-     * faithful format.
+     *                         faithful format.
      */
-    public void setCanPrintFaithful(boolean canPrintFaithful)
-    {
-        if (!readOnly)
-        {
+    public void setCanPrintFaithful(boolean canPrintFaithful) {
+        if (!readOnly) {
             setPermissionBit(FAITHFUL_PRINT_BIT, canPrintFaithful);
         }
     }
@@ -424,8 +382,7 @@ public class AccessPermission
      * This method is used for the currentAccessPermission of a document to avoid
      * users to change access permission.
      */
-    public void setReadOnly()
-    {
+    public void setReadOnly() {
         readOnly = true;
     }
 
@@ -435,8 +392,7 @@ public class AccessPermission
      * @return true if the object is in read only mode.
      */
 
-    public boolean isReadOnly()
-    {
+    public boolean isReadOnly() {
         return readOnly;
     }
 
@@ -445,18 +401,14 @@ public class AccessPermission
      *
      * @return true if any revision 3 access permission is set
      */
-    protected boolean hasAnyRevision3PermissionSet()
-    {
-        if (canFillInForm())
-        {
+    protected boolean hasAnyRevision3PermissionSet() {
+        if (canFillInForm()) {
             return true;
         }
-        if (canExtractForAccessibility())
-        {
+        if (canExtractForAccessibility()) {
             return true;
         }
-        if (canAssembleDocument())
-        {
+        if (canAssembleDocument()) {
             return true;
         }
         return canPrintFaithful();

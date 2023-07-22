@@ -26,16 +26,13 @@ import lpdf.pdfbox.contentstream.operator.OperatorName;
  *
  * @author John Hewson
  */
-public class SetStrokingColorN extends SetStrokingColor
-{
-    public SetStrokingColorN(PDFStreamEngine context)
-    {
+public class SetStrokingColorN extends SetStrokingColor {
+    public SetStrokingColorN(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.STROKING_COLOR_N;
     }
 }

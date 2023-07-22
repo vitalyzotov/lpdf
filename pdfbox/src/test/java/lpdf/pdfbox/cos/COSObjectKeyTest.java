@@ -16,41 +16,32 @@
  */
 package lpdf.pdfbox.cos;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
-
-class COSObjectKeyTest
-{
+class COSObjectKeyTest {
     @Test
-    void testInputValues()
-    {
-        try
-        {
+    void testInputValues() {
+        try {
             new COSObjectKey(-1L, 0);
             fail("An IllegalArgumentException shouzld have been thrown");
-        }
-        catch (IllegalArgumentException exception)
-        {
+        } catch (IllegalArgumentException exception) {
 
         }
 
-        try
-        {
+        try {
             new COSObjectKey(1L, -1);
             fail("An IllegalArgumentException shouzld have been thrown");
-        }
-        catch (IllegalArgumentException exception)
-        {
+        } catch (IllegalArgumentException exception) {
 
         }
     }
 
     @Test
-    void compareToInputNotNullOutputZero()
-    {
+    void compareToInputNotNullOutputZero() {
         // Arrange
         final COSObjectKey objectUnderTest = new COSObjectKey(1L, 0);
         final COSObjectKey other = new COSObjectKey(1L, 0);
@@ -63,8 +54,7 @@ class COSObjectKeyTest
     }
 
     @Test
-    void compareToInputNotNullOutputNotNull()
-    {
+    void compareToInputNotNullOutputNotNull() {
         // Arrange
         final COSObjectKey objectUnderTest = new COSObjectKey(1L, 0);
         final COSObjectKey other = new COSObjectKey(9_999_999L, 0);
@@ -79,15 +69,13 @@ class COSObjectKeyTest
     }
 
     @Test
-    void testEquals()
-    {
+    void testEquals() {
         assertEquals(new COSObjectKey(100, 0), new COSObjectKey(100, 0));
         assertNotEquals(new COSObjectKey(100, 0), new COSObjectKey(101, 0));
     }
 
     @Test
-    void testInternalRepresentation()
-    {
+    void testInternalRepresentation() {
         COSObjectKey key = new COSObjectKey(100, 0);
         assertEquals(100, key.getNumber());
         assertEquals(0, key.getGeneration());
@@ -106,8 +94,7 @@ class COSObjectKeyTest
     }
 
     @Test
-    void testSortingOrder()
-    {
+    void testSortingOrder() {
         // comparison is done by comparing the object numbers first
         // if they are equal the generation numbers are taken into account
         COSObjectKey key40 = new COSObjectKey(4, 0);
@@ -122,8 +109,7 @@ class COSObjectKeyTest
     }
 
     @Test
-    void checkHashCode()
-    {
+    void checkHashCode() {
         // same object number 100 0
         assertEquals(new COSObjectKey(100, 0).hashCode(),
                 new COSObjectKey(100, 0).hashCode());

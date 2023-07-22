@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Villu Ruusmann
  */
-public interface DataInput
-{
+public interface DataInput {
 
     /**
      * Determines if there are any bytes left to read or not.
@@ -52,6 +51,7 @@ public interface DataInput
 
     /**
      * Read one single byte from the buffer.
+     *
      * @return the byte
      * @throws IOException if an error occurs during reading
      */
@@ -59,6 +59,7 @@ public interface DataInput
 
     /**
      * Read one single unsigned byte from the buffer.
+     *
      * @return the unsigned byte as int
      * @throws IOException if an error occurs during reading
      */
@@ -75,21 +76,21 @@ public interface DataInput
 
     /**
      * Read one single short value from the buffer.
+     *
      * @return the short value
      * @throws IOException if an error occurs during reading
      */
-    default short readShort() throws IOException
-    {
+    default short readShort() throws IOException {
         return (short) readUnsignedShort();
     }
 
     /**
      * Read one single unsigned short (2 bytes) value from the buffer.
+     *
      * @return the unsigned short value as int
      * @throws IOException if an error occurs during reading
      */
-    default int readUnsignedShort() throws IOException
-    {
+    default int readUnsignedShort() throws IOException {
         int b1 = readUnsignedByte();
         int b2 = readUnsignedByte();
         return b1 << 8 | b2;
@@ -97,11 +98,11 @@ public interface DataInput
 
     /**
      * Read one single int (4 bytes) from the buffer.
+     *
      * @return the int value
      * @throws IOException if an error occurs during reading
      */
-    default int readInt() throws IOException
-    {
+    default int readInt() throws IOException {
         int b1 = readUnsignedByte();
         int b2 = readUnsignedByte();
         int b3 = readUnsignedByte();
@@ -111,6 +112,7 @@ public interface DataInput
 
     /**
      * Read a number of single byte values from the buffer.
+     *
      * @param length the number of bytes to be read
      * @return an array with containing the bytes from the buffer
      * @throws IOException if an error occurs during reading
@@ -121,15 +123,14 @@ public interface DataInput
 
     /**
      * Read the offset from the buffer.
+     *
      * @param offSize the given offsize
      * @return the offset
      * @throws IOException if an error occurs during reading
      */
-    default int readOffset(int offSize) throws IOException
-    {
+    default int readOffset(int offSize) throws IOException {
         int value = 0;
-        for (int i = 0; i < offSize; i++)
-        {
+        for (int i = 0; i < offSize; i++) {
             value = value << 8 | readUnsignedByte();
         }
         return value;

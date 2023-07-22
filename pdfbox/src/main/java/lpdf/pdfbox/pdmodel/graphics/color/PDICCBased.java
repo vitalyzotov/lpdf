@@ -16,8 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSFloat;
@@ -29,6 +27,8 @@ import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.ResourceCache;
 import lpdf.pdfbox.pdmodel.common.PDRange;
 import lpdf.pdfbox.pdmodel.common.PDStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;

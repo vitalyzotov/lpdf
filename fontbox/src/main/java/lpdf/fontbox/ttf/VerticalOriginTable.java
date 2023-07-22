@@ -22,21 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A vertical origin 'VORG' table in an OpenType font.
- *
+ * <p>
  * The purpose of this table is to improve the efficiency of determining
  * vertical origins in CFF fonts where absent this information the bounding
  * box would have to be extracted from CFF charstring data.
- *
+ * <p>
  * This table is strongly recommended by the OpenType CJK Font Guidelines
  * for "CFF OpenType fonts that are used for vertical writing".
- *
+ * <p>
  * This table is specified only in the OpenType specification (1.3 and later).
  *
  * @author Glenn Adams
- *
  */
-public class VerticalOriginTable extends TTFTable
-{
+public class VerticalOriginTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -46,27 +44,24 @@ public class VerticalOriginTable extends TTFTable
     private int defaultVertOriginY;
     private Map<Integer, Integer> origins;
 
-    VerticalOriginTable()
-    {
+    VerticalOriginTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.read32Fixed();
         defaultVertOriginY = data.readSignedShort();
         int numVertOriginYMetrics = data.readUnsignedShort();
         origins = new ConcurrentHashMap<>(numVertOriginYMetrics);
-        for (int i = 0; i < numVertOriginYMetrics; ++i)
-        {
+        for (int i = 0; i < numVertOriginYMetrics; ++i) {
             int g = data.readUnsignedShort();
             int y = data.readSignedShort();
             origins.put(g, y);
@@ -77,8 +72,7 @@ public class VerticalOriginTable extends TTFTable
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
 
@@ -89,14 +83,10 @@ public class VerticalOriginTable extends TTFTable
      * @param gid GID
      * @return Returns the y-coordinate of the vertical origin.
      */
-    public int getOriginY(int gid)
-    {
-        if (origins.containsKey(gid))
-        {
+    public int getOriginY(int gid) {
+        if (origins.containsKey(gid)) {
             return origins.get(gid);
-        }
-        else
-        {
+        } else {
             return defaultVertOriginY;
         }
     }

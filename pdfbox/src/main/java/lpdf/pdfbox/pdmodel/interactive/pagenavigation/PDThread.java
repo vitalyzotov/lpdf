@@ -26,8 +26,7 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDThread implements COSObjectable
-{
+public class PDThread implements COSObjectable {
 
 
     private final COSDictionary thread;
@@ -37,17 +36,14 @@ public class PDThread implements COSObjectable
      *
      * @param t The underlying dictionary.
      */
-    public PDThread( COSDictionary t )
-    {
+    public PDThread(COSDictionary t) {
         thread = t;
     }
 
     /**
      * Default constructor.
-     *
      */
-    public PDThread()
-    {
+    public PDThread() {
         thread = new COSDictionary();
         thread.setItem(COSName.TYPE, COSName.THREAD);
     }
@@ -58,8 +54,7 @@ public class PDThread implements COSObjectable
      * @return The underlying info dictionary.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return thread;
     }
 
@@ -68,8 +63,7 @@ public class PDThread implements COSObjectable
      *
      * @return The thread information.
      */
-    public PDDocumentInformation getThreadInfo()
-    {
+    public PDDocumentInformation getThreadInfo() {
         COSDictionary info = thread.getCOSDictionary(COSName.I);
         return info != null ? new PDDocumentInformation(info) : null;
     }
@@ -79,8 +73,7 @@ public class PDThread implements COSObjectable
      *
      * @param info The info dictionary about this thread.
      */
-    public void setThreadInfo( PDDocumentInformation info )
-    {
+    public void setThreadInfo(PDDocumentInformation info) {
         thread.setItem(COSName.I, info);
     }
 
@@ -90,8 +83,7 @@ public class PDThread implements COSObjectable
      *
      * @return The first bead in the thread.
      */
-    public PDThreadBead getFirstBead()
-    {
+    public PDThreadBead getFirstBead() {
         COSDictionary bead = thread.getCOSDictionary(COSName.F);
         return bead != null ? new PDThreadBead(bead) : null;
     }
@@ -102,11 +94,9 @@ public class PDThread implements COSObjectable
      *
      * @param bead The first bead in the thread.
      */
-    public void setFirstBead( PDThreadBead bead )
-    {
-        if( bead != null )
-        {
-            bead.setThread( this );
+    public void setFirstBead(PDThreadBead bead) {
+        if (bead != null) {
+            bead.setThread(this);
         }
         thread.setItem(COSName.F, bead);
     }

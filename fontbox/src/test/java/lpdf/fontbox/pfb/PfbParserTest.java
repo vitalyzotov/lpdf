@@ -16,33 +16,28 @@
  */
 package lpdf.fontbox.pfb;
 
+import lpdf.fontbox.encoding.BuiltInEncoding;
+import lpdf.fontbox.type1.Type1Font;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import lpdf.fontbox.encoding.BuiltInEncoding;
-import lpdf.fontbox.type1.Type1Font;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- *
  * @author Tilman Hausherr
  */
-class PfbParserTest
-{
+class PfbParserTest {
     /**
      * Test parsing a PFB font.
      *
      * @throws IOException
      */
     @Test
-    void testPfb() throws IOException
-    {
+    void testPfb() throws IOException {
         Type1Font font;
-        try (InputStream is = new FileInputStream("target/fonts/OpenSans-Regular.pfb"))
-        {
+        try (InputStream is = new FileInputStream("target/fonts/OpenSans-Regular.pfb")) {
             font = Type1Font.createWithPFB(is);
         }
         Assertions.assertEquals("1.10", font.getVersion());
@@ -58,8 +53,7 @@ class PfbParserTest
         Assertions.assertEquals(4498, font.getASCIISegment().length);
         Assertions.assertEquals(95911, font.getBinarySegment().length);
         Assertions.assertEquals(938, font.getCharStringsDict().size());
-        for (String s : font.getCharStringsDict().keySet())
-        {
+        for (String s : font.getCharStringsDict().keySet()) {
             Assertions.assertNotNull(font.getPath(s));
             Assertions.assertTrue(font.hasGlyph(s));
         }
@@ -69,8 +63,7 @@ class PfbParserTest
      * Test 0 length font.
      */
     @Test
-    void testEmpty()
-    {
+    void testEmpty() {
         Assertions.assertThrows(IOException.class, () -> Type1Font.createWithPFB(new byte[0]));
     }
 }

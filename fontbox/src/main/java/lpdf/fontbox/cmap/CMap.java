@@ -16,6 +16,9 @@
  */
 package lpdf.fontbox.cmap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,16 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This class represents a CMap file.
  *
  * @author Ben Litchfield
  */
-public class CMap
-{
+public class CMap {
     private static final Logger LOG = LoggerFactory.getLogger(CMap.class);
 
     private int wmode = 0;
@@ -65,7 +64,7 @@ public class CMap
     private final List<CIDRange> codeToCidRanges = new ArrayList<>();
 
     // inverted map
-    private final Map <String, byte[]> unicodeToByteCodes = new HashMap<>();
+    private final Map<String, byte[]> unicodeToByteCodes = new HashMap<>();
 
     private static final String SPACE = " ";
     private int spaceMapping = -1;
@@ -73,8 +72,7 @@ public class CMap
     /**
      * Creates a new instance of CMap.
      */
-    CMap()
-    {
+    CMap() {
     }
 
     /**
@@ -82,8 +80,7 @@ public class CMap
      *
      * @return true If there are any CID mappings, false otherwise.
      */
-    public boolean hasCIDMappings()
-    {
+    public boolean hasCIDMappings() {
         return !codeToCid.isEmpty() || !codeToCidRanges.isEmpty();
     }
 
@@ -92,14 +89,13 @@ public class CMap
      *
      * @return true If there are any Unicode mappings, false otherwise.
      */
-    public boolean hasUnicodeMappings()
-    {
+    public boolean hasUnicodeMappings() {
         return !charToUnicodeOneByte.isEmpty() || !charToUnicodeTwoBytes.isEmpty();
     }
 
     /**
      * Returns the sequence of Unicode characters for the given character code.
-     *
+     * <p>
      * This method exists for convenience. It may return false values as the origin byte length of the input value is
      * unknown and the mapping for some input values aren't unique. <br>
      * Example:<br>
@@ -109,11 +105,9 @@ public class CMap
      * @param code character code
      * @return Unicode characters (may be more than one, e.g "fi" ligature)
      */
-    public String toUnicode(int code)
-    {
+    public String toUnicode(int code) {
         String unicode = code < 256 ? toUnicode(code, 1) : null;
-        if (unicode == null)
-        {
+        if (unicode == null) {
             unicode = toUnicode(code, 2);
         }
         return unicode;
@@ -122,18 +116,15 @@ public class CMap
     /**
      * Returns the sequence of Unicode characters for the given character code.
      *
-     * @param code character code
+     * @param code   character code
      * @param length code length
      * @return Unicode characters (may be more than one, e.g "fi" ligature)
      */
-    public String toUnicode(int code, int length)
-    {
-        if (length == 1)
-        {
+    public String toUnicode(int code, int length) {
+        if (length == 1) {
             return charToUnicodeOneByte.get(code);
         }
-        if (length == 2)
-        {
+        if (length == 2) {
             return charToUnicodeTwoBytes.get(code);
         }
         LOG.warn("Mappings with more than 2 bytes aren't supported");
@@ -146,8 +137,7 @@ public class CMap
      * @param code bytes of the character code
      * @return Unicode characters (may be more than one, e.g "fi" ligature)
      */
-    public String toUnicode(byte[] code)
-    {
+    public String toUnicode(byte[] code) {
         return toUnicode(toInt(code), code.length);
     }
 
@@ -160,41 +150,32 @@ public class CMap
      * @return character code
      * @throws IOException if there was an error reading the stream or CMap
      */
-    public int readCode(InputStream in) throws IOException
-    {
+    public int readCode(InputStream in) throws IOException {
         byte[] bytes = new byte[maxCodeLength];
-        in.read(bytes,0,minCodeLength);
+        in.read(bytes, 0, minCodeLength);
         in.mark(maxCodeLength);
-        for (int i = minCodeLength-1; i < maxCodeLength; i++)
-        {
+        for (int i = minCodeLength - 1; i < maxCodeLength; i++) {
             final int byteCount = i + 1;
-            if (codespaceRanges.stream().anyMatch(r -> r.isFullMatch(bytes, byteCount)))
-            {
+            if (codespaceRanges.stream().anyMatch(r -> r.isFullMatch(bytes, byteCount))) {
                 return toInt(bytes, byteCount);
             }
-            if (byteCount < maxCodeLength)
-            {
-                bytes[byteCount] = (byte)in.read();
+            if (byteCount < maxCodeLength) {
+                bytes[byteCount] = (byte) in.read();
             }
         }
-        if (LOG.isWarnEnabled())
-        {
+        if (LOG.isWarnEnabled()) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < maxCodeLength; ++i)
-            {
+            for (int i = 0; i < maxCodeLength; ++i) {
                 sb.append(String.format("0x%02X (%04o) ", bytes[i], bytes[i]));
             }
             LOG.warn("Invalid character code sequence " + sb + "in CMap " + cmapName);
         }
         // PDFBOX-4811 reposition to where we were after initial read
-        if (in.markSupported())
-        {
+        if (in.markSupported()) {
             in.reset();
-        }
-        else
-        {
+        } else {
             LOG.warn("mark() and reset() not supported, " + (maxCodeLength - 1) +
-                     " bytes have been skipped");
+                    " bytes have been skipped");
         }
         return toInt(bytes, minCodeLength); // Adobe Reader behavior
     }
@@ -202,19 +183,16 @@ public class CMap
     /**
      * Returns an int for the given byte array
      */
-    static int toInt(byte[] data)
-    {
+    static int toInt(byte[] data) {
         return toInt(data, data.length);
     }
 
     /**
      * Returns an int for the given byte array
      */
-    private static int toInt(byte[] data, int dataLen)
-    {
+    private static int toInt(byte[] data, int dataLen) {
         int code = 0;
-        for (int i = 0; i < dataLen; ++i)
-        {
+        for (int i = 0; i < dataLen; ++i) {
             code <<= 8;
             code |= (data[i] & 0xFF);
         }
@@ -227,19 +205,15 @@ public class CMap
      * @param code character code as byte array
      * @return CID
      */
-    public int toCID(byte[] code)
-    {
-        if (!hasCIDMappings() || code.length < minCidLength || code.length > maxCidLength)
-        {
+    public int toCID(byte[] code) {
+        if (!hasCIDMappings() || code.length < minCidLength || code.length > maxCidLength) {
             return 0;
         }
         Integer cid = null;
-        if (codeToCid.containsKey(code.length))
-        {
+        if (codeToCid.containsKey(code.length)) {
             cid = codeToCid.get(code.length).get(toInt(code));
         }
-        if (cid == null)
-        {
+        if (cid == null) {
             cid = toCIDFromRanges(code);
         }
         return cid;
@@ -247,7 +221,7 @@ public class CMap
 
     /**
      * Returns the CID for the given character code.
-     *
+     * <p>
      * This method exists for convenience. It may return false values as the origin byte length of the input value is
      * unknown and the mapping for some input values aren't unique. <br>
      * Example:<br>
@@ -257,16 +231,13 @@ public class CMap
      * @param code character code
      * @return CID
      */
-    public int toCID(int code)
-    {
-        if (!hasCIDMappings())
-        {
+    public int toCID(int code) {
+        if (!hasCIDMappings()) {
             return 0;
         }
         int cid = 0;
         int length = minCidLength;
-        while (cid == 0 && (length <= maxCidLength))
-        {
+        while (cid == 0 && (length <= maxCidLength)) {
             cid = toCID(code, length++);
         }
         return cid;
@@ -279,15 +250,12 @@ public class CMap
      * @param length the origin byte length of the code
      * @return CID
      */
-    public int toCID(int code, int length)
-    {
-        if (!hasCIDMappings() || length < minCidLength || length > maxCidLength)
-        {
+    public int toCID(int code, int length) {
+        if (!hasCIDMappings() || length < minCidLength || length > maxCidLength) {
             return 0;
         }
         Integer cid = null;
-        if (codeToCid.containsKey(length))
-        {
+        if (codeToCid.containsKey(length)) {
             cid = codeToCid.get(length).get(code);
         }
         return cid != null ? cid : toCIDFromRanges(code, length);
@@ -300,13 +268,10 @@ public class CMap
      * @return CID
      */
 
-    private int toCIDFromRanges(int code, int length)
-    {
-        for (CIDRange range : codeToCidRanges)
-        {
+    private int toCIDFromRanges(int code, int length) {
+        for (CIDRange range : codeToCidRanges) {
             int ch = range.map(code, length);
-            if (ch != -1)
-            {
+            if (ch != -1) {
                 return ch;
             }
         }
@@ -320,13 +285,10 @@ public class CMap
      * @return CID
      */
 
-    private int toCIDFromRanges(byte[] code)
-    {
-        for (CIDRange range : codeToCidRanges)
-        {
+    private int toCIDFromRanges(byte[] code) {
+        for (CIDRange range : codeToCidRanges) {
             int ch = range.map(code);
-            if (ch != -1)
-            {
+            if (ch != -1) {
                 return ch;
             }
         }
@@ -341,13 +303,11 @@ public class CMap
      * @param length The length of the data we are getting.
      * @return the resulting integer
      */
-    private int getCodeFromArray( byte[] data, int offset, int length )
-    {
+    private int getCodeFromArray(byte[] data, int offset, int length) {
         int code = 0;
-        for( int i=0; i<length; i++ )
-        {
+        for (int i = 0; i < length; i++) {
             code <<= 8;
-            code |= (data[offset+i]+256)%256;
+            code |= (data[offset + i] + 256) % 256;
         }
         return code;
     }
@@ -355,28 +315,21 @@ public class CMap
     /**
      * This will add a character code to Unicode character sequence mapping.
      *
-     * @param codes The character codes to map from.
+     * @param codes   The character codes to map from.
      * @param unicode The Unicode characters to map to.
      */
-    void addCharMapping(byte[] codes, String unicode)
-    {
+    void addCharMapping(byte[] codes, String unicode) {
         unicodeToByteCodes.put(unicode, codes.clone()); // clone needed, bytes is modified later
         int code = getCodeFromArray(codes, 0, codes.length);
-        if (codes.length == 1)
-        {
+        if (codes.length == 1) {
             charToUnicodeOneByte.put(code, unicode);
-        }
-        else if (codes.length == 2)
-        {
+        } else if (codes.length == 2) {
             charToUnicodeTwoBytes.put(code, unicode);
-        }
-        else
-        {
+        } else {
             LOG.warn("Mappings with more than 2 bytes aren't supported yet");
         }
         // fixme: ugly little hack
-        if (SPACE.equals(unicode))
-        {
+        if (SPACE.equals(unicode)) {
             spaceMapping = code;
         }
     }
@@ -387,8 +340,7 @@ public class CMap
      * @param unicode The unicode string.
      * @return the code bytes or null if there is none.
      */
-    public byte[] getCodesFromUnicode(String unicode)
-    {
+    public byte[] getCodesFromUnicode(String unicode) {
         return unicodeToByteCodes.get(unicode);
     }
 
@@ -396,13 +348,11 @@ public class CMap
      * This will add a CID mapping.
      *
      * @param code character code
-     * @param cid CID
+     * @param cid  CID
      */
-    void addCIDMapping(byte[] code, int cid)
-    {
+    void addCIDMapping(byte[] code, int cid) {
         Map<Integer, Integer> codeToCidMap = codeToCid.get(code.length);
-        if (codeToCidMap == null)
-        {
+        if (codeToCidMap == null) {
             codeToCidMap = new HashMap<>();
             codeToCid.put(code.length, codeToCidMap);
             minCidLength = Math.min(minCidLength, code.length);
@@ -415,24 +365,19 @@ public class CMap
      * This will add a CID Range.
      *
      * @param from starting character of the CID range.
-     * @param to ending character of the CID range.
-     * @param cid the cid to be started with.
-     *
+     * @param to   ending character of the CID range.
+     * @param cid  the cid to be started with.
      */
-    void addCIDRange(byte[] from, byte[] to, int cid)
-    {
+    void addCIDRange(byte[] from, byte[] to, int cid) {
         addCIDRange(codeToCidRanges, toInt(from), toInt(to), cid, from.length);
     }
 
-    private void addCIDRange(List<CIDRange> cidRanges, int from, int to, int cid, int length)
-    {
+    private void addCIDRange(List<CIDRange> cidRanges, int from, int to, int cid, int length) {
         CIDRange lastRange = null;
-        if (!cidRanges.isEmpty())
-        {
+        if (!cidRanges.isEmpty()) {
             lastRange = cidRanges.get(cidRanges.size() - 1);
         }
-        if (lastRange == null || !lastRange.extend(from, to, cid, length))
-        {
+        if (lastRange == null || !lastRange.extend(from, to, cid, length)) {
             cidRanges.add(new CIDRange(from, to, cid, length));
             minCidLength = Math.min(minCidLength, length);
             maxCidLength = Math.max(maxCidLength, length);
@@ -444,8 +389,7 @@ public class CMap
      *
      * @param range A single codespace range.
      */
-    void addCodespaceRange( CodespaceRange range )
-    {
+    void addCodespaceRange(CodespaceRange range) {
         codespaceRanges.add(range);
         maxCodeLength = Math.max(maxCodeLength, range.getCodeLength());
         minCodeLength = Math.min(minCodeLength, range.getCodeLength());
@@ -457,8 +401,7 @@ public class CMap
      *
      * @param cmap The cmap to load mappings from.
      */
-    void useCmap(CMap cmap)
-    {
+    void useCmap(CMap cmap) {
         cmap.codespaceRanges.forEach(this::addCodespaceRange);
         charToUnicodeOneByte.putAll(cmap.charToUnicodeOneByte);
         charToUnicodeTwoBytes.putAll(cmap.charToUnicodeTwoBytes);
@@ -469,8 +412,7 @@ public class CMap
         cmap.codeToCid.forEach((key, value) ->
         {
             Map<Integer, Integer> existingMapping = codeToCid.putIfAbsent(key, value);
-            if (existingMapping!=null)
-            {
+            if (existingMapping != null) {
                 existingMapping.putAll(value);
             }
         });
@@ -483,13 +425,12 @@ public class CMap
 
     /**
      * Returns the WMode of a CMap.
-     *
+     * <p>
      * 0 represents a horizontal and 1 represents a vertical orientation.
      *
      * @return the wmode
      */
-    public int getWMode()
-    {
+    public int getWMode() {
         return wmode;
     }
 
@@ -498,8 +439,7 @@ public class CMap
      *
      * @param newWMode the new WMode.
      */
-    public void setWMode(int newWMode)
-    {
+    public void setWMode(int newWMode) {
         wmode = newWMode;
     }
 
@@ -508,8 +448,7 @@ public class CMap
      *
      * @return the CMap name.
      */
-    public String getName()
-    {
+    public String getName() {
         return cmapName;
     }
 
@@ -518,8 +457,7 @@ public class CMap
      *
      * @param name the CMap name.
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         cmapName = name;
     }
 
@@ -528,8 +466,7 @@ public class CMap
      *
      * @return the CMap version.
      */
-    public String getVersion()
-    {
+    public String getVersion() {
         return cmapVersion;
     }
 
@@ -538,8 +475,7 @@ public class CMap
      *
      * @param version the CMap version.
      */
-    public void setVersion(String version)
-    {
+    public void setVersion(String version) {
         cmapVersion = version;
     }
 
@@ -548,8 +484,7 @@ public class CMap
      *
      * @return the CMap type.
      */
-    public int getType()
-    {
+    public int getType() {
         return cmapType;
     }
 
@@ -558,8 +493,7 @@ public class CMap
      *
      * @param type the CMap type.
      */
-    public void setType(int type)
-    {
+    public void setType(int type) {
         cmapType = type;
     }
 
@@ -568,8 +502,7 @@ public class CMap
      *
      * @return the registry.
      */
-    public String getRegistry()
-    {
+    public String getRegistry() {
         return registry;
     }
 
@@ -578,8 +511,7 @@ public class CMap
      *
      * @param newRegistry the registry.
      */
-    public void setRegistry(String newRegistry)
-    {
+    public void setRegistry(String newRegistry) {
         registry = newRegistry;
     }
 
@@ -588,8 +520,7 @@ public class CMap
      *
      * @return the ordering.
      */
-    public String getOrdering()
-    {
+    public String getOrdering() {
         return ordering;
     }
 
@@ -598,8 +529,7 @@ public class CMap
      *
      * @param newOrdering the ordering.
      */
-    public void setOrdering(String newOrdering)
-    {
+    public void setOrdering(String newOrdering) {
         ordering = newOrdering;
     }
 
@@ -608,8 +538,7 @@ public class CMap
      *
      * @return the supplement.
      */
-    public int getSupplement()
-    {
+    public int getSupplement() {
         return supplement;
     }
 
@@ -618,8 +547,7 @@ public class CMap
      *
      * @param newSupplement the supplement.
      */
-    public void setSupplement(int newSupplement)
-    {
+    public void setSupplement(int newSupplement) {
         supplement = newSupplement;
     }
 
@@ -628,14 +556,12 @@ public class CMap
      *
      * @return the mapped code for the space character
      */
-    public int getSpaceMapping()
-    {
+    public int getSpaceMapping() {
         return spaceMapping;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return cmapName;
     }
 }

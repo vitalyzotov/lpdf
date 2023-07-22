@@ -21,78 +21,65 @@ import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.PDRange;
 
-import java.io.IOException;
-
 /**
  * A Lab colour space is a CIE-based ABC colour space with two transformation stages.
  *
  * @author Ben Litchfield
  * @author John Hewson
  */
-public final class PDLab extends PDCIEDictionaryBasedColorSpace
-{
+public final class PDLab extends PDCIEDictionaryBasedColorSpace {
     private PDColor initialColor;
 
     /**
      * Creates a new Lab color space.
      */
-    public PDLab()
-    {
+    public PDLab() {
         super(COSName.LAB);
     }
 
     /**
      * Creates a new Lab color space from a PDF array.
+     *
      * @param lab the color space array
      */
-    public PDLab(COSArray lab)
-    {
+    public PDLab(COSArray lab) {
         super(lab);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.LAB.getName();
     }
 
 
     // reverse transformation (f^-1)
-    private float inverse(float x)
-    {
-        if (x > 6.0 / 29.0)
-        {
+    private float inverse(float x) {
+        if (x > 6.0 / 29.0) {
             return x * x * x;
-        }
-        else
-        {
+        } else {
             return (108f / 841f) * (x - (4f / 29f));
         }
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 3;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
+    public float[] getDefaultDecode(int bitsPerComponent) {
         PDRange a = getARange();
         PDRange b = getBRange();
-        return new float[] { 0, 100, a.getMin(), a.getMax(), b.getMin(), b.getMax() };
+        return new float[]{0, 100, a.getMin(), a.getMax(), b.getMin(), b.getMax()};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
-        if (initialColor == null)
-        {
-            initialColor = new PDColor(new float[] {
+    public PDColor getInitialColor() {
+        if (initialColor == null) {
+            initialColor = new PDColor(new float[]{
                     0,
                     Math.max(0, getARange().getMin()),
-                    Math.max(0, getBRange().getMin()) },
+                    Math.max(0, getBRange().getMin())},
                     this);
         }
         return initialColor;
@@ -100,10 +87,10 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
 
     /**
      * creates a range array with default values (-100..100 -100..100).
+     *
      * @return the new range array.
      */
-    private COSArray getDefaultRangeArray()
-    {
+    private COSArray getDefaultRangeArray() {
         COSArray range = new COSArray();
         range.add(new COSFloat(-100));
         range.add(new COSFloat(100));
@@ -115,13 +102,12 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
     /**
      * This will get the valid range for the "a" component.
      * If none is found then the default will be returned, which is -100..100.
+     *
      * @return the "a" range.
      */
-    public PDRange getARange()
-    {
+    public PDRange getARange() {
         COSArray rangeArray = dictionary.getCOSArray(COSName.RANGE);
-        if (rangeArray == null)
-        {
+        if (rangeArray == null) {
             rangeArray = getDefaultRangeArray();
         }
         return new PDRange(rangeArray, 0);
@@ -130,13 +116,12 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
     /**
      * This will get the valid range for the "b" component.
      * If none is found  then the default will be returned, which is -100..100.
+     *
      * @return the "b" range.
      */
-    public PDRange getBRange()
-    {
+    public PDRange getBRange() {
         COSArray rangeArray = dictionary.getCOSArray(COSName.RANGE);
-        if (rangeArray == null)
-        {
+        if (rangeArray == null) {
             rangeArray = getDefaultRangeArray();
         }
         return new PDRange(rangeArray, 1);
@@ -144,39 +129,34 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace
 
     /**
      * This will set the a range for the "a" component.
+     *
      * @param range the new range for the "a" component,
-     * or null if defaults (-100..100) are to be set.
+     *              or null if defaults (-100..100) are to be set.
      */
-    public void setARange(PDRange range)
-    {
+    public void setARange(PDRange range) {
         setComponentRangeArray(range, 0);
     }
 
     /**
      * This will set the "b" range for this color space.
+     *
      * @param range the new range for the "b" component,
-     * or null if defaults (-100..100) are to be set.
+     *              or null if defaults (-100..100) are to be set.
      */
-    public void setBRange(PDRange range)
-    {
+    public void setBRange(PDRange range) {
         setComponentRangeArray(range, 2);
     }
 
-    private void setComponentRangeArray(PDRange range, int index)
-    {
+    private void setComponentRangeArray(PDRange range, int index) {
         COSArray rangeArray = dictionary.getCOSArray(COSName.RANGE);
-        if (rangeArray == null)
-        {
+        if (rangeArray == null) {
             rangeArray = getDefaultRangeArray();
         }
-        if (range == null)
-        {
+        if (range == null) {
             // reset to defaults
             rangeArray.set(index, new COSFloat(-100));
             rangeArray.set(index + 1, new COSFloat(100));
-        }
-        else
-        {
+        } else {
             rangeArray.set(index, new COSFloat(range.getMin()));
             rangeArray.set(index + 1, new COSFloat(range.getMax()));
         }

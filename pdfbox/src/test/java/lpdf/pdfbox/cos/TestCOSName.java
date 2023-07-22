@@ -16,41 +16,36 @@
 
 package lpdf.pdfbox.cos;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDPage;
 import org.junit.jupiter.api.Test;
 
-class TestCOSName
-{
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class TestCOSName {
     /**
      * PDFBOX-4076: Check that characters outside of US_ASCII are not replaced with "?".
      *
      * @throws IOException
      */
     @Test
-    void PDFBox4076() throws IOException
-    {
+    void PDFBox4076() throws IOException {
         String special = "中国你好!";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
             document.getDocumentCatalog().getCOSObject().setString(COSName.getPDFName(special), special);
 
             document.save(baos);
         }
-        try (PDDocument document = Loader.loadPDF(baos.toByteArray()))
-        {
+        try (PDDocument document = Loader.loadPDF(baos.toByteArray())) {
             COSDictionary catalogDict = document.getDocumentCatalog().getCOSObject();
             assertTrue(catalogDict.containsKey(special));
             assertEquals(special, catalogDict.getString(special));

@@ -36,19 +36,33 @@ package lpdf.pdfbox.filter;
  * @version $Id: TIFFExtension.java,v 1.0 08.05.12 16:45 haraldk Exp$
  */
 interface TIFFExtension {
-    /** CCITT T.4/Group 3 Fax compression. */
+    /**
+     * CCITT T.4/Group 3 Fax compression.
+     */
     int COMPRESSION_CCITT_T4 = 3;
-    /** CCITT T.6/Group 4 Fax compression. */
+    /**
+     * CCITT T.6/Group 4 Fax compression.
+     */
     int COMPRESSION_CCITT_T6 = 4;
-    /** LZW Compression. Was baseline, but moved to extension due to license issues in the LZW algorithm. */
+    /**
+     * LZW Compression. Was baseline, but moved to extension due to license issues in the LZW algorithm.
+     */
     int COMPRESSION_LZW = 5;
-    /** Deprecated. For backwards compatibility only ("Old-style" JPEG). */
+    /**
+     * Deprecated. For backwards compatibility only ("Old-style" JPEG).
+     */
     int COMPRESSION_OLD_JPEG = 6;
-    /** JPEG Compression (lossy). */
+    /**
+     * JPEG Compression (lossy).
+     */
     int COMPRESSION_JPEG = 7;
-    /** Custom: PKZIP-style Deflate. */
+    /**
+     * Custom: PKZIP-style Deflate.
+     */
     int COMPRESSION_DEFLATE = 32946;
-    /** Adobe-style Deflate. */
+    /**
+     * Adobe-style Deflate.
+     */
     int COMPRESSION_ZLIB = 8;
 
     int PHOTOMETRIC_SEPARATED = 5;
@@ -71,12 +85,18 @@ interface TIFFExtension {
     int YCBCR_POSITIONING_CENTERED = 1;
     int YCBCR_POSITIONING_COSITED = 2;
 
-    /** Deprecated. For backwards compatibility only ("Old-style" JPEG). */
+    /**
+     * Deprecated. For backwards compatibility only ("Old-style" JPEG).
+     */
     int JPEG_PROC_BASELINE = 1;
-    /** Deprecated. For backwards compatibility only ("Old-style" JPEG). */
+    /**
+     * Deprecated. For backwards compatibility only ("Old-style" JPEG).
+     */
     int JPEG_PROC_LOSSLESS = 14;
 
-    /** For use with Photometric: 5 (Separated), when image data is in CMYK color space. */
+    /**
+     * For use with Photometric: 5 (Separated), when image data is in CMYK color space.
+     */
     int INKSET_CMYK = 1;
 
     /**

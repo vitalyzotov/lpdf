@@ -24,6 +24,5 @@ package lpdf.pdfbox.pdmodel.encryption;
  *
  * @author Benoit Guillon
  */
-public abstract class DecryptionMaterial
-{
+public abstract class DecryptionMaterial {
 }

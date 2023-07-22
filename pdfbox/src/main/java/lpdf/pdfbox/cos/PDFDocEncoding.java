@@ -25,36 +25,30 @@ import java.util.Map;
  * The "PDFDocEncoding" encoding. Note that this is *not* a Type 1 font encoding, it is used only
  * within PDF "text strings".
  */
-final class PDFDocEncoding
-{
+final class PDFDocEncoding {
     private static final char REPLACEMENT_CHARACTER = '\uFFFD';
 
     private static final int[] CODE_TO_UNI;
     private static final Map<Character, Integer> UNI_TO_CODE;
 
-    static
-    {
+    static {
         CODE_TO_UNI = new int[256];
         UNI_TO_CODE = new HashMap<>(256);
 
         // initialize with basically ISO-8859-1
-        for (int i = 0; i < 256; i++)
-        {
+        for (int i = 0; i < 256; i++) {
             // skip entries not in Unicode column
-            if (i > 0x17 && i < 0x20)
-            {
+            if (i > 0x17 && i < 0x20) {
                 continue;
             }
-            if (i > 0x7E && i < 0xA1)
-            {
+            if (i > 0x7E && i < 0xA1) {
                 continue;
             }
-            if (i == 0xAD)
-            {
+            if (i == 0xAD) {
                 continue;
             }
 
-            set(i, (char)i);
+            set(i, (char) i);
         }
 
         // then do all deviations (based on the table in ISO 32000-1:2008)
@@ -105,12 +99,10 @@ final class PDFDocEncoding
         // end of deviations
     }
 
-    private PDFDocEncoding()
-    {
+    private PDFDocEncoding() {
     }
 
-    private static void set(int code, char unicode)
-    {
+    private static void set(int code, char unicode) {
         CODE_TO_UNI[code] = unicode;
         UNI_TO_CODE.put(unicode, code);
     }
@@ -118,18 +110,13 @@ final class PDFDocEncoding
     /**
      * Returns the string representation of the given PDFDocEncoded bytes.
      */
-    public static String toString(byte[] bytes)
-    {
+    public static String toString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        for (byte b : bytes)
-        {
-            if ((b & 0xff) >= CODE_TO_UNI.length)
-            {
+        for (byte b : bytes) {
+            if ((b & 0xff) >= CODE_TO_UNI.length) {
                 sb.append('?');
-            }
-            else
-            {
-                sb.append((char)CODE_TO_UNI[b & 0xff]);
+            } else {
+                sb.append((char) CODE_TO_UNI[b & 0xff]);
             }
         }
         return sb.toString();
@@ -138,18 +125,13 @@ final class PDFDocEncoding
     /**
      * Returns the given string encoded with PDFDocEncoding.
      */
-    public static byte[] getBytes(String text)
-    {
+    public static byte[] getBytes(String text) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        for (char c : text.toCharArray())
-        {
+        for (char c : text.toCharArray()) {
             Integer code = UNI_TO_CODE.get(c);
-            if (code == null)
-            {
+            if (code == null) {
                 out.write(0);
-            }
-            else
-            {
+            } else {
                 out.write(code);
             }
         }
@@ -161,8 +143,7 @@ final class PDFDocEncoding
      *
      * @param character UTF-16 character
      */
-    public static boolean containsChar(char character)
-    {
+    public static boolean containsChar(char character) {
         return UNI_TO_CODE.containsKey(character);
     }
 }

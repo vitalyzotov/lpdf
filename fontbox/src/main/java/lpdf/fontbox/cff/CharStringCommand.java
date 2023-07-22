@@ -25,8 +25,7 @@ import java.util.Map;
  *
  * @author Villu Ruusmann
  */
-public class CharStringCommand
-{
+public class CharStringCommand {
     private final Type1KeyWord type1KeyWord;
     private final Type2KeyWord type2KeyWord;
 
@@ -50,8 +49,7 @@ public class CharStringCommand
     private static final int KEY_UNKNOWN = 99;
     private static final CharStringCommand COMMAND_UNKNOWN = new CharStringCommand(KEY_UNKNOWN, 0);
 
-    private static Map<Integer, CharStringCommand> createMap()
-    {
+    private static Map<Integer, CharStringCommand> createMap() {
         Map<Integer, CharStringCommand> charStringCommandMap = new HashMap<>();
         // one byte commands
         charStringCommandMap.put(Key.HSTEM.hashValue, new CharStringCommand(Key.HSTEM));
@@ -124,8 +122,7 @@ public class CharStringCommand
      *
      * @param key the key of the char string command
      */
-    private CharStringCommand(CharStringCommand.Key key)
-    {
+    private CharStringCommand(CharStringCommand.Key key) {
         type1KeyWord = Type1KeyWord.valueOfKey(key.hashValue);
         type2KeyWord = Type2KeyWord.valueOfKey(key.hashValue);
     }
@@ -136,8 +133,7 @@ public class CharStringCommand
      * @param b0 value1
      * @param b1 value2
      */
-    private CharStringCommand(int b0, int b1)
-    {
+    private CharStringCommand(int b0, int b1) {
         type1KeyWord = Type1KeyWord.valueOfKey(b0, b1);
         type2KeyWord = Type2KeyWord.valueOfKey(b0, b1);
     }
@@ -149,8 +145,7 @@ public class CharStringCommand
      * @param b0 value
      * @return CharStringCommand represented by the given value
      */
-    public static CharStringCommand getInstance(int b0)
-    {
+    public static CharStringCommand getInstance(int b0) {
         CharStringCommand command = CHAR_STRING_COMMANDS.get(b0);
         return command != null ? command : COMMAND_UNKNOWN;
     }
@@ -160,11 +155,9 @@ public class CharStringCommand
      *
      * @param b0 value1
      * @param b1 value2
-     *
      * @return CharStringCommand represented by the given two values
      */
-    public static CharStringCommand getInstance(int b0, int b1)
-    {
+    public static CharStringCommand getInstance(int b0, int b1) {
         CharStringCommand command = CHAR_STRING_COMMANDS.get(getKeyHashValue(b0, b1));
         return command != null ? command : COMMAND_UNKNOWN;
     }
@@ -173,32 +166,24 @@ public class CharStringCommand
      * Get an instance of the CharStringCommand represented by the given array.
      *
      * @param values array of values
-     *
      * @return CharStringCommand represented by the given values
      */
-    public static CharStringCommand getInstance(int[] values)
-    {
-        if (values.length == 1)
-        {
+    public static CharStringCommand getInstance(int[] values) {
+        if (values.length == 1) {
             return getInstance(values[0]);
-        }
-        else if (values.length == 2)
-        {
+        } else if (values.length == 2) {
             return getInstance(values[0], values[1]);
         }
         return COMMAND_UNKNOWN;
     }
 
-    private static int getKeyHashValue(int b0, int b1)
-    {
+    private static int getKeyHashValue(int b0, int b1) {
         Type1KeyWord type1Key = Type1KeyWord.valueOfKey(b0, b1);
-        if (type1Key != null)
-        {
+        if (type1Key != null) {
             return type1Key.key.hashValue;
         }
         Type2KeyWord type2Key = Type2KeyWord.valueOfKey(b0, b1);
-        if (type2Key != null)
-        {
+        if (type2Key != null) {
             return type2Key.key.hashValue;
         }
         return KEY_UNKNOWN;
@@ -209,8 +194,7 @@ public class CharStringCommand
      *
      * @return the type1 key word
      */
-    public Type1KeyWord getType1KeyWord()
-    {
+    public Type1KeyWord getType1KeyWord() {
         return type1KeyWord;
     }
 
@@ -219,8 +203,7 @@ public class CharStringCommand
      *
      * @return the type2 key word
      */
-    public Type2KeyWord getType2KeyWord()
-    {
+    public Type2KeyWord getType2KeyWord() {
         return type2KeyWord;
     }
 
@@ -228,19 +211,13 @@ public class CharStringCommand
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         String str;
-        if (type2KeyWord != null)
-        {
+        if (type2KeyWord != null) {
             str = type2KeyWord.toString();
-        }
-        else if (type1KeyWord != null)
-        {
+        } else if (type1KeyWord != null) {
             str = type1KeyWord.toString();
-        }
-        else
-        {
+        } else {
             str = "unknown command";
         }
         return str + '|';
@@ -250,14 +227,11 @@ public class CharStringCommand
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
-        if (type1KeyWord != null)
-        {
+    public int hashCode() {
+        if (type1KeyWord != null) {
             return type1KeyWord.key.hashCode();
         }
-        if (type2KeyWord != null)
-        {
+        if (type2KeyWord != null) {
             return type2KeyWord.key.hashCode();
         }
         return 0;
@@ -267,21 +241,16 @@ public class CharStringCommand
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object object)
-    {
-        if (object instanceof CharStringCommand)
-        {
+    public boolean equals(Object object) {
+        if (object instanceof CharStringCommand) {
             CharStringCommand that = (CharStringCommand) object;
-            if (type1KeyWord != null && type1KeyWord.equals(that.getType1KeyWord()))
-            {
+            if (type1KeyWord != null && type1KeyWord.equals(that.getType1KeyWord())) {
                 return true;
             }
-            if (type2KeyWord != null && type2KeyWord.equals(that.getType2KeyWord()))
-            {
+            if (type2KeyWord != null && type2KeyWord.equals(that.getType2KeyWord())) {
                 return true;
             }
-            if (type1KeyWord == null && type2KeyWord == null)
-            {
+            if (type1KeyWord == null && type2KeyWord == null) {
                 return true;
             }
         }
@@ -291,8 +260,7 @@ public class CharStringCommand
     /**
      * Enum of all valid type1 key words
      */
-    public enum Type1KeyWord
-    {
+    public enum Type1KeyWord {
         HSTEM(Key.HSTEM), VSTEM(Key.VSTEM), VMOVETO(Key.VMOVETO), RLINETO(Key.RLINETO), //
         HLINETO(Key.HLINETO), VLINETO(Key.VLINETO), RRCURVETO(Key.RRCURVETO), //
         CLOSEPATH(Key.CLOSEPATH), CALLSUBR(Key.CALLSUBR), RET(Key.RET), //
@@ -305,33 +273,27 @@ public class CharStringCommand
 
         final Key key;
 
-        private Type1KeyWord(Key key)
-        {
+        private Type1KeyWord(Key key) {
             this.key = key;
         }
 
         private static final Map<Key, Type1KeyWord> BY_KEY = new EnumMap<>(Key.class);
 
-        static
-        {
-            for (Type1KeyWord e : values())
-            {
-                 BY_KEY.put(e.key, e);
+        static {
+            for (Type1KeyWord e : values()) {
+                BY_KEY.put(e.key, e);
             }
         }
 
-        public static Type1KeyWord valueOfKey(int b0)
-        {
+        public static Type1KeyWord valueOfKey(int b0) {
             return BY_KEY.get(Key.valueOfKey(b0));
         }
 
-        public static Type1KeyWord valueOfKey(int b0, int b1)
-        {
+        public static Type1KeyWord valueOfKey(int b0, int b1) {
             return BY_KEY.get(Key.valueOfKey(b0, b1));
         }
 
-        public static Type1KeyWord valueOfKey(Key key)
-        {
+        public static Type1KeyWord valueOfKey(Key key) {
             return BY_KEY.get(key);
         }
 
@@ -340,8 +302,7 @@ public class CharStringCommand
     /**
      * Enum of all valid type2 key words
      */
-    public enum Type2KeyWord
-    {
+    public enum Type2KeyWord {
         HSTEM(Key.HSTEM), VSTEM(Key.VSTEM), VMOVETO(Key.VMOVETO), RLINETO(Key.RLINETO), //
         HLINETO(Key.HLINETO), VLINETO(Key.VLINETO), RRCURVETO(Key.RRCURVETO), CALLSUBR(Key.CALLSUBR), //
         RET(Key.RET), ESCAPE(Key.ESCAPE), AND(Key.AND), OR(Key.OR), //
@@ -359,39 +320,32 @@ public class CharStringCommand
 
         final Key key;
 
-        private Type2KeyWord(Key key)
-        {
+        private Type2KeyWord(Key key) {
             this.key = key;
         }
 
         private static final Map<Key, Type2KeyWord> BY_KEY = new EnumMap<>(Key.class);
 
-        static
-        {
-            for (Type2KeyWord e : values())
-            {
-                 BY_KEY.put(e.key, e);
+        static {
+            for (Type2KeyWord e : values()) {
+                BY_KEY.put(e.key, e);
             }
         }
 
-        public static Type2KeyWord valueOfKey(int b0)
-        {
+        public static Type2KeyWord valueOfKey(int b0) {
             return BY_KEY.get(Key.valueOfKey(b0));
         }
 
-        public static Type2KeyWord valueOfKey(int b0, int b1)
-        {
+        public static Type2KeyWord valueOfKey(int b0, int b1) {
             return BY_KEY.get(Key.valueOfKey(b0, b1));
         }
 
-        public static Type2KeyWord valueOfKey(Key key)
-        {
+        public static Type2KeyWord valueOfKey(Key key) {
             return BY_KEY.get(key);
         }
     }
 
-    public enum Key
-    {
+    public enum Key {
         HSTEM(1), VSTEM(3), VMOVETO(4), RLINETO(5), //
         HLINETO(6), VLINETO(7), RRCURVETO(8), CLOSEPATH(9), CALLSUBR(10), //
         RET(11), ESCAPE(12), DOTSECTION(12, 0), VSTEM3(12, 1), HSTEM3(12, 2), //
@@ -410,33 +364,27 @@ public class CharStringCommand
 
         private final int hashValue;
 
-        private Key(int b0)
-        {
+        private Key(int b0) {
             hashValue = b0;
         }
 
-        private Key(int b0, int b1)
-        {
+        private Key(int b0, int b1) {
             hashValue = (b0 << 4) + b1;
         }
 
         private static final Map<Integer, Key> BY_KEY = new HashMap<>();
 
-        static
-        {
-            for (Key e : values())
-            {
+        static {
+            for (Key e : values()) {
                 BY_KEY.put(e.hashValue, e);
             }
         }
 
-        public static Key valueOfKey(int b0)
-        {
+        public static Key valueOfKey(int b0) {
             return BY_KEY.get(b0);
         }
 
-        public static Key valueOfKey(int b0, int b1)
-        {
+        public static Key valueOfKey(int b0, int b1) {
             return BY_KEY.get((b0 << 4) + b1);
         }
     }

@@ -22,8 +22,7 @@ package lpdf.pdfbox.pdmodel.graphics.state;
  *
  * @author John Hewson
  */
-public enum RenderingIntent
-{
+public enum RenderingIntent {
     /**
      * Absolute Colorimetric.
      */
@@ -44,12 +43,9 @@ public enum RenderingIntent
      */
     PERCEPTUAL("Perceptual");
 
-    public static RenderingIntent fromString(String value)
-    {
-        for (RenderingIntent instance : RenderingIntent.values())
-        {
-            if (instance.value.equals(value))
-            {
+    public static RenderingIntent fromString(String value) {
+        for (RenderingIntent instance : RenderingIntent.values()) {
+            if (instance.value.equals(value)) {
                 return instance;
             }
         }
@@ -60,8 +56,7 @@ public enum RenderingIntent
 
     private final String value;
 
-    RenderingIntent(String value)
-    {
+    RenderingIntent(String value) {
         this.value = value;
     }
 
@@ -70,8 +65,7 @@ public enum RenderingIntent
      *
      * @return the string value
      */
-    public String stringValue()
-    {
+    public String stringValue() {
         return value;
     }
 }

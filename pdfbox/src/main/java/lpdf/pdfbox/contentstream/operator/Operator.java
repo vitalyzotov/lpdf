@@ -26,14 +26,15 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author Ben Litchfield
  */
-public final class Operator
-{
+public final class Operator {
     private final String theOperator;
     private byte[] imageData;
     private COSDictionary imageParameters;
 
-    /** map for singleton operator objects; use {@link ConcurrentHashMap} for better scalability with multiple threads */
-    private static final ConcurrentMap<String,Operator> operators = new ConcurrentHashMap<>();
+    /**
+     * map for singleton operator objects; use {@link ConcurrentHashMap} for better scalability with multiple threads
+     */
+    private static final ConcurrentMap<String, Operator> operators = new ConcurrentHashMap<>();
 
     /**
      * Constructor.
@@ -41,12 +42,10 @@ public final class Operator
      * @param aOperator The operator that this object will represent.
      * @throws IllegalArgumentException if the operator starts with "/".
      */
-    private Operator(String aOperator)
-    {
+    private Operator(String aOperator) {
         theOperator = aOperator;
-        if( aOperator.startsWith( "/" ) )
-        {
-            throw new IllegalArgumentException( "Operators are not allowed to start with / '" + aOperator + "'" );
+        if (aOperator.startsWith("/")) {
+            throw new IllegalArgumentException("Operators are not allowed to start with / '" + aOperator + "'");
         }
     }
 
@@ -54,29 +53,22 @@ public final class Operator
      * This is used to create/cache operators in the system.
      *
      * @param operator The operator for the system.
-     *
      * @return The operator that matches the operator keyword.
      */
-    public static Operator getOperator( String operator )
-    {
+    public static Operator getOperator(String operator) {
         Operator operation;
         if (operator.equals(OperatorName.BEGIN_INLINE_IMAGE_DATA)
-                || OperatorName.BEGIN_INLINE_IMAGE.equals(operator))
-        {
+                || OperatorName.BEGIN_INLINE_IMAGE.equals(operator)) {
             //we can't cache the ID operators.
-            operation = new Operator( operator );
-        }
-        else
-        {
-            operation = operators.get( operator );
-            if( operation == null )
-            {
+            operation = new Operator(operator);
+        } else {
+            operation = operators.get(operator);
+            if (operation == null) {
                 // another thread may has already added an operator of this kind
                 // make sure that we get the same operator
-                operation = operators.putIfAbsent( operator, new Operator( operator ) );
-                if ( operation == null )
-                {
-                    operation = operators.get( operator );
+                operation = operators.putIfAbsent(operator, new Operator(operator));
+                if (operation == null) {
+                    operation = operators.get(operator);
                 }
             }
         }
@@ -89,8 +81,7 @@ public final class Operator
      *
      * @return The string representation of the operation.
      */
-    public String getName()
-    {
+    public String getName() {
         return theOperator;
     }
 
@@ -100,8 +91,7 @@ public final class Operator
      * @return A string rep of this class.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PDFOperator{" + theOperator + "}";
     }
 
@@ -111,8 +101,7 @@ public final class Operator
      *
      * @return Value of property imageData.
      */
-    public byte[] getImageData()
-    {
+    public byte[] getImageData() {
         return this.imageData;
     }
 
@@ -121,8 +110,7 @@ public final class Operator
      *
      * @param imageDataArray New value of property imageData.
      */
-    public void setImageData(byte[] imageDataArray)
-    {
+    public void setImageData(byte[] imageDataArray) {
         imageData = imageDataArray;
     }
 
@@ -131,8 +119,7 @@ public final class Operator
      *
      * @return The image parameters.
      */
-    public COSDictionary getImageParameters()
-    {
+    public COSDictionary getImageParameters() {
         return imageParameters;
     }
 
@@ -141,8 +128,7 @@ public final class Operator
      *
      * @param params The image parameters.
      */
-    public void setImageParameters( COSDictionary params)
-    {
+    public void setImageParameters(COSDictionary params) {
         imageParameters = params;
     }
 }

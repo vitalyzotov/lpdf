@@ -15,25 +15,23 @@
  */
 package lpdf.fontbox.cmap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class CIDRangeTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class CIDRangeTest {
 
     @Test
-    void testCIDRangeOneByte()
-    {
+    void testCIDRangeOneByte() {
         CIDRange cidRange = new CIDRange(0, 20, 65, 1);
         assertEquals(1, cidRange.getCodeLength());
 
-        assertEquals(65, cidRange.map(new byte[] { 0 }));
-        assertEquals(75, cidRange.map(new byte[] { 10 }));
+        assertEquals(65, cidRange.map(new byte[]{0}));
+        assertEquals(75, cidRange.map(new byte[]{10}));
         // out of range
-        assertEquals(-1, cidRange.map(new byte[] { 30 }));
+        assertEquals(-1, cidRange.map(new byte[]{30}));
         // wrong code length
-        assertEquals(-1, cidRange.map(new byte[] { 0, 10 }));
+        assertEquals(-1, cidRange.map(new byte[]{0, 10}));
 
         assertEquals(65, cidRange.map(0, 1));
         assertEquals(75, cidRange.map(10, 1));
@@ -49,17 +47,16 @@ class CIDRangeTest
     }
 
     @Test
-    void testCIDRangeTwoByte()
-    {
+    void testCIDRangeTwoByte() {
         CIDRange cidRange = new CIDRange(256, 280, 65, 2);
         assertEquals(2, cidRange.getCodeLength());
 
-        assertEquals(65, cidRange.map(new byte[] { 1, 0 }));
-        assertEquals(75, cidRange.map(new byte[] { 1, 10 }));
+        assertEquals(65, cidRange.map(new byte[]{1, 0}));
+        assertEquals(75, cidRange.map(new byte[]{1, 10}));
         // out of range
-        assertEquals(-1, cidRange.map(new byte[] { 1, 30 }));
+        assertEquals(-1, cidRange.map(new byte[]{1, 30}));
         // wrong code length
-        assertEquals(-1, cidRange.map(new byte[] { 10 }));
+        assertEquals(-1, cidRange.map(new byte[]{10}));
 
         assertEquals(65, cidRange.map(256, 2));
         assertEquals(75, cidRange.map(266, 2));

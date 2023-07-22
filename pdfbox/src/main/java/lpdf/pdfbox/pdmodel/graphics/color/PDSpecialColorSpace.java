@@ -21,6 +21,5 @@ package lpdf.pdfbox.pdmodel.graphics.color;
  *
  * @author John Hewson
  */
-public abstract class PDSpecialColorSpace extends PDColorSpace
-{
+public abstract class PDSpecialColorSpace extends PDColorSpace {
 }

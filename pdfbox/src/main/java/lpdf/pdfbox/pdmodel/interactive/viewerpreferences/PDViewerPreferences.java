@@ -18,7 +18,6 @@ package lpdf.pdfbox.pdmodel.interactive.viewerpreferences;
 
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
@@ -26,16 +25,14 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDViewerPreferences implements COSObjectable
-{
+public class PDViewerPreferences implements COSObjectable {
 
     /**
      * Enumeration containing all valid values for NonFullScreenPageMode.
      */
-    public enum NON_FULL_SCREEN_PAGE_MODE
-    {
+    public enum NON_FULL_SCREEN_PAGE_MODE {
         /**
-         *  From PDF Reference: "Neither document outline nor thumbnail images visible".
+         * From PDF Reference: "Neither document outline nor thumbnail images visible".
          */
         UseNone,
         /**
@@ -55,8 +52,7 @@ public class PDViewerPreferences implements COSObjectable
     /**
      * Enumeration containing all valid values for ReadingDirection.
      */
-    public enum READING_DIRECTION
-    {
+    public enum READING_DIRECTION {
         /**
          * left to right.
          */
@@ -70,8 +66,7 @@ public class PDViewerPreferences implements COSObjectable
     /**
      * Enumeration containing all valid values for boundaries.
      */
-    public enum BOUNDARY
-    {
+    public enum BOUNDARY {
         /**
          * use media box as boundary.
          */
@@ -97,8 +92,7 @@ public class PDViewerPreferences implements COSObjectable
     /**
      * Enumeration containing all valid values for duplex.
      */
-    public enum DUPLEX
-    {
+    public enum DUPLEX {
         /**
          * simplex printing.
          */
@@ -116,8 +110,7 @@ public class PDViewerPreferences implements COSObjectable
     /**
      * Enumeration containing all valid values for printscaling.
      */
-    public enum PRINT_SCALING
-    {
+    public enum PRINT_SCALING {
         /**
          * no scaling.
          */
@@ -135,8 +128,7 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param dic The underlying dictionary.
      */
-    public PDViewerPreferences( COSDictionary dic )
-    {
+    public PDViewerPreferences(COSDictionary dic) {
         prefs = dic;
     }
 
@@ -146,8 +138,7 @@ public class PDViewerPreferences implements COSObjectable
      * @return The underlying info dictionary.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return prefs;
     }
 
@@ -156,9 +147,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the toolbar preference.
      */
-    public boolean hideToolbar()
-    {
-        return prefs.getBoolean( COSName.HIDE_TOOLBAR, false );
+    public boolean hideToolbar() {
+        return prefs.getBoolean(COSName.HIDE_TOOLBAR, false);
     }
 
     /**
@@ -166,9 +156,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the toolbar preference.
      */
-    public void setHideToolbar( boolean value )
-    {
-        prefs.setBoolean( COSName.HIDE_TOOLBAR, value );
+    public void setHideToolbar(boolean value) {
+        prefs.setBoolean(COSName.HIDE_TOOLBAR, value);
     }
 
     /**
@@ -176,9 +165,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the menubar preference.
      */
-    public boolean hideMenubar()
-    {
-        return prefs.getBoolean( COSName.HIDE_MENUBAR, false );
+    public boolean hideMenubar() {
+        return prefs.getBoolean(COSName.HIDE_MENUBAR, false);
     }
 
     /**
@@ -186,9 +174,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the menubar preference.
      */
-    public void setHideMenubar( boolean value )
-    {
-        prefs.setBoolean( COSName.HIDE_MENUBAR, value );
+    public void setHideMenubar(boolean value) {
+        prefs.setBoolean(COSName.HIDE_MENUBAR, value);
     }
 
     /**
@@ -196,9 +183,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the window UI preference.
      */
-    public boolean hideWindowUI()
-    {
-        return prefs.getBoolean( COSName.HIDE_WINDOWUI, false );
+    public boolean hideWindowUI() {
+        return prefs.getBoolean(COSName.HIDE_WINDOWUI, false);
     }
 
     /**
@@ -206,9 +192,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the window UI preference.
      */
-    public void setHideWindowUI( boolean value )
-    {
-        prefs.setBoolean( COSName.HIDE_WINDOWUI, value );
+    public void setHideWindowUI(boolean value) {
+        prefs.setBoolean(COSName.HIDE_WINDOWUI, value);
     }
 
     /**
@@ -216,9 +201,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the fit window preference.
      */
-    public boolean fitWindow()
-    {
-        return prefs.getBoolean( COSName.FIT_WINDOW, false );
+    public boolean fitWindow() {
+        return prefs.getBoolean(COSName.FIT_WINDOW, false);
     }
 
     /**
@@ -226,9 +210,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the fit window preference.
      */
-    public void setFitWindow( boolean value )
-    {
-        prefs.setBoolean( COSName.FIT_WINDOW, value );
+    public void setFitWindow(boolean value) {
+        prefs.setBoolean(COSName.FIT_WINDOW, value);
     }
 
     /**
@@ -236,9 +219,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the center window preference.
      */
-    public boolean centerWindow()
-    {
-        return prefs.getBoolean( COSName.CENTER_WINDOW, false );
+    public boolean centerWindow() {
+        return prefs.getBoolean(COSName.CENTER_WINDOW, false);
     }
 
     /**
@@ -246,9 +228,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the center window preference.
      */
-    public void setCenterWindow( boolean value )
-    {
-        prefs.setBoolean( COSName.CENTER_WINDOW, value );
+    public void setCenterWindow(boolean value) {
+        prefs.setBoolean(COSName.CENTER_WINDOW, value);
     }
 
     /**
@@ -256,9 +237,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the display doc title preference.
      */
-    public boolean displayDocTitle()
-    {
-        return prefs.getBoolean( COSName.DISPLAY_DOC_TITLE, false );
+    public boolean displayDocTitle() {
+        return prefs.getBoolean(COSName.DISPLAY_DOC_TITLE, false);
     }
 
     /**
@@ -266,9 +246,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the display doc title preference.
      */
-    public void setDisplayDocTitle( boolean value )
-    {
-        prefs.setBoolean( COSName.DISPLAY_DOC_TITLE, value );
+    public void setDisplayDocTitle(boolean value) {
+        prefs.setBoolean(COSName.DISPLAY_DOC_TITLE, value);
     }
 
     /**
@@ -276,9 +255,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the non full screen page mode preference.
      */
-    public String getNonFullScreenPageMode()
-    {
-        return prefs.getNameAsString( COSName.NON_FULL_SCREEN_PAGE_MODE,
+    public String getNonFullScreenPageMode() {
+        return prefs.getNameAsString(COSName.NON_FULL_SCREEN_PAGE_MODE,
                 NON_FULL_SCREEN_PAGE_MODE.UseNone.toString());
     }
 
@@ -287,9 +265,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the non full screen page mode preference.
      */
-    public void setNonFullScreenPageMode( NON_FULL_SCREEN_PAGE_MODE value )
-    {
-        prefs.setName( COSName.NON_FULL_SCREEN_PAGE_MODE, value.toString() );
+    public void setNonFullScreenPageMode(NON_FULL_SCREEN_PAGE_MODE value) {
+        prefs.setName(COSName.NON_FULL_SCREEN_PAGE_MODE, value.toString());
     }
 
     /**
@@ -297,9 +274,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the reading direction preference.
      */
-    public String getReadingDirection()
-    {
-        return prefs.getNameAsString( COSName.DIRECTION, READING_DIRECTION.L2R.toString());
+    public String getReadingDirection() {
+        return prefs.getNameAsString(COSName.DIRECTION, READING_DIRECTION.L2R.toString());
     }
 
     /**
@@ -307,9 +283,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the reading direction preference.
      */
-    public void setReadingDirection( READING_DIRECTION value )
-    {
-        prefs.setName( COSName.DIRECTION, value.toString() );
+    public void setReadingDirection(READING_DIRECTION value) {
+        prefs.setName(COSName.DIRECTION, value.toString());
     }
 
     /**
@@ -317,9 +292,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the ViewArea preference.
      */
-    public String getViewArea()
-    {
-        return prefs.getNameAsString( COSName.VIEW_AREA, BOUNDARY.CropBox.toString());
+    public String getViewArea() {
+        return prefs.getNameAsString(COSName.VIEW_AREA, BOUNDARY.CropBox.toString());
     }
 
     /**
@@ -327,9 +301,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the ViewArea preference.
      */
-    public void setViewArea( BOUNDARY value )
-    {
-        prefs.setName( COSName.VIEW_AREA, value.toString() );
+    public void setViewArea(BOUNDARY value) {
+        prefs.setName(COSName.VIEW_AREA, value.toString());
     }
 
     /**
@@ -337,9 +310,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the ViewClip preference.
      */
-    public String getViewClip()
-    {
-        return prefs.getNameAsString( COSName.VIEW_CLIP, BOUNDARY.CropBox.toString());
+    public String getViewClip() {
+        return prefs.getNameAsString(COSName.VIEW_CLIP, BOUNDARY.CropBox.toString());
     }
 
     /**
@@ -347,9 +319,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the ViewClip preference.
      */
-    public void setViewClip( BOUNDARY value )
-    {
-        prefs.setName( COSName.VIEW_CLIP, value.toString() );
+    public void setViewClip(BOUNDARY value) {
+        prefs.setName(COSName.VIEW_CLIP, value.toString());
     }
 
     /**
@@ -357,9 +328,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the PrintArea preference.
      */
-    public String getPrintArea()
-    {
-        return prefs.getNameAsString( COSName.PRINT_AREA, BOUNDARY.CropBox.toString());
+    public String getPrintArea() {
+        return prefs.getNameAsString(COSName.PRINT_AREA, BOUNDARY.CropBox.toString());
     }
 
     /**
@@ -367,9 +337,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the PrintArea preference.
      */
-    public void setPrintArea( BOUNDARY value )
-    {
-        prefs.setName( COSName.PRINT_AREA, value.toString() );
+    public void setPrintArea(BOUNDARY value) {
+        prefs.setName(COSName.PRINT_AREA, value.toString());
     }
 
     /**
@@ -377,9 +346,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the PrintClip preference.
      */
-    public String getPrintClip()
-    {
-        return prefs.getNameAsString( COSName.PRINT_CLIP, BOUNDARY.CropBox.toString());
+    public String getPrintClip() {
+        return prefs.getNameAsString(COSName.PRINT_CLIP, BOUNDARY.CropBox.toString());
     }
 
     /**
@@ -387,9 +355,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the PrintClip preference.
      */
-    public void setPrintClip( BOUNDARY value )
-    {
-        prefs.setName( COSName.PRINT_CLIP, value.toString() );
+    public void setPrintClip(BOUNDARY value) {
+        prefs.setName(COSName.PRINT_CLIP, value.toString());
     }
 
     /**
@@ -397,9 +364,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the Duplex preference.
      */
-    public String getDuplex()
-    {
-        return prefs.getNameAsString( COSName.DUPLEX );
+    public String getDuplex() {
+        return prefs.getNameAsString(COSName.DUPLEX);
     }
 
     /**
@@ -407,9 +373,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the Duplex preference.
      */
-    public void setDuplex( DUPLEX value )
-    {
-        prefs.setName( COSName.DUPLEX, value.toString() );
+    public void setDuplex(DUPLEX value) {
+        prefs.setName(COSName.DUPLEX, value.toString());
     }
 
     /**
@@ -417,9 +382,8 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @return the PrintScaling preference.
      */
-    public String getPrintScaling()
-    {
-        return prefs.getNameAsString( COSName.PRINT_SCALING , PRINT_SCALING.AppDefault.toString());
+    public String getPrintScaling() {
+        return prefs.getNameAsString(COSName.PRINT_SCALING, PRINT_SCALING.AppDefault.toString());
     }
 
     /**
@@ -427,8 +391,7 @@ public class PDViewerPreferences implements COSObjectable
      *
      * @param value Set the PrintScaling preference.
      */
-    public void setPrintScaling( PRINT_SCALING value )
-    {
-        prefs.setName( COSName.PRINT_SCALING, value.toString() );
+    public void setPrintScaling(PRINT_SCALING value) {
+        prefs.setName(COSName.PRINT_SCALING, value.toString());
     }
 }

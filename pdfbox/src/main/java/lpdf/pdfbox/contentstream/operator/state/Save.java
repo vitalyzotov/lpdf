@@ -16,35 +16,31 @@
  */
 package lpdf.pdfbox.contentstream.operator.state;
 
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+
+import java.util.List;
 
 /**
  * q: Save the graphics state.
  *
  * @author Laurent Huault
  */
-public class Save extends OperatorProcessor
-{
-    public Save(PDFStreamEngine context)
-    {
+public class Save extends OperatorProcessor {
+    public Save(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments)
-    {
+    public void process(Operator operator, List<COSBase> arguments) {
         getContext().saveGraphicsState();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SAVE;
     }
 }

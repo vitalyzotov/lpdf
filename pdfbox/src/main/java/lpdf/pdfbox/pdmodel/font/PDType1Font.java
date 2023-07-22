@@ -16,22 +16,14 @@
  */
 package lpdf.pdfbox.pdmodel.font;
 
-import lpdf.harmony.awt.geom.AffineTransform;
-import lpdf.harmony.awt.geom.GeneralPath;
-import lpdf.harmony.awt.geom.Point2D;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.fontbox.EncodedFont;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.type1.DamagedFontException;
 import lpdf.fontbox.type1.Type1Font;
 import lpdf.fontbox.util.BoundingBox;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.Point2D;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSStream;
@@ -41,30 +33,36 @@ import lpdf.pdfbox.pdmodel.common.PDStream;
 import lpdf.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import lpdf.pdfbox.pdmodel.font.encoding.Encoding;
 import lpdf.pdfbox.pdmodel.font.encoding.StandardEncoding;
+import lpdf.pdfbox.pdmodel.font.encoding.SymbolEncoding;
 import lpdf.pdfbox.pdmodel.font.encoding.Type1Encoding;
 import lpdf.pdfbox.pdmodel.font.encoding.WinAnsiEncoding;
 import lpdf.pdfbox.pdmodel.font.encoding.ZapfDingbatsEncoding;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
-import lpdf.pdfbox.pdmodel.font.encoding.SymbolEncoding;
 
 /**
  * A PostScript Type 1 Font.
  *
  * @author Ben Litchfield
  */
-public class PDType1Font extends PDSimpleFont implements PDVectorFont
-{
+public class PDType1Font extends PDSimpleFont implements PDVectorFont {
     private static final Logger LOG = LoggerFactory.getLogger(PDType1Font.class);
 
     // alternative names for glyphs which are commonly encountered
     private static final Map<String, String> ALT_NAMES = new HashMap<>();
     private static final int PFB_START_MARKER = 0x80;
 
-    static
-    {
+    static {
         ALT_NAMES.put("ff", "f_f");
         ALT_NAMES.put("ffi", "f_f_i");
         ALT_NAMES.put("ffl", "f_f_l");
@@ -101,42 +99,36 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      *
      * @param baseFont One of the standard 14 PostScript names, e.g. {@link FontName#HELVETICA_BOLD}.
      */
-    public PDType1Font(FontName baseFont)
-    {
+    public PDType1Font(FontName baseFont) {
         super(baseFont);
 
         dict.setItem(COSName.SUBTYPE, COSName.TYPE1);
         dict.setName(COSName.BASE_FONT, baseFont.getName());
-        switch (baseFont)
-        {
-        case ZAPF_DINGBATS:
-            encoding = ZapfDingbatsEncoding.INSTANCE;
-            break;
-        case SYMBOL:
-            encoding = SymbolEncoding.INSTANCE;
-            break;
-        default:
-            encoding = WinAnsiEncoding.INSTANCE;
-            dict.setItem(COSName.ENCODING, COSName.WIN_ANSI_ENCODING);
-            break;
+        switch (baseFont) {
+            case ZAPF_DINGBATS:
+                encoding = ZapfDingbatsEncoding.INSTANCE;
+                break;
+            case SYMBOL:
+                encoding = SymbolEncoding.INSTANCE;
+                break;
+            default:
+                encoding = WinAnsiEncoding.INSTANCE;
+                dict.setItem(COSName.ENCODING, COSName.WIN_ANSI_ENCODING);
+                break;
         }
 
         // todo: could load the PFB font here if we wanted to support Standard 14 embedding
         type1font = null;
         FontMapping<FontBoxFont> mapping = FontMappers.instance()
-                                                      .getFontBoxFont(getBaseFont(),
-                                                                      getFontDescriptor());
+                .getFontBoxFont(getBaseFont(),
+                        getFontDescriptor());
         genericFont = mapping.getFont();
 
-        if (mapping.isFallback())
-        {
+        if (mapping.isFallback()) {
             String fontName;
-            try
-            {
+            try {
                 fontName = genericFont.getName();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 LOG.debug("Couldn't get font name - setting to '?'", e);
                 fontName = "?";
             }
@@ -150,25 +142,23 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
     /**
      * Creates a new Type 1 font for embedding.
      *
-     * @param doc PDF document to write to
+     * @param doc   PDF document to write to
      * @param pfbIn PFB file stream
      * @throws IOException if the font could not be read
      */
-    public PDType1Font(PDDocument doc, InputStream pfbIn) throws IOException
-    {
+    public PDType1Font(PDDocument doc, InputStream pfbIn) throws IOException {
         this(doc, pfbIn, null);
     }
 
     /**
      * Creates a new Type 1 font for embedding.
      *
-     * @param doc PDF document to write to
-     * @param pfbIn PFB file stream
+     * @param doc      PDF document to write to
+     * @param pfbIn    PFB file stream
      * @param encoding encoding to be used for the font
      * @throws IOException if the font could not be read
      */
-    public PDType1Font(PDDocument doc, InputStream pfbIn, Encoding encoding) throws IOException
-    {
+    public PDType1Font(PDDocument doc, InputStream pfbIn, Encoding encoding) throws IOException {
         PDType1FontEmbedder embedder = new PDType1FontEmbedder(doc, dict, pfbIn, encoding);
         this.encoding = encoding == null ? embedder.getFontEncoding() : encoding;
         glyphList = embedder.getGlyphList();
@@ -183,54 +173,44 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      * Creates a Type 1 font from a Font dictionary in a PDF.
      *
      * @param fontDictionary font dictionary.
-     * @throws IOException if there was an error initializing the font.
+     * @throws IOException              if there was an error initializing the font.
      * @throws IllegalArgumentException if /FontFile3 was used.
      */
-    public PDType1Font(COSDictionary fontDictionary) throws IOException
-    {
+    public PDType1Font(COSDictionary fontDictionary) throws IOException {
         super(fontDictionary);
 
         PDFontDescriptor fd = getFontDescriptor();
         Type1Font t1 = null;
         boolean fontIsDamaged = false;
-        if (fd != null)
-        {
+        if (fd != null) {
             // a Type1 font may contain a Type1C font
             PDStream fontFile3 = fd.getFontFile3();
-            if (fontFile3 != null)
-            {
+            if (fontFile3 != null) {
                 LOG.warn("/FontFile3 for Type1 font not supported");
             }
 
             // or it may contain a PFB
             PDStream fontFile = fd.getFontFile();
-            if (fontFile != null)
-            {
-                try
-                {
+            if (fontFile != null) {
+                try {
                     COSStream stream = fontFile.getCOSObject();
                     int length1 = stream.getInt(COSName.LENGTH1);
                     int length2 = stream.getInt(COSName.LENGTH2);
 
                     // repair Length1 and Length2 if necessary
                     byte[] bytes = fontFile.toByteArray();
-                    if (bytes.length == 0)
-                    {
+                    if (bytes.length == 0) {
                         throw new IOException("Font data unavailable");
                     }
                     length1 = repairLength1(bytes, length1);
                     length2 = repairLength2(bytes, length1, length2);
 
-                    if ((bytes[0] & 0xff) == PFB_START_MARKER)
-                    {
+                    if ((bytes[0] & 0xff) == PFB_START_MARKER) {
                         // some bad files embed the entire PFB, see PDFBOX-2607
                         t1 = Type1Font.createWithPFB(bytes);
-                    }
-                    else
-                    {
+                    } else {
                         // the PFB embedded as two segments back-to-back
-                        if (length1 < 0 || length1 > length1 + length2)
-                        {
+                        if (length1 < 0 || length1 > length1 + length2) {
                             throw new IOException("Invalid length data, actual length: " +
                                     bytes.length + ", /Length1: " + length1 + ", /Length2: " + length2);
                         }
@@ -238,19 +218,14 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
                         byte[] segment2 = Arrays.copyOfRange(bytes, length1, length1 + length2);
 
                         // empty streams are simply ignored
-                        if (length1 > 0 && length2 > 0)
-                        {
+                        if (length1 > 0 && length2 > 0) {
                             t1 = Type1Font.createWithSegments(segment1, segment2);
                         }
                     }
-                }
-                catch (DamagedFontException e)
-                {
+                } catch (DamagedFontException e) {
                     LOG.warn("Can't read damaged embedded Type1 font " + fd.getFontName(), e);
                     fontIsDamaged = true;
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     LOG.error("Can't read the embedded Type1 font " + fd.getFontName(), e);
                     fontIsDamaged = true;
                 }
@@ -261,18 +236,14 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
         type1font = t1;
 
         // find a generic font to use for rendering, could be a .pfb, but might be a .ttf
-        if (type1font != null)
-        {
+        if (type1font != null) {
             genericFont = type1font;
-        }
-        else
-        {
+        } else {
             FontMapping<FontBoxFont> mapping = FontMappers.instance()
-                                                          .getFontBoxFont(getBaseFont(), fd);
+                    .getFontBoxFont(getBaseFont(), fd);
             genericFont = mapping.getFont();
 
-            if (mapping.isFallback())
-            {
+            if (mapping.isFallback()) {
                 LOG.warn("Using fallback font " + genericFont.getName() + " for " + getBaseFont());
             }
         }
@@ -285,30 +256,25 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      * Some Type 1 fonts have an invalid Length1, which causes the binary segment of the font
      * to be truncated, see PDFBOX-2350, PDFBOX-3677.
      *
-     * @param bytes Type 1 stream bytes
+     * @param bytes   Type 1 stream bytes
      * @param length1 Length1 from the Type 1 stream
      * @return repaired Length1 value
      */
-    private int repairLength1(byte[] bytes, int length1)
-    {
+    private int repairLength1(byte[] bytes, int length1) {
         // scan backwards from the end of the first segment to find 'exec'
         int offset = Math.max(0, length1 - 4);
-        if (offset <= 0 || offset > bytes.length - 4)
-        {
+        if (offset <= 0 || offset > bytes.length - 4) {
             offset = bytes.length - 4;
         }
 
         offset = findBinaryOffsetAfterExec(bytes, offset);
-        if (offset == 0 && length1 > 0)
-        {
+        if (offset == 0 && length1 > 0) {
             // 2nd try with brute force
             offset = findBinaryOffsetAfterExec(bytes, bytes.length - 4);
         }
 
-        if (length1 - offset != 0 && offset > 0)
-        {
-            if (LOG.isWarnEnabled())
-            {
+        if (length1 - offset != 0 && offset > 0) {
+            if (LOG.isWarnEnabled()) {
                 LOG.warn("Ignored invalid Length1 " + length1 + " for Type 1 font " + getName());
             }
             return offset;
@@ -317,22 +283,18 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
         return length1;
     }
 
-    private static int findBinaryOffsetAfterExec(byte[] bytes, int startOffset)
-    {
+    private static int findBinaryOffsetAfterExec(byte[] bytes, int startOffset) {
         int offset = startOffset;
-        while (offset > 0)
-        {
+        while (offset > 0) {
             if (bytes[offset + 0] == 'e'
                     && bytes[offset + 1] == 'x'
                     && bytes[offset + 2] == 'e'
-                    && bytes[offset + 3] == 'c')
-            {
+                    && bytes[offset + 3] == 'c') {
                 offset += 4;
                 // skip additional CR LF space characters
                 while (offset < bytes.length &&
                         (bytes[offset] == '\r' || bytes[offset] == '\n' ||
-                         bytes[offset] == ' ' || bytes[offset] == '\t'))
-                {
+                                bytes[offset] == ' ' || bytes[offset] == '\t')) {
                     offset++;
                 }
                 break;
@@ -347,16 +309,14 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      * IllegalArgumentException in Arrays.copyOfRange(), a huge value eats up memory because of
      * padding.
      *
-     * @param bytes Type 1 stream bytes
+     * @param bytes   Type 1 stream bytes
      * @param length1 Length1 from the Type 1 stream
      * @param length2 Length2 from the Type 1 stream
      * @return repaired Length2 value
      */
-    private int repairLength2(byte[] bytes, int length1, int length2)
-    {
+    private int repairLength2(byte[] bytes, int length1, int length2) {
         // repair Length2 if necessary
-        if (length2 < 0 || length2 > bytes.length - length1)
-        {
+        if (length2 < 0 || length2 > bytes.length - length1) {
             LOG.warn("Ignored invalid Length2 " + length2 + " for Type 1 font " + getName());
             return bytes.length - length1;
         }
@@ -368,21 +328,16 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      *
      * @return the PostScript name of the font
      */
-    public final String getBaseFont()
-    {
+    public final String getBaseFont() {
         return dict.getNameAsString(COSName.BASE_FONT);
     }
 
     @Override
-    public float getHeight(int code) throws IOException
-    {
-        if (getStandard14AFM() != null)
-        {
+    public float getHeight(int code) throws IOException {
+        if (getStandard14AFM() != null) {
             String afmName = getEncoding().getName(code);
             return getStandard14AFM().getCharacterHeight(afmName); // todo: isn't this the y-advance, not the height?
-        }
-        else
-        {
+        } else {
             String name = codeToName(code);
 
             // todo: should be scaled by font matrix
@@ -391,35 +346,27 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
     }
 
     @Override
-    protected byte[] encode(int unicode) throws IOException
-    {
+    protected byte[] encode(int unicode) throws IOException {
         byte[] bytes = codeToBytesMap.get(unicode);
-        if (bytes != null)
-        {
+        if (bytes != null) {
             return bytes;
         }
 
         String name = getGlyphList().codePointToName(unicode);
-        if (isStandard14())
-        {
+        if (isStandard14()) {
             // genericFont not needed, thus simplified code
             // this is important on systems with no installed fonts
-            if (!encoding.contains(name))
-            {
+            if (!encoding.contains(name)) {
                 throw new IllegalArgumentException(
                         String.format("U+%04X ('%s') is not available in the font %s, encoding: %s",
                                 unicode, name, getName(), encoding.getEncodingName()));
             }
-            if (".notdef".equals(name))
-            {
+            if (".notdef".equals(name)) {
                 throw new IllegalArgumentException(
                         String.format("No glyph for U+%04X in the font %s", unicode, getName()));
             }
-        }
-        else
-        {
-            if (!encoding.contains(name))
-            {
+        } else {
+            if (!encoding.contains(name)) {
                 throw new IllegalArgumentException(
                         String.format("U+%04X ('%s') is not available in the font %s (generic: %s), encoding: %s",
                                 unicode, name, getName(), genericFont.getName(), encoding.getEncodingName()));
@@ -427,8 +374,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
 
             String nameInFont = getNameInFont(name);
 
-            if (".notdef".equals(nameInFont) || !genericFont.hasGlyph(nameInFont))
-            {
+            if (".notdef".equals(nameInFont) || !genericFont.hasGlyph(nameInFont)) {
                 throw new IllegalArgumentException(
                         String.format("No glyph for U+%04X in the font %s (generic: %s)", unicode, getName(), genericFont.getName()));
             }
@@ -436,76 +382,60 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
 
         Map<String, Integer> inverted = encoding.getNameToCodeMap();
         int code = inverted.get(name);
-        if (code < 0)
-        {
+        if (code < 0) {
             throw new IllegalArgumentException(
                     String.format("U+%04X ('%s') is not available in the font %s (generic: %s), encoding: %s",
                             unicode, name, getName(), genericFont.getName(), encoding.getEncodingName()));
         }
-        bytes = new byte[] { (byte)code };
+        bytes = new byte[]{(byte) code};
         codeToBytesMap.put(unicode, bytes);
         return bytes;
     }
 
     @Override
-    public float getWidthFromFont(int code) throws IOException
-    {
+    public float getWidthFromFont(int code) throws IOException {
         String name = codeToName(code);
 
         // width of .notdef is ignored for substitutes, see PDFBOX-1900
-        if (!isEmbedded && name.equals(".notdef"))
-        {
+        if (!isEmbedded && name.equals(".notdef")) {
             return 250;
         }
         float width = genericFont.getWidth(name);
 
         Point2D p = new Point2D.Float(width, 0);
         fontMatrixTransform.transform(p, p);
-        return (float)p.getX();
+        return (float) p.getX();
     }
 
     @Override
-    public boolean isEmbedded()
-    {
+    public boolean isEmbedded() {
         return isEmbedded;
     }
 
     @Override
-    public float getAverageFontWidth()
-    {
-        if (getStandard14AFM() != null)
-        {
+    public float getAverageFontWidth() {
+        if (getStandard14AFM() != null) {
             return getStandard14AFM().getAverageCharacterWidth();
-        }
-        else
-        {
+        } else {
             return super.getAverageFontWidth();
         }
     }
 
     @Override
-    public int readCode(InputStream in) throws IOException
-    {
+    public int readCode(InputStream in) throws IOException {
         return in.read();
     }
 
     @Override
-    protected Encoding readEncodingFromFont() throws IOException
-    {
-        if (!isEmbedded() && getStandard14AFM() != null)
-        {
+    protected Encoding readEncodingFromFont() throws IOException {
+        if (!isEmbedded() && getStandard14AFM() != null) {
             // read from AFM
             return new Type1Encoding(getStandard14AFM());
-        }
-        else
-        {
+        } else {
             // extract from Type1 font/substitute
-            if (genericFont instanceof EncodedFont)
-            {
+            if (genericFont instanceof EncodedFont) {
                 return Type1Encoding.fromFontBox(((EncodedFont) genericFont).getEncoding());
-            }
-            else
-            {
+            } else {
                 // default (only happens with TTFs)
                 return StandardEncoding.INSTANCE;
             }
@@ -517,49 +447,41 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      *
      * @return the embedded or substituted Type 1 font or null
      */
-    public Type1Font getType1Font()
-    {
+    public Type1Font getType1Font() {
         return type1font;
     }
 
     @Override
-    public FontBoxFont getFontBoxFont()
-    {
+    public FontBoxFont getFontBoxFont() {
         return genericFont;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return getBaseFont();
     }
 
     @Override
-    public BoundingBox getBoundingBox() throws IOException
-    {
-        if (fontBBox == null)
-        {
+    public BoundingBox getBoundingBox() throws IOException {
+        if (fontBBox == null) {
             fontBBox = generateBoundingBox();
         }
         return fontBBox;
     }
 
-    private BoundingBox generateBoundingBox() throws IOException
-    {
+    private BoundingBox generateBoundingBox() throws IOException {
         if (getFontDescriptor() != null) {
             PDRectangle bbox = getFontDescriptor().getFontBoundingBox();
-            if (isNonZeroBoundingBox(bbox))
-            {
+            if (isNonZeroBoundingBox(bbox)) {
                 return new BoundingBox(bbox.getLowerLeftX(), bbox.getLowerLeftY(),
-                                       bbox.getUpperRightX(), bbox.getUpperRightY());
+                        bbox.getUpperRightX(), bbox.getUpperRightY());
             }
         }
         return genericFont.getFontBBox();
     }
 
     //@Override
-    public String codeToName(int code) throws IOException
-    {
+    public String codeToName(int code) throws IOException {
         String name = getEncoding() != null ? getEncoding().getName(code) : ".notdef";
         return getNameInFont(name);
     }
@@ -568,27 +490,22 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
      * Maps a PostScript glyph name to the name in the underlying font, for example when
      * using a TTF font we might map "W" to "uni0057".
      */
-    private String getNameInFont(String name) throws IOException
-    {
-        if (isEmbedded() || genericFont.hasGlyph(name))
-        {
+    private String getNameInFont(String name) throws IOException {
+        if (isEmbedded() || genericFont.hasGlyph(name)) {
             return name;
         }
 
         // try alternative name
         String altName = ALT_NAMES.get(name);
-        if (altName != null && !name.equals(".notdef") && genericFont.hasGlyph(altName))
-        {
+        if (altName != null && !name.equals(".notdef") && genericFont.hasGlyph(altName)) {
             return altName;
         }
 
         // try unicode name
         String unicodes = getGlyphList().toUnicode(name);
-        if (unicodes != null && unicodes.length() == 1)
-        {
+        if (unicodes != null && unicodes.length() == 1) {
             String uniName = getUniNameOfCodePoint(unicodes.codePointAt(0));
-            if (genericFont.hasGlyph(uniName))
-            {
+            if (genericFont.hasGlyph(uniName)) {
                 return uniName;
             }
             // PDFBOX-4017: no postscript table on Windows 10, and the low uni00NN
@@ -596,14 +513,11 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
             // while disregarding encoding from the PDF (because of file from PDFBOX-1606,
             // makes sense because this segment is about finding the name in a standard font)
             //TODO bring up better solution than this
-            if ("SymbolMT".equals(genericFont.getName()))
-            {
+            if ("SymbolMT".equals(genericFont.getName())) {
                 Integer code = SymbolEncoding.INSTANCE.getNameToCodeMap().get(name);
-                if (code != null)
-                {
+                if (code != null) {
                     uniName = getUniNameOfCodePoint(code + 0xF000);
-                    if (genericFont.hasGlyph(uniName))
-                    {
+                    if (genericFont.hasGlyph(uniName)) {
                         return uniName;
                     }
                 }
@@ -614,78 +528,61 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
+    public GeneralPath getPath(String name) throws IOException {
         // Acrobat does not draw .notdef for Type 1 fonts, see PDFBOX-2421
         // I suspect that it does do this for embedded fonts though, but this is untested
-        if (name.equals(".notdef") && !isEmbedded)
-        {
+        if (name.equals(".notdef") && !isEmbedded) {
             return new GeneralPath();
-        }
-        else
-        {
+        } else {
             return genericFont.getPath(getNameInFont(name));
         }
     }
 
     @Override
-    public GeneralPath getPath(int code) throws IOException
-    {
+    public GeneralPath getPath(int code) throws IOException {
         String name = getEncoding().getName(code);
         return getPath(name);
     }
 
     @Override
-    public GeneralPath getNormalizedPath(int code) throws IOException
-    {
+    public GeneralPath getNormalizedPath(int code) throws IOException {
         String name = getEncoding().getName(code);
         GeneralPath path = getPath(name);
-        if (path == null)
-        {
+        if (path == null) {
             return getPath(".notdef");
         }
         return path;
     }
 
     @Override
-    public boolean hasGlyph(String name) throws IOException
-    {
+    public boolean hasGlyph(String name) throws IOException {
         return genericFont.hasGlyph(getNameInFont(name));
     }
 
     @Override
-    public boolean hasGlyph(int code) throws IOException
-    {
+    public boolean hasGlyph(int code) throws IOException {
         return !getEncoding().getName(code).equals(".notdef");
     }
 
     @Override
-    public final Matrix getFontMatrix()
-    {
-        if (fontMatrix == null)
-        {
+    public final Matrix getFontMatrix() {
+        if (fontMatrix == null) {
             // PDF specified that Type 1 fonts use a 1000upem matrix, but some fonts specify
             // their own custom matrix anyway, for example PDFBOX-2298
             List<Number> numbers = null;
-            try
-            {
+            try {
                 numbers = genericFont.getFontMatrix();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 LOG.debug("Couldn't get font matrix box - returning default value", e);
                 fontMatrix = DEFAULT_FONT_MATRIX;
             }
 
-            if (numbers != null && numbers.size() == 6)
-            {
+            if (numbers != null && numbers.size() == 6) {
                 fontMatrix = new Matrix(
                         numbers.get(0).floatValue(), numbers.get(1).floatValue(),
                         numbers.get(2).floatValue(), numbers.get(3).floatValue(),
                         numbers.get(4).floatValue(), numbers.get(5).floatValue());
-            }
-            else
-            {
+            } else {
                 return super.getFontMatrix();
             }
         }
@@ -693,8 +590,7 @@ public class PDType1Font extends PDSimpleFont implements PDVectorFont
     }
 
     @Override
-    public boolean isDamaged()
-    {
+    public boolean isDamaged() {
         return isDamaged;
     }
 }

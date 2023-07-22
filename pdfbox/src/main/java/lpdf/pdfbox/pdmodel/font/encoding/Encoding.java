@@ -16,20 +16,19 @@
  */
 package lpdf.pdfbox.pdmodel.font.encoding;
 
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.common.COSObjectable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * A PostScript encoding vector, maps character codes to glyph names.
  *
  * @author Ben Litchfield
  */
-public abstract class Encoding implements COSObjectable
-{
+public abstract class Encoding implements COSObjectable {
     protected static final int CHAR_CODE = 0;
     protected static final int CHAR_NAME = 1;
 
@@ -39,26 +38,16 @@ public abstract class Encoding implements COSObjectable
      * @param name The name of the encoding to get.
      * @return The encoding that matches the name.
      */
-    public static Encoding getInstance(COSName name)
-    {
-        if (COSName.STANDARD_ENCODING.equals(name))
-        {
+    public static Encoding getInstance(COSName name) {
+        if (COSName.STANDARD_ENCODING.equals(name)) {
             return StandardEncoding.INSTANCE;
-        }
-        else if (COSName.WIN_ANSI_ENCODING.equals(name))
-        {
+        } else if (COSName.WIN_ANSI_ENCODING.equals(name)) {
             return WinAnsiEncoding.INSTANCE;
-        }
-        else if (COSName.MAC_ROMAN_ENCODING.equals(name))
-        {
+        } else if (COSName.MAC_ROMAN_ENCODING.equals(name)) {
             return MacRomanEncoding.INSTANCE;
-        }
-        else if (COSName.MAC_EXPERT_ENCODING.equals(name))
-        {
+        } else if (COSName.MAC_EXPERT_ENCODING.equals(name)) {
             return MacExpertEncoding.INSTANCE;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -78,8 +67,7 @@ public abstract class Encoding implements COSObjectable
      *
      * @return the code -&gt; name map
      */
-    public Map<Integer, String> getCodeToNameMap()
-    {
+    public Map<Integer, String> getCodeToNameMap() {
         return Collections.unmodifiableMap(codeToName);
     }
 
@@ -89,8 +77,7 @@ public abstract class Encoding implements COSObjectable
      *
      * @return the name -&gt; code map
      */
-    public Map<String, Integer> getNameToCodeMap()
-    {
+    public Map<String, Integer> getNameToCodeMap() {
         return Collections.unmodifiableMap(inverted);
     }
 
@@ -98,13 +85,11 @@ public abstract class Encoding implements COSObjectable
      * This will add a character encoding. An already existing mapping is preserved when creating
      * the reverse mapping. Should only be used during construction of the class.
      *
-     * @see #overwrite(int, String)
-     *
      * @param code character code
      * @param name PostScript glyph name
+     * @see #overwrite(int, String)
      */
-    protected void add(int code, String name)
-    {
+    protected void add(int code, String name) {
         codeToName.put(code, name);
         inverted.putIfAbsent(name, code);
     }
@@ -113,20 +98,16 @@ public abstract class Encoding implements COSObjectable
      * This will add a character encoding. An already existing mapping is overwritten when creating
      * the reverse mapping. Should only be used during construction of the class.
      *
-     * @see Encoding#add(int, String)
-     *
      * @param code character code
      * @param name PostScript glyph name
+     * @see Encoding#add(int, String)
      */
-    protected void overwrite(int code, String name)
-    {
+    protected void overwrite(int code, String name) {
         // remove existing reverse mapping first
         String oldName = codeToName.get(code);
-        if (oldName != null)
-        {
+        if (oldName != null) {
             Integer oldCode = inverted.get(oldName);
-            if (oldCode != null && oldCode == code)
-            {
+            if (oldCode != null && oldCode == code) {
                 inverted.remove(oldName);
             }
         }
@@ -140,8 +121,7 @@ public abstract class Encoding implements COSObjectable
      * @param name PostScript glyph name
      * @return true if the encoding has a mapping for the given name value
      */
-    public boolean contains(String name)
-    {
+    public boolean contains(String name) {
         return inverted.containsKey(name);
     }
 
@@ -150,10 +130,8 @@ public abstract class Encoding implements COSObjectable
      *
      * @param code character code
      * @return if the encoding has a mapping for the given code value
-     *
      */
-    public boolean contains(int code)
-    {
+    public boolean contains(int code) {
         return codeToName.containsKey(code);
     }
 
@@ -163,14 +141,12 @@ public abstract class Encoding implements COSObjectable
      * @param code character code
      * @return PostScript glyph name
      */
-    public String getName(int code)
-    {
-       String name = codeToName.get(code);
-       if (name != null)
-       {
-          return name;
-       }
-       return ".notdef";
+    public String getName(int code) {
+        String name = codeToName.get(code);
+        if (name != null) {
+            return name;
+        }
+        return ".notdef";
     }
 
     /**

@@ -23,26 +23,22 @@ import java.util.Locale;
  *
  * @author Villu Ruusmann
  */
-public final class Type1FontUtil
-{
+public final class Type1FontUtil {
 
-    private Type1FontUtil()
-    {
+    private Type1FontUtil() {
     }
 
     /**
      * Converts a byte-array into a string with the corresponding hex value.
+     *
      * @param bytes the byte array
      * @return the string with the hex value
      */
-    public static String hexEncode(byte[] bytes)
-    {
+    public static String hexEncode(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        for (byte aByte : bytes)
-        {
+        for (byte aByte : bytes) {
             String string = Integer.toHexString(aByte & 0xff);
-            if (string.length() == 1)
-            {
+            if (string.length() == 1) {
                 sb.append('0');
             }
             sb.append(string.toUpperCase(Locale.US));
@@ -52,18 +48,16 @@ public final class Type1FontUtil
 
     /**
      * Converts a string representing a hex value into a byte array.
+     *
      * @param string the string representing the hex value
      * @return the hex value as byte array
      */
-    public static byte[] hexDecode(String string)
-    {
-        if (string.length() % 2 != 0)
-        {
+    public static byte[] hexDecode(String string) {
+        if (string.length() % 2 != 0) {
             throw new IllegalArgumentException();
         }
         byte[] bytes = new byte[string.length() / 2];
-        for (int i = 0; i < string.length(); i += 2)
-        {
+        for (int i = 0; i < string.length(); i += 2) {
             bytes[i / 2] = (byte) Integer.parseInt(string.substring(i, i + 2), 16);
         }
         return bytes;
@@ -71,27 +65,26 @@ public final class Type1FontUtil
 
     /**
      * Encrypt eexec.
+     *
      * @param buffer the given data
      * @return the encrypted data
      */
-    public static byte[] eexecEncrypt(byte[] buffer)
-    {
+    public static byte[] eexecEncrypt(byte[] buffer) {
         return encrypt(buffer, 55665, 4);
     }
 
     /**
      * Encrypt charstring.
+     *
      * @param buffer the given data
-     * @param n blocksize?
+     * @param n      blocksize?
      * @return the encrypted data
      */
-    public static byte[] charstringEncrypt(byte[] buffer, int n)
-    {
+    public static byte[] charstringEncrypt(byte[] buffer, int n) {
         return encrypt(buffer, 4330, n);
     }
 
-    private static byte[] encrypt(byte[] plaintextBytes, int r, int n)
-    {
+    private static byte[] encrypt(byte[] plaintextBytes, int r, int n) {
         byte[] buffer = new byte[plaintextBytes.length + n];
 
         System.arraycopy(plaintextBytes, 0, buffer, n, buffer.length - n);
@@ -101,8 +94,7 @@ public final class Type1FontUtil
 
         byte[] ciphertextBytes = new byte[buffer.length];
 
-        for (int i = 0; i < buffer.length; i++)
-        {
+        for (int i = 0; i < buffer.length; i++) {
             int plain = buffer[i] & 0xff;
             int cipher = plain ^ r >> 8;
 
@@ -116,34 +108,32 @@ public final class Type1FontUtil
 
     /**
      * Decrypt eexec.
+     *
      * @param buffer the given encrypted data
      * @return the decrypted data
      */
-    public static byte[] eexecDecrypt(byte[] buffer)
-    {
+    public static byte[] eexecDecrypt(byte[] buffer) {
         return decrypt(buffer, 55665, 4);
     }
 
     /**
      * Decrypt charstring.
+     *
      * @param buffer the given encrypted data
-     * @param n blocksize?
+     * @param n      blocksize?
      * @return the decrypted data
      */
-    public static byte[] charstringDecrypt(byte[] buffer, int n)
-    {
+    public static byte[] charstringDecrypt(byte[] buffer, int n) {
         return decrypt(buffer, 4330, n);
     }
 
-    private static byte[] decrypt(byte[] ciphertextBytes, int r, int n)
-    {
+    private static byte[] decrypt(byte[] ciphertextBytes, int r, int n) {
         byte[] buffer = new byte[ciphertextBytes.length];
 
         int c1 = 52845;
         int c2 = 22719;
 
-        for (int i = 0; i < ciphertextBytes.length; i++)
-        {
+        for (int i = 0; i < ciphertextBytes.length; i++) {
             int cipher = ciphertextBytes[i] & 0xff;
             int plain = cipher ^ r >> 8;
 

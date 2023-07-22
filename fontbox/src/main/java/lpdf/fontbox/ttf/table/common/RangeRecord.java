@@ -23,39 +23,32 @@ package lpdf.fontbox.ttf.table.common;
  * Coverage format 2</a> in the Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class RangeRecord
-{
+public class RangeRecord {
     private final int startGlyphID;
     private final int endGlyphID;
     private final int startCoverageIndex;
 
-    public RangeRecord(int startGlyphID, int endGlyphID, int startCoverageIndex)
-    {
+    public RangeRecord(int startGlyphID, int endGlyphID, int startCoverageIndex) {
         this.startGlyphID = startGlyphID;
         this.endGlyphID = endGlyphID;
         this.startCoverageIndex = startCoverageIndex;
     }
 
-    public int getStartGlyphID()
-    {
+    public int getStartGlyphID() {
         return startGlyphID;
     }
 
-    public int getEndGlyphID()
-    {
+    public int getEndGlyphID() {
         return endGlyphID;
     }
 
-    public int getStartCoverageIndex()
-    {
+    public int getStartCoverageIndex() {
         return startCoverageIndex;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("RangeRecord[startGlyphID=%d,endGlyphID=%d,startCoverageIndex=%d]",
                 startGlyphID, endGlyphID, startCoverageIndex);
     }

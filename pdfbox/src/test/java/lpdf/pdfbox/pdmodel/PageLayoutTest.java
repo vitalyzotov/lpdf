@@ -15,27 +15,26 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
 
-class PageLayoutTest
-{
+class PageLayoutTest {
     /**
      * @author Tilman Hausherr
-     *
+     * <p>
      * Test for completeness (PDFBOX-3362).
      */
     @Test
-    void testValues()
-    {
+    void testValues() {
         Set<PageLayout> pageLayoutSet = EnumSet.noneOf(PageLayout.class);
         Set<String> stringSet = new HashSet<>();
-        for (PageLayout pl : PageLayout.values())
-        {
+        for (PageLayout pl : PageLayout.values()) {
             String s = pl.stringValue();
             stringSet.add(s);
             pageLayoutSet.add(PageLayout.fromString(s));
@@ -48,8 +47,7 @@ class PageLayoutTest
      * @author John Bergqvist
      */
     @Test
-    void fromStringInputNotNullOutputIllegalArgumentException()
-    {
+    void fromStringInputNotNullOutputIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> PageLayout.fromString("SinglePag"));
     }
 }

@@ -17,6 +17,9 @@
 
 package lpdf.fontbox.util.autodetect;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +27,12 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * FontFinder for native Windows platforms. This class is based on a class provided by Apache FOP. see
  * org.apache.fop.fonts.autodetect.WindowsFontDirFinder
  */
-public class WindowsFontDirFinder implements FontDirFinder
-{
+public class WindowsFontDirFinder implements FontDirFinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(WindowsFontDirFinder.class);
 
@@ -41,21 +40,16 @@ public class WindowsFontDirFinder implements FontDirFinder
      * Attempts to read windir environment variable on windows (disclaimer: This is a bit dirty but seems to work
      * nicely).
      */
-    private String getWinDir(String osName) throws IOException
-    {
+    private String getWinDir(String osName) throws IOException {
         Process process;
         Runtime runtime = Runtime.getRuntime();
-        if (osName.startsWith("Windows 9"))
-        {
+        if (osName.startsWith("Windows 9")) {
             process = runtime.exec("command.com /c echo %windir%");
-        }
-        else
-        {
+        } else {
             process = runtime.exec("cmd.exe /c echo %windir%");
         }
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-                process.getInputStream(), StandardCharsets.ISO_8859_1)))
-        {
+                process.getInputStream(), StandardCharsets.ISO_8859_1))) {
             return bufferedReader.readLine();
         }
     }
@@ -66,109 +60,80 @@ public class WindowsFontDirFinder implements FontDirFinder
      * @return a list of detected font files
      */
     @Override
-    public List<File> find()
-    {
+    public List<File> find() {
         List<File> fontDirList = new java.util.ArrayList<>();
         String windir = null;
-        try
-        {
+        try {
             windir = System.getProperty("env.windir");
-        }
-        catch (SecurityException e)
-        {
+        } catch (SecurityException e) {
             LOG.debug("Couldn't get Windows font directories - ignoring", e);
             // should continue if this fails
         }
         String osName = System.getProperty("os.name");
-        if (windir == null)
-        {
-            try
-            {
+        if (windir == null) {
+            try {
                 windir = getWinDir(osName);
-            }
-            catch (IOException | SecurityException e)
-            {
+            } catch (IOException | SecurityException e) {
                 LOG.debug("Couldn't get Windows font directories - ignoring", e);
                 // should continue if this fails
             }
         }
         File osFontsDir;
         File psFontsDir;
-        if (windir != null && windir.length() > 2)
-        {
+        if (windir != null && windir.length() > 2) {
             // remove any trailing '/'
-            if (windir.endsWith("/"))
-            {
+            if (windir.endsWith("/")) {
                 windir = windir.substring(0, windir.length() - 1);
             }
             osFontsDir = new File(windir + File.separator + "FONTS");
-            if (osFontsDir.exists() && osFontsDir.canRead())
-            {
+            if (osFontsDir.exists() && osFontsDir.canRead()) {
                 fontDirList.add(osFontsDir);
             }
             psFontsDir = new File(windir.substring(0, 2) + File.separator + "PSFONTS");
-            if (psFontsDir.exists() && psFontsDir.canRead())
-            {
+            if (psFontsDir.exists() && psFontsDir.canRead()) {
                 fontDirList.add(psFontsDir);
             }
-        }
-        else
-        {
+        } else {
             String windowsDirName = osName.endsWith("NT") ? "WINNT" : "WINDOWS";
             // look for true type font folder
-            for (char driveLetter = 'C'; driveLetter <= 'E'; driveLetter++)
-            {
+            for (char driveLetter = 'C'; driveLetter <= 'E'; driveLetter++) {
                 osFontsDir = new File(driveLetter + ":" + File.separator + windowsDirName
                         + File.separator + "FONTS");
-                try
-                {
-                    if (osFontsDir.exists() && osFontsDir.canRead())
-                    {
+                try {
+                    if (osFontsDir.exists() && osFontsDir.canRead()) {
                         fontDirList.add(osFontsDir);
                         break;
                     }
-                }
-                catch (SecurityException e)
-                {
+                } catch (SecurityException e) {
                     LOG.debug("Couldn't get Windows font directories - ignoring", e);
                     // should continue if this fails
                 }
             }
             // look for type 1 font folder
-            for (char driveLetter = 'C'; driveLetter <= 'E'; driveLetter++)
-            {
+            for (char driveLetter = 'C'; driveLetter <= 'E'; driveLetter++) {
                 psFontsDir = new File(driveLetter + ":" + File.separator + "PSFONTS");
-                try
-                {
-                    if (psFontsDir.exists() && psFontsDir.canRead())
-                    {
+                try {
+                    if (psFontsDir.exists() && psFontsDir.canRead()) {
                         fontDirList.add(psFontsDir);
                         break;
                     }
-                }
-                catch (SecurityException e)
-                {
+                } catch (SecurityException e) {
                     LOG.debug("Couldn't get Windows font directories - ignoring", e);
                     // should continue if this fails
                 }
             }
         }
 
-        try
-        {
+        try {
             String localAppData = System.getenv("LOCALAPPDATA");
-            if (localAppData != null && !localAppData.isEmpty())
-            {
+            if (localAppData != null && !localAppData.isEmpty()) {
                 File localFontDir = new File(localAppData + File.separator + "Microsoft" +
                         File.separator + "Windows" + File.separator + "Fonts");
-                if (localFontDir.exists() && localFontDir.canRead())
-                {
+                if (localFontDir.exists() && localFontDir.canRead()) {
                     fontDirList.add(localFontDir);
                 }
             }
-        }
-        catch (SecurityException e)
-        {
+        } catch (SecurityException e) {
             LOG.debug("Couldn't get LOCALAPPDATA directory - ignoring", e);
             // should continue if this fails
         }

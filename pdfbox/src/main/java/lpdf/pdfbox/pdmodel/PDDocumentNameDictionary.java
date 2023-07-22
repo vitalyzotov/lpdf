@@ -25,8 +25,7 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDDocumentNameDictionary implements COSObjectable
-{
+public class PDDocumentNameDictionary implements COSObjectable {
     private final COSDictionary nameDictionary;
     private final PDDocumentCatalog catalog;
 
@@ -35,11 +34,9 @@ public class PDDocumentNameDictionary implements COSObjectable
      *
      * @param cat The document catalog that this dictionary is part of.
      */
-    public PDDocumentNameDictionary( PDDocumentCatalog cat )
-    {
+    public PDDocumentNameDictionary(PDDocumentCatalog cat) {
         COSDictionary names = cat.getCOSObject().getCOSDictionary(COSName.NAMES);
-        if (names == null)
-        {
+        if (names == null) {
             names = new COSDictionary();
             cat.getCOSObject().setItem(COSName.NAMES, names);
         }
@@ -50,11 +47,10 @@ public class PDDocumentNameDictionary implements COSObjectable
     /**
      * Constructor.
      *
-     * @param cat The document that this dictionary is part of.
+     * @param cat   The document that this dictionary is part of.
      * @param names The names dictionary.
      */
-    public PDDocumentNameDictionary( PDDocumentCatalog cat, COSDictionary names )
-    {
+    public PDDocumentNameDictionary(PDDocumentCatalog cat, COSDictionary names) {
         catalog = cat;
         nameDictionary = names;
     }
@@ -65,8 +61,7 @@ public class PDDocumentNameDictionary implements COSObjectable
      * @return The cos dictionary for this object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return nameDictionary;
     }
 
@@ -77,8 +72,7 @@ public class PDDocumentNameDictionary implements COSObjectable
      *
      * @return The embedded files name tree node.
      */
-    public PDEmbeddedFilesNameTreeNode getEmbeddedFiles()
-    {
+    public PDEmbeddedFilesNameTreeNode getEmbeddedFiles() {
         COSDictionary dic = nameDictionary.getCOSDictionary(COSName.EMBEDDED_FILES);
         return dic != null ? new PDEmbeddedFilesNameTreeNode(dic) : null;
     }
@@ -88,9 +82,8 @@ public class PDDocumentNameDictionary implements COSObjectable
      *
      * @param ef The new embedded files
      */
-    public void setEmbeddedFiles( PDEmbeddedFilesNameTreeNode ef )
-    {
-        nameDictionary.setItem( COSName.EMBEDDED_FILES, ef );
+    public void setEmbeddedFiles(PDEmbeddedFilesNameTreeNode ef) {
+        nameDictionary.setItem(COSName.EMBEDDED_FILES, ef);
     }
 
     /**
@@ -100,8 +93,7 @@ public class PDDocumentNameDictionary implements COSObjectable
      *
      * @return The document level JavaScript name tree.
      */
-    public PDJavascriptNameTreeNode getJavaScript()
-    {
+    public PDJavascriptNameTreeNode getJavaScript() {
         COSDictionary dic = nameDictionary.getCOSDictionary(COSName.JAVA_SCRIPT);
         return dic != null ? new PDJavascriptNameTreeNode(dic) : null;
     }
@@ -111,8 +103,7 @@ public class PDDocumentNameDictionary implements COSObjectable
      *
      * @param js The new Javascript entries.
      */
-    public void setJavascript( PDJavascriptNameTreeNode js )
-    {
-        nameDictionary.setItem( COSName.JAVA_SCRIPT, js );
+    public void setJavascript(PDJavascriptNameTreeNode js) {
+        nameDictionary.setItem(COSName.JAVA_SCRIPT, js);
     }
 }

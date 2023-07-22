@@ -16,14 +16,13 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.common.COSObjectable;
+
 import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
-
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSName;
-
-import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
  * This is the document metadata.  Each getXXX method will return the entry if
@@ -32,17 +31,14 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  * @author Gerardo Ortiz
- *
  */
-public class PDDocumentInformation implements COSObjectable
-{
+public class PDDocumentInformation implements COSObjectable {
     private final COSDictionary info;
 
     /**
      * Default Constructor.
      */
-    public PDDocumentInformation()
-    {
+    public PDDocumentInformation() {
         info = new COSDictionary();
     }
 
@@ -51,8 +47,7 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param dic The underlying dictionary.
      */
-    public PDDocumentInformation( COSDictionary dic )
-    {
+    public PDDocumentInformation(COSDictionary dic) {
         info = dic;
     }
 
@@ -62,8 +57,7 @@ public class PDDocumentInformation implements COSObjectable
      * @return The underlying info dictionary.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return info;
     }
 
@@ -77,19 +71,17 @@ public class PDDocumentInformation implements COSObjectable
      * @param propertyKey the dictionaries key
      * @return the properties value
      */
-     public Object getPropertyStringValue(String propertyKey)
-     {
-         return info.getString(propertyKey);
-     }
+    public Object getPropertyStringValue(String propertyKey) {
+        return info.getString(propertyKey);
+    }
 
     /**
      * This will get the title of the document.  This will return null if no title exists.
      *
      * @return The title of the document.
      */
-    public String getTitle()
-    {
-        return info.getString( COSName.TITLE );
+    public String getTitle() {
+        return info.getString(COSName.TITLE);
     }
 
     /**
@@ -97,9 +89,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param title The new title for the document.
      */
-    public void setTitle( String title )
-    {
-        info.setString( COSName.TITLE, title );
+    public void setTitle(String title) {
+        info.setString(COSName.TITLE, title);
     }
 
     /**
@@ -107,9 +98,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The author of the document.
      */
-    public String getAuthor()
-    {
-        return info.getString( COSName.AUTHOR );
+    public String getAuthor() {
+        return info.getString(COSName.AUTHOR);
     }
 
     /**
@@ -117,9 +107,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param author The new author for the document.
      */
-    public void setAuthor( String author )
-    {
-        info.setString( COSName.AUTHOR, author );
+    public void setAuthor(String author) {
+        info.setString(COSName.AUTHOR, author);
     }
 
     /**
@@ -127,9 +116,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The subject of the document.
      */
-    public String getSubject()
-    {
-        return info.getString( COSName.SUBJECT );
+    public String getSubject() {
+        return info.getString(COSName.SUBJECT);
     }
 
     /**
@@ -137,9 +125,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param subject The new subject for the document.
      */
-    public void setSubject( String subject )
-    {
-        info.setString( COSName.SUBJECT, subject );
+    public void setSubject(String subject) {
+        info.setString(COSName.SUBJECT, subject);
     }
 
     /**
@@ -147,9 +134,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The keywords of the document.
      */
-    public String getKeywords()
-    {
-        return info.getString( COSName.KEYWORDS );
+    public String getKeywords() {
+        return info.getString(COSName.KEYWORDS);
     }
 
     /**
@@ -157,9 +143,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param keywords The new keywords for the document.
      */
-    public void setKeywords( String keywords )
-    {
-        info.setString( COSName.KEYWORDS, keywords );
+    public void setKeywords(String keywords) {
+        info.setString(COSName.KEYWORDS, keywords);
     }
 
     /**
@@ -167,9 +152,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The creator of the document.
      */
-    public String getCreator()
-    {
-        return info.getString( COSName.CREATOR );
+    public String getCreator() {
+        return info.getString(COSName.CREATOR);
     }
 
     /**
@@ -177,9 +161,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param creator The new creator for the document.
      */
-    public void setCreator( String creator )
-    {
-        info.setString( COSName.CREATOR, creator );
+    public void setCreator(String creator) {
+        info.setString(COSName.CREATOR, creator);
     }
 
     /**
@@ -187,9 +170,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The producer of the document.
      */
-    public String getProducer()
-    {
-        return info.getString( COSName.PRODUCER );
+    public String getProducer() {
+        return info.getString(COSName.PRODUCER);
     }
 
     /**
@@ -197,9 +179,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param producer The new producer for the document.
      */
-    public void setProducer( String producer )
-    {
-        info.setString( COSName.PRODUCER, producer );
+    public void setProducer(String producer) {
+        info.setString(COSName.PRODUCER, producer);
     }
 
     /**
@@ -207,9 +188,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The creation date of the document.
      */
-    public Calendar getCreationDate()
-    {
-        return info.getDate( COSName.CREATION_DATE );
+    public Calendar getCreationDate() {
+        return info.getDate(COSName.CREATION_DATE);
     }
 
     /**
@@ -217,9 +197,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param date The new creation date for the document.
      */
-    public void setCreationDate( Calendar date )
-    {
-        info.setDate( COSName.CREATION_DATE, date );
+    public void setCreationDate(Calendar date) {
+        info.setDate(COSName.CREATION_DATE, date);
     }
 
     /**
@@ -227,9 +206,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The modification date of the document.
      */
-    public Calendar getModificationDate()
-    {
-        return info.getDate( COSName.MOD_DATE );
+    public Calendar getModificationDate() {
+        return info.getDate(COSName.MOD_DATE);
     }
 
     /**
@@ -237,9 +215,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @param date The new modification date for the document.
      */
-    public void setModificationDate( Calendar date )
-    {
-        info.setDate( COSName.MOD_DATE, date );
+    public void setModificationDate(Calendar date) {
+        info.setDate(COSName.MOD_DATE, date);
     }
 
     /**
@@ -248,9 +225,8 @@ public class PDDocumentInformation implements COSObjectable
      *
      * @return The trapped value for the document.
      */
-    public String getTrapped()
-    {
-        return info.getNameAsString( COSName.TRAPPED );
+    public String getTrapped() {
+        return info.getNameAsString(COSName.TRAPPED);
     }
 
     /**
@@ -259,38 +235,33 @@ public class PDDocumentInformation implements COSObjectable
      * @return all metadata key strings.
      * @since Apache PDFBox 1.3.0
      */
-    public Set<String> getMetadataKeys()
-    {
+    public Set<String> getMetadataKeys() {
         Set<String> keys = new TreeSet<>();
-        for (COSName key : info.keySet())
-        {
+        for (COSName key : info.keySet()) {
             keys.add(key.getName());
         }
         return keys;
     }
 
     /**
-     *  This will get the value of a custom metadata information field for the document.
-     *  This will return null if one is not found.
+     * This will get the value of a custom metadata information field for the document.
+     * This will return null if one is not found.
      *
      * @param fieldName Name of custom metadata field from pdf document.
-     *
      * @return String Value of metadata field
      */
-    public String getCustomMetadataValue(String fieldName)
-    {
-        return info.getString( fieldName );
+    public String getCustomMetadataValue(String fieldName) {
+        return info.getString(fieldName);
     }
 
     /**
      * Set the custom metadata value.
      *
-     * @param fieldName The name of the custom metadata field.
+     * @param fieldName  The name of the custom metadata field.
      * @param fieldValue The value to the custom metadata field.
      */
-    public void setCustomMetadataValue( String fieldName, String fieldValue )
-    {
-        info.setString( fieldName, fieldValue );
+    public void setCustomMetadataValue(String fieldName, String fieldValue) {
+        info.setString(fieldName, fieldValue);
     }
 
     /**
@@ -298,20 +269,17 @@ public class PDDocumentInformation implements COSObjectable
      * 'True', 'False', or 'Unknown'.
      *
      * @param value The new trapped value for the document.
-     *
      * @throws IllegalArgumentException if the parameter is invalid.
      */
-    public void setTrapped( String value )
-    {
-        if( value != null &&
-            !value.equals( "True" ) &&
-            !value.equals( "False" ) &&
-            !value.equals( "Unknown" ) )
-        {
-            throw new IllegalArgumentException( "Valid values for trapped are " +
-                                        "'True', 'False', or 'Unknown'" );
+    public void setTrapped(String value) {
+        if (value != null &&
+                !value.equals("True") &&
+                !value.equals("False") &&
+                !value.equals("Unknown")) {
+            throw new IllegalArgumentException("Valid values for trapped are " +
+                    "'True', 'False', or 'Unknown'");
         }
 
-        info.setName( COSName.TRAPPED, value );
+        info.setName(COSName.TRAPPED, value);
     }
 }

@@ -20,6 +20,7 @@
 package lpdf.harmony.awt;
 
 import lpdf.harmony.awt.geom.Point2D;
+
 import java.io.Serializable;
 
 public class Point extends Point2D implements Serializable {
@@ -47,7 +48,7 @@ public class Point extends Point2D implements Serializable {
             return true;
         }
         if (obj instanceof Point) {
-            Point p = (Point)obj;
+            Point p = (Point) obj;
             return x == p.x && y == p.y;
         }
         return false;
@@ -85,7 +86,7 @@ public class Point extends Point2D implements Serializable {
     public void setLocation(double x, double y) {
         x = x < Integer.MIN_VALUE ? Integer.MIN_VALUE : x > Integer.MAX_VALUE ? Integer.MAX_VALUE : x;
         y = y < Integer.MIN_VALUE ? Integer.MIN_VALUE : y > Integer.MAX_VALUE ? Integer.MAX_VALUE : y;
-        setLocation((int)Math.round(x), (int)Math.round(y));
+        setLocation((int) Math.round(x), (int) Math.round(y));
     }
 
     public void move(int x, int y) {

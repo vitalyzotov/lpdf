@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class TTFTable
-{
+public class TTFTable {
     private String tag;
     private long checkSum;
     private long offset;
@@ -38,71 +37,62 @@ public class TTFTable
     /**
      * Constructor.
      */
-    TTFTable()
-    {
+    TTFTable() {
     }
 
     /**
      * @return Returns the checkSum.
      */
-    public long getCheckSum()
-    {
+    public long getCheckSum() {
         return checkSum;
     }
 
     /**
      * @param checkSumValue The checkSum to set.
      */
-    void setCheckSum(long checkSumValue)
-    {
+    void setCheckSum(long checkSumValue) {
         this.checkSum = checkSumValue;
     }
 
     /**
      * @return Returns the length.
      */
-    public long getLength()
-    {
+    public long getLength() {
         return length;
     }
 
     /**
      * @param lengthValue The length to set.
      */
-    void setLength(long lengthValue)
-    {
+    void setLength(long lengthValue) {
         this.length = lengthValue;
     }
 
     /**
      * @return Returns the offset.
      */
-    public long getOffset()
-    {
+    public long getOffset() {
         return offset;
     }
 
     /**
      * @param offsetValue The offset to set.
      */
-    void setOffset(long offsetValue)
-    {
+    void setOffset(long offsetValue) {
         this.offset = offsetValue;
     }
 
     /**
      * @return Returns the tag.
      */
-    public String getTag()
-    {
+    public String getTag() {
         return tag;
     }
 
     /**
      * @param tagValue The tag to set.
      */
-    void setTag(String tagValue)
-    {
+    void setTag(String tagValue) {
         this.tag = tagValue;
     }
 
@@ -111,19 +101,17 @@ public class TTFTable
      *
      * @return true if the table is initialized
      */
-    public boolean getInitialized()
-    {
+    public boolean getInitialized() {
         return initialized;
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
     }
 }

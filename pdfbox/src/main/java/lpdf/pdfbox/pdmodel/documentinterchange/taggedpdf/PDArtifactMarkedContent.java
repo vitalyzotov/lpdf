@@ -26,13 +26,10 @@ import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
  * An artifact marked content.
  *
  * @author Johannes Koch
- *
  */
-public class PDArtifactMarkedContent extends PDMarkedContent
-{
+public class PDArtifactMarkedContent extends PDMarkedContent {
 
-    public PDArtifactMarkedContent(COSDictionary properties)
-    {
+    public PDArtifactMarkedContent(COSDictionary properties) {
         super(COSName.ARTIFACT, properties);
     }
 
@@ -42,8 +39,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      *
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.getProperties().getNameAsString(COSName.TYPE);
     }
 
@@ -52,8 +48,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      *
      * @return the artifact's bounding box
      */
-    public PDRectangle getBBox()
-    {
+    public PDRectangle getBBox() {
         COSArray a = getProperties().getCOSArray(COSName.BBOX);
         return a != null ? new PDRectangle(a) : null;
     }
@@ -64,8 +59,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      * @return <code>true</code> if the artifact is attached to the top edge,
      * <code>false</code> otherwise
      */
-    public boolean isTopAttached()
-    {
+    public boolean isTopAttached() {
         return this.isAttached("Top");
     }
 
@@ -75,8 +69,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      * @return <code>true</code> if the artifact is attached to the bottom edge,
      * <code>false</code> otherwise
      */
-    public boolean isBottomAttached()
-    {
+    public boolean isBottomAttached() {
         return this.isAttached("Bottom");
     }
 
@@ -86,8 +79,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      * @return <code>true</code> if the artifact is attached to the left edge,
      * <code>false</code> otherwise
      */
-    public boolean isLeftAttached()
-    {
+    public boolean isLeftAttached() {
         return this.isAttached("Left");
     }
 
@@ -97,8 +89,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      * @return <code>true</code> if the artifact is attached to the right edge,
      * <code>false</code> otherwise
      */
-    public boolean isRightAttached()
-    {
+    public boolean isRightAttached() {
         return this.isAttached("Right");
     }
 
@@ -107,8 +98,7 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      *
      * @return the subtype
      */
-    public String getSubtype()
-    {
+    public String getSubtype() {
         return this.getProperties().getNameAsString(COSName.SUBTYPE);
     }
 
@@ -120,15 +110,11 @@ public class PDArtifactMarkedContent extends PDMarkedContent
      * @return <code>true</code> if the artifact is attached to the given edge,
      * <code>false</code> otherwise
      */
-    private boolean isAttached(String edge)
-    {
+    private boolean isAttached(String edge) {
         COSArray a = getProperties().getCOSArray(COSName.ATTACHED);
-        if (a != null)
-        {
-            for (int i = 0; i < a.size(); i++)
-            {
-                if (edge.equals(a.getName(i)))
-                {
+        if (a != null) {
+            for (int i = 0; i < a.size(); i++) {
+                if (edge.equals(a.getName(i))) {
                     return true;
                 }
             }

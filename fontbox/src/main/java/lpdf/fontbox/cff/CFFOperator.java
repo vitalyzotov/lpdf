@@ -21,22 +21,19 @@ import java.util.Map;
 
 /**
  * This class represents a CFF operator.
+ *
  * @author Villu Ruusmann
  */
-public final class CFFOperator
-{
+public final class CFFOperator {
 
-    private CFFOperator()
-    {
+    private CFFOperator() {
     }
 
-    private static void register(int b0, String name)
-    {
+    private static void register(int b0, String name) {
         register(b0, 0, name);
     }
 
-    private static void register(int b0, int b1, String name)
-    {
+    private static void register(int b0, int b1, String name) {
         keyMap.put(calculateKey(b0, b1), name);
     }
 
@@ -46,8 +43,7 @@ public final class CFFOperator
      * @param b0 the first byte of the operator
      * @return the corresponding operator name
      */
-    public static String getOperator(int b0)
-    {
+    public static String getOperator(int b0) {
         return getOperator(b0, 0);
     }
 
@@ -58,20 +54,17 @@ public final class CFFOperator
      * @param b1 the second byte of the operator
      * @return the corresponding operator name
      */
-    public static String getOperator(int b0, int b1)
-    {
+    public static String getOperator(int b0, int b1) {
         return keyMap.get(calculateKey(b0, b1));
     }
 
-    private static int calculateKey(int b0, int b1)
-    {
+    private static int calculateKey(int b0, int b1) {
         return (b1 << 8) + b0;
     }
 
     private static final Map<Integer, String> keyMap = new LinkedHashMap<>(52);
 
-    static
-    {
+    static {
         // Top DICT
         register(0, "version");
         register(1, "Notice");

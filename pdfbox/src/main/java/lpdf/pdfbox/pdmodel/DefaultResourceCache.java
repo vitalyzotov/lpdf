@@ -17,9 +17,6 @@
 
 package lpdf.pdfbox.pdmodel;
 
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
-import java.util.Map;
 import lpdf.pdfbox.cos.COSObject;
 import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import lpdf.pdfbox.pdmodel.font.PDFont;
@@ -29,14 +26,17 @@ import lpdf.pdfbox.pdmodel.graphics.pattern.PDAbstractPattern;
 import lpdf.pdfbox.pdmodel.graphics.shading.PDShading;
 import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A resource cached based on SoftReference, retains resources until memory pressure causes them
  * to be garbage collected.
  *
  * @author John Hewson
  */
-public class DefaultResourceCache implements ResourceCache
-{
+public class DefaultResourceCache implements ResourceCache {
     private final Map<COSObject, SoftReference<PDFont>> fonts =
             new HashMap<>();
 
@@ -59,121 +59,100 @@ public class DefaultResourceCache implements ResourceCache
             new HashMap<>();
 
     @Override
-    public PDFont getFont(COSObject indirect)
-    {
+    public PDFont getFont(COSObject indirect) {
         SoftReference<PDFont> font = fonts.get(indirect);
-        if (font != null)
-        {
+        if (font != null) {
             return font.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDFont font)
-    {
+    public void put(COSObject indirect, PDFont font) {
         fonts.put(indirect, new SoftReference<>(font));
     }
 
     @Override
-    public PDColorSpace getColorSpace(COSObject indirect)
-    {
+    public PDColorSpace getColorSpace(COSObject indirect) {
         SoftReference<PDColorSpace> colorSpace = colorSpaces.get(indirect);
-        if (colorSpace != null)
-        {
+        if (colorSpace != null) {
             return colorSpace.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDColorSpace colorSpace)
-    {
+    public void put(COSObject indirect, PDColorSpace colorSpace) {
         colorSpaces.put(indirect, new SoftReference<>(colorSpace));
     }
 
     @Override
-    public PDExtendedGraphicsState getExtGState(COSObject indirect)
-    {
+    public PDExtendedGraphicsState getExtGState(COSObject indirect) {
         SoftReference<PDExtendedGraphicsState> extGState = extGStates.get(indirect);
-        if (extGState != null)
-        {
+        if (extGState != null) {
             return extGState.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDExtendedGraphicsState extGState)
-    {
+    public void put(COSObject indirect, PDExtendedGraphicsState extGState) {
         extGStates.put(indirect, new SoftReference<>(extGState));
     }
 
     @Override
-    public PDShading getShading(COSObject indirect)
-    {
+    public PDShading getShading(COSObject indirect) {
         SoftReference<PDShading> shading = shadings.get(indirect);
-        if (shading != null)
-        {
+        if (shading != null) {
             return shading.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDShading shading)
-    {
+    public void put(COSObject indirect, PDShading shading) {
         shadings.put(indirect, new SoftReference<>(shading));
     }
 
     @Override
-    public PDAbstractPattern getPattern(COSObject indirect)
-    {
+    public PDAbstractPattern getPattern(COSObject indirect) {
         SoftReference<PDAbstractPattern> pattern = patterns.get(indirect);
-        if (pattern != null)
-        {
+        if (pattern != null) {
             return pattern.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDAbstractPattern pattern)
-    {
+    public void put(COSObject indirect, PDAbstractPattern pattern) {
         patterns.put(indirect, new SoftReference<>(pattern));
     }
 
     @Override
-    public PDPropertyList getProperties(COSObject indirect)
-    {
+    public PDPropertyList getProperties(COSObject indirect) {
         SoftReference<PDPropertyList> propertyList = properties.get(indirect);
-        if (propertyList != null)
-        {
+        if (propertyList != null) {
             return propertyList.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDPropertyList propertyList)
-    {
+    public void put(COSObject indirect, PDPropertyList propertyList) {
         properties.put(indirect, new SoftReference<>(propertyList));
     }
 
     @Override
-    public PDXObject getXObject(COSObject indirect)
-    {
+    public PDXObject getXObject(COSObject indirect) {
         SoftReference<PDXObject> xobject = xobjects.get(indirect);
-        if (xobject != null)
-        {
+        if (xobject != null) {
             return xobject.get();
         }
         return null;
     }
 
     @Override
-    public void put(COSObject indirect, PDXObject xobject)
-    {
+    public void put(COSObject indirect, PDXObject xobject) {
         xobjects.put(indirect, new SoftReference<>(xobject));
     }
 }

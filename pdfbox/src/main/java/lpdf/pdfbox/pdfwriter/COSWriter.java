@@ -16,6 +16,9 @@
  */
 package lpdf.pdfbox.pdfwriter;
 
+import lpdf.io.IOUtils;
+import lpdf.io.RandomAccessInputStream;
+import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSBoolean;
@@ -32,9 +35,6 @@ import lpdf.pdfbox.cos.COSStream;
 import lpdf.pdfbox.cos.COSString;
 import lpdf.pdfbox.cos.COSUpdateInfo;
 import lpdf.pdfbox.cos.ICOSVisitor;
-import lpdf.io.IOUtils;
-import lpdf.io.RandomAccessInputStream;
-import lpdf.io.RandomAccessRead;
 import lpdf.pdfbox.pdfparser.PDFXRefStream;
 import lpdf.pdfbox.pdfparser.xref.FreeXReference;
 import lpdf.pdfbox.pdfparser.xref.NormalXReference;

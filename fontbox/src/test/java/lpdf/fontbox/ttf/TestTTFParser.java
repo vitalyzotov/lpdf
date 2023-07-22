@@ -15,8 +15,9 @@
  */
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import lpdf.io.RandomAccessReadBuffer;
+import lpdf.io.RandomAccessReadBufferedFile;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,17 +25,15 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import lpdf.io.RandomAccessReadBuffer;
-import lpdf.io.RandomAccessReadBufferedFile;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This will test the TTFParser implementation.
  *
  * @author Tim Allison
  */
-class TestTTFParser
-{
+class TestTTFParser {
 
     /**
      * Check whether the creation date is UTC
@@ -42,8 +41,7 @@ class TestTTFParser
      * @throws IOException If something went wrong
      */
     @Test
-    void testUTCDate() throws IOException
-    {
+    void testUTCDate() throws IOException {
         final File testFile = new File("src/test/resources/ttf/LiberationSans-Regular.ttf");
         TimeZone utc = TimeZone.getTimeZone("UTC");
         //Before PDFBOX-2122, TTFDataStream was using the default TimeZone
@@ -66,8 +64,7 @@ class TestTTFParser
      * @throws IOException if an error occurs.
      */
     @Test
-    void testPostTable() throws IOException
-    {
+    void testPostTable() throws IOException {
         InputStream input = TestTTFParser.class.getResourceAsStream(
                 "/ttf/LiberationSans-Regular.ttf");
         assertNotNull(input);
@@ -83,11 +80,9 @@ class TestTTFParser
 
         CmapSubtable cmap = null;
 
-        for (CmapSubtable e : cmaps)
-        {
+        for (CmapSubtable e : cmaps) {
             if (e.getPlatformId() == NameRecord.PLATFORM_WINDOWS
-                    && e.getPlatformEncodingId() == NameRecord.ENCODING_WINDOWS_UNICODE_BMP)
-            {
+                    && e.getPlatformEncodingId() == NameRecord.ENCODING_WINDOWS_UNICODE_BMP) {
                 cmap = e;
                 break;
             }

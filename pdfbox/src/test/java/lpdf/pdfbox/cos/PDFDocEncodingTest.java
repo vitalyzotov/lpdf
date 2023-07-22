@@ -17,23 +17,22 @@
 
 package lpdf.pdfbox.cos;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test for PDFDocEncoding.
- *
  */
-class PDFDocEncodingTest
-{
+class PDFDocEncodingTest {
 
     static final List<String> deviations = new ArrayList<>();
 
-    static
-    {
+    static {
         // all deviations (based on the table in ISO 32000-1:2008)
         // block 1
         deviations.add(String.valueOf('\u02D8')); // BREVE
@@ -81,8 +80,7 @@ class PDFDocEncodingTest
     }
 
     @Test
-    void testDeviations()
-    {
+    void testDeviations() {
         deviations.forEach(deviation ->
         {
             COSString cosString = new COSString(deviation);
@@ -97,10 +95,8 @@ class PDFDocEncodingTest
      * @throws IOException
      */
     @Test
-    void testPDFBox3864() throws IOException
-    {
-        for (int i = 0; i < 256; i++)
-        {
+    void testPDFBox3864() throws IOException {
+        for (int i = 0; i < 256; i++) {
             String hex = String.format("FEFF%04X", i);
             COSString cs1 = COSString.parseHex(hex);
             COSString cs2 = new COSString(cs1.getString());

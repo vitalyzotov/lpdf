@@ -16,336 +16,245 @@
  */
 package lpdf.pdfbox.cos;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.Calendar;
-
 import lpdf.pdfbox.pdmodel.font.encoding.Encoding;
 import org.junit.jupiter.api.Test;
 
-class UnmodifiableCOSDictionaryTest
-{
+import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+class UnmodifiableCOSDictionaryTest {
     @Test
-    void testUnmodifiableCOSDictionary()
-    {
+    void testUnmodifiableCOSDictionary() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.clear();
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.removeItem(COSName.A);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
         COSDictionary cosDictionary = new COSDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.addAll(cosDictionary);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setFlag(COSName.A, 0, true);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setNeedToBeUpdated(true);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetItem()
-    {
+    void testSetItem() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setItem(COSName.A, COSName.A);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
         Encoding standardEncoding = Encoding.getInstance(COSName.STANDARD_ENCODING);
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setItem(COSName.A, standardEncoding);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setItem("A", COSName.A);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setItem("A", standardEncoding);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch(UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetBoolean()
-    {
+    void testSetBoolean() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setBoolean(COSName.A, true);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setBoolean("A", true);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetName()
-    {
+    void testSetName() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setName(COSName.A, "A");
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setName("A", "A");
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetDate()
-    {
+    void testSetDate() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
         Calendar calendar = Calendar.getInstance();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setDate(COSName.A, calendar);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setDate("A", calendar);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetEmbeddedDate()
-    {
+    void testSetEmbeddedDate() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
         Calendar calendar = Calendar.getInstance();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setEmbeddedDate(COSName.PARAMS, COSName.A, calendar);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
     }
 
     @Test
-    void testSetString()
-    {
+    void testSetString() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setString(COSName.A, "A");
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setString("A", "A");
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetEmbeddedString()
-    {
+    void testSetEmbeddedString() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setEmbeddedString(COSName.PARAMS, COSName.A, "A");
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetInt()
-    {
+    void testSetInt() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setInt(COSName.A, 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setInt("A", 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetEmbeddedInt()
-    {
+    void testSetEmbeddedInt() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setEmbeddedInt(COSName.PARAMS, COSName.A, 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetLong()
-    {
+    void testSetLong() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setLong(COSName.A, 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setLong("A", 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }
 
     @Test
-    void testSetFloat()
-    {
+    void testSetFloat() {
         COSDictionary unmodifiableCOSDictionary = new COSDictionary().asUnmodifiableDictionary();
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setFloat(COSName.A, 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
 
-        try
-        {
+        try {
             unmodifiableCOSDictionary.setFloat("A", 0);
             fail("An UnsupportedOperationException should have been thrown");
-        }
-        catch (UnsupportedOperationException exception)
-        {
+        } catch (UnsupportedOperationException exception) {
             // nothing to do
         }
     }

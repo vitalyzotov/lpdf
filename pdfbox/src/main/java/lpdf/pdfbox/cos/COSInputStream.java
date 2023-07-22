@@ -17,6 +17,10 @@
 
 package lpdf.pdfbox.cos;
 
+import lpdf.pdfbox.filter.DecodeOptions;
+import lpdf.pdfbox.filter.DecodeResult;
+import lpdf.pdfbox.filter.Filter;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FilterInputStream;
@@ -28,64 +32,53 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lpdf.pdfbox.filter.DecodeOptions;
-import lpdf.pdfbox.filter.DecodeResult;
-import lpdf.pdfbox.filter.Filter;
-
 /**
  * An InputStream which reads from an encoded COS stream.
  *
  * @author John Hewson
  */
-public final class COSInputStream extends FilterInputStream
-{
+public final class COSInputStream extends FilterInputStream {
     /**
      * Creates a new COSInputStream from an encoded input stream.
      *
-     * @param filters Filters to be applied.
+     * @param filters    Filters to be applied.
      * @param parameters Filter parameters.
-     * @param in Encoded input stream.
+     * @param in         Encoded input stream.
      * @return Decoded stream.
      * @throws IOException If the stream could not be read.
      */
     static COSInputStream create(List<Filter> filters, COSDictionary parameters, InputStream in)
-            throws IOException
-    {
+            throws IOException {
         return create(filters, parameters, in, DecodeOptions.DEFAULT);
     }
 
     /**
      * Creates a new COSInputStream from an encoded input stream.
      *
-     * @param filters Filters to be applied.
+     * @param filters    Filters to be applied.
      * @param parameters Filter parameters.
-     * @param in Encoded input stream.
-     * @param options decode options for the encoded stream
+     * @param in         Encoded input stream.
+     * @param options    decode options for the encoded stream
      * @return Decoded stream.
      * @throws IOException If the stream could not be read.
      */
     static COSInputStream create(List<Filter> filters, COSDictionary parameters, InputStream in,
-            DecodeOptions options) throws IOException
-    {
-        if (filters.isEmpty())
-        {
+                                 DecodeOptions options) throws IOException {
+        if (filters.isEmpty()) {
             return new COSInputStream(in, Collections.<DecodeResult>emptyList());
         }
 
         List<DecodeResult> results = new ArrayList<>(filters.size());
         InputStream input = in;
-        if (filters.size() > 1)
-        {
+        if (filters.size() > 1) {
             Set<Filter> filterSet = new HashSet<>(filters);
-            if (filterSet.size() != filters.size())
-            {
+            if (filterSet.size() != filters.size()) {
                 throw new IOException("Duplicate");
             }
         }
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         // apply filters
-        for (int i = 0; i < filters.size(); i++)
-        {
+        for (int i = 0; i < filters.size(); i++) {
             output.reset();
             results.add(filters.get(i).decode(input, output, parameters, i, options));
             input = new ByteArrayInputStream(output.toByteArray());
@@ -98,11 +91,10 @@ public final class COSInputStream extends FilterInputStream
     /**
      * Constructor.
      *
-     * @param input decoded stream
+     * @param input         decoded stream
      * @param decodeResults results of decoding
      */
-    private COSInputStream(InputStream input, List<DecodeResult> decodeResults)
-    {
+    private COSInputStream(InputStream input, List<DecodeResult> decodeResults) {
         super(input);
         this.decodeResults = decodeResults;
     }
@@ -112,14 +104,10 @@ public final class COSInputStream extends FilterInputStream
      *
      * @return the result of the last filter
      */
-    public DecodeResult getDecodeResult()
-    {
-        if (decodeResults.isEmpty())
-        {
+    public DecodeResult getDecodeResult() {
+        if (decodeResults.isEmpty()) {
             return DecodeResult.createDefault();
-        }
-        else
-        {
+        } else {
             return decodeResults.get(decodeResults.size() - 1);
         }
     }

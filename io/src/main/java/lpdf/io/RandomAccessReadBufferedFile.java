@@ -29,13 +29,12 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Provides random access to portions of a file combined with buffered reading of content. Start of next bytes to read
  * can be set via seek method.
- *
+ * <p>
  * File is accessed via {@link FileChannel} and is read in ByteBuffer chunks which are cached.
  *
  * @author Timo Boehme
  */
-public class RandomAccessReadBufferedFile implements RandomAccessRead
-{
+public class RandomAccessReadBufferedFile implements RandomAccessRead {
     private static final int PAGE_SIZE_SHIFT = 12;
     private static final int PAGE_SIZE = 1 << PAGE_SIZE_SHIFT;
     private static final long PAGE_OFFSET_MASK = -1L << PAGE_SIZE_SHIFT;
@@ -46,18 +45,17 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
 
     private ByteBuffer lastRemovedCachePage = null;
 
-    /** Create a LRU page cache. */
+    /**
+     * Create a LRU page cache.
+     */
     private final Map<Long, ByteBuffer> pageCache = new LinkedHashMap<Long, ByteBuffer>(
-            MAX_CACHED_PAGES, 0.75f, true)
-    {
+            MAX_CACHED_PAGES, 0.75f, true) {
         private static final long serialVersionUID = -6302488539257741101L;
 
         @Override
-        protected boolean removeEldestEntry(Map.Entry<Long, ByteBuffer> eldest)
-        {
+        protected boolean removeEldestEntry(Map.Entry<Long, ByteBuffer> eldest) {
             final boolean doRemove = size() > MAX_CACHED_PAGES;
-            if (doRemove)
-            {
+            if (doRemove) {
                 lastRemovedCachePage = eldest.getValue();
                 lastRemovedCachePage.clear();
             }
@@ -81,8 +79,7 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
      * @param filename the filename of the file to be read.
      * @throws IOException if something went wrong while accessing the given file.
      */
-    public RandomAccessReadBufferedFile( String filename ) throws IOException
-    {
+    public RandomAccessReadBufferedFile(String filename) throws IOException {
         this(new File(filename));
     }
 
@@ -92,8 +89,7 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
      * @param file the file to be read.
      * @throws IOException if something went wrong while accessing the given file.
      */
-    public RandomAccessReadBufferedFile( File file ) throws IOException
-    {
+    public RandomAccessReadBufferedFile(File file) throws IOException {
         this.file = file;
         fileChannel = FileChannel.open(file.toPath(), StandardOpenOption.READ);
         fileLength = file.length();
@@ -101,8 +97,7 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
     }
 
     @Override
-    public long getPosition() throws IOException
-    {
+    public long getPosition() throws IOException {
         checkClosed();
         return fileOffset;
     }
@@ -115,22 +110,18 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
      * @throws java.io.IOException if something went wrong.
      */
     @Override
-    public void seek( final long position ) throws IOException
-    {
+    public void seek(final long position) throws IOException {
         checkClosed();
-        if (position < 0)
-        {
+        if (position < 0) {
             throw new IOException("Invalid position " + position);
         }
         final long newPageOffset = position & PAGE_OFFSET_MASK;
-        if ( newPageOffset != curPageOffset )
-        {
+        if (newPageOffset != curPageOffset) {
             ByteBuffer newPage = pageCache.get(newPageOffset);
-            if ( newPage == null )
-            {
+            if (newPage == null) {
                 fileChannel.position(newPageOffset);
                 newPage = readPage();
-                pageCache.put( newPageOffset, newPage );
+                pageCache.put(newPageOffset, newPage);
             }
             curPageOffset = newPageOffset;
             curPage = newPage;
@@ -145,26 +136,20 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
      * previously removed page from cache the buffer of this page is reused.
      * Otherwise a new byte buffer is created.
      */
-    private ByteBuffer readPage() throws IOException
-    {
+    private ByteBuffer readPage() throws IOException {
         ByteBuffer page;
 
-        if ( lastRemovedCachePage != null )
-        {
+        if (lastRemovedCachePage != null) {
             page = lastRemovedCachePage;
             lastRemovedCachePage = null;
-        }
-        else
-        {
+        } else {
             page = ByteBuffer.allocate(PAGE_SIZE);
         }
 
         int readBytes = 0;
-        while (readBytes < PAGE_SIZE)
-        {
+        while (readBytes < PAGE_SIZE) {
             int curBytesRead = fileChannel.read(page);
-            if (curBytesRead < 0)
-            {
+            if (curBytesRead < 0) {
                 // EOF
                 break;
             }
@@ -175,17 +160,14 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
     }
 
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         checkClosed();
-        if ( fileOffset >= fileLength )
-        {
+        if (fileOffset >= fileLength) {
             return -1;
         }
 
-        if (offsetWithinPage == PAGE_SIZE)
-        {
-            seek( fileOffset );
+        if (offsetWithinPage == PAGE_SIZE) {
+            seek(fileOffset);
         }
 
         fileOffset++;
@@ -193,23 +175,19 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
     }
 
     @Override
-    public int read( byte[] b, int off, int len ) throws IOException
-    {
+    public int read(byte[] b, int off, int len) throws IOException {
         checkClosed();
-        if ( fileOffset >= fileLength )
-        {
+        if (fileOffset >= fileLength) {
             return -1;
         }
 
-        if (offsetWithinPage == PAGE_SIZE)
-        {
-            seek( fileOffset );
+        if (offsetWithinPage == PAGE_SIZE) {
+            seek(fileOffset);
         }
 
         int commonLen = Math.min(PAGE_SIZE - offsetWithinPage, len);
-        if ((fileLength - fileOffset) < PAGE_SIZE)
-        {
-            commonLen = Math.min( commonLen, (int) ( fileLength - fileOffset ) );
+        if ((fileLength - fileOffset) < PAGE_SIZE) {
+            commonLen = Math.min(commonLen, (int) (fileLength - fileOffset));
         }
 
         curPage.position(offsetWithinPage);
@@ -222,14 +200,12 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
     }
 
     @Override
-    public long length() throws IOException
-    {
+    public long length() throws IOException {
         return fileLength;
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         rafCopies.values().forEach(IOUtils::closeQuietly);
         rafCopies.clear();
         fileChannel.close();
@@ -238,37 +214,32 @@ public class RandomAccessReadBufferedFile implements RandomAccessRead
     }
 
     @Override
-    public boolean isClosed()
-    {
+    public boolean isClosed() {
         return isClosed;
     }
 
     /**
      * Ensure that the RandomAccessBuffer is not closed
+     *
      * @throws IOException If RandomAccessBuffer already closed
      */
-    private void checkClosed() throws IOException
-    {
-        if (isClosed)
-        {
+    private void checkClosed() throws IOException {
+        if (isClosed) {
             throw new IOException(getClass().getName() + " already closed");
         }
     }
 
     @Override
-    public boolean isEOF() throws IOException
-    {
+    public boolean isEOF() throws IOException {
         return peek() == -1;
     }
 
     @Override
-    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException
-    {
+    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException {
         checkClosed();
         Long currentThreadID = Thread.currentThread().getId();
         RandomAccessReadBufferedFile randomAccessReadBufferedFile = rafCopies.get(currentThreadID);
-        if (randomAccessReadBufferedFile == null || randomAccessReadBufferedFile.isClosed())
-        {
+        if (randomAccessReadBufferedFile == null || randomAccessReadBufferedFile.isClosed()) {
             randomAccessReadBufferedFile = new RandomAccessReadBufferedFile(file);
             rafCopies.put(currentThreadID, randomAccessReadBufferedFile);
         }

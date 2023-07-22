@@ -21,15 +21,13 @@ package lpdf.fontbox.ttf;
  *
  * @author Ben Litchfield
  */
-public class DigitalSignatureTable extends TTFTable
-{
+public class DigitalSignatureTable extends TTFTable {
     /**
      * Tag to identify this table.
      */
     public static final String TAG = "DSIG";
 
-    DigitalSignatureTable()
-    {
+    DigitalSignatureTable() {
         super();
     }
 }

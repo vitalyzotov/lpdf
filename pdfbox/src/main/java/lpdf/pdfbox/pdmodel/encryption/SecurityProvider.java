@@ -22,38 +22,29 @@ import java.security.Provider;
 
 /**
  * Singleton which provides a security provider.
- *
  */
-public class SecurityProvider
-{
+public class SecurityProvider {
     private static Provider provider = null;
 
-    private SecurityProvider()
-    {
+    private SecurityProvider() {
     }
 
     /**
      * Returns the provider to be used for advanced encrypting/decrypting. Default is the BouncyCastleProvider.
      *
      * @return the security provider
-     *
      * @throws IOException if the default provider can't be instantiated
      */
-    public static Provider getProvider() throws IOException
-    {
+    public static Provider getProvider() throws IOException {
         // TODO synchronize access
-        if (provider == null)
-        {
-            try
-            {
+        if (provider == null) {
+            try {
                 Class<Provider> providerClass = (Class<Provider>) Class
                         .forName("org.bouncycastle.jce.provider.BouncyCastleProvider");
                 provider = providerClass.getDeclaredConstructor().newInstance();
-            }
-            catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                   NoSuchMethodException | SecurityException | IllegalArgumentException |
-                   InvocationTargetException ex)
-            {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                     NoSuchMethodException | SecurityException | IllegalArgumentException |
+                     InvocationTargetException ex) {
                 throw new IOException(ex);
             }
         }
@@ -65,8 +56,7 @@ public class SecurityProvider
      *
      * @param provider the security provider
      */
-    public static void setProvider(Provider provider)
-    {
+    public static void setProvider(Provider provider) {
         SecurityProvider.provider = provider;
     }
 }

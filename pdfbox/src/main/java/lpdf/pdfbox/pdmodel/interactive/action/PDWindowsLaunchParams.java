@@ -18,7 +18,6 @@ package lpdf.pdfbox.pdmodel.interactive.action;
 
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 
 /**
@@ -26,8 +25,7 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  *
  * @author Ben Litchfield
  */
-public class PDWindowsLaunchParams implements COSObjectable
-{
+public class PDWindowsLaunchParams implements COSObjectable {
     /**
      * The open operation for the launch.
      */
@@ -45,8 +43,7 @@ public class PDWindowsLaunchParams implements COSObjectable
     /**
      * Default constructor.
      */
-    public PDWindowsLaunchParams()
-    {
+    public PDWindowsLaunchParams() {
         params = new COSDictionary();
     }
 
@@ -55,8 +52,7 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @param p The params dictionary.
      */
-    public PDWindowsLaunchParams( COSDictionary p )
-    {
+    public PDWindowsLaunchParams(COSDictionary p) {
         params = p;
     }
 
@@ -66,8 +62,7 @@ public class PDWindowsLaunchParams implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return params;
     }
 
@@ -76,9 +71,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @return The executable/document to launch.
      */
-    public String getFilename()
-    {
-        return params.getString( COSName.F );
+    public String getFilename() {
+        return params.getString(COSName.F);
     }
 
     /**
@@ -86,9 +80,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @param file The executable/document to launch.
      */
-    public void setFilename( String file )
-    {
-        params.setString( COSName.F, file );
+    public void setFilename(String file) {
+        params.setString(COSName.F, file);
     }
 
     /**
@@ -96,9 +89,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @return The dir of the executable/document to launch.
      */
-    public String getDirectory()
-    {
-        return params.getString( COSName.D );
+    public String getDirectory() {
+        return params.getString(COSName.D);
     }
 
     /**
@@ -106,9 +98,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @param dir The dir of the executable/document to launch.
      */
-    public void setDirectory( String dir )
-    {
-        params.setString( COSName.D, dir );
+    public void setDirectory(String dir) {
+        params.setString(COSName.D, dir);
     }
 
     /**
@@ -119,8 +110,7 @@ public class PDWindowsLaunchParams implements COSObjectable
      * @see PDWindowsLaunchParams#OPERATION_OPEN
      * @see PDWindowsLaunchParams#OPERATION_PRINT
      */
-    public String getOperation()
-    {
+    public String getOperation() {
         return params.getString(COSName.O, OPERATION_OPEN);
     }
 
@@ -129,9 +119,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @param op The operation to perform on the file.
      */
-    public void setOperation( String op )
-    {
-        params.setString( COSName.D, op );
+    public void setOperation(String op) {
+        params.setString(COSName.D, op);
     }
 
     /**
@@ -139,9 +128,8 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @return The parameter to pass the executable.
      */
-    public String getExecuteParam()
-    {
-        return params.getString( COSName.P );
+    public String getExecuteParam() {
+        return params.getString(COSName.P);
     }
 
     /**
@@ -149,8 +137,7 @@ public class PDWindowsLaunchParams implements COSObjectable
      *
      * @param param The parameter for the executable.
      */
-    public void setExecuteParam( String param )
-    {
-        params.setString( COSName.P, param );
+    public void setExecuteParam(String param) {
+        params.setString(COSName.P, param);
     }
 }

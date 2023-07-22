@@ -21,8 +21,7 @@ package lpdf.pdfbox.pdmodel.graphics.state;
  *
  * @author John Hewson
  */
-public enum RenderingMode
-{
+public enum RenderingMode {
     /**
      * Fill text.
      */
@@ -65,15 +64,13 @@ public enum RenderingMode
 
     private static final RenderingMode[] VALUES = RenderingMode.values();
 
-    public static RenderingMode fromInt(int value)
-    {
+    public static RenderingMode fromInt(int value) {
         return VALUES[value];
     }
 
     private final int value;
 
-    RenderingMode(int value)
-    {
+    RenderingMode(int value) {
         this.value = value;
     }
 
@@ -82,8 +79,7 @@ public enum RenderingMode
      *
      * @return the integer value of this mode
      */
-    public int intValue()
-    {
+    public int intValue() {
         return value;
     }
 
@@ -92,12 +88,11 @@ public enum RenderingMode
      *
      * @return true if this mode fills text
      */
-    public boolean isFill()
-    {
+    public boolean isFill() {
         return this == FILL ||
-               this == FILL_STROKE ||
-               this == FILL_CLIP ||
-               this == FILL_STROKE_CLIP;
+                this == FILL_STROKE ||
+                this == FILL_CLIP ||
+                this == FILL_STROKE_CLIP;
     }
 
     /**
@@ -105,12 +100,11 @@ public enum RenderingMode
      *
      * @return true if this mode strokes text
      */
-    public boolean isStroke()
-    {
+    public boolean isStroke() {
         return this == STROKE ||
-               this == FILL_STROKE ||
-               this == STROKE_CLIP ||
-               this == FILL_STROKE_CLIP;
+                this == FILL_STROKE ||
+                this == STROKE_CLIP ||
+                this == FILL_STROKE_CLIP;
     }
 
     /**
@@ -118,11 +112,10 @@ public enum RenderingMode
      *
      * @return true if this mode clips text
      */
-    public boolean isClip()
-    {
+    public boolean isClip() {
         return this == FILL_CLIP ||
-               this == STROKE_CLIP ||
-               this == FILL_STROKE_CLIP ||
-               this == NEITHER_CLIP;
+                this == STROKE_CLIP ||
+                this == FILL_STROKE_CLIP ||
+                this == NEITHER_CLIP;
     }
 }

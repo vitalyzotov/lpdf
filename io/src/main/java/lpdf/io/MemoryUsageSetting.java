@@ -16,28 +16,33 @@
  */
 package lpdf.io;
 
-import java.io.File;
-
 import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
+
+import java.io.File;
 
 /**
  * Controls how memory/temporary files are used for
  * buffering streams etc.
  */
-public final class MemoryUsageSetting
-{
+public final class MemoryUsageSetting {
     private final boolean useMainMemory;
     private final boolean useTempFile;
 
-    /** maximum number of main-memory bytes allowed to be used;
-     *  <code>-1</code> means 'unrestricted' */
+    /**
+     * maximum number of main-memory bytes allowed to be used;
+     * <code>-1</code> means 'unrestricted'
+     */
     private final long maxMainMemoryBytes;
 
-    /** maximum number of bytes allowed for storage at all (main-memory+file);
-     *  <code>-1</code> means 'unrestricted' */
+    /**
+     * maximum number of bytes allowed for storage at all (main-memory+file);
+     * <code>-1</code> means 'unrestricted'
+     */
     private final long maxStorageBytes;
 
-    /** directory to be used for scratch file */
+    /**
+     * directory to be used for scratch file
+     */
     private File tempDir;
 
     /**
@@ -48,46 +53,40 @@ public final class MemoryUsageSetting
     /**
      * Private constructor for setup buffering memory usage called by one of the setup methods.
      *
-     * @param useMainMemory if <code>true</code> main memory usage is enabled; in case of
-     *                      <code>false</code> and <code>useTempFile</code> is <code>false</code> too
-     *                      we set this to <code>true</code>
-     * @param useTempFile if <code>true</code> using of temporary file(s) is enabled
+     * @param useMainMemory      if <code>true</code> main memory usage is enabled; in case of
+     *                           <code>false</code> and <code>useTempFile</code> is <code>false</code> too
+     *                           we set this to <code>true</code>
+     * @param useTempFile        if <code>true</code> using of temporary file(s) is enabled
      * @param maxMainMemoryBytes maximum number of main-memory to be used;
      *                           if <code>-1</code> means 'unrestricted';
      *                           if <code>0</code> we only use temporary file if <code>useTempFile</code>
      *                           is <code>true</code> otherwise main-memory usage will have restriction
      *                           defined by maxStorageBytes
-     * @param maxStorageBytes maximum size the main-memory and temporary file(s) may have all together;
-     *                        <code>0</code>  or less will be ignored; if it is less than
-     *                        maxMainMemoryBytes we use maxMainMemoryBytes value instead
+     * @param maxStorageBytes    maximum size the main-memory and temporary file(s) may have all together;
+     *                           <code>0</code>  or less will be ignored; if it is less than
+     *                           maxMainMemoryBytes we use maxMainMemoryBytes value instead
      */
     private MemoryUsageSetting(boolean useMainMemory, boolean useTempFile,
-                        long maxMainMemoryBytes, long maxStorageBytes)
-    {
+                               long maxMainMemoryBytes, long maxStorageBytes) {
         // do some checks; adjust values as needed to get consistent setting
         boolean locUseMainMemory = !useTempFile || useMainMemory;
-        long    locMaxMainMemoryBytes = useMainMemory ? maxMainMemoryBytes : -1;
-        long    locMaxStorageBytes = maxStorageBytes > 0 ? maxStorageBytes : -1;
+        long locMaxMainMemoryBytes = useMainMemory ? maxMainMemoryBytes : -1;
+        long locMaxStorageBytes = maxStorageBytes > 0 ? maxStorageBytes : -1;
 
-        if (locMaxMainMemoryBytes < -1)
-        {
+        if (locMaxMainMemoryBytes < -1) {
             locMaxMainMemoryBytes = -1;
         }
 
-        if (locUseMainMemory && (locMaxMainMemoryBytes == 0))
-        {
+        if (locUseMainMemory && (locMaxMainMemoryBytes == 0)) {
             if (useTempFile) {
                 locUseMainMemory = false;
-            }
-            else
-            {
+            } else {
                 locMaxMainMemoryBytes = locMaxStorageBytes;
             }
         }
 
         if (locUseMainMemory && (locMaxStorageBytes > -1) &&
-            ((locMaxMainMemoryBytes == -1) || (locMaxMainMemoryBytes > locMaxStorageBytes)))
-        {
+                ((locMaxMainMemoryBytes == -1) || (locMaxMainMemoryBytes > locMaxStorageBytes))) {
             locMaxStorageBytes = locMaxMainMemoryBytes;
         }
 
@@ -103,8 +102,7 @@ public final class MemoryUsageSetting
      *
      * @return returns an instance of MemoryUsageSetting set up to use unlimited memory
      */
-    public static MemoryUsageSetting setupMainMemoryOnly()
-    {
+    public static MemoryUsageSetting setupMainMemoryOnly() {
         return setupMainMemoryOnly(-1);
     }
 
@@ -112,12 +110,10 @@ public final class MemoryUsageSetting
      * Setups buffering memory usage to only use main-memory with the defined maximum.
      *
      * @param maxMainMemoryBytes maximum number of main-memory to be used; <code>-1</code> for no restriction;
-     * <code>0</code> will also be interpreted here as no restriction
-     *
+     *                           <code>0</code> will also be interpreted here as no restriction
      * @return returns an instance of MemoryUsageSetting set up to use main memory
      */
-    public static MemoryUsageSetting setupMainMemoryOnly(long maxMainMemoryBytes)
-    {
+    public static MemoryUsageSetting setupMainMemoryOnly(long maxMainMemoryBytes) {
         return new MemoryUsageSetting(true, false, maxMainMemoryBytes, maxMainMemoryBytes);
     }
 
@@ -126,8 +122,7 @@ public final class MemoryUsageSetting
      *
      * @return returns an instance of MemoryUsageSetting set up to use temporary files with not restricted size
      */
-    public static MemoryUsageSetting setupTempFileOnly()
-    {
+    public static MemoryUsageSetting setupTempFileOnly() {
         return setupTempFileOnly(-1);
     }
 
@@ -135,12 +130,10 @@ public final class MemoryUsageSetting
      * Setups buffering memory usage to only use temporary file(s) (no main-memory) with the specified maximum size.
      *
      * @param maxStorageBytes maximum size the temporary file(s) may have all together; <code>-1</code> for no
-     * restriction; <code>0</code> will also be interpreted here as no restriction
-     *
+     *                        restriction; <code>0</code> will also be interpreted here as no restriction
      * @return returns an instance of MemoryUsageSetting set up to use temporary files with restricted size
      */
-    public static MemoryUsageSetting setupTempFileOnly(long maxStorageBytes)
-    {
+    public static MemoryUsageSetting setupTempFileOnly(long maxStorageBytes) {
         return new MemoryUsageSetting(false, true, 0, maxStorageBytes);
     }
 
@@ -149,12 +142,10 @@ public final class MemoryUsageSetting
      * specified portion is exceeded.
      *
      * @param maxMainMemoryBytes maximum number of main-memory to be used; if <code>-1</code> this is the same as
-     * {@link #setupMainMemoryOnly()}; if <code>0</code> this is the same as {@link #setupTempFileOnly()}
-     *
+     *                           {@link #setupMainMemoryOnly()}; if <code>0</code> this is the same as {@link #setupTempFileOnly()}
      * @return returns an instance of MemoryUsageSetting set up to use a mixed setting
      */
-    public static MemoryUsageSetting setupMixed(long maxMainMemoryBytes)
-    {
+    public static MemoryUsageSetting setupMixed(long maxMainMemoryBytes) {
         return setupMixed(maxMainMemoryBytes, -1);
     }
 
@@ -163,14 +154,12 @@ public final class MemoryUsageSetting
      * specified portion is exceeded.
      *
      * @param maxMainMemoryBytes maximum number of main-memory to be used; if <code>-1</code> this is the same as
-     * {@link #setupMainMemoryOnly()}; if <code>0</code> this is the same as {@link #setupTempFileOnly()}
-     * @param maxStorageBytes maximum size the main-memory and temporary file(s) may have all together; <code>0</code>
-     * or less will be ignored; if it is less than maxMainMemoryBytes we use maxMainMemoryBytes value instead
-     *
+     *                           {@link #setupMainMemoryOnly()}; if <code>0</code> this is the same as {@link #setupTempFileOnly()}
+     * @param maxStorageBytes    maximum size the main-memory and temporary file(s) may have all together; <code>0</code>
+     *                           or less will be ignored; if it is less than maxMainMemoryBytes we use maxMainMemoryBytes value instead
      * @return returns an instance of MemoryUsageSetting set up to use a mixed setting
      */
-    public static MemoryUsageSetting setupMixed(long maxMainMemoryBytes, long maxStorageBytes)
-    {
+    public static MemoryUsageSetting setupMixed(long maxMainMemoryBytes, long maxStorageBytes) {
         return new MemoryUsageSetting(true, true, maxMainMemoryBytes, maxStorageBytes);
     }
 
@@ -178,11 +167,9 @@ public final class MemoryUsageSetting
      * Sets directory to be used for temporary files.
      *
      * @param tempDir directory for temporary files
-     *
      * @return this instance
      */
-    public MemoryUsageSetting setTempDir(File tempDir)
-    {
+    public MemoryUsageSetting setTempDir(File tempDir) {
         this.tempDir = tempDir;
         return this;
     }
@@ -196,8 +183,7 @@ public final class MemoryUsageSetting
      *
      * @return true if this instance is set up to use main memory
      */
-    public boolean useMainMemory()
-    {
+    public boolean useMainMemory() {
         return useMainMemory;
     }
 
@@ -210,8 +196,7 @@ public final class MemoryUsageSetting
      *
      * @return true if this instance is set up to use temporary files
      */
-    public boolean useTempFile()
-    {
+    public boolean useTempFile() {
         return useTempFile;
     }
 
@@ -220,8 +205,7 @@ public final class MemoryUsageSetting
      *
      * @return true if this instance is set up to restrict main memory
      */
-    public boolean isMainMemoryRestricted()
-    {
+    public boolean isMainMemoryRestricted() {
         return maxMainMemoryBytes >= 0;
     }
 
@@ -230,8 +214,7 @@ public final class MemoryUsageSetting
      *
      * @return true if this instance is set up to restrict storage size
      */
-    public boolean isStorageRestricted()
-    {
+    public boolean isStorageRestricted() {
         return maxStorageBytes > 0;
     }
 
@@ -240,8 +223,7 @@ public final class MemoryUsageSetting
      *
      * @return the maximum number of main-memory in bytes to be used
      */
-    public long getMaxMainMemoryBytes()
-    {
+    public long getMaxMainMemoryBytes() {
         return maxMainMemoryBytes;
     }
 
@@ -250,8 +232,7 @@ public final class MemoryUsageSetting
      *
      * @return the maximum size of storage bytes to be used
      */
-    public long getMaxStorageBytes()
-    {
+    public long getMaxStorageBytes() {
         return maxStorageBytes;
     }
 
@@ -260,21 +241,19 @@ public final class MemoryUsageSetting
      *
      * @return the temp dir to bes used for temporary files or null
      */
-    public File getTempDir()
-    {
+    public File getTempDir() {
         return tempDir;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return useMainMemory ?
-                   (useTempFile ? "Mixed mode with max. of " + maxMainMemoryBytes + " main memory bytes" +
-                                  (isStorageRestricted() ? " and max. of " + maxStorageBytes + " storage bytes" :
-                                                           " and unrestricted scratch file size") :
-                                  (isMainMemoryRestricted() ? "Main memory only with max. of " + maxMainMemoryBytes + " bytes" :
-                                                              "Main memory only with no size restriction")):
-                   (isStorageRestricted() ? "Scratch file only with max. of " + maxStorageBytes + " bytes" :
-                                            "Scratch file only with no size restriction");
+                (useTempFile ? "Mixed mode with max. of " + maxMainMemoryBytes + " main memory bytes" +
+                        (isStorageRestricted() ? " and max. of " + maxStorageBytes + " storage bytes" :
+                                " and unrestricted scratch file size") :
+                        (isMainMemoryRestricted() ? "Main memory only with max. of " + maxMainMemoryBytes + " bytes" :
+                                "Main memory only with no size restriction")) :
+                (isStorageRestricted() ? "Scratch file only with max. of " + maxStorageBytes + " bytes" :
+                        "Scratch file only with no size restriction");
     }
 }

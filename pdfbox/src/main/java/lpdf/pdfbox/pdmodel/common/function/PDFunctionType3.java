@@ -28,8 +28,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class PDFunctionType3 extends PDFunction
-{
+public class PDFunctionType3 extends PDFunction {
     private COSArray functions = null;
     private COSArray encode = null;
     private COSArray bounds = null;
@@ -41,26 +40,23 @@ public class PDFunctionType3 extends PDFunction
      *
      * @param functionStream The function .
      */
-    public PDFunctionType3(COSBase functionStream)
-    {
-        super( functionStream );
+    public PDFunctionType3(COSBase functionStream) {
+        super(functionStream);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getFunctionType()
-    {
+    public int getFunctionType() {
         return 3;
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
-    public float[] eval(float[] input) throws IOException
-    {
+    public float[] eval(float[] input) throws IOException {
         //This function is known as a "stitching" function. Based on the input, it decides which child function to call.
         // All functions in the array are 1-value-input functions
         //See PDF Reference section 3.9.3.
@@ -70,52 +66,43 @@ public class PDFunctionType3 extends PDFunction
         // clip input value to domain
         x = clipToRange(x, domain.getMin(), domain.getMax());
 
-        if (functionsArray == null)
-        {
+        if (functionsArray == null) {
             COSArray ar = getFunctions();
             functionsArray = new PDFunction[ar.size()];
-            for (int i = 0; i < ar.size(); ++i)
-            {
+            for (int i = 0; i < ar.size(); ++i) {
                 functionsArray[i] = PDFunction.create(ar.getObject(i));
             }
         }
 
-        if (functionsArray.length == 1)
-        {
+        if (functionsArray.length == 1) {
             // This doesn't make sense but it may happen ...
             function = functionsArray[0];
             PDRange encRange = getEncodeForParameter(0);
             x = interpolate(x, domain.getMin(), domain.getMax(), encRange.getMin(), encRange.getMax());
-        }
-        else
-        {
-            if (boundsValues == null)
-            {
+        } else {
+            if (boundsValues == null) {
                 boundsValues = getBounds().toFloatArray();
             }
             int boundsSize = boundsValues.length;
             // create a combined array containing the domain and the bounds values
             // domain.min, bounds[0], bounds[1], ...., bounds[boundsSize-1], domain.max
-            float[] partitionValues = new float[boundsSize+2];
+            float[] partitionValues = new float[boundsSize + 2];
             int partitionValuesSize = partitionValues.length;
             partitionValues[0] = domain.getMin();
-            partitionValues[partitionValuesSize-1] = domain.getMax();
+            partitionValues[partitionValuesSize - 1] = domain.getMax();
             System.arraycopy(boundsValues, 0, partitionValues, 1, boundsSize);
             // find the partition
-            for (int i=0; i < partitionValuesSize-1; i++)
-            {
-                if ( x >= partitionValues[i] &&
-                        (x < partitionValues[i+1] || (i == partitionValuesSize - 2 && Float.compare(x,partitionValues[i+1]) == 0)))
-                {
+            for (int i = 0; i < partitionValuesSize - 1; i++) {
+                if (x >= partitionValues[i] &&
+                        (x < partitionValues[i + 1] || (i == partitionValuesSize - 2 && Float.compare(x, partitionValues[i + 1]) == 0))) {
                     function = functionsArray[i];
                     PDRange encRange = getEncodeForParameter(i);
-                    x = interpolate(x, partitionValues[i], partitionValues[i+1], encRange.getMin(), encRange.getMax());
+                    x = interpolate(x, partitionValues[i], partitionValues[i + 1], encRange.getMin(), encRange.getMax());
                     break;
                 }
             }
         }
-        if (function == null)
-        {
+        if (function == null) {
             throw new IOException("partition not found in type 3 function");
         }
         float[] functionValues = new float[]{x};
@@ -130,10 +117,8 @@ public class PDFunctionType3 extends PDFunction
      *
      * @return the functions array.
      */
-    public COSArray getFunctions()
-    {
-        if (functions == null)
-        {
+    public COSArray getFunctions() {
+        if (functions == null) {
             functions = getCOSObject().getCOSArray(COSName.FUNCTIONS);
         }
         return functions;
@@ -144,10 +129,8 @@ public class PDFunctionType3 extends PDFunction
      *
      * @return the bounds array.
      */
-    public COSArray getBounds()
-    {
-        if (bounds == null)
-        {
+    public COSArray getBounds() {
+        if (bounds == null) {
             bounds = getCOSObject().getCOSArray(COSName.BOUNDS);
         }
         return bounds;
@@ -158,10 +141,8 @@ public class PDFunctionType3 extends PDFunction
      *
      * @return the encode array.
      */
-    public COSArray getEncode()
-    {
-        if (encode == null)
-        {
+    public COSArray getEncode() {
+        if (encode == null) {
             encode = getCOSObject().getCOSArray(COSName.ENCODE);
         }
         return encode;
@@ -171,13 +152,11 @@ public class PDFunctionType3 extends PDFunction
      * Get the encode for the input parameter.
      *
      * @param n The function parameter number.
-     *
      * @return The encode parameter range or null if none is set.
      */
-    private PDRange getEncodeForParameter(int n)
-    {
+    private PDRange getEncodeForParameter(int n) {
         COSArray encodeValues = getEncode();
-        return new PDRange( encodeValues, n );
+        return new PDRange(encodeValues, n);
     }
 
 }

@@ -16,68 +16,90 @@
  */
 package lpdf.pdfbox.pdmodel.common;
 
+import lpdf.fontbox.util.BoundingBox;
 import lpdf.harmony.awt.geom.GeneralPath;
 import lpdf.harmony.awt.geom.Point2D;
-import java.util.Arrays;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSNumber;
-
-import lpdf.fontbox.util.BoundingBox;
-
 import lpdf.pdfbox.util.Matrix;
+
+import java.util.Arrays;
 
 /**
  * A rectangle in a PDF document.
  *
  * @author Ben Litchfield
  */
-public class PDRectangle implements COSObjectable
-{
-    /** user space units per inch */
+public class PDRectangle implements COSObjectable {
+    /**
+     * user space units per inch
+     */
     private static final float POINTS_PER_INCH = 72;
 
-    /** user space units per millimeter */
+    /**
+     * user space units per millimeter
+     */
     private static final float POINTS_PER_MM = 1 / (10 * 2.54f) * POINTS_PER_INCH;
 
-    /** An immutable rectangle the size of U.S. Letter, 8.5" x 11". */
+    /**
+     * An immutable rectangle the size of U.S. Letter, 8.5" x 11".
+     */
     @SuppressWarnings("java:S2390") // see also https://jira.sonarsource.com/browse/SONARJAVA-3580
     public static final PDRectangle LETTER = new PDImmutableRectangle(8.5f * POINTS_PER_INCH,
-                                                            11f *POINTS_PER_INCH);
-    /**  An immutable rectangle the size of U.S. Tabloid, 11" x 17". */
+            11f * POINTS_PER_INCH);
+    /**
+     * An immutable rectangle the size of U.S. Tabloid, 11" x 17".
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle TABLOID = new PDImmutableRectangle(11f * POINTS_PER_INCH,
-                                                            17f * POINTS_PER_INCH);
-    /**  An immutable rectangle the size of U.S. Legal, 8.5" x 14". */
+            17f * POINTS_PER_INCH);
+    /**
+     * An immutable rectangle the size of U.S. Legal, 8.5" x 14".
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle LEGAL = new PDImmutableRectangle(8.5f * POINTS_PER_INCH,
-                                                            14f * POINTS_PER_INCH);
-    /**  An immutable rectangle the size of A0 Paper. */
+            14f * POINTS_PER_INCH);
+    /**
+     * An immutable rectangle the size of A0 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A0 = new PDImmutableRectangle(841 * POINTS_PER_MM, 1189 * POINTS_PER_MM);
 
-    /** An immutable rectangle the size of A1 Paper. */
+    /**
+     * An immutable rectangle the size of A1 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A1 = new PDImmutableRectangle(594 * POINTS_PER_MM, 841 * POINTS_PER_MM);
 
-    /**  An immutable rectangle the size of A2 Paper. */
+    /**
+     * An immutable rectangle the size of A2 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A2 = new PDImmutableRectangle(420 * POINTS_PER_MM, 594 * POINTS_PER_MM);
 
-    /** An immutable rectangle the size of A3 Paper.  */
+    /**
+     * An immutable rectangle the size of A3 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A3 = new PDImmutableRectangle(297 * POINTS_PER_MM, 420 * POINTS_PER_MM);
 
-    /**  An immutable rectangle the size of A4 Paper. */
+    /**
+     * An immutable rectangle the size of A4 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A4 = new PDImmutableRectangle(210 * POINTS_PER_MM, 297 * POINTS_PER_MM);
 
-    /** An immutable rectangle the size of A5 Paper. */
+    /**
+     * An immutable rectangle the size of A5 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A5 = new PDImmutableRectangle(148 * POINTS_PER_MM, 210 * POINTS_PER_MM);
 
-    /**  An immutable rectangle the size of A6 Paper. */
+    /**
+     * An immutable rectangle the size of A6 Paper.
+     */
     @SuppressWarnings("java:S2390")
     public static final PDRectangle A6 = new PDImmutableRectangle(105 * POINTS_PER_MM, 148 * POINTS_PER_MM);
 
@@ -85,40 +107,37 @@ public class PDRectangle implements COSObjectable
 
     /**
      * Constructor.
-     *
+     * <p>
      * Initializes to 0,0,0,0
      */
-    public PDRectangle()
-    {
+    public PDRectangle() {
         this(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     /**
      * Constructor.
      *
-     * @param width The width of the rectangle.
+     * @param width  The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    public PDRectangle( float width, float height )
-    {
+    public PDRectangle(float width, float height) {
         this(0.0f, 0.0f, width, height);
     }
 
     /**
      * Constructor.
      *
-     * @param x the x coordinate of the rectangle
-     * @param y the y coordinate of the rectangle
-     * @param width The width of the rectangle.
+     * @param x      the x coordinate of the rectangle
+     * @param y      the y coordinate of the rectangle
+     * @param width  The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    public PDRectangle( float x, float y, float width, float height )
-    {
+    public PDRectangle(float x, float y, float width, float height) {
         rectArray = new COSArray();
-        rectArray.add( new COSFloat( x ) );
-        rectArray.add( new COSFloat( y ) );
-        rectArray.add( new COSFloat( x + width ) );
-        rectArray.add( new COSFloat( y + height ) );
+        rectArray.add(new COSFloat(x));
+        rectArray.add(new COSFloat(y));
+        rectArray.add(new COSFloat(x + width));
+        rectArray.add(new COSFloat(y + height));
     }
 
     /**
@@ -126,13 +145,12 @@ public class PDRectangle implements COSObjectable
      *
      * @param box the bounding box to be used for the rectangle
      */
-    public PDRectangle( BoundingBox box )
-    {
+    public PDRectangle(BoundingBox box) {
         rectArray = new COSArray();
-        rectArray.add( new COSFloat( box.getLowerLeftX() ) );
-        rectArray.add( new COSFloat( box.getLowerLeftY() ) );
-        rectArray.add( new COSFloat( box.getUpperRightX() ) );
-        rectArray.add( new COSFloat( box.getUpperRightY() ) );
+        rectArray.add(new COSFloat(box.getLowerLeftX()));
+        rectArray.add(new COSFloat(box.getLowerLeftY()));
+        rectArray.add(new COSFloat(box.getUpperRightX()));
+        rectArray.add(new COSFloat(box.getUpperRightY()));
     }
 
     /**
@@ -140,31 +158,30 @@ public class PDRectangle implements COSObjectable
      *
      * @param array An array of numbers as specified in the PDF Reference for a rectangle type.
      */
-    public PDRectangle( COSArray array )
-    {
+    public PDRectangle(COSArray array) {
         float[] values = Arrays.copyOf(array.toFloatArray(), 4);
         rectArray = new COSArray();
         // we have to start with the lower left corner
-        rectArray.add( new COSFloat( Math.min(values[0],values[2] )) );
-        rectArray.add( new COSFloat( Math.min(values[1],values[3] )) );
-        rectArray.add( new COSFloat( Math.max(values[0],values[2] )) );
-        rectArray.add( new COSFloat( Math.max(values[1],values[3] )) );
+        rectArray.add(new COSFloat(Math.min(values[0], values[2])));
+        rectArray.add(new COSFloat(Math.min(values[1], values[3])));
+        rectArray.add(new COSFloat(Math.max(values[0], values[2])));
+        rectArray.add(new COSFloat(Math.max(values[1], values[3])));
     }
 
     /**
      * Method to determine if the x/y point is inside this rectangle.
+     *
      * @param x The x-coordinate to test.
      * @param y The y-coordinate to test.
      * @return True if the point is inside this rectangle.
      */
-    public boolean contains( float x, float y )
-    {
+    public boolean contains(float x, float y) {
         float llx = getLowerLeftX();
         float urx = getUpperRightX();
         float lly = getLowerLeftY();
         float ury = getUpperRightY();
         return x >= llx && x <= urx &&
-               y >= lly && y <= ury;
+                y >= lly && y <= ury;
     }
 
     /**
@@ -176,11 +193,10 @@ public class PDRectangle implements COSObjectable
      *
      * @return A new rectangle that has been translated back to the origin.
      */
-    public PDRectangle createRetranslatedRectangle()
-    {
+    public PDRectangle createRetranslatedRectangle() {
         PDRectangle retval = new PDRectangle();
-        retval.setUpperRightX( getWidth() );
-        retval.setUpperRightY( getHeight() );
+        retval.setUpperRightX(getWidth());
+        retval.setUpperRightY(getHeight());
         return retval;
     }
 
@@ -189,8 +205,7 @@ public class PDRectangle implements COSObjectable
      *
      * @return The cos array.
      */
-    public COSArray getCOSArray()
-    {
+    public COSArray getCOSArray() {
         return rectArray;
     }
 
@@ -199,9 +214,8 @@ public class PDRectangle implements COSObjectable
      *
      * @return The lower left x.
      */
-    public float getLowerLeftX()
-    {
-        return ((COSNumber)rectArray.get(0)).floatValue();
+    public float getLowerLeftX() {
+        return ((COSNumber) rectArray.get(0)).floatValue();
     }
 
     /**
@@ -209,9 +223,8 @@ public class PDRectangle implements COSObjectable
      *
      * @param value The lower left x.
      */
-    public void setLowerLeftX(float value)
-    {
-        rectArray.set(0, new COSFloat( value ) );
+    public void setLowerLeftX(float value) {
+        rectArray.set(0, new COSFloat(value));
     }
 
     /**
@@ -219,9 +232,8 @@ public class PDRectangle implements COSObjectable
      *
      * @return The lower left y.
      */
-    public float getLowerLeftY()
-    {
-        return ((COSNumber)rectArray.get(1)).floatValue();
+    public float getLowerLeftY() {
+        return ((COSNumber) rectArray.get(1)).floatValue();
     }
 
     /**
@@ -229,9 +241,8 @@ public class PDRectangle implements COSObjectable
      *
      * @param value The lower left y.
      */
-    public void setLowerLeftY(float value)
-    {
-        rectArray.set(1, new COSFloat( value ) );
+    public void setLowerLeftY(float value) {
+        rectArray.set(1, new COSFloat(value));
     }
 
     /**
@@ -239,9 +250,8 @@ public class PDRectangle implements COSObjectable
      *
      * @return The upper right x .
      */
-    public float getUpperRightX()
-    {
-        return ((COSNumber)rectArray.get(2)).floatValue();
+    public float getUpperRightX() {
+        return ((COSNumber) rectArray.get(2)).floatValue();
     }
 
     /**
@@ -249,9 +259,8 @@ public class PDRectangle implements COSObjectable
      *
      * @param value The upper right x .
      */
-    public void setUpperRightX(float value)
-    {
-        rectArray.set(2, new COSFloat( value ) );
+    public void setUpperRightX(float value) {
+        rectArray.set(2, new COSFloat(value));
     }
 
     /**
@@ -259,9 +268,8 @@ public class PDRectangle implements COSObjectable
      *
      * @return The upper right y.
      */
-    public float getUpperRightY()
-    {
-        return ((COSNumber)rectArray.get(3)).floatValue();
+    public float getUpperRightY() {
+        return ((COSNumber) rectArray.get(3)).floatValue();
     }
 
     /**
@@ -269,9 +277,8 @@ public class PDRectangle implements COSObjectable
      *
      * @param value The upper right y.
      */
-    public void setUpperRightY(float value)
-    {
-        rectArray.set(3, new COSFloat( value ) );
+    public void setUpperRightY(float value) {
+        rectArray.set(3, new COSFloat(value));
     }
 
     /**
@@ -280,8 +287,7 @@ public class PDRectangle implements COSObjectable
      *
      * @return The width of this rectangle.
      */
-    public float getWidth()
-    {
+    public float getWidth() {
         return getUpperRightX() - getLowerLeftX();
     }
 
@@ -291,8 +297,7 @@ public class PDRectangle implements COSObjectable
      *
      * @return The height of this rectangle.
      */
-    public float getHeight()
-    {
+    public float getHeight() {
         return getUpperRightY() - getLowerLeftY();
     }
 
@@ -303,8 +308,7 @@ public class PDRectangle implements COSObjectable
      * @param matrix the matrix to be used for the transformation
      * @return the transformed rectangle
      */
-    public GeneralPath transform(Matrix matrix)
-    {
+    public GeneralPath transform(Matrix matrix) {
         float x1 = getLowerLeftX();
         float y1 = getLowerLeftY();
         float x2 = getUpperRightX();
@@ -330,8 +334,7 @@ public class PDRectangle implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return rectArray;
     }
 
@@ -341,8 +344,7 @@ public class PDRectangle implements COSObjectable
      *
      * @return a general path equivalent to this rectangle
      */
-    public GeneralPath toGeneralPath()
-    {
+    public GeneralPath toGeneralPath() {
         float x1 = getLowerLeftX();
         float y1 = getLowerLeftY();
         float x2 = getUpperRightX();
@@ -362,9 +364,8 @@ public class PDRectangle implements COSObjectable
      * @return This object as a string.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[" + getLowerLeftX() + "," + getLowerLeftY() + "," +
-                     getUpperRightX() + "," + getUpperRightY() +"]";
+                getUpperRightX() + "," + getUpperRightY() + "]";
     }
 }

@@ -16,13 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.interactive.pagenavigation.PDTransition;
@@ -30,19 +23,22 @@ import lpdf.pdfbox.pdmodel.interactive.pagenavigation.PDTransitionDirection;
 import lpdf.pdfbox.pdmodel.interactive.pagenavigation.PDTransitionStyle;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author Andrea Vacondio
- *
  */
-class TestPDPageTransitions
-{
+class TestPDPageTransitions {
 
     @Test
-    void readTransitions() throws IOException, URISyntaxException
-    {
+    void readTransitions() throws IOException, URISyntaxException {
         try (PDDocument doc = Loader.loadPDF(new File(this.getClass().getResource(
-                "/lpdf/pdfbox/pdmodel/interactive/pagenavigation/transitions_test.pdf").toURI())))
-        {
+                "/lpdf/pdfbox/pdmodel/interactive/pagenavigation/transitions_test.pdf").toURI()))) {
             PDTransition firstTransition = doc.getPages().get(0).getTransition();
             assertEquals(PDTransitionStyle.Glitter.name(), firstTransition.getStyle());
             assertEquals(2, firstTransition.getDuration(), 0);
@@ -52,13 +48,11 @@ class TestPDPageTransitions
     }
 
     @Test
-    void saveAndReadTransitions() throws IOException
-    {
+    void saveAndReadTransitions() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         // save
-        try (PDDocument document = new PDDocument())
-        {
+        try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
             PDTransition transition = new PDTransition(PDTransitionStyle.Fly);
@@ -69,8 +63,7 @@ class TestPDPageTransitions
         }
 
         // read
-        try (PDDocument doc = Loader.loadPDF(baos.toByteArray()))
-        {
+        try (PDDocument doc = Loader.loadPDF(baos.toByteArray())) {
             PDPage page = doc.getPages().get(0);
             PDTransition loadedTransition = page.getTransition();
             assertEquals(PDTransitionStyle.Fly.name(), loadedTransition.getStyle());

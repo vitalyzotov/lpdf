@@ -15,24 +15,21 @@
  */
 package lpdf.pdfbox.filter;
 
-import static lpdf.pdfbox.filter.Predictor.getBitSeq;
-import static lpdf.pdfbox.filter.Predictor.calcSetBitSeq;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
+import static lpdf.pdfbox.filter.Predictor.calcSetBitSeq;
+import static lpdf.pdfbox.filter.Predictor.getBitSeq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- *
  * @author Tilman Hausherr
  */
-class PredictorTest
-{
+class PredictorTest {
     /**
      * Test of getBitSeq method, of class Predictor.
      */
     @Test
-    void testGetBitSeq()
-    {
+    void testGetBitSeq() {
         assertEquals(Integer.parseInt("11111111", 2), getBitSeq(Integer.parseInt("11111111", 2), 0, 8));
         assertEquals(Integer.parseInt("00000000", 2), getBitSeq(Integer.parseInt("00000000", 2), 0, 8));
         assertEquals(Integer.parseInt("1", 2), getBitSeq(Integer.parseInt("11111111", 2), 0, 1));
@@ -59,8 +56,7 @@ class PredictorTest
      * Test of calcSetBitSeq method, of class Predictor.
      */
     @Test
-    void testCalcSetBitSeq()
-    {
+    void testCalcSetBitSeq() {
         assertEquals(Integer.parseInt("00000000", 2), calcSetBitSeq(Integer.parseInt("11111111", 2), 0, 8, 0));
         assertEquals(Integer.parseInt("00000001", 2), calcSetBitSeq(Integer.parseInt("11111111", 2), 0, 8, 1));
         assertEquals(Integer.parseInt("11111111", 2), calcSetBitSeq(Integer.parseInt("11111111", 2), 0, 1, 1));

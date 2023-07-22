@@ -16,43 +16,37 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.digitalsignature;
 
+import lpdf.io.IOUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import lpdf.io.IOUtils;
-
 /**
  * A filtered stream that includes the bytes that are in the (begin,length) intervals passed in the
  * constructor.
  *
  * @author boix_jor
- *
  */
-public class COSFilterInputStream extends FilterInputStream
-{
+public class COSFilterInputStream extends FilterInputStream {
     private int[][] ranges;
     private int range;
     private long position = 0;
 
-    public COSFilterInputStream(InputStream in, int[] byteRange)
-    {
+    public COSFilterInputStream(InputStream in, int[] byteRange) {
         super(in);
         calculateRanges(byteRange);
     }
 
-    public COSFilterInputStream(byte[] in, int[] byteRange)
-    {
+    public COSFilterInputStream(byte[] in, int[] byteRange) {
         this(new ByteArrayInputStream(in), byteRange);
     }
 
     @Override
-    public int read() throws IOException
-    {
-        if ((this.range == -1 || getRemaining() <= 0) && !nextRange())
-        {
+    public int read() throws IOException {
+        if ((this.range == -1 || getRemaining() <= 0) && !nextRange()) {
             return -1; // EOF
         }
         int result = super.read();
@@ -61,16 +55,13 @@ public class COSFilterInputStream extends FilterInputStream
     }
 
     @Override
-    public int read(byte[] b) throws IOException
-    {
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        if ((this.range == -1 || getRemaining() <= 0) && !nextRange())
-        {
+    public int read(byte[] b, int off, int len) throws IOException {
+        if ((this.range == -1 || getRemaining() <= 0) && !nextRange()) {
             return -1; // EOF
         }
         int bytesRead = super.read(b, off, (int) Math.min(len, getRemaining()));
@@ -78,45 +69,35 @@ public class COSFilterInputStream extends FilterInputStream
         return bytesRead;
     }
 
-    public byte[] toByteArray() throws IOException
-    {
+    public byte[] toByteArray() throws IOException {
         return IOUtils.toByteArray(this);
     }
 
-    private void calculateRanges(int[] byteRange)
-    {
+    private void calculateRanges(int[] byteRange) {
         this.ranges = new int[byteRange.length / 2][];
-        for (int i = 0; i < byteRange.length / 2; i++)
-        {
-            this.ranges[i] = new int[] { byteRange[i * 2], byteRange[i * 2] + byteRange[i * 2 + 1] };
+        for (int i = 0; i < byteRange.length / 2; i++) {
+            this.ranges[i] = new int[]{byteRange[i * 2], byteRange[i * 2] + byteRange[i * 2 + 1]};
         }
         this.range = -1;
     }
 
-    private long getRemaining()
-    {
+    private long getRemaining() {
         return this.ranges[this.range][1] - this.position;
     }
 
-    private boolean nextRange() throws IOException
-    {
-        if (this.range + 1 < this.ranges.length)
-        {
+    private boolean nextRange() throws IOException {
+        if (this.range + 1 < this.ranges.length) {
             this.range++;
-            while (this.position < this.ranges[this.range][0])
-            {
+            while (this.position < this.ranges[this.range][0]) {
                 long skipped = super.skip(this.ranges[this.range][0] - this.position);
-                if (skipped == 0)
-                {
+                if (skipped == 0) {
                     throw new IOException("FilterInputStream.skip() returns 0, range: " +
                             Arrays.toString(this.ranges[this.range]));
                 }
                 this.position += skipped;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

@@ -17,6 +17,12 @@
 
 package lpdf.fontbox.ttf.gsub;
 
+import lpdf.fontbox.ttf.CmapLookup;
+import lpdf.fontbox.ttf.model.GsubData;
+import lpdf.fontbox.ttf.model.ScriptFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,21 +31,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.fontbox.ttf.CmapLookup;
-import lpdf.fontbox.ttf.model.GsubData;
-import lpdf.fontbox.ttf.model.ScriptFeature;
-
 /**
- *
  * Bengali-specific implementation of GSUB system
  *
  * @author Palash Ray
- *
  */
-public class GsubWorkerForBengali implements GsubWorker
-{
+public class GsubWorkerForBengali implements GsubWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(GsubWorkerForBengali.class);
 
@@ -53,10 +50,10 @@ public class GsubWorkerForBengali implements GsubWorker
             "rphf", "blwf", "pstf", "half", "vatu", "cjct", INIT_FEATURE, "pres", "abvs", "blws",
             "psts", "haln", "calt");
 
-    private static final char[] BEFORE_HALF_CHARS = new char[] { '\u09BF', '\u09C7', '\u09C8' };
-    private static final BeforeAndAfterSpanComponent[] BEFORE_AND_AFTER_SPAN_CHARS = new BeforeAndAfterSpanComponent[] {
+    private static final char[] BEFORE_HALF_CHARS = new char[]{'\u09BF', '\u09C7', '\u09C8'};
+    private static final BeforeAndAfterSpanComponent[] BEFORE_AND_AFTER_SPAN_CHARS = new BeforeAndAfterSpanComponent[]{
             new BeforeAndAfterSpanComponent('\u09CB', '\u09C7', '\u09BE'),
-            new BeforeAndAfterSpanComponent('\u09CC', '\u09C7', '\u09D7') };
+            new BeforeAndAfterSpanComponent('\u09CC', '\u09C7', '\u09D7')};
 
     private final CmapLookup cmapLookup;
     private final GsubData gsubData;
@@ -65,8 +62,7 @@ public class GsubWorkerForBengali implements GsubWorker
     private final Map<Integer, BeforeAndAfterSpanComponent> beforeAndAfterSpanGlyphIds;
 
 
-    GsubWorkerForBengali(CmapLookup cmapLookup, GsubData gsubData)
-    {
+    GsubWorkerForBengali(CmapLookup cmapLookup, GsubData gsubData) {
         this.cmapLookup = cmapLookup;
         this.gsubData = gsubData;
         beforeHalfGlyphIds = getBeforeHalfGlyphIds();
@@ -74,14 +70,11 @@ public class GsubWorkerForBengali implements GsubWorker
     }
 
     @Override
-    public List<Integer> applyTransforms(List<Integer> originalGlyphIds)
-    {
+    public List<Integer> applyTransforms(List<Integer> originalGlyphIds) {
         List<Integer> intermediateGlyphsFromGsub = originalGlyphIds;
 
-        for (String feature : FEATURES_IN_ORDER)
-        {
-            if (!gsubData.isFeatureSupported(feature))
-            {
+        for (String feature : FEATURES_IN_ORDER) {
+            if (!gsubData.isFeatureSupported(feature)) {
                 LOG.debug("the feature " + feature + " was not found");
                 continue;
             }
@@ -97,22 +90,18 @@ public class GsubWorkerForBengali implements GsubWorker
         return Collections.unmodifiableList(repositionGlyphs(intermediateGlyphsFromGsub));
     }
 
-    private List<Integer> repositionGlyphs(List<Integer> originalGlyphIds)
-    {
+    private List<Integer> repositionGlyphs(List<Integer> originalGlyphIds) {
         List<Integer> glyphsRepositionedByBeforeHalf = repositionBeforeHalfGlyphIds(
                 originalGlyphIds);
         return repositionBeforeAndAfterSpanGlyphIds(glyphsRepositionedByBeforeHalf);
     }
 
-    private List<Integer> repositionBeforeHalfGlyphIds(List<Integer> originalGlyphIds)
-    {
+    private List<Integer> repositionBeforeHalfGlyphIds(List<Integer> originalGlyphIds) {
         List<Integer> repositionedGlyphIds = new ArrayList<>(originalGlyphIds);
 
-        for (int index = 1; index < originalGlyphIds.size(); index++)
-        {
+        for (int index = 1; index < originalGlyphIds.size(); index++) {
             int glyphId = originalGlyphIds.get(index);
-            if (beforeHalfGlyphIds.contains(glyphId))
-            {
+            if (beforeHalfGlyphIds.contains(glyphId)) {
                 int previousGlyphId = originalGlyphIds.get(index - 1);
                 repositionedGlyphIds.set(index, previousGlyphId);
                 repositionedGlyphIds.set(index - 1, glyphId);
@@ -121,17 +110,14 @@ public class GsubWorkerForBengali implements GsubWorker
         return repositionedGlyphIds;
     }
 
-    private List<Integer> repositionBeforeAndAfterSpanGlyphIds(List<Integer> originalGlyphIds)
-    {
+    private List<Integer> repositionBeforeAndAfterSpanGlyphIds(List<Integer> originalGlyphIds) {
         List<Integer> repositionedGlyphIds = new ArrayList<>(originalGlyphIds);
 
-        for (int index = 1; index < originalGlyphIds.size(); index++)
-        {
+        for (int index = 1; index < originalGlyphIds.size(); index++) {
             int glyphId = originalGlyphIds.get(index);
             BeforeAndAfterSpanComponent beforeAndAfterSpanComponent =
                     beforeAndAfterSpanGlyphIds.get(glyphId);
-            if (beforeAndAfterSpanComponent != null)
-            {
+            if (beforeAndAfterSpanComponent != null) {
                 int previousGlyphId = originalGlyphIds.get(index - 1);
                 repositionedGlyphIds.set(index, previousGlyphId);
                 repositionedGlyphIds.set(index - 1,
@@ -144,11 +130,9 @@ public class GsubWorkerForBengali implements GsubWorker
     }
 
     private List<Integer> applyGsubFeature(ScriptFeature scriptFeature,
-            List<Integer> originalGlyphs)
-    {
+                                           List<Integer> originalGlyphs) {
         Set<List<Integer>> allGlyphIdsForSubstitution = scriptFeature.getAllGlyphIdsForSubstitution();
-        if (allGlyphIdsForSubstitution.isEmpty())
-        {
+        if (allGlyphIdsForSubstitution.isEmpty()) {
             // not stopping here results in really weird output, the regex goes wild
             LOG.debug("getAllGlyphIdsForSubstitution() for " + scriptFeature.getName() + " is empty");
             return originalGlyphs;
@@ -163,14 +147,11 @@ public class GsubWorkerForBengali implements GsubWorker
 
         tokens.forEach(chunk ->
         {
-            if (scriptFeature.canReplaceGlyphs(chunk))
-            {
+            if (scriptFeature.canReplaceGlyphs(chunk)) {
                 // gsub system kicks in, you get the glyphId directly
                 Integer glyphId = scriptFeature.getReplacementForGlyphs(chunk);
                 gsubProcessedGlyphs.add(glyphId);
-            }
-            else
-            {
+            } else {
                 gsubProcessedGlyphs.addAll(chunk);
             }
         });
@@ -181,20 +162,16 @@ public class GsubWorkerForBengali implements GsubWorker
         return gsubProcessedGlyphs;
     }
 
-    private List<Integer> getBeforeHalfGlyphIds()
-    {
+    private List<Integer> getBeforeHalfGlyphIds() {
         List<Integer> glyphIds = new ArrayList<>(BEFORE_HALF_CHARS.length);
 
-        for (char character : BEFORE_HALF_CHARS)
-        {
+        for (char character : BEFORE_HALF_CHARS) {
             glyphIds.add(getGlyphId(character));
         }
 
-        if (gsubData.isFeatureSupported(INIT_FEATURE))
-        {
+        if (gsubData.isFeatureSupported(INIT_FEATURE)) {
             ScriptFeature feature = gsubData.getFeature(INIT_FEATURE);
-            for (List<Integer> glyphCluster : feature.getAllGlyphIdsForSubstitution())
-            {
+            for (List<Integer> glyphCluster : feature.getAllGlyphIdsForSubstitution()) {
                 glyphIds.add(feature.getReplacementForGlyphs(glyphCluster));
             }
         }
@@ -203,17 +180,14 @@ public class GsubWorkerForBengali implements GsubWorker
 
     }
 
-    private Integer getGlyphId(char character)
-    {
+    private Integer getGlyphId(char character) {
         return cmapLookup.getGlyphId(character);
     }
 
-    private Map<Integer, BeforeAndAfterSpanComponent> getBeforeAndAfterSpanGlyphIds()
-    {
+    private Map<Integer, BeforeAndAfterSpanComponent> getBeforeAndAfterSpanGlyphIds() {
         Map<Integer, BeforeAndAfterSpanComponent> result = new HashMap<>();
 
-        for (BeforeAndAfterSpanComponent beforeAndAfterSpanComponent : BEFORE_AND_AFTER_SPAN_CHARS)
-        {
+        for (BeforeAndAfterSpanComponent beforeAndAfterSpanComponent : BEFORE_AND_AFTER_SPAN_CHARS) {
             result.put(
                     getGlyphId(beforeAndAfterSpanComponent.originalCharacter),
                     beforeAndAfterSpanComponent);
@@ -228,7 +202,6 @@ public class GsubWorkerForBengali implements GsubWorker
      * used, this glyph has to be replaced by these 2 glyphs. For O-kar, it has to be replaced by
      * E-kar (\u09C7) and AA-kar (\u09BE). For OU-kar, it has be replaced by E-kar (\u09C7) and
      * \u09D7.
-     *
      */
     private static class BeforeAndAfterSpanComponent {
         private final char originalCharacter;
@@ -236,8 +209,7 @@ public class GsubWorkerForBengali implements GsubWorker
         private final char afterComponentCharacter;
 
         BeforeAndAfterSpanComponent(char originalCharacter, char beforeComponentCharacter,
-                char afterComponentCharacter)
-        {
+                                    char afterComponentCharacter) {
             this.originalCharacter = originalCharacter;
             this.beforeComponentCharacter = beforeComponentCharacter;
             this.afterComponentCharacter = afterComponentCharacter;

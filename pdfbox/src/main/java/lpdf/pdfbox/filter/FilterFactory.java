@@ -16,19 +16,19 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.pdfbox.cos.COSName;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import lpdf.pdfbox.cos.COSName;
 
 /**
  * Factory for Filter classes.
  *
  * @author Ben Litchfield
  */
-public final class FilterFactory
-{
+public final class FilterFactory {
     /**
      * Singleton instance.
      */
@@ -36,8 +36,7 @@ public final class FilterFactory
 
     private final Map<COSName, Filter> filters = new HashMap<>();
 
-    private FilterFactory()
-    {
+    private FilterFactory() {
         Filter flate = new FlateFilter();
 
         Filter ccittFax = new CCITTFaxFilter();
@@ -66,34 +65,32 @@ public final class FilterFactory
 
     /**
      * Returns a filter instance given its name as a string.
+     *
      * @param filterName the name of the filter to retrieve
      * @return the filter that matches the name
      * @throws IOException if the filter name was invalid
      */
-    public Filter getFilter(String filterName) throws IOException
-    {
+    public Filter getFilter(String filterName) throws IOException {
         return getFilter(COSName.getPDFName(filterName));
     }
 
     /**
      * Returns a filter instance given its COSName.
+     *
      * @param filterName the name of the filter to retrieve
      * @return the filter that matches the name
      * @throws IOException if the filter name was invalid
      */
-    public Filter getFilter(COSName filterName) throws IOException
-    {
+    public Filter getFilter(COSName filterName) throws IOException {
         Filter filter = filters.get(filterName);
-        if (filter == null)
-        {
+        if (filter == null) {
             throw new IOException("Invalid filter: " + filterName);
         }
         return filter;
     }
 
     // returns all available filters, for testing
-    Collection<Filter> getAllFilters()
-    {
+    Collection<Filter> getAllFilters() {
         return filters.values();
     }
 }

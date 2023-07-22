@@ -30,8 +30,7 @@ import lpdf.pdfbox.pdmodel.common.PDStream;
  *
  * @author Ben Litchfield
  */
-public final class PDFontDescriptor implements COSObjectable
-{
+public final class PDFontDescriptor implements COSObjectable {
     private static final int FLAG_FIXED_PITCH = 1;
     private static final int FLAG_SERIF = 2;
     private static final int FLAG_SYMBOLIC = 4;
@@ -51,10 +50,9 @@ public final class PDFontDescriptor implements COSObjectable
     /**
      * Package-private constructor, for embedding.
      */
-    PDFontDescriptor()
-    {
+    PDFontDescriptor() {
         dic = new COSDictionary();
-        dic.setItem( COSName.TYPE, COSName.FONT_DESC );
+        dic.setItem(COSName.TYPE, COSName.FONT_DESC);
     }
 
     /**
@@ -62,8 +60,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param desc The wrapped COS Dictionary.
      */
-    public PDFontDescriptor( COSDictionary desc )
-    {
+    public PDFontDescriptor(COSDictionary desc) {
         dic = desc;
     }
 
@@ -72,9 +69,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isFixedPitch()
-    {
-        return isFlagBitOn( FLAG_FIXED_PITCH );
+    public boolean isFixedPitch() {
+        return isFlagBitOn(FLAG_FIXED_PITCH);
     }
 
     /**
@@ -82,9 +78,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setFixedPitch( boolean flag )
-    {
-        setFlagBit( FLAG_FIXED_PITCH, flag );
+    public void setFixedPitch(boolean flag) {
+        setFlagBit(FLAG_FIXED_PITCH, flag);
     }
 
     /**
@@ -92,9 +87,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isSerif()
-    {
-        return isFlagBitOn( FLAG_SERIF );
+    public boolean isSerif() {
+        return isFlagBitOn(FLAG_SERIF);
     }
 
     /**
@@ -102,9 +96,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setSerif( boolean flag )
-    {
-        setFlagBit( FLAG_SERIF, flag );
+    public void setSerif(boolean flag) {
+        setFlagBit(FLAG_SERIF, flag);
     }
 
     /**
@@ -112,9 +105,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isSymbolic()
-    {
-        return isFlagBitOn( FLAG_SYMBOLIC );
+    public boolean isSymbolic() {
+        return isFlagBitOn(FLAG_SYMBOLIC);
     }
 
     /**
@@ -122,9 +114,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setSymbolic( boolean flag )
-    {
-        setFlagBit( FLAG_SYMBOLIC, flag );
+    public void setSymbolic(boolean flag) {
+        setFlagBit(FLAG_SYMBOLIC, flag);
     }
 
     /**
@@ -132,9 +123,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isScript()
-    {
-        return isFlagBitOn( FLAG_SCRIPT );
+    public boolean isScript() {
+        return isFlagBitOn(FLAG_SCRIPT);
     }
 
     /**
@@ -142,9 +132,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setScript( boolean flag )
-    {
-        setFlagBit( FLAG_SCRIPT, flag );
+    public void setScript(boolean flag) {
+        setFlagBit(FLAG_SCRIPT, flag);
     }
 
     /**
@@ -152,9 +141,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isNonSymbolic()
-    {
-        return isFlagBitOn( FLAG_NON_SYMBOLIC );
+    public boolean isNonSymbolic() {
+        return isFlagBitOn(FLAG_NON_SYMBOLIC);
     }
 
     /**
@@ -162,9 +150,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setNonSymbolic( boolean flag )
-    {
-        setFlagBit( FLAG_NON_SYMBOLIC, flag );
+    public void setNonSymbolic(boolean flag) {
+        setFlagBit(FLAG_NON_SYMBOLIC, flag);
     }
 
     /**
@@ -172,9 +159,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isItalic()
-    {
-        return isFlagBitOn( FLAG_ITALIC );
+    public boolean isItalic() {
+        return isFlagBitOn(FLAG_ITALIC);
     }
 
     /**
@@ -182,9 +168,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setItalic( boolean flag )
-    {
-        setFlagBit( FLAG_ITALIC, flag );
+    public void setItalic(boolean flag) {
+        setFlagBit(FLAG_ITALIC, flag);
     }
 
     /**
@@ -192,9 +177,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isAllCap()
-    {
-        return isFlagBitOn( FLAG_ALL_CAP);
+    public boolean isAllCap() {
+        return isFlagBitOn(FLAG_ALL_CAP);
     }
 
     /**
@@ -202,9 +186,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setAllCap( boolean flag )
-    {
-        setFlagBit( FLAG_ALL_CAP, flag );
+    public void setAllCap(boolean flag) {
+        setFlagBit(FLAG_ALL_CAP, flag);
     }
 
     /**
@@ -212,9 +195,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isSmallCap()
-    {
-        return isFlagBitOn( FLAG_SMALL_CAP );
+    public boolean isSmallCap() {
+        return isFlagBitOn(FLAG_SMALL_CAP);
     }
 
     /**
@@ -222,9 +204,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setSmallCap( boolean flag )
-    {
-        setFlagBit( FLAG_SMALL_CAP, flag );
+    public void setSmallCap(boolean flag) {
+        setFlagBit(FLAG_SMALL_CAP, flag);
     }
 
     /**
@@ -232,9 +213,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The flag value.
      */
-    public boolean isForceBold()
-    {
-        return isFlagBitOn( FLAG_FORCE_BOLD );
+    public boolean isForceBold() {
+        return isFlagBitOn(FLAG_FORCE_BOLD);
     }
 
     /**
@@ -242,28 +222,22 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flag The flag value.
      */
-    public void setForceBold( boolean flag )
-    {
-        setFlagBit( FLAG_FORCE_BOLD, flag );
+    public void setForceBold(boolean flag) {
+        setFlagBit(FLAG_FORCE_BOLD, flag);
     }
 
-    private boolean isFlagBitOn( int bit )
-    {
+    private boolean isFlagBitOn(int bit) {
         return (getFlags() & bit) != 0;
     }
 
-    private void setFlagBit( int bit, boolean value )
-    {
+    private void setFlagBit(int bit, boolean value) {
         int flags = getFlags();
-        if( value )
-        {
+        if (value) {
             flags = flags | bit;
-        }
-        else
-        {
+        } else {
             flags = flags & (~bit);
         }
-        setFlags( flags );
+        setFlags(flags);
     }
 
     /**
@@ -272,8 +246,7 @@ public final class PDFontDescriptor implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dic;
     }
 
@@ -282,8 +255,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The name of the font.
      */
-    public String getFontName()
-    {
+    public String getFontName() {
         return dic.getNameAsString(COSName.FONT_NAME);
     }
 
@@ -292,14 +264,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param fontName The new name for the font.
      */
-    public void setFontName( String fontName )
-    {
+    public void setFontName(String fontName) {
         COSName name = null;
-        if( fontName != null )
-        {
-            name = COSName.getPDFName( fontName );
+        if (fontName != null) {
+            name = COSName.getPDFName(fontName);
         }
-        dic.setItem( COSName.FONT_NAME, name );
+        dic.setItem(COSName.FONT_NAME, name);
     }
 
     /**
@@ -307,8 +277,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The font family.
      */
-    public String getFontFamily()
-    {
+    public String getFontFamily() {
         return dic.getString(COSName.FONT_FAMILY);
     }
 
@@ -317,14 +286,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param fontFamily The font family.
      */
-    public void setFontFamily( String fontFamily )
-    {
+    public void setFontFamily(String fontFamily) {
         COSString name = null;
-        if( fontFamily != null )
-        {
-            name = new COSString( fontFamily );
+        if (fontFamily != null) {
+            name = new COSString(fontFamily);
         }
-        dic.setItem( COSName.FONT_FAMILY, name );
+        dic.setItem(COSName.FONT_FAMILY, name);
     }
 
     /**
@@ -334,9 +301,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The font weight.
      */
-    public float getFontWeight()
-    {
-        return dic.getFloat( COSName.FONT_WEIGHT,0 );
+    public float getFontWeight() {
+        return dic.getFloat(COSName.FONT_WEIGHT, 0);
     }
 
     /**
@@ -344,9 +310,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param fontWeight The new weight of the font.
      */
-    public void setFontWeight( float fontWeight )
-    {
-        dic.setFloat( COSName.FONT_WEIGHT, fontWeight );
+    public void setFontWeight(float fontWeight) {
+        dic.setFloat(COSName.FONT_WEIGHT, fontWeight);
     }
 
     /**
@@ -358,8 +323,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The stretch of the font.
      */
-    public String getFontStretch()
-    {
+    public String getFontStretch() {
         return dic.getNameAsString(COSName.FONT_STRETCH);
     }
 
@@ -368,14 +332,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param fontStretch The new stretch for the font.
      */
-    public void setFontStretch( String fontStretch )
-    {
+    public void setFontStretch(String fontStretch) {
         COSName name = null;
-        if( fontStretch != null )
-        {
-            name = COSName.getPDFName( fontStretch );
+        if (fontStretch != null) {
+            name = COSName.getPDFName(fontStretch);
         }
-        dic.setItem( COSName.FONT_STRETCH, name );
+        dic.setItem(COSName.FONT_STRETCH, name);
     }
 
     /**
@@ -383,11 +345,9 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The font flags.
      */
-    public int getFlags()
-    {
-        if (flags == -1)
-        {
-            flags = dic.getInt( COSName.FLAGS, 0 );
+    public int getFlags() {
+        if (flags == -1) {
+            flags = dic.getInt(COSName.FLAGS, 0);
         }
         return flags;
     }
@@ -397,9 +357,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param flags The new font flags.
      */
-    public void setFlags( int flags )
-    {
-        dic.setInt( COSName.FLAGS, flags );
+    public void setFlags(int flags) {
+        dic.setInt(COSName.FLAGS, flags);
         this.flags = flags;
     }
 
@@ -408,13 +367,11 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The fonts bounding box.
      */
-    public PDRectangle getFontBoundingBox()
-    {
+    public PDRectangle getFontBoundingBox() {
         COSArray rect = dic.getCOSArray(COSName.FONT_BBOX);
         PDRectangle retval = null;
-        if( rect != null )
-        {
-            retval = new PDRectangle( rect );
+        if (rect != null) {
+            retval = new PDRectangle(rect);
         }
         return retval;
     }
@@ -424,14 +381,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param rect The new bounding box.
      */
-    public void setFontBoundingBox( PDRectangle rect )
-    {
+    public void setFontBoundingBox(PDRectangle rect) {
         COSArray array = null;
-        if( rect != null )
-        {
+        if (rect != null) {
             array = rect.getCOSArray();
         }
-        dic.setItem( COSName.FONT_BBOX, array );
+        dic.setItem(COSName.FONT_BBOX, array);
     }
 
     /**
@@ -439,9 +394,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The italic angle.
      */
-    public float getItalicAngle()
-    {
-        return dic.getFloat( COSName.ITALIC_ANGLE, 0 );
+    public float getItalicAngle() {
+        return dic.getFloat(COSName.ITALIC_ANGLE, 0);
     }
 
     /**
@@ -449,9 +403,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param angle The new italic angle for the font.
      */
-    public void setItalicAngle( float angle )
-    {
-        dic.setFloat( COSName.ITALIC_ANGLE, angle );
+    public void setItalicAngle(float angle) {
+        dic.setFloat(COSName.ITALIC_ANGLE, angle);
     }
 
     /**
@@ -459,9 +412,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The ascent.
      */
-    public float getAscent()
-    {
-        return dic.getFloat( COSName.ASCENT, 0 );
+    public float getAscent() {
+        return dic.getFloat(COSName.ASCENT, 0);
     }
 
     /**
@@ -469,9 +421,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param ascent The new ascent for the font.
      */
-    public void setAscent( float ascent )
-    {
-        dic.setFloat( COSName.ASCENT, ascent );
+    public void setAscent(float ascent) {
+        dic.setFloat(COSName.ASCENT, ascent);
     }
 
     /**
@@ -479,9 +430,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The descent.
      */
-    public float getDescent()
-    {
-        return dic.getFloat( COSName.DESCENT, 0 );
+    public float getDescent() {
+        return dic.getFloat(COSName.DESCENT, 0);
     }
 
     /**
@@ -489,9 +439,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param descent The new descent for the font.
      */
-    public void setDescent( float descent )
-    {
-        dic.setFloat( COSName.DESCENT, descent );
+    public void setDescent(float descent) {
+        dic.setFloat(COSName.DESCENT, descent);
     }
 
     /**
@@ -499,9 +448,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The leading.
      */
-    public float getLeading()
-    {
-        return dic.getFloat( COSName.LEADING, 0 );
+    public float getLeading() {
+        return dic.getFloat(COSName.LEADING, 0);
     }
 
     /**
@@ -509,9 +457,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param leading The new leading for the font.
      */
-    public void setLeading( float leading )
-    {
-        dic.setFloat( COSName.LEADING, leading );
+    public void setLeading(float leading) {
+        dic.setFloat(COSName.LEADING, leading);
     }
 
     /**
@@ -519,15 +466,13 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The cap height.
      */
-    public float getCapHeight()
-    {
-        if(Float.compare(capHeight, Float.NEGATIVE_INFINITY) == 0)
-        {
+    public float getCapHeight() {
+        if (Float.compare(capHeight, Float.NEGATIVE_INFINITY) == 0) {
             /* We observed a negative value being returned with
              * the Scheherazade font. PDFBOX-429 was logged for this.
              * We are not sure if returning the absolute value
              * is the correct fix, but it seems to work.  */
-            capHeight = java.lang.Math.abs(dic.getFloat( COSName.CAP_HEIGHT, 0 ));
+            capHeight = java.lang.Math.abs(dic.getFloat(COSName.CAP_HEIGHT, 0));
         }
         return capHeight;
     }
@@ -538,9 +483,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param capHeight The new cap height for the font.
      */
-    public void setCapHeight( float capHeight )
-    {
-        dic.setFloat( COSName.CAP_HEIGHT, capHeight );
+    public void setCapHeight(float capHeight) {
+        dic.setFloat(COSName.CAP_HEIGHT, capHeight);
         this.capHeight = capHeight;
     }
 
@@ -549,15 +493,13 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The x height.
      */
-    public float getXHeight()
-    {
-        if(Float.compare(xHeight, Float.NEGATIVE_INFINITY) == 0)
-        {
+    public float getXHeight() {
+        if (Float.compare(xHeight, Float.NEGATIVE_INFINITY) == 0) {
             /* We observed a negative value being returned with
              * the Scheherazade font. PDFBOX-429 was logged for this.
              * We are not sure if returning the absolute value
              * is the correct fix, but it seems to work.  */
-            xHeight = java.lang.Math.abs(dic.getFloat( COSName.XHEIGHT, 0 ));
+            xHeight = java.lang.Math.abs(dic.getFloat(COSName.XHEIGHT, 0));
         }
         return xHeight;
     }
@@ -567,9 +509,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param xHeight The new x height for the font.
      */
-    public void setXHeight( float xHeight )
-    {
-        dic.setFloat( COSName.XHEIGHT, xHeight );
+    public void setXHeight(float xHeight) {
+        dic.setFloat(COSName.XHEIGHT, xHeight);
         this.xHeight = xHeight;
     }
 
@@ -578,9 +519,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The stem v value.
      */
-    public float getStemV()
-    {
-        return dic.getFloat( COSName.STEM_V, 0 );
+    public float getStemV() {
+        return dic.getFloat(COSName.STEM_V, 0);
     }
 
     /**
@@ -588,9 +528,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param stemV The new stem v for the font.
      */
-    public void setStemV( float stemV )
-    {
-        dic.setFloat( COSName.STEM_V, stemV );
+    public void setStemV(float stemV) {
+        dic.setFloat(COSName.STEM_V, stemV);
     }
 
     /**
@@ -598,9 +537,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The stem h value.
      */
-    public float getStemH()
-    {
-        return dic.getFloat( COSName.STEM_H, 0 );
+    public float getStemH() {
+        return dic.getFloat(COSName.STEM_H, 0);
     }
 
     /**
@@ -608,9 +546,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param stemH The new stem h for the font.
      */
-    public void setStemH( float stemH )
-    {
-        dic.setFloat( COSName.STEM_H, stemH );
+    public void setStemH(float stemH) {
+        dic.setFloat(COSName.STEM_H, stemH);
     }
 
     /**
@@ -618,9 +555,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The average width value.
      */
-    public float getAverageWidth()
-    {
-        return dic.getFloat( COSName.AVG_WIDTH, 0 );
+    public float getAverageWidth() {
+        return dic.getFloat(COSName.AVG_WIDTH, 0);
     }
 
     /**
@@ -628,9 +564,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param averageWidth The new average width for the font.
      */
-    public void setAverageWidth( float averageWidth )
-    {
-        dic.setFloat( COSName.AVG_WIDTH, averageWidth );
+    public void setAverageWidth(float averageWidth) {
+        dic.setFloat(COSName.AVG_WIDTH, averageWidth);
     }
 
     /**
@@ -638,9 +573,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The max width value.
      */
-    public float getMaxWidth()
-    {
-        return dic.getFloat( COSName.MAX_WIDTH, 0 );
+    public float getMaxWidth() {
+        return dic.getFloat(COSName.MAX_WIDTH, 0);
     }
 
     /**
@@ -648,9 +582,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param maxWidth The new max width for the font.
      */
-    public void setMaxWidth( float maxWidth )
-    {
-        dic.setFloat( COSName.MAX_WIDTH, maxWidth );
+    public void setMaxWidth(float maxWidth) {
+        dic.setFloat(COSName.MAX_WIDTH, maxWidth);
     }
 
     /**
@@ -658,8 +591,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return true if widths are present in the font descriptor
      */
-    public boolean hasWidths()
-    {
+    public boolean hasWidths() {
         return dic.containsKey(COSName.WIDTHS) || dic.containsKey(COSName.MISSING_WIDTH);
     }
 
@@ -668,8 +600,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return true if the missing widths entry is present in the font descriptor
      */
-    public boolean hasMissingWidth()
-    {
+    public boolean hasMissingWidth() {
         return dic.containsKey(COSName.MISSING_WIDTH);
     }
 
@@ -678,9 +609,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The missing width value, or 0 if there is no such dictionary entry.
      */
-    public float getMissingWidth()
-    {
-        return dic.getFloat( COSName.MISSING_WIDTH, 0 );
+    public float getMissingWidth() {
+        return dic.getFloat(COSName.MISSING_WIDTH, 0);
     }
 
     /**
@@ -688,9 +618,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param missingWidth The new missing width for the font.
      */
-    public void setMissingWidth( float missingWidth )
-    {
-        dic.setFloat( COSName.MISSING_WIDTH, missingWidth );
+    public void setMissingWidth(float missingWidth) {
+        dic.setFloat(COSName.MISSING_WIDTH, missingWidth);
     }
 
     /**
@@ -698,8 +627,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return The character set value.
      */
-    public String getCharSet()
-    {
+    public String getCharSet() {
         return dic.getString(COSName.CHAR_SET);
     }
 
@@ -708,14 +636,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param charSet The new character set for the font.
      */
-    public void setCharacterSet( String charSet )
-    {
+    public void setCharacterSet(String charSet) {
         COSString name = null;
-        if( charSet != null )
-        {
-            name = new COSString( charSet );
+        if (charSet != null) {
+            name = new COSString(charSet);
         }
-        dic.setItem( COSName.CHAR_SET, name );
+        dic.setItem(COSName.CHAR_SET, name);
     }
 
     /**
@@ -723,8 +649,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return A stream containing a Type 1 font program.
      */
-    public PDStream getFontFile()
-    {
+    public PDStream getFontFile() {
         COSStream stream = dic.getCOSStream(COSName.FONT_FILE);
         return stream != null ? new PDStream(stream) : null;
     }
@@ -734,9 +659,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param type1Stream The type 1 stream.
      */
-    public void setFontFile( PDStream type1Stream )
-    {
-        dic.setItem( COSName.FONT_FILE, type1Stream );
+    public void setFontFile(PDStream type1Stream) {
+        dic.setItem(COSName.FONT_FILE, type1Stream);
     }
 
     /**
@@ -744,8 +668,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return A stream containing a true type font program.
      */
-    public PDStream getFontFile2()
-    {
+    public PDStream getFontFile2() {
         COSStream stream = dic.getCOSStream(COSName.FONT_FILE2);
         return stream != null ? new PDStream(stream) : null;
     }
@@ -755,9 +678,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param ttfStream The true type stream.
      */
-    public void setFontFile2( PDStream ttfStream )
-    {
-        dic.setItem( COSName.FONT_FILE2, ttfStream );
+    public void setFontFile2(PDStream ttfStream) {
+        dic.setItem(COSName.FONT_FILE2, ttfStream);
     }
 
     /**
@@ -765,8 +687,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return A stream containing a font program.
      */
-    public PDStream getFontFile3()
-    {
+    public PDStream getFontFile3() {
         COSStream stream = dic.getCOSStream(COSName.FONT_FILE3);
         return stream != null ? new PDStream(stream) : null;
     }
@@ -776,9 +697,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param stream The font program stream.
      */
-    public void setFontFile3( PDStream stream )
-    {
-        dic.setItem( COSName.FONT_FILE3, stream );
+    public void setFontFile3(PDStream stream) {
+        dic.setItem(COSName.FONT_FILE3, stream);
     }
 
     /**
@@ -786,8 +706,7 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return A stream containing a CIDSet.
      */
-    public PDStream getCIDSet()
-    {
+    public PDStream getCIDSet() {
         COSStream cidSet = dic.getCOSStream(COSName.CID_SET);
         return cidSet != null ? new PDStream(cidSet) : null;
     }
@@ -797,9 +716,8 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @param stream The font program stream.
      */
-    public void setCIDSet( PDStream stream )
-    {
-        dic.setItem( COSName.CID_SET, stream );
+    public void setCIDSet(PDStream stream) {
+        dic.setItem(COSName.CID_SET, stream);
     }
 
     /**
@@ -807,15 +725,12 @@ public final class PDFontDescriptor implements COSObjectable
      *
      * @return A Panose wrapper object.
      */
-    public PDPanose getPanose()
-    {
+    public PDPanose getPanose() {
         COSDictionary style = dic.getCOSDictionary(COSName.STYLE);
-        if (style != null)
-        {
-            COSString panose = (COSString)style.getDictionaryObject(COSName.PANOSE);
+        if (style != null) {
+            COSString panose = (COSString) style.getDictionaryObject(COSName.PANOSE);
             byte[] bytes = panose.getBytes();
-            if (bytes.length >= PDPanose.LENGTH)
-            {
+            if (bytes.length >= PDPanose.LENGTH) {
                 return new PDPanose(bytes);
             }
         }

@@ -17,23 +17,22 @@
 
 package lpdf.pdfbox.pdmodel.common;
 
-import java.io.IOException;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSInteger;
+
+import java.io.IOException;
 
 /**
  * todo: JavaDoc
  *
  * @author John Hewson
  */
-public class PDIntegerNameTreeNode extends PDNameTreeNode<COSInteger>
-{
+public class PDIntegerNameTreeNode extends PDNameTreeNode<COSInteger> {
     /**
      * Constructor.
      */
-    public PDIntegerNameTreeNode()
-    {
+    public PDIntegerNameTreeNode() {
         super();
     }
 
@@ -42,20 +41,17 @@ public class PDIntegerNameTreeNode extends PDNameTreeNode<COSInteger>
      *
      * @param dic The COS dictionary.
      */
-    public PDIntegerNameTreeNode(COSDictionary dic)
-    {
+    public PDIntegerNameTreeNode(COSDictionary dic) {
         super(dic);
     }
 
     @Override
-    protected COSInteger convertCOSToPD(COSBase base) throws IOException
-    {
-        return (COSInteger)base;
+    protected COSInteger convertCOSToPD(COSBase base) throws IOException {
+        return (COSInteger) base;
     }
 
     @Override
-    protected PDIntegerNameTreeNode createChildNode( COSDictionary dic )
-    {
+    protected PDIntegerNameTreeNode createChildNode(COSDictionary dic) {
         return new PDIntegerNameTreeNode(dic);
     }
 }

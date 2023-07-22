@@ -17,26 +17,24 @@
 
 package lpdf.pdfbox.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Exposes PDFBox version.
  */
-public final class Version
-{
+public final class Version {
     private static final Logger LOG = LoggerFactory.getLogger(Version.class);
 
     private static final String PDFBOX_VERSION_PROPERTIES =
             "/lpdf/pdfbox/resources/version.properties";
 
-    private Version()
-    {
+    private Version() {
         // static helper
     }
 
@@ -45,17 +43,13 @@ public final class Version
      *
      * @return the version of PDFBox
      */
-    public static String getVersion()
-    {
+    public static String getVersion() {
         try (InputStream resourceAsStream = Version.class.getResourceAsStream(PDFBOX_VERSION_PROPERTIES);
-             InputStream is = new BufferedInputStream(resourceAsStream))
-        {
+             InputStream is = new BufferedInputStream(resourceAsStream)) {
             Properties properties = new Properties();
             properties.load(is);
             return properties.getProperty("pdfbox.version", null);
-        }
-        catch (IOException io)
-        {
+        } catch (IOException io) {
             LOG.debug("Unable to read version from properties - returning null", io);
             return null;
         }

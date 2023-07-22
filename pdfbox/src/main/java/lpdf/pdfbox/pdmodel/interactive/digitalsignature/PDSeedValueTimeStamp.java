@@ -25,15 +25,13 @@ import lpdf.pdfbox.cos.COSName;
  *
  * @author Thomas Chojecki
  */
-public class PDSeedValueTimeStamp
-{
+public class PDSeedValueTimeStamp {
     private final COSDictionary dictionary;
 
     /**
      * Default constructor.
      */
-    public PDSeedValueTimeStamp()
-    {
+    public PDSeedValueTimeStamp() {
         dictionary = new COSDictionary();
         dictionary.setDirect(true);
     }
@@ -43,8 +41,7 @@ public class PDSeedValueTimeStamp
      *
      * @param dict The signature dictionary.
      */
-    public PDSeedValueTimeStamp(COSDictionary dict)
-    {
+    public PDSeedValueTimeStamp(COSDictionary dict) {
         dictionary = dict;
         dictionary.setDirect(true);
     }
@@ -54,8 +51,7 @@ public class PDSeedValueTimeStamp
      *
      * @return The COS dictionary that matches this Java object.
      */
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -64,17 +60,16 @@ public class PDSeedValueTimeStamp
      *
      * @return the URL
      */
-    public String getURL()
-    {
+    public String getURL() {
         return dictionary.getString(COSName.URL);
     }
 
     /**
      * Sets the URL.
+     *
      * @param url the URL to be set as URL
      */
-    public void setURL(String url)
-    {
+    public void setURL(String url) {
         dictionary.setString(COSName.URL, url);
     }
 
@@ -83,8 +78,7 @@ public class PDSeedValueTimeStamp
      *
      * @return true if a timestamp is required
      */
-    public boolean isTimestampRequired()
-    {
+    public boolean isTimestampRequired() {
         return dictionary.getInt(COSName.FT, 0) != 0;
     }
 
@@ -93,8 +87,7 @@ public class PDSeedValueTimeStamp
      *
      * @param flag true if a timestamp is required
      */
-    public void setTimestampRequired(boolean flag)
-    {
+    public void setTimestampRequired(boolean flag) {
         dictionary.setInt(COSName.FT, flag ? 1 : 0);
     }
 }

@@ -16,11 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.List;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.cos.COSNumber;
@@ -29,21 +24,23 @@ import lpdf.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * @author Yegor Kozlov
  */
-class TestPDPageContentStream
-{
+class TestPDPageContentStream {
     @Test
-    void testSetCmykColors() throws IOException
-    {
-        try (PDDocument doc = new PDDocument())
-        {
+    void testSetCmykColors() throws IOException {
+        try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage();
             doc.addPage(page);
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, true))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, true)) {
                 // pass a non-stroking color in CMYK color space
                 contentStream.setNonStrokingColor(0.1f, 0.2f, 0.3f, 0.4f);
             }
@@ -57,18 +54,17 @@ class TestPDPageContentStream
             // [2] = COSFloat{0.3}
             // [3] = COSFloat{0.4}
             // [4] = PDFOperator{"k"}
-            assertEquals(0.1f, ((COSNumber)pageTokens.get(0)).floatValue());
-            assertEquals(0.2f, ((COSNumber)pageTokens.get(1)).floatValue());
-            assertEquals(0.3f, ((COSNumber)pageTokens.get(2)).floatValue());
-            assertEquals(0.4f, ((COSNumber)pageTokens.get(3)).floatValue());
+            assertEquals(0.1f, ((COSNumber) pageTokens.get(0)).floatValue());
+            assertEquals(0.2f, ((COSNumber) pageTokens.get(1)).floatValue());
+            assertEquals(0.3f, ((COSNumber) pageTokens.get(2)).floatValue());
+            assertEquals(0.4f, ((COSNumber) pageTokens.get(3)).floatValue());
             assertEquals(OperatorName.NON_STROKING_CMYK, ((Operator) pageTokens.get(4)).getName());
 
             // same as above but for PDPageContentStream#setStrokingColor
             page = new PDPage();
             doc.addPage(page);
 
-            try ( PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false)) {
                 // pass a non-stroking color in CMYK color space
                 contentStream.setStrokingColor(0.5f, 0.6f, 0.7f, 0.8f);
             }
@@ -86,20 +82,17 @@ class TestPDPageContentStream
             assertEquals(0.6f, ((COSNumber) pageTokens.get(1)).floatValue());
             assertEquals(0.7f, ((COSNumber) pageTokens.get(2)).floatValue());
             assertEquals(0.8f, ((COSNumber) pageTokens.get(3)).floatValue());
-            assertEquals(OperatorName.STROKING_COLOR_CMYK, ((Operator)pageTokens.get(4)).getName());
+            assertEquals(OperatorName.STROKING_COLOR_CMYK, ((Operator) pageTokens.get(4)).getName());
         }
     }
 
     @Test
-    void testSetRGBandGColors() throws IOException
-    {
-        try (PDDocument doc = new PDDocument())
-        {
+    void testSetRGBandGColors() throws IOException {
+        try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage();
             doc.addPage(page);
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, true))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, true)) {
                 // pass a non-stroking color in RGB and Gray color space
                 contentStream.setNonStrokingColor(0.1f, 0.2f, 0.3f);
                 contentStream.setNonStrokingColor(0.8f);
@@ -119,8 +112,7 @@ class TestPDPageContentStream
             page = new PDPage();
             doc.addPage(page);
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false))
-            {
+            try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, false)) {
                 // pass a non-stroking color in RGB and Gray color space
                 contentStream.setStrokingColor(0.5f, 0.6f, 0.7f);
                 contentStream.setStrokingColor(0.8f);
@@ -144,8 +136,7 @@ class TestPDPageContentStream
      * @throws IOException
      */
     @Test
-    void testMissingContentStream() throws IOException
-    {
+    void testMissingContentStream() throws IOException {
         PDPage page = new PDPage();
         PDFStreamParser parser = new PDFStreamParser(page);
         List<Object> tokens = parser.parse();
@@ -158,10 +149,8 @@ class TestPDPageContentStream
      * @throws IOException
      */
     @Test
-    void testCloseContract() throws IOException
-    {
-        try (PDDocument doc = new PDDocument())
-        {
+    void testCloseContract() throws IOException {
+        try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage();
             doc.addPage(page);
             PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.OVERWRITE, true);
@@ -176,10 +165,8 @@ class TestPDPageContentStream
      * @throws IOException
      */
     @Test
-    void testGeneralGraphicStateOperatorTextMode() throws IOException
-    {
-        try (PDDocument doc = new PDDocument())
-        {
+    void testGeneralGraphicStateOperatorTextMode() throws IOException {
+        try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage();
             doc.addPage(page);
             PDPageContentStream contentStream = new PDPageContentStream(doc, page);
@@ -191,7 +178,7 @@ class TestPDPageContentStream
             // w
             contentStream.setLineWidth(10f);
             // d
-            contentStream.setLineDashPattern(new float[] { 2, 1 }, 0f);
+            contentStream.setLineDashPattern(new float[]{2, 1}, 0f);
             // M
             contentStream.setMiterLimit(1.0f);
             // gs
@@ -199,9 +186,7 @@ class TestPDPageContentStream
             // ri, i are not supported with a specific setter
             contentStream.endText();
             contentStream.close();
-        }
-        catch (IllegalArgumentException exception)
-        {
+        } catch (IllegalArgumentException exception) {
             fail(exception);
         }
     }

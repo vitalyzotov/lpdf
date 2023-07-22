@@ -21,8 +21,7 @@ package lpdf.fontbox.cmap;
  *
  * @author Ben Litchfield
  */
-public class CodespaceRange
-{
+public class CodespaceRange {
     private final int[] start;
     private final int[] end;
     private final int codeLength;
@@ -36,24 +35,19 @@ public class CodespaceRange
      * low byte has to be within 0x40 and 0xFC
      *
      * @param startBytes start of the range
-     * @param endBytes start of the range
+     * @param endBytes   start of the range
      */
-    public CodespaceRange(byte[] startBytes, byte[] endBytes)
-    {
+    public CodespaceRange(byte[] startBytes, byte[] endBytes) {
         byte[] correctedStartBytes = startBytes;
-        if (startBytes.length != endBytes.length && startBytes.length == 1 && startBytes[0] == 0)
-        {
+        if (startBytes.length != endBytes.length && startBytes.length == 1 && startBytes[0] == 0) {
             correctedStartBytes = new byte[endBytes.length];
-        }
-        else if (startBytes.length != endBytes.length)
-        {
+        } else if (startBytes.length != endBytes.length) {
             throw new IllegalArgumentException(
                     "The start and the end values must not have different lengths.");
         }
         start = new int[correctedStartBytes.length];
         end = new int[endBytes.length];
-        for (int i = 0; i < correctedStartBytes.length; i++)
-        {
+        for (int i = 0; i < correctedStartBytes.length; i++) {
             start[i] = correctedStartBytes[i] & 0xFF;
             end[i] = endBytes[i] & 0xFF;
         }
@@ -65,8 +59,7 @@ public class CodespaceRange
      *
      * @return the code length
      */
-    public int getCodeLength()
-    {
+    public int getCodeLength() {
         return codeLength;
     }
 
@@ -74,34 +67,27 @@ public class CodespaceRange
      * Returns true if the given code bytes match this codespace range.
      *
      * @param code the code bytes to be matched
-     *
      * @return true if the given code bytes match this codespace range
      */
-    public boolean matches(byte[] code)
-    {
+    public boolean matches(byte[] code) {
         return isFullMatch(code, code.length);
     }
 
     /**
      * Returns true if the given number of code bytes match this codespace range.
      *
-     * @param code the code bytes to be matched
+     * @param code    the code bytes to be matched
      * @param codeLen the code length to be used for matching
-     *
      * @return true if the given number of code bytes match this codespace range
      */
-    public boolean isFullMatch(byte[] code, int codeLen)
-    {
+    public boolean isFullMatch(byte[] code, int codeLen) {
         // code must be the same length as the bounding codes
-        if (codeLength != codeLen)
-        {
+        if (codeLength != codeLen) {
             return false;
         }
-        for (int i = 0; i < codeLength; i++)
-        {
+        for (int i = 0; i < codeLength; i++) {
             int codeAsInt = code[i] & 0xFF;
-            if (codeAsInt < start[i] || codeAsInt > end[i])
-            {
+            if (codeAsInt < start[i] || codeAsInt > end[i]) {
                 return false;
             }
         }

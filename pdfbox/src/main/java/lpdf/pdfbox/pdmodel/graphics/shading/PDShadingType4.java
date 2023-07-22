@@ -16,10 +16,10 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Resources for a shading type 4 (Free-Form Gouraud-Shaded Triangle Mesh).

@@ -17,14 +17,6 @@
 
 package lpdf.pdfbox.it.gsub;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import lpdf.fontbox.ttf.CmapLookup;
 import lpdf.fontbox.ttf.gsub.GsubWorker;
 import lpdf.fontbox.ttf.gsub.GsubWorkerFactory;
@@ -35,15 +27,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Integration test for {@link GsubWorkerForBengali}. Has various combinations of glyphs to test
  * proper working of the GSUB system.
  *
  * @author Palash Ray
- *
  */
-class GsubWorkerForBengaliTest
-{
+class GsubWorkerForBengaliTest {
 
     private static final String LOHIT_BENGALI_TTF = "/lpdf/pdfbox/ttf/Lohit-Bengali.ttf";
 
@@ -51,10 +49,8 @@ class GsubWorkerForBengaliTest
     private GsubWorker gsubWorkerForBengali;
 
     @BeforeEach
-    public void init() throws IOException
-    {
-        try (PDDocument doc = new PDDocument())
-        {
+    public void init() throws IOException {
+        try (PDDocument doc = new PDDocument()) {
             PDType0Font font = PDType0Font.load(doc,
                     GsubWorkerForBengaliTest.class.getResourceAsStream(LOHIT_BENGALI_TTF), true);
 
@@ -64,8 +60,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_simple_hosshoi_kar()
-    {
+    void testApplyTransforms_simple_hosshoi_kar() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(56, 102, 91);
 
@@ -77,8 +72,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_ja_phala()
-    {
+    void testApplyTransforms_ja_phala() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(89, 156, 101, 97);
 
@@ -90,8 +84,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_e_kar()
-    {
+    void testApplyTransforms_e_kar() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(438, 89, 94, 101);
 
@@ -103,8 +96,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_o_kar()
-    {
+    void testApplyTransforms_o_kar() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(108, 89, 101, 97);
 
@@ -116,8 +108,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Disabled
-    void testApplyTransforms_o_kar_repeated_1_not_working_yet()
-    {
+    void testApplyTransforms_o_kar_repeated_1_not_working_yet() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(108, 96, 101, 108, 94, 101);
 
@@ -129,8 +120,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Disabled
-    void testApplyTransforms_o_kar_repeated_2_not_working_yet()
-    {
+    void testApplyTransforms_o_kar_repeated_2_not_working_yet() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(108, 73, 101, 108, 77, 101);
 
@@ -142,8 +132,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_ou_kar()
-    {
+    void testApplyTransforms_ou_kar() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(108, 91, 114, 94);
 
@@ -155,8 +144,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_oi_kar()
-    {
+    void testApplyTransforms_oi_kar() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(439, 89, 93);
 
@@ -168,8 +156,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_kha_e_murddhana_swa_e_khiwa()
-    {
+    void testApplyTransforms_kha_e_murddhana_swa_e_khiwa() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(167, 103, 438, 93, 93);
 
@@ -181,8 +168,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_ra_phala()
-    {
+    void testApplyTransforms_ra_phala() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(274, 82);
 
@@ -194,8 +180,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_ref()
-    {
+    void testApplyTransforms_ref() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(85, 104, 440, 82);
 
@@ -207,8 +192,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_ra_e_hosshu()
-    {
+    void testApplyTransforms_ra_e_hosshu() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(352, 108, 87, 101);
 
@@ -220,8 +204,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_la_e_la_e()
-    {
+    void testApplyTransforms_la_e_la_e() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(67, 108, 369, 101, 94);
 
@@ -233,8 +216,7 @@ class GsubWorkerForBengaliTest
     }
 
     @Test
-    void testApplyTransforms_khanda_ta()
-    {
+    void testApplyTransforms_khanda_ta() {
         // given
         List<Integer> glyphsAfterGsub = Arrays.asList(98, 78, 101, 113);
 
@@ -245,12 +227,10 @@ class GsubWorkerForBengaliTest
         assertEquals(glyphsAfterGsub, result);
     }
 
-    private List<Integer> getGlyphIds(String word)
-    {
+    private List<Integer> getGlyphIds(String word) {
         List<Integer> originalGlyphIds = new ArrayList<>();
 
-        for (char unicodeChar : word.toCharArray())
-        {
+        for (char unicodeChar : word.toCharArray()) {
             int glyphId = cmapLookup.getGlyphId(unicodeChar);
             assertTrue(glyphId > 0);
             originalGlyphIds.add(glyphId);

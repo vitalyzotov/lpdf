@@ -25,8 +25,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public abstract class COSBase implements COSObjectable
-{
+public abstract class COSBase implements COSObjectable {
 
     private boolean direct;
     private COSObjectKey key;
@@ -34,8 +33,7 @@ public abstract class COSBase implements COSObjectable
     /**
      * Constructor.
      */
-    public COSBase()
-    {
+    public COSBase() {
     }
 
     /**
@@ -44,8 +42,7 @@ public abstract class COSBase implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return this;
     }
 
@@ -63,8 +60,7 @@ public abstract class COSBase implements COSObjectable
      *
      * @return the state
      */
-    public boolean isDirect()
-    {
+    public boolean isDirect() {
         return direct;
     }
 
@@ -73,8 +69,7 @@ public abstract class COSBase implements COSObjectable
      *
      * @param direct set it true, for writing direct object
      */
-    public void setDirect(boolean direct)
-    {
+    public void setDirect(boolean direct) {
         this.direct = direct;
     }
 
@@ -83,8 +78,7 @@ public abstract class COSBase implements COSObjectable
      *
      * @return the COSObjectKey
      */
-    public COSObjectKey getKey()
-    {
+    public COSObjectKey getKey() {
         return key;
     }
 
@@ -93,8 +87,7 @@ public abstract class COSBase implements COSObjectable
      *
      * @param key the COSObjectKey of the indirect object
      */
-    public void setKey(COSObjectKey key)
-    {
+    public void setKey(COSObjectKey key) {
         this.key = key;
     }
 

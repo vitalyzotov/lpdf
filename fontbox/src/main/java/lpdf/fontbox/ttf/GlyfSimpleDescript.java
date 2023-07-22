@@ -18,16 +18,16 @@
  */
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics. see
  * http://xmlgraphics.apache.org/batik/ for further details.
  */
-public class GlyfSimpleDescript extends GlyfDescript
-{
+public class GlyfSimpleDescript extends GlyfDescript {
 
     /**
      * Log instance.
@@ -45,8 +45,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      *
      * @throws IOException is thrown if something went wrong
      */
-    GlyfSimpleDescript()
-    {
+    GlyfSimpleDescript() {
         super((short) 0);
         pointCount = 0;
     }
@@ -55,12 +54,11 @@ public class GlyfSimpleDescript extends GlyfDescript
      * Constructor.
      *
      * @param numberOfContours number of contours
-     * @param bais the stream to be read
-     * @param x0 the initial X-position
+     * @param bais             the stream to be read
+     * @param x0               the initial X-position
      * @throws IOException is thrown if something went wrong
      */
-    GlyfSimpleDescript(short numberOfContours, TTFDataStream bais, short x0) throws IOException
-    {
+    GlyfSimpleDescript(short numberOfContours, TTFDataStream bais, short x0) throws IOException {
         super(numberOfContours);
 
         /*
@@ -68,8 +66,7 @@ public class GlyfSimpleDescript extends GlyfDescript
          * "If a glyph has zero contours, it need not have any glyph data." set the pointCount to zero to initialize
          * attributes and avoid nullpointer but maybe there shouldn't have GlyphDescript in the GlyphData?
          */
-        if (numberOfContours == 0)
-        {
+        if (numberOfContours == 0) {
             pointCount = 0;
             return;
         }
@@ -78,8 +75,7 @@ public class GlyfSimpleDescript extends GlyfDescript
         endPtsOfContours = bais.readUnsignedShortArray(numberOfContours);
 
         int lastEndPt = endPtsOfContours[numberOfContours - 1];
-        if (numberOfContours == 1 && lastEndPt == 65535)
-        {
+        if (numberOfContours == 1 && lastEndPt == 65535) {
             // PDFBOX-2939: assume an empty glyph
             pointCount = 0;
             return;
@@ -101,8 +97,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public int getEndPtOfContours(int i)
-    {
+    public int getEndPtOfContours(int i) {
         return endPtsOfContours[i];
     }
 
@@ -110,8 +105,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public byte getFlags(int i)
-    {
+    public byte getFlags(int i) {
         return flags[i];
     }
 
@@ -119,8 +113,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public short getXCoordinate(int i)
-    {
+    public short getXCoordinate(int i) {
         return xCoordinates[i];
     }
 
@@ -128,8 +121,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public short getYCoordinate(int i)
-    {
+    public short getYCoordinate(int i) {
         return yCoordinates[i];
     }
 
@@ -137,8 +129,7 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public boolean isComposite()
-    {
+    public boolean isComposite() {
         return false;
     }
 
@@ -146,58 +137,40 @@ public class GlyfSimpleDescript extends GlyfDescript
      * {@inheritDoc}
      */
     @Override
-    public int getPointCount()
-    {
+    public int getPointCount() {
         return pointCount;
     }
 
     /**
      * The table is stored as relative values, but we'll store them as absolutes.
      */
-    private void readCoords(int count, TTFDataStream bais, short x0) throws IOException
-    {
+    private void readCoords(int count, TTFDataStream bais, short x0) throws IOException {
         short x = x0;
         short y = 0;
-        for (int i = 0; i < count; i++)
-        {
-            if ((flags[i] & X_DUAL) != 0)
-            {
-                if ((flags[i] & X_SHORT_VECTOR) != 0)
-                {
+        for (int i = 0; i < count; i++) {
+            if ((flags[i] & X_DUAL) != 0) {
+                if ((flags[i] & X_SHORT_VECTOR) != 0) {
                     x += (short) bais.readUnsignedByte();
                 }
-            }
-            else
-            {
-                if ((flags[i] & X_SHORT_VECTOR) != 0)
-                {
+            } else {
+                if ((flags[i] & X_SHORT_VECTOR) != 0) {
                     x -= (short) bais.readUnsignedByte();
-                }
-                else
-                {
+                } else {
                     x += bais.readSignedShort();
                 }
             }
             xCoordinates[i] = x;
         }
 
-        for (int i = 0; i < count; i++)
-        {
-            if ((flags[i] & Y_DUAL) != 0)
-            {
-                if ((flags[i] & Y_SHORT_VECTOR) != 0)
-                {
+        for (int i = 0; i < count; i++) {
+            if ((flags[i] & Y_DUAL) != 0) {
+                if ((flags[i] & Y_SHORT_VECTOR) != 0) {
                     y += (short) bais.readUnsignedByte();
                 }
-            }
-            else
-            {
-                if ((flags[i] & Y_SHORT_VECTOR) != 0)
-                {
+            } else {
+                if ((flags[i] & Y_SHORT_VECTOR) != 0) {
                     y -= (short) bais.readUnsignedByte();
-                }
-                else
-                {
+                } else {
                     y += bais.readSignedShort();
                 }
             }
@@ -208,18 +181,13 @@ public class GlyfSimpleDescript extends GlyfDescript
     /**
      * The flags are run-length encoded.
      */
-    private void readFlags(int flagCount, TTFDataStream bais) throws IOException
-    {
-        for (int index = 0; index < flagCount; index++)
-        {
+    private void readFlags(int flagCount, TTFDataStream bais) throws IOException {
+        for (int index = 0; index < flagCount; index++) {
             flags[index] = (byte) bais.readUnsignedByte();
-            if ((flags[index] & REPEAT) != 0)
-            {
+            if ((flags[index] & REPEAT) != 0) {
                 int repeats = bais.readUnsignedByte();
-                for (int i = 1; i <= repeats; i++)
-                {
-                    if (index + i >= flags.length)
-                    {
+                for (int i = 1; i <= repeats; i++) {
+                    if (index + i >= flags.length) {
                         throw new IOException(
                                 "repeat count (" + repeats + ") higher than remaining space");
                     }

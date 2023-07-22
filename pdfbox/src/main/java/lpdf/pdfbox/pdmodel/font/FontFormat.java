@@ -22,8 +22,7 @@ package lpdf.pdfbox.pdmodel.font;
  *
  * @author John Hewson
  */
-public enum FontFormat
-{
+public enum FontFormat {
     /**
      * TrueType font.
      */

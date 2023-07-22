@@ -16,6 +16,11 @@
  */
 package lpdf.pdfbox.filter;
 
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.cos.COSDictionary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,10 +28,6 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.io.IOUtils;
 
 /**
  * Decompresses data encoded using the zlib/deflate compression method,
@@ -35,22 +36,17 @@ import lpdf.io.IOUtils;
  * @author Ben Litchfield
  * @author Marcel Kammer
  */
-final class FlateFilter extends Filter
-{
+final class FlateFilter extends Filter {
     private static final Logger LOG = LoggerFactory.getLogger(FlateFilter.class);
 
     @Override
     public DecodeResult decode(InputStream encoded, OutputStream decoded,
-                                         COSDictionary parameters, int index) throws IOException
-    {
+                               COSDictionary parameters, int index) throws IOException {
         final COSDictionary decodeParams = getDecodeParams(parameters, index);
 
-        try
-        {
+        try {
             decompress(encoded, Predictor.wrapPredictor(decoded, decodeParams));
-        }
-        catch (DataFormatException e)
-        {
+        } catch (DataFormatException e) {
             // if the stream is corrupt a DataFormatException may occur
             LOG.error("FlateFilter: stop reading corrupt stream due to a DataFormatException");
 
@@ -62,73 +58,57 @@ final class FlateFilter extends Filter
 
     // Use Inflater instead of InflateInputStream to avoid an EOFException due to a probably
     // missing Z_STREAM_END, see PDFBOX-1232 for details
-    private void decompress(InputStream in, OutputStream out) throws IOException, DataFormatException 
-    { 
+    private void decompress(InputStream in, OutputStream out) throws IOException, DataFormatException {
         byte[] buf = new byte[2048];
         // skip zlib header
         in.read();
         in.read();
-        int read = in.read(buf); 
-        if (read > 0) 
-        { 
+        int read = in.read(buf);
+        if (read > 0) {
             // use nowrap mode to bypass zlib-header and checksum to avoid a DataFormatException
-            Inflater inflater = new Inflater(true); 
-            inflater.setInput(buf,0,read);
+            Inflater inflater = new Inflater(true);
+            inflater.setInput(buf, 0, read);
             byte[] res = new byte[1024];
             boolean dataWritten = false;
-            try
-            {
-                while (true) 
-                { 
+            try {
+                while (true) {
                     int resRead = 0;
-                    try
-                    {
+                    try {
                         resRead = inflater.inflate(res);
-                    }
-                    catch(DataFormatException exception)
-                    {
-                        if (dataWritten)
-                        {
+                    } catch (DataFormatException exception) {
+                        if (dataWritten) {
                             // some data could be read -> don't throw an exception
                             LOG.warn("FlateFilter: premature end of stream due to a DataFormatException");
                             break;
-                        }
-                        else
-                        {
+                        } else {
                             // nothing could be read -> re-throw exception
                             throw exception;
                         }
                     }
-                    if (resRead != 0) 
-                    { 
-                        out.write(res,0,resRead);
+                    if (resRead != 0) {
+                        out.write(res, 0, resRead);
                         dataWritten = true;
-                        continue; 
-                    } 
-                    if (inflater.finished() || inflater.needsDictionary() || in.available() == 0) 
-                    {
+                        continue;
+                    }
+                    if (inflater.finished() || inflater.needsDictionary() || in.available() == 0) {
                         break;
-                    } 
-                    read = in.read(buf); 
-                    inflater.setInput(buf,0,read);
+                    }
+                    read = in.read(buf);
+                    inflater.setInput(buf, 0, read);
                 }
-            }
-            finally
-            {
+            } finally {
                 inflater.end();
             }
         }
         out.flush();
     }
-    
+
     @Override
     protected void encode(InputStream input, OutputStream encoded, COSDictionary parameters)
-            throws IOException
-    {
+            throws IOException {
         int compressionLevel = getCompressionLevel();
         Deflater deflater = new Deflater(compressionLevel);
-        try (DeflaterOutputStream out = new DeflaterOutputStream(encoded,deflater))
-        {
+        try (DeflaterOutputStream out = new DeflaterOutputStream(encoded, deflater)) {
             IOUtils.copy(input, out);
         }
         encoded.flush();

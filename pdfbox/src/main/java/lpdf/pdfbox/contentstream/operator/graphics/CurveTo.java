@@ -17,14 +17,14 @@
 package lpdf.pdfbox.contentstream.operator.graphics;
 
 import lpdf.harmony.awt.geom.Point2D;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;

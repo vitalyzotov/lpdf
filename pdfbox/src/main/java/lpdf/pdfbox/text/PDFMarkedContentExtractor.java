@@ -16,29 +16,28 @@
  */
 package lpdf.pdfbox.text;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Deque;
-
-import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
-import lpdf.pdfbox.pdmodel.graphics.PDXObject;
 import lpdf.pdfbox.contentstream.operator.markedcontent.BeginMarkedContentSequence;
 import lpdf.pdfbox.contentstream.operator.markedcontent.BeginMarkedContentSequenceWithProperties;
 import lpdf.pdfbox.contentstream.operator.markedcontent.DrawObject;
 import lpdf.pdfbox.contentstream.operator.markedcontent.EndMarkedContentSequence;
+import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
+import lpdf.pdfbox.pdmodel.graphics.PDXObject;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is an stream engine to extract the marked content of a pdf.
  *
  * @author Johannes Koch
  */
-public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
-{
+public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine {
     private boolean suppressDuplicateOverlappingText = true;
     private final List<PDMarkedContent> markedContents = new ArrayList<>();
     private final Deque<PDMarkedContent> currentMarkedContents = new ArrayDeque<>();
@@ -47,8 +46,7 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
     /**
      * Instantiate a new PDFTextStripper object.
      */
-    public PDFMarkedContentExtractor()
-    {
+    public PDFMarkedContentExtractor() {
         this(null);
     }
 
@@ -57,8 +55,7 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
      *
      * @param encoding The encoding that the output will be written in.
      */
-    public PDFMarkedContentExtractor(String encoding)
-    {
+    public PDFMarkedContentExtractor(String encoding) {
         addOperator(new BeginMarkedContentSequenceWithProperties(this));
         addOperator(new BeginMarkedContentSequence(this));
         addOperator(new EndMarkedContentSequence(this));
@@ -70,8 +67,7 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
     /**
      * @return the suppressDuplicateOverlappingText setting.
      */
-    public boolean isSuppressDuplicateOverlappingText()
-    {
+    public boolean isSuppressDuplicateOverlappingText() {
         return suppressDuplicateOverlappingText;
     }
 
@@ -83,37 +79,30 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
      *
      * @param suppressDuplicateOverlappingText The suppressDuplicateOverlappingText setting to set.
      */
-    public void setSuppressDuplicateOverlappingText(boolean suppressDuplicateOverlappingText)
-    {
+    public void setSuppressDuplicateOverlappingText(boolean suppressDuplicateOverlappingText) {
         this.suppressDuplicateOverlappingText = suppressDuplicateOverlappingText;
     }
 
     /**
      * This will determine of two floating point numbers are within a specified variance.
      *
-     * @param first The first number to compare to.
-     * @param second The second number to compare to.
+     * @param first    The first number to compare to.
+     * @param second   The second number to compare to.
      * @param variance The allowed variance.
      */
-    private boolean within( float first, float second, float variance )
-    {
+    private boolean within(float first, float second, float variance) {
         return second > first - variance && second < first + variance;
     }
 
     @Override
-    public void beginMarkedContentSequence(COSName tag, COSDictionary properties)
-    {
+    public void beginMarkedContentSequence(COSName tag, COSDictionary properties) {
         PDMarkedContent markedContent = PDMarkedContent.create(tag, properties);
-        if (this.currentMarkedContents.isEmpty())
-        {
+        if (this.currentMarkedContents.isEmpty()) {
             this.markedContents.add(markedContent);
-        }
-        else
-        {
+        } else {
             PDMarkedContent currentMarkedContent =
-                this.currentMarkedContents.peek();
-            if (currentMarkedContent != null)
-            {
+                    this.currentMarkedContents.peek();
+            if (currentMarkedContent != null) {
                 currentMarkedContent.addMarkedContent(markedContent);
             }
         }
@@ -121,18 +110,14 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
     }
 
     @Override
-    public void endMarkedContentSequence()
-    {
-        if (!this.currentMarkedContents.isEmpty())
-        {
+    public void endMarkedContentSequence() {
+        if (!this.currentMarkedContents.isEmpty()) {
             this.currentMarkedContents.pop();
         }
     }
 
-    public void xobject(PDXObject xobject)
-    {
-        if (!this.currentMarkedContents.isEmpty())
-        {
+    public void xobject(PDXObject xobject) {
+        if (!this.currentMarkedContents.isEmpty()) {
             this.currentMarkedContents.peek().addXObject(xobject);
         }
     }
@@ -145,11 +130,9 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
      * @param text The text to process.
      */
     @Override
-    protected void processTextPosition( TextPosition text )
-    {
+    protected void processTextPosition(TextPosition text) {
         boolean showCharacter = true;
-        if( this.suppressDuplicateOverlappingText )
-        {
+        if (this.suppressDuplicateOverlappingText) {
             showCharacter = false;
             String textCharacter = text.getUnicode();
             float textX = text.getX();
@@ -169,33 +152,29 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
             // character).
             //
             boolean suppressCharacter = false;
-            float tolerance = (text.getWidth()/textCharacter.length())/3.0f;
-            for (TextPosition sameTextCharacter : sameTextCharacters)
-            {
+            float tolerance = (text.getWidth() / textCharacter.length()) / 3.0f;
+            for (TextPosition sameTextCharacter : sameTextCharacters) {
                 String charCharacter = sameTextCharacter.getUnicode();
                 float charX = sameTextCharacter.getX();
                 float charY = sameTextCharacter.getY();
                 //only want to suppress
-                if( charCharacter != null &&
+                if (charCharacter != null &&
                         //charCharacter.equals( textCharacter ) &&
-                        within( charX, textX, tolerance ) &&
-                        within( charY,
+                        within(charX, textX, tolerance) &&
+                        within(charY,
                                 textY,
-                                tolerance ) )
-                {
+                                tolerance)) {
                     suppressCharacter = true;
                     break;
                 }
             }
-            if( !suppressCharacter )
-            {
-                sameTextCharacters.add( text );
+            if (!suppressCharacter) {
+                sameTextCharacters.add(text);
                 showCharacter = true;
             }
         }
 
-        if( showCharacter )
-        {
+        if (showCharacter) {
             List<TextPosition> textList = new ArrayList<>();
 
             /* In the wild, some PDF encoded documents put diacritics (accents on
@@ -204,43 +183,34 @@ public class PDFMarkedContentExtractor extends LegacyPDFStreamEngine
              * we need to do the overlay. This code recombines the diacritic with
              * its associated character if the two are consecutive.
              */
-            if(textList.isEmpty())
-            {
+            if (textList.isEmpty()) {
                 textList.add(text);
-            }
-            else
-            {
+            } else {
                 /* test if we overlap the previous entry.
                  * Note that we are making an assumption that we need to only look back
                  * one TextPosition to find what we are overlapping.
                  * This may not always be true. */
-                TextPosition previousTextPosition = textList.get(textList.size()-1);
-                if(text.isDiacritic() && previousTextPosition.contains(text))
-                {
+                TextPosition previousTextPosition = textList.get(textList.size() - 1);
+                if (text.isDiacritic() && previousTextPosition.contains(text)) {
                     previousTextPosition.mergeDiacritic(text);
                 }
                 /* If the previous TextPosition was the diacritic, merge it into this
                  * one and remove it from the list. */
-                else if(previousTextPosition.isDiacritic() && text.contains(previousTextPosition))
-                {
+                else if (previousTextPosition.isDiacritic() && text.contains(previousTextPosition)) {
                     text.mergeDiacritic(previousTextPosition);
-                    textList.remove(textList.size()-1);
+                    textList.remove(textList.size() - 1);
                     textList.add(text);
-                }
-                else
-                {
+                } else {
                     textList.add(text);
                 }
             }
-            if (!this.currentMarkedContents.isEmpty())
-            {
+            if (!this.currentMarkedContents.isEmpty()) {
                 this.currentMarkedContents.peek().addText(text);
             }
         }
     }
 
-    public List<PDMarkedContent> getMarkedContents()
-    {
+    public List<PDMarkedContent> getMarkedContents() {
         return this.markedContents;
     }
 }

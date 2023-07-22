@@ -16,9 +16,9 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
+import lpdf.pdfbox.cos.COSDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lpdf.pdfbox.cos.COSDictionary;
 
 /**
  * Common resources for shading types 6 and 7

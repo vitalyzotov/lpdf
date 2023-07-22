@@ -17,10 +17,10 @@
 
 package lpdf.fontbox.ttf.table.gsub;
 
-import java.util.Arrays;
-
 import lpdf.fontbox.ttf.table.common.CoverageTable;
 import lpdf.fontbox.ttf.table.common.LookupSubTable;
+
+import java.util.Arrays;
 
 /**
  * This class is a part of the <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/gsub">GSUB — Glyph
@@ -31,33 +31,27 @@ import lpdf.fontbox.ttf.table.common.LookupSubTable;
  * Substitution Format 2</a>.
  *
  * @author Palash Ray
- *
  */
-public class LookupTypeSingleSubstFormat2 extends LookupSubTable
-{
+public class LookupTypeSingleSubstFormat2 extends LookupSubTable {
     private final int[] substituteGlyphIDs;
 
     public LookupTypeSingleSubstFormat2(int substFormat, CoverageTable coverageTable,
-            int[] substituteGlyphIDs)
-    {
+                                        int[] substituteGlyphIDs) {
         super(substFormat, coverageTable);
         this.substituteGlyphIDs = substituteGlyphIDs;
     }
 
     @Override
-    public int doSubstitution(int gid, int coverageIndex)
-    {
+    public int doSubstitution(int gid, int coverageIndex) {
         return coverageIndex < 0 ? gid : substituteGlyphIDs[coverageIndex];
     }
 
-    public int[] getSubstituteGlyphIDs()
-    {
+    public int[] getSubstituteGlyphIDs() {
         return substituteGlyphIDs;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(
                 "LookupTypeSingleSubstFormat2[substFormat=%d,substituteGlyphIDs=%s]",
                 getSubstFormat(), Arrays.toString(substituteGlyphIDs));

@@ -24,25 +24,21 @@ import lpdf.fontbox.encoding.Encoding;
  *
  * @author John Hewson
  */
-public abstract class CFFEncoding extends Encoding
-{
+public abstract class CFFEncoding extends Encoding {
     /**
      * Package-private constructor for subclasses.
      */
-    CFFEncoding()
-    {
+    CFFEncoding() {
     }
 
     /**
      * Adds a new code/SID combination to the encoding.
      *
      * @param code the given code
-     * @param sid the given SID
+     * @param sid  the given SID
      * @param name glyph name
-     *
      */
-    public void add(int code, int sid, String name)
-    {
+    public void add(int code, int sid, String name) {
         addCharacterEncoding(code, name);
     }
 
@@ -50,11 +46,9 @@ public abstract class CFFEncoding extends Encoding
      * For use by subclasses only.
      *
      * @param code the given code
-     * @param sid the given SID
-     *
+     * @param sid  the given SID
      */
-    protected void add(int code, int sid)
-    {
+    protected void add(int code, int sid) {
         addCharacterEncoding(code, CFFStandardString.getName(sid));
     }
 }

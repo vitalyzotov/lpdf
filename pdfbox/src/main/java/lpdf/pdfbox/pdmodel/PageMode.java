@@ -22,32 +22,40 @@ package lpdf.pdfbox.pdmodel;
  *
  * @author John Hewson
  */
-public enum PageMode
-{
-    /** Neither the outline nor the thumbnails are displayed. */
+public enum PageMode {
+    /**
+     * Neither the outline nor the thumbnails are displayed.
+     */
     USE_NONE("UseNone"),
 
-    /** Show bookmarks when pdf is opened. */
+    /**
+     * Show bookmarks when pdf is opened.
+     */
     USE_OUTLINES("UseOutlines"),
 
-    /** Show thumbnails when pdf is opened. */
+    /**
+     * Show thumbnails when pdf is opened.
+     */
     USE_THUMBS("UseThumbs"),
 
-    /** Full screen mode with no menu bar, window controls. */
+    /**
+     * Full screen mode with no menu bar, window controls.
+     */
     FULL_SCREEN("FullScreen"),
 
-    /** Optional content group panel is visible when opened. */
+    /**
+     * Optional content group panel is visible when opened.
+     */
     USE_OPTIONAL_CONTENT("UseOC"),
 
-    /** Attachments panel is visible. */
+    /**
+     * Attachments panel is visible.
+     */
     USE_ATTACHMENTS("UseAttachments");
 
-    public static PageMode fromString(String value)
-    {
-        for (PageMode instance : PageMode.values())
-        {
-            if (instance.value.equals(value))
-            {
+    public static PageMode fromString(String value) {
+        for (PageMode instance : PageMode.values()) {
+            if (instance.value.equals(value)) {
                 return instance;
             }
         }
@@ -56,8 +64,7 @@ public enum PageMode
 
     private final String value;
 
-    PageMode(String value)
-    {
+    PageMode(String value) {
         this.value = value;
     }
 
@@ -66,8 +73,7 @@ public enum PageMode
      *
      * @return the string value
      */
-    public String stringValue()
-    {
+    public String stringValue() {
         return value;
     }
 }

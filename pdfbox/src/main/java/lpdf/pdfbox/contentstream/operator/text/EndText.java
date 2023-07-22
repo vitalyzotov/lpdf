@@ -16,30 +16,27 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * ET: End text.
  *
  * @author Laurent Huault
  */
-public class EndText extends OperatorProcessor
-{
-    public EndText(PDFStreamEngine context)
-    {
+public class EndText extends OperatorProcessor {
+    public EndText(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDFStreamEngine context = getContext();
         context.setTextMatrix(null);
         context.setTextLineMatrix(null);
@@ -47,8 +44,7 @@ public class EndText extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.END_TEXT;
     }
 }

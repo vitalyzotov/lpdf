@@ -18,6 +18,7 @@
 package lpdf.fontbox.type1;
 
 import lpdf.fontbox.cff.Type1CharString;
+
 import java.io.IOException;
 
 /**
@@ -25,8 +26,7 @@ import java.io.IOException;
  *
  * @author John Hewson
  */
-public interface Type1CharStringReader
-{
+public interface Type1CharStringReader {
     /**
      * Returns the Type 1 CharString for the character with the given name.
      *

@@ -24,14 +24,12 @@ import java.io.InputStream;
  *
  * @author Thomas Chojecki
  */
-public interface SignatureInterface
-{
+public interface SignatureInterface {
     /**
      * Creates a cms signature for the given content
      *
      * @param content is the content as a (Filter)InputStream
      * @return signature as a byte array
-     *
      * @throws IOException if the signature could not be created
      */
     byte[] sign(InputStream content) throws IOException;

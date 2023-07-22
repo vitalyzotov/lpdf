@@ -16,34 +16,31 @@
  */
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.io.RandomAccessRead;
 import lpdf.io.RandomAccessReadBufferedFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * @author Vladimir Plizga
  */
-class GlyfCompositeDescriptTest
-{
+class GlyfCompositeDescriptTest {
 
     @Test
     @DisplayName("getComponents() method returns read-only list of all glyph components")
-    void getComponentsView() throws IOException
-    {
+    void getComponentsView() throws IOException {
         // given
         OTFParser otfParser = new OTFParser();
         String fontPath = "src/test/resources/ttf/LiberationSans-Regular.ttf";
         OpenTypeFont font;
-        try (RandomAccessRead fontFile = new RandomAccessReadBufferedFile(fontPath))
-        {
+        try (RandomAccessRead fontFile = new RandomAccessReadBufferedFile(fontPath)) {
             font = otfParser.parse(fontFile);
         }
         GlyphTable glyphTable = font.getGlyph();

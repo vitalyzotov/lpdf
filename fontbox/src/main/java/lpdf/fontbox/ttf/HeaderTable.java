@@ -24,8 +24,7 @@ import java.util.Calendar;
  *
  * @author Ben Litchfield
  */
-public class HeaderTable extends TTFTable
-{
+public class HeaderTable extends TTFTable {
     /**
      * Tag to identify this table.
      */
@@ -59,21 +58,19 @@ public class HeaderTable extends TTFTable
     private short indexToLocFormat;
     private short glyphDataFormat;
 
-    HeaderTable()
-    {
+    HeaderTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.read32Fixed();
         fontRevision = data.read32Fixed();
         checkSumAdjustment = data.readUnsignedInt();
@@ -93,242 +90,242 @@ public class HeaderTable extends TTFTable
         glyphDataFormat = data.readSignedShort();
         initialized = true;
     }
+
     /**
      * @return Returns the checkSumAdjustment.
      */
-    public long getCheckSumAdjustment()
-    {
+    public long getCheckSumAdjustment() {
         return checkSumAdjustment;
     }
+
     /**
      * @param checkSumAdjustmentValue The checkSumAdjustment to set.
      */
-    public void setCheckSumAdjustment(long checkSumAdjustmentValue)
-    {
+    public void setCheckSumAdjustment(long checkSumAdjustmentValue) {
         this.checkSumAdjustment = checkSumAdjustmentValue;
     }
+
     /**
      * @return Returns the created.
      */
-    public Calendar getCreated()
-    {
+    public Calendar getCreated() {
         return created;
     }
+
     /**
      * @param createdValue The created to set.
      */
-    public void setCreated(Calendar createdValue)
-    {
+    public void setCreated(Calendar createdValue) {
         this.created = createdValue;
     }
+
     /**
      * @return Returns the flags.
      */
-    public int getFlags()
-    {
+    public int getFlags() {
         return flags;
     }
+
     /**
      * @param flagsValue The flags to set.
      */
-    public void setFlags(int flagsValue)
-    {
+    public void setFlags(int flagsValue) {
         this.flags = flagsValue;
     }
+
     /**
      * @return Returns the fontDirectionHint.
      */
-    public short getFontDirectionHint()
-    {
+    public short getFontDirectionHint() {
         return fontDirectionHint;
     }
+
     /**
      * @param fontDirectionHintValue The fontDirectionHint to set.
      */
-    public void setFontDirectionHint(short fontDirectionHintValue)
-    {
+    public void setFontDirectionHint(short fontDirectionHintValue) {
         this.fontDirectionHint = fontDirectionHintValue;
     }
+
     /**
      * @return Returns the fontRevision.
      */
-    public float getFontRevision()
-    {
+    public float getFontRevision() {
         return fontRevision;
     }
+
     /**
      * @param fontRevisionValue The fontRevision to set.
      */
-    public void setFontRevision(float fontRevisionValue)
-    {
+    public void setFontRevision(float fontRevisionValue) {
         this.fontRevision = fontRevisionValue;
     }
+
     /**
      * @return Returns the glyphDataFormat.
      */
-    public short getGlyphDataFormat()
-    {
+    public short getGlyphDataFormat() {
         return glyphDataFormat;
     }
+
     /**
      * @param glyphDataFormatValue The glyphDataFormat to set.
      */
-    public void setGlyphDataFormat(short glyphDataFormatValue)
-    {
+    public void setGlyphDataFormat(short glyphDataFormatValue) {
         this.glyphDataFormat = glyphDataFormatValue;
     }
+
     /**
      * @return Returns the indexToLocFormat.
      */
-    public short getIndexToLocFormat()
-    {
+    public short getIndexToLocFormat() {
         return indexToLocFormat;
     }
+
     /**
      * @param indexToLocFormatValue The indexToLocFormat to set.
      */
-    public void setIndexToLocFormat(short indexToLocFormatValue)
-    {
+    public void setIndexToLocFormat(short indexToLocFormatValue) {
         this.indexToLocFormat = indexToLocFormatValue;
     }
+
     /**
      * @return Returns the lowestRecPPEM.
      */
-    public int getLowestRecPPEM()
-    {
+    public int getLowestRecPPEM() {
         return lowestRecPPEM;
     }
+
     /**
      * @param lowestRecPPEMValue The lowestRecPPEM to set.
      */
-    public void setLowestRecPPEM(int lowestRecPPEMValue)
-    {
+    public void setLowestRecPPEM(int lowestRecPPEMValue) {
         this.lowestRecPPEM = lowestRecPPEMValue;
     }
+
     /**
      * @return Returns the macStyle.
      */
-    public int getMacStyle()
-    {
+    public int getMacStyle() {
         return macStyle;
     }
+
     /**
      * @param macStyleValue The macStyle to set.
      */
-    public void setMacStyle(int macStyleValue)
-    {
+    public void setMacStyle(int macStyleValue) {
         this.macStyle = macStyleValue;
     }
+
     /**
      * @return Returns the magicNumber.
      */
-    public long getMagicNumber()
-    {
+    public long getMagicNumber() {
         return magicNumber;
     }
+
     /**
      * @param magicNumberValue The magicNumber to set.
      */
-    public void setMagicNumber(long magicNumberValue)
-    {
+    public void setMagicNumber(long magicNumberValue) {
         this.magicNumber = magicNumberValue;
     }
+
     /**
      * @return Returns the modified.
      */
-    public Calendar getModified()
-    {
+    public Calendar getModified() {
         return modified;
     }
+
     /**
      * @param modifiedValue The modified to set.
      */
-    public void setModified(Calendar modifiedValue)
-    {
+    public void setModified(Calendar modifiedValue) {
         this.modified = modifiedValue;
     }
+
     /**
      * @return Returns the unitsPerEm.
      */
-    public int getUnitsPerEm()
-    {
+    public int getUnitsPerEm() {
         return unitsPerEm;
     }
+
     /**
      * @param unitsPerEmValue The unitsPerEm to set.
      */
-    public void setUnitsPerEm(int unitsPerEmValue)
-    {
+    public void setUnitsPerEm(int unitsPerEmValue) {
         this.unitsPerEm = unitsPerEmValue;
     }
+
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
+
     /**
      * @param versionValue The version to set.
      */
-    public void setVersion(float versionValue)
-    {
+    public void setVersion(float versionValue) {
         this.version = versionValue;
     }
+
     /**
      * @return Returns the xMax.
      */
-    public short getXMax()
-    {
+    public short getXMax() {
         return xMax;
     }
+
     /**
      * @param maxValue The xMax to set.
      */
-    public void setXMax(short maxValue)
-    {
+    public void setXMax(short maxValue) {
         xMax = maxValue;
     }
+
     /**
      * @return Returns the xMin.
      */
-    public short getXMin()
-    {
+    public short getXMin() {
         return xMin;
     }
+
     /**
      * @param minValue The xMin to set.
      */
-    public void setXMin(short minValue)
-    {
+    public void setXMin(short minValue) {
         xMin = minValue;
     }
+
     /**
      * @return Returns the yMax.
      */
-    public short getYMax()
-    {
+    public short getYMax() {
         return yMax;
     }
+
     /**
      * @param maxValue The yMax to set.
      */
-    public void setYMax(short maxValue)
-    {
+    public void setYMax(short maxValue) {
         yMax = maxValue;
     }
+
     /**
      * @return Returns the yMin.
      */
-    public short getYMin()
-    {
+    public short getYMin() {
         return yMin;
     }
+
     /**
      * @param minValue The yMin to set.
      */
-    public void setYMin(short minValue)
-    {
+    public void setYMin(short minValue) {
         yMin = minValue;
     }
 }

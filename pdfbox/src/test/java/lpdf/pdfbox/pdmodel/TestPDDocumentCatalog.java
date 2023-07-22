@@ -16,43 +16,36 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import lpdf.io.RandomAccessReadBuffer;
+import lpdf.pdfbox.Loader;
+import lpdf.pdfbox.pdmodel.graphics.color.PDOutputIntent;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import lpdf.pdfbox.Loader;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.io.RandomAccessReadBuffer;
-import lpdf.pdfbox.pdmodel.graphics.color.PDOutputIntent;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
 
 /**
  * Test PDDocument Catalog functionality.
- *
  */
-class TestPDDocumentCatalog
-{
+class TestPDDocumentCatalog {
 
     /**
      * Test getPageLabels().
-     *
+     * <p>
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-90"
-     *   >PDFBOX-90</a> - Support explicit retrieval of page labels.
+     * >PDFBOX-90</a> - Support explicit retrieval of page labels.
      *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
-    void retrievePageLabels() throws IOException
-    {
+    void retrievePageLabels() throws IOException {
         try (PDDocument doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
-                TestPDDocumentCatalog.class.getResourceAsStream("test_pagelabels.pdf"))))
-        {
+                TestPDDocumentCatalog.class.getResourceAsStream("test_pagelabels.pdf")))) {
             PDDocumentCatalog cat = doc.getDocumentCatalog();
             String[] labels = cat.getPageLabels().getLabelsByPageIndices();
             assertEquals(12, labels.length);
@@ -73,20 +66,18 @@ class TestPDDocumentCatalog
 
     /**
      * Test page labels for malformed PDF.
-     *
+     * <p>
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-900"
-     *   >PDFBOX-900</a> - Handle malformed PDFs
+     * >PDFBOX-900</a> - Handle malformed PDFs
      *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
-    void retrievePageLabelsOnMalformedPdf() throws IOException
-    {
+    void retrievePageLabelsOnMalformedPdf() throws IOException {
         try (PDDocument doc = Loader
                 .loadPDF(RandomAccessReadBuffer.createBufferFromStream(
-                        TestPDDocumentCatalog.class.getResourceAsStream("badpagelabels.pdf"))))
-        {
+                        TestPDDocumentCatalog.class.getResourceAsStream("badpagelabels.pdf")))) {
             PDDocumentCatalog cat = doc.getDocumentCatalog();
             // getLabelsByPageIndices() should not throw an exception
             cat.getPageLabels().getLabelsByPageIndices();
@@ -95,27 +86,25 @@ class TestPDDocumentCatalog
 
     /**
      * Test getNumberOfPages().
-     *
+     * <p>
      * Test case for
      * <a href="https://issues.apache.org/jira/browse/PDFBOX-911"
-     *   >PDFBOX-911</a> - Method PDDocument.getNumberOfPages() returns wrong
+     * >PDFBOX-911</a> - Method PDDocument.getNumberOfPages() returns wrong
      * number of pages
      *
      * @throws IOException in case the document can not be parsed.
      */
     @Test
-    void retrieveNumberOfPages() throws IOException
-    {
+    void retrieveNumberOfPages() throws IOException {
         try (PDDocument doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
-                TestPDDocumentCatalog.class.getResourceAsStream("test.unc.pdf"))))
-        {
+                TestPDDocumentCatalog.class.getResourceAsStream("test.unc.pdf")))) {
             assertEquals(4, doc.getNumberOfPages());
         }
     }
 
     /**
      * Test OutputIntents functionality.
-     *
+     * <p>
      * Test case for
      * <a https://issues.apache.org/jira/browse/PDFBOX-2687">PDFBOX-2687</a>
      * ClassCastException when trying to get OutputIntents or add to it.
@@ -123,12 +112,10 @@ class TestPDDocumentCatalog
      * @throws IOException in case the document can not be parsed.
      */
     @Test
-    void handleOutputIntents() throws IOException
-    {
+    void handleOutputIntents() throws IOException {
         try (InputStream colorProfile = TestPDDocumentCatalog.class.getResourceAsStream("sRGB.icc");
-                PDDocument doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
-                        TestPDDocumentCatalog.class.getResourceAsStream("test.unc.pdf"))))
-        {
+             PDDocument doc = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(
+                     TestPDDocumentCatalog.class.getResourceAsStream("test.unc.pdf")))) {
             PDDocumentCatalog catalog = doc.getDocumentCatalog();
 
             // retrieve OutputIntents
@@ -145,12 +132,12 @@ class TestPDDocumentCatalog
 
             // retrieve OutputIntents
             outputIntents = catalog.getOutputIntents();
-            assertEquals(1,outputIntents.size());
+            assertEquals(1, outputIntents.size());
 
             // set OutputIntents
             catalog.setOutputIntents(outputIntents);
             outputIntents = catalog.getOutputIntents();
-            assertEquals(1,outputIntents.size());
+            assertEquals(1, outputIntents.size());
         }
     }
 

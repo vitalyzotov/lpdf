@@ -16,19 +16,19 @@
  */
 package lpdf.fontbox.ttf;
 
-import java.io.IOException;
-import java.io.InputStream;
+import lpdf.io.RandomAccessRead;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lpdf.io.RandomAccessRead;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * TrueType font file parser.
  *
  * @author Ben Litchfield
  */
-public class TTFParser
-{
+public class TTFParser {
     private static final Logger LOG = LoggerFactory.getLogger(TTFParser.class);
 
     private boolean isEmbedded = false;
@@ -36,8 +36,7 @@ public class TTFParser
     /**
      * Constructor.
      */
-    public TTFParser()
-    {
+    public TTFParser() {
         this(false);
     }
 
@@ -46,8 +45,7 @@ public class TTFParser
      *
      * @param isEmbedded true if the font is embedded in PDF
      */
-    public TTFParser(boolean isEmbedded)
-    {
+    public TTFParser(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
     }
 
@@ -58,21 +56,15 @@ public class TTFParser
      * @return A TrueType font.
      * @throws IOException If there is an error parsing the TrueType font.
      */
-    public TrueTypeFont parse(RandomAccessRead randomAccessRead) throws IOException
-    {
+    public TrueTypeFont parse(RandomAccessRead randomAccessRead) throws IOException {
         RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(randomAccessRead);
-        try
-        {
+        try {
             return parse(dataStream);
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             // close only on error (source is still being accessed later)
             dataStream.close();
             throw ex;
-        }
-        finally
-        {
+        } finally {
             randomAccessRead.close();
         }
     }
@@ -84,22 +76,16 @@ public class TTFParser
      * @return A TrueType font.
      * @throws IOException If there is an error parsing the TrueType font.
      */
-    public TrueTypeFont parseEmbedded(InputStream inputStream) throws IOException
-    {
+    public TrueTypeFont parseEmbedded(InputStream inputStream) throws IOException {
         this.isEmbedded = true;
         RandomAccessReadDataStream dataStream = new RandomAccessReadDataStream(inputStream);
-        try
-        {
+        try {
             return parse(dataStream);
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             // close only on error (source is still being accessed later)
             dataStream.close();
             throw ex;
-        }
-        finally
-        {
+        } finally {
             inputStream.close();
         }
     }
@@ -111,31 +97,25 @@ public class TTFParser
      * @return A TrueType font.
      * @throws IOException If there is an error parsing the TrueType font.
      */
-    TrueTypeFont parse(TTFDataStream raf) throws IOException
-    {
+    TrueTypeFont parse(TTFDataStream raf) throws IOException {
         TrueTypeFont font = newFont(raf);
         font.setVersion(raf.read32Fixed());
         int numberOfTables = raf.readUnsignedShort();
         int searchRange = raf.readUnsignedShort();
         int entrySelector = raf.readUnsignedShort();
         int rangeShift = raf.readUnsignedShort();
-        for (int i = 0; i < numberOfTables; i++)
-        {
+        for (int i = 0; i < numberOfTables; i++) {
             TTFTable table = readTableDirectory(raf);
 
             // skip tables with zero length
-            if (table != null)
-            {
-                if (table.getOffset() + table.getLength() > font.getOriginalDataSize())
-                {
+            if (table != null) {
+                if (table.getOffset() + table.getLength() > font.getOriginalDataSize()) {
                     // PDFBOX-5285 if we're lucky, this is an "unimportant" table, e.g. vmtx
                     LOG.warn("Skip table '" + table.getTag() +
                             "' which goes past the file size; offset: " + table.getOffset() +
                             ", size: " + table.getLength() +
                             ", font size: " + font.getOriginalDataSize());
-                }
-                else
-                {
+                } else {
                     font.addTable(table);
                 }
             }
@@ -145,8 +125,7 @@ public class TTFParser
         return font;
     }
 
-    TrueTypeFont newFont(TTFDataStream raf)
-    {
+    TrueTypeFont newFont(TTFDataStream raf) {
         return new TrueTypeFont(raf);
     }
 
@@ -156,12 +135,9 @@ public class TTFParser
      * @param font the TrueTypeFont instance holding the parsed data.
      * @throws IOException If there is an error parsing the TrueType font.
      */
-    private void parseTables(TrueTypeFont font) throws IOException
-    {
-        for (TTFTable table : font.getTables())
-        {
-            if (!table.getInitialized())
-            {
+    private void parseTables(TrueTypeFont font) throws IOException {
+        for (TTFTable table : font.getTables()) {
+            if (!table.getInitialized()) {
                 font.readTable(table);
             }
         }
@@ -171,73 +147,58 @@ public class TTFParser
         boolean isPostScript = isOTF ? ((OpenTypeFont) font).isPostScript() : hasCFF;
 
         HeaderTable head = font.getHeader();
-        if (head == null)
-        {
+        if (head == null) {
             throw new IOException("'head' table is mandatory");
         }
 
         HorizontalHeaderTable hh = font.getHorizontalHeader();
-        if (hh == null)
-        {
+        if (hh == null) {
             throw new IOException("'hhea' table is mandatory");
         }
 
         MaximumProfileTable maxp = font.getMaximumProfile();
-        if (maxp == null)
-        {
+        if (maxp == null) {
             throw new IOException("'maxp' table is mandatory");
         }
 
         PostScriptTable post = font.getPostScript();
-        if (post == null && !isEmbedded)
-        {
+        if (post == null && !isEmbedded) {
             // in an embedded font this table is optional
             throw new IOException("'post' table is mandatory");
         }
 
-        if (!isPostScript)
-        {
-            if (font.getIndexToLocation() == null)
-            {
+        if (!isPostScript) {
+            if (font.getIndexToLocation() == null) {
                 throw new IOException("'loca' table is mandatory");
             }
-            if (font.getGlyph() == null)
-            {
+            if (font.getGlyph() == null) {
                 throw new IOException("'glyf' table is mandatory");
             }
-        }
-        else if (!isOTF)
-        {
+        } else if (!isOTF) {
             throw new IOException("True Type fonts using CFF outlines are not supported");
         }
 
-        if (font.getNaming() == null && !isEmbedded)
-        {
+        if (font.getNaming() == null && !isEmbedded) {
             throw new IOException("'name' table is mandatory");
         }
 
-        if (font.getHorizontalMetrics() == null)
-        {
+        if (font.getHorizontalMetrics() == null) {
             throw new IOException("'hmtx' table is mandatory");
         }
 
-        if (!isEmbedded && font.getCmap() == null)
-        {
+        if (!isEmbedded && font.getCmap() == null) {
             throw new IOException("'cmap' table is mandatory");
         }
     }
 
-    protected boolean allowCFF()
-    {
+    protected boolean allowCFF() {
         return false;
     }
 
-    private TTFTable readTableDirectory(TTFDataStream raf) throws IOException
-    {
+    private TTFTable readTableDirectory(TTFDataStream raf) throws IOException {
         TTFTable table;
         String tag = raf.readString(4);
-        switch (tag)
-        {
+        switch (tag) {
             case CmapTable.TAG:
                 table = new CmapTable();
                 break;
@@ -296,16 +257,14 @@ public class TTFParser
         table.setLength(raf.readUnsignedInt());
 
         // skip tables with zero length (except glyf)
-        if (table.getLength() == 0 && !tag.equals(GlyphTable.TAG))
-        {
+        if (table.getLength() == 0 && !tag.equals(GlyphTable.TAG)) {
             return null;
         }
 
         return table;
     }
 
-    protected TTFTable readTable(String tag)
-    {
+    protected TTFTable readTable(String tag) {
         // unknown table type but read it anyway.
         return new TTFTable();
     }

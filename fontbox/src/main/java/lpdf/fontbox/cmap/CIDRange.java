@@ -20,8 +20,7 @@ package lpdf.fontbox.cmap;
 /**
  * Range of continuous CIDs between two Unicode characters.
  */
-class CIDRange
-{
+class CIDRange {
 
     private final int from;
     private int to;
@@ -33,11 +32,10 @@ class CIDRange
      *
      * @param from       start value of COD range
      * @param to         end value of CID range
-     * @param unicode        unicode start value
+     * @param unicode    unicode start value
      * @param codeLength byte length of CID values
      */
-    CIDRange(int from, int to, int unicode, int codeLength)
-    {
+    CIDRange(int from, int to, int unicode, int codeLength) {
         this.from = from;
         this.to = to;
         this.unicode = unicode;
@@ -49,8 +47,7 @@ class CIDRange
      *
      * @return the code length
      */
-    public int getCodeLength()
-    {
+    public int getCodeLength() {
         return codeLength;
     }
 
@@ -60,13 +57,10 @@ class CIDRange
      * @param bytes Unicode character
      * @return corresponding CID, or -1 if the character is out of range
      */
-    public int map(byte[] bytes)
-    {
-        if (bytes.length == codeLength)
-        {
+    public int map(byte[] bytes) {
+        if (bytes.length == codeLength) {
             int ch = CMap.toInt(bytes);
-            if (from <= ch && ch <= to)
-            {
+            if (from <= ch && ch <= to) {
                 return unicode + (ch - from);
             }
         }
@@ -80,10 +74,8 @@ class CIDRange
      * @param length origin byte length of the code
      * @return corresponding CID, or -1 if the character is out of range
      */
-    public int map(int code, int length)
-    {
-        if (length == codeLength && from <= code && code <= to)
-        {
+    public int map(int code, int length) {
+        if (length == codeLength && from <= code && code <= to) {
             return unicode + (code - from);
         }
         return -1;
@@ -95,10 +87,8 @@ class CIDRange
      * @param code CID
      * @return corresponding Unicode character, or -1 if the CID is out of range
      */
-    public int unmap(int code)
-    {
-        if (unicode <= code && code <= unicode + (to - from))
-        {
+    public int unmap(int code) {
+        if (unicode <= code && code <= unicode + (to - from)) {
             return from + (code - unicode);
         }
         return -1;
@@ -114,10 +104,8 @@ class CIDRange
      * @param length  byte length of CIDs
      * @return true if the given range was extended
      */
-    public boolean extend(int newFrom, int newTo, int newCid, int length)
-    {
-        if (codeLength == length && (newFrom == to + 1) && (newCid == unicode + to - from + 1))
-        {
+    public boolean extend(int newFrom, int newTo, int newCid, int length) {
+        if (codeLength == length && (newFrom == to + 1) && (newCid == unicode + to - from + 1)) {
             to = newTo;
             return true;
         }

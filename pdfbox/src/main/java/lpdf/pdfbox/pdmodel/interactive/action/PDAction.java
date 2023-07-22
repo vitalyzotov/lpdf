@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -26,14 +23,16 @@ import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.COSArrayList;
 import lpdf.pdfbox.pdmodel.common.PDDestinationOrAction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This represents an action that can be executed in a PDF document.
  *
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public abstract class PDAction implements PDDestinationOrAction
-{
+public abstract class PDAction implements PDDestinationOrAction {
     /**
      * The type of PDF object.
      */
@@ -47,10 +46,9 @@ public abstract class PDAction implements PDDestinationOrAction
     /**
      * Default constructor.
      */
-    public PDAction()
-    {
+    public PDAction() {
         action = new COSDictionary();
-        setType( TYPE );
+        setType(TYPE);
     }
 
     /**
@@ -58,8 +56,7 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @param a The action dictionary.
      */
-    public PDAction( COSDictionary a )
-    {
+    public PDAction(COSDictionary a) {
         action = a;
     }
 
@@ -69,8 +66,7 @@ public abstract class PDAction implements PDDestinationOrAction
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return action;
     }
 
@@ -80,9 +76,8 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @return The Type of PDF object.
      */
-    public final String getType()
-    {
-       return action.getNameAsString( COSName.TYPE );
+    public final String getType() {
+        return action.getNameAsString(COSName.TYPE);
     }
 
     /**
@@ -91,9 +86,8 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @param type The new Type for the PDF object.
      */
-    protected final void setType(String type)
-    {
-       action.setName(COSName.TYPE, type );
+    protected final void setType(String type) {
+        action.setName(COSName.TYPE, type);
     }
 
     /**
@@ -101,8 +95,7 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @return The S entry of actions dictionary.
      */
-    public final String getSubType()
-    {
+    public final String getSubType() {
         return action.getNameAsString(COSName.S);
     }
 
@@ -111,8 +104,7 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @param s The new type of action.
      */
-    protected final void setSubType(String s)
-    {
+    protected final void setSubType(String s) {
         action.setName(COSName.S, s);
     }
 
@@ -123,24 +115,19 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @return The Next action or sequence of actions.
      */
-    public List<PDAction> getNext()
-    {
+    public List<PDAction> getNext() {
         List<PDAction> retval = null;
         COSBase next = action.getDictionaryObject(COSName.NEXT);
-        if( next instanceof COSDictionary )
-        {
-            PDAction pdAction = PDActionFactory.createAction( (COSDictionary) next );
+        if (next instanceof COSDictionary) {
+            PDAction pdAction = PDActionFactory.createAction((COSDictionary) next);
             retval = new COSArrayList<>(pdAction, next, action, COSName.NEXT);
-        }
-        else if( next instanceof COSArray )
-        {
-            COSArray array = (COSArray)next;
+        } else if (next instanceof COSArray) {
+            COSArray array = (COSArray) next;
             List<PDAction> actions = new ArrayList<>(array.size());
-            for( int i=0; i<array.size(); i++ )
-            {
-                actions.add( PDActionFactory.createAction( (COSDictionary) array.getObject( i )));
+            for (int i = 0; i < array.size(); i++) {
+                actions.add(PDActionFactory.createAction((COSDictionary) array.getObject(i)));
             }
-            retval = new COSArrayList<>( actions, array );
+            retval = new COSArrayList<>(actions, array);
         }
 
         return retval;
@@ -153,8 +140,7 @@ public abstract class PDAction implements PDDestinationOrAction
      *
      * @param next The Next action or sequence of actions.
      */
-    public void setNext(List<PDAction> next)
-    {
+    public void setNext(List<PDAction> next) {
         action.setItem(COSName.NEXT, new COSArray(next));
     }
 }

@@ -16,19 +16,15 @@
  */
 package lpdf.pdfbox.pdmodel.font;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import lpdf.fontbox.afm.FontMetrics;
 import lpdf.fontbox.encoding.BuiltInEncoding;
 import lpdf.fontbox.pfb.PfbParser;
 import lpdf.fontbox.type1.Type1Font;
 import lpdf.fontbox.util.BoundingBox;
+import lpdf.io.IOUtils;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-import lpdf.io.IOUtils;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.common.PDRectangle;
 import lpdf.pdfbox.pdmodel.common.PDStream;
@@ -36,27 +32,30 @@ import lpdf.pdfbox.pdmodel.font.encoding.Encoding;
 import lpdf.pdfbox.pdmodel.font.encoding.GlyphList;
 import lpdf.pdfbox.pdmodel.font.encoding.Type1Encoding;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Embedded PDType1Font builder. Helper class to populate a PDType1Font from a PFB and AFM.
  *
  * @author Michael Niedermair
  */
-class PDType1FontEmbedder
-{
+class PDType1FontEmbedder {
     private final Encoding fontEncoding;
     private final Type1Font type1;
 
     /**
      * This will load a PFB to be embedded into a document.
      *
-     * @param doc The PDF document that will hold the embedded font.
-     * @param dict The Font dictionary to write to.
+     * @param doc       The PDF document that will hold the embedded font.
+     * @param dict      The Font dictionary to write to.
      * @param pfbStream The pfb input.
      * @throws IOException If there is an error loading the data.
      */
     PDType1FontEmbedder(PDDocument doc, COSDictionary dict, InputStream pfbStream,
-                        Encoding encoding) throws IOException
-    {
+                        Encoding encoding) throws IOException {
         dict.setItem(COSName.SUBTYPE, COSName.TYPE1);
 
         // read the pfb
@@ -64,12 +63,9 @@ class PDType1FontEmbedder
         PfbParser pfbParser = new PfbParser(pfbBytes);
         type1 = Type1Font.createWithPFB(pfbBytes);
 
-        if (encoding == null)
-        {
+        if (encoding == null) {
             fontEncoding = Type1Encoding.fromFontBox(type1.getEncoding());
-        }
-        else
-        {
+        } else {
             fontEncoding = encoding;
         }
 
@@ -78,8 +74,7 @@ class PDType1FontEmbedder
 
         PDStream fontStream = new PDStream(doc, pfbParser.getInputStream(), COSName.FLATE_DECODE);
         fontStream.getCOSObject().setInt("Length", pfbParser.size());
-        for (int i = 0; i < pfbParser.getLengths().length; i++)
-        {
+        for (int i = 0; i < pfbParser.getLengths().length; i++) {
             fontStream.getCOSObject().setInt("Length" + (i + 1), pfbParser.getLengths()[i]);
         }
         fd.setFontFile(fontStream);
@@ -90,8 +85,7 @@ class PDType1FontEmbedder
 
         // widths
         List<Integer> widths = new ArrayList<>(256);
-        for (int code = 0; code <= 255; code++)
-        {
+        for (int code = 0; code <= 255; code++) {
             String name = fontEncoding.getName(code);
             int width = Math.round(type1.getWidth(name));
             widths.add(width);
@@ -108,8 +102,7 @@ class PDType1FontEmbedder
      *
      * @throws IOException if the font bounding box isn't available
      */
-    static PDFontDescriptor buildFontDescriptor(Type1Font type1) throws IOException
-    {
+    static PDFontDescriptor buildFontDescriptor(Type1Font type1) throws IOException {
         boolean isSymbolic = type1.getEncoding() instanceof BuiltInEncoding;
         BoundingBox bbox = type1.getFontBBox();
         PDFontDescriptor fd = new PDFontDescriptor();
@@ -132,8 +125,7 @@ class PDType1FontEmbedder
      *
      * @param metrics AFM
      */
-    static PDFontDescriptor buildFontDescriptor(FontMetrics metrics)
-    {
+    static PDFontDescriptor buildFontDescriptor(FontMetrics metrics) {
         boolean isSymbolic = metrics.getEncodingScheme().equals("FontSpecific");
 
         PDFontDescriptor fd = new PDFontDescriptor();
@@ -156,24 +148,21 @@ class PDType1FontEmbedder
     /**
      * Returns the font's encoding.
      */
-    public Encoding getFontEncoding()
-    {
+    public Encoding getFontEncoding() {
         return fontEncoding;
     }
 
     /**
      * Returns the font's glyph list.
      */
-    public GlyphList getGlyphList()
-    {
+    public GlyphList getGlyphList() {
         return GlyphList.getAdobeGlyphList();
     }
 
     /**
      * Returns the Type 1 font.
      */
-    public Type1Font getType1Font()
-    {
+    public Type1Font getType1Font() {
         return type1;
     }
 }

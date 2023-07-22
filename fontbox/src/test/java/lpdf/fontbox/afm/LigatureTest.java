@@ -17,15 +17,13 @@
 
 package lpdf.fontbox.afm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class LigatureTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class LigatureTest {
     @Test
-    void testLigature()
-    {
+    void testLigature() {
         Ligature ligature = new Ligature("successor", "ligature");
         assertEquals("successor", ligature.getSuccessor());
         assertEquals("ligature", ligature.getLigature());

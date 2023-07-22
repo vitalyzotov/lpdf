@@ -23,11 +23,10 @@ import java.util.List;
 /**
  * Implementers provide find method for searching native operating system for available fonts.
  * This class is based on a class provided by Apache FOP.
- *
+ * <p>
  * See org.apache.fop.fonts.autodetect.FontDirFinder
  */
-public interface FontDirFinder
-{
+public interface FontDirFinder {
     /**
      * Finds a list of font files.
      *

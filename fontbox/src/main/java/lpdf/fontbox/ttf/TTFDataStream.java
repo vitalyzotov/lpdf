@@ -30,10 +30,8 @@ import java.util.TimeZone;
  *
  * @author Ben Litchfield
  */
-abstract class TTFDataStream implements Closeable
-{
-    TTFDataStream()
-    {
+abstract class TTFDataStream implements Closeable {
+    TTFDataStream() {
     }
 
     /**
@@ -42,8 +40,7 @@ abstract class TTFDataStream implements Closeable
      * @return A 32 bit value.
      * @throws IOException If there is an error reading the data.
      */
-    public float read32Fixed() throws IOException
-    {
+    public float read32Fixed() throws IOException {
         float retval = readSignedShort();
         retval += (readUnsignedShort() / 65536f);
         return retval;
@@ -56,21 +53,19 @@ abstract class TTFDataStream implements Closeable
      * @return A string of the desired length.
      * @throws IOException If there is an error reading the data.
      */
-    public String readString(int length) throws IOException
-    {
+    public String readString(int length) throws IOException {
         return readString(length, StandardCharsets.ISO_8859_1);
     }
 
     /**
      * Read a fixed length string.
      *
-     * @param length The length of the string to read in bytes.
+     * @param length  The length of the string to read in bytes.
      * @param charset The expected character set of the string.
      * @return A string of the desired length.
      * @throws IOException If there is an error reading the data.
      */
-    public String readString(int length, Charset charset) throws IOException
-    {
+    public String readString(int length, Charset charset) throws IOException {
         return new String(read(length), charset);
     }
 
@@ -96,8 +91,7 @@ abstract class TTFDataStream implements Closeable
      * @return A signed byte.
      * @throws IOException If there is an error reading the data.
      */
-    public int readSignedByte() throws IOException
-    {
+    public int readSignedByte() throws IOException {
         int signedByte = read();
         return signedByte <= 127 ? signedByte : signedByte - 256;
     }
@@ -108,11 +102,9 @@ abstract class TTFDataStream implements Closeable
      * @return A unsigned byte.
      * @throws IOException If there is an error reading the data.
      */
-    public int readUnsignedByte() throws IOException
-    {
+    public int readUnsignedByte() throws IOException {
         int unsignedByte = read();
-        if (unsignedByte == -1)
-        {
+        if (unsignedByte == -1) {
             throw new EOFException("premature EOF");
         }
         return unsignedByte;
@@ -124,14 +116,12 @@ abstract class TTFDataStream implements Closeable
      * @return An unsigned integer.
      * @throws IOException If there is an error reading the data.
      */
-    public long readUnsignedInt() throws IOException
-    {
+    public long readUnsignedInt() throws IOException {
         long byte1 = read();
         long byte2 = read();
         long byte3 = read();
         long byte4 = read();
-        if (byte4 < 0)
-        {
+        if (byte4 < 0) {
             throw new EOFException();
         }
         return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
@@ -143,12 +133,10 @@ abstract class TTFDataStream implements Closeable
      * @return An unsigned short.
      * @throws IOException If there is an error reading the data.
      */
-    public int readUnsignedShort() throws IOException
-    {
+    public int readUnsignedShort() throws IOException {
         int b1 = read();
         int b2 = read();
-        if ((b1 | b2) < 0)
-        {
+        if ((b1 | b2) < 0) {
             throw new EOFException();
         }
         return (b1 << 8) + b2;
@@ -161,11 +149,9 @@ abstract class TTFDataStream implements Closeable
      * @return An unsigned byte array.
      * @throws IOException If there is an error reading the data.
      */
-    public int[] readUnsignedByteArray(int length) throws IOException
-    {
+    public int[] readUnsignedByteArray(int length) throws IOException {
         int[] array = new int[length];
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             array[i] = read();
         }
         return array;
@@ -178,11 +164,9 @@ abstract class TTFDataStream implements Closeable
      * @return An unsigned short array.
      * @throws IOException If there is an error reading the data.
      */
-    public int[] readUnsignedShortArray(int length) throws IOException
-    {
+    public int[] readUnsignedShortArray(int length) throws IOException {
         int[] array = new int[length];
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             array[i] = readUnsignedShort();
         }
         return array;
@@ -194,8 +178,7 @@ abstract class TTFDataStream implements Closeable
      * @return An signed short.
      * @throws IOException If there is an error reading the data.
      */
-    public short readSignedShort() throws IOException
-    {
+    public short readSignedShort() throws IOException {
         return (short) readUnsignedShort();
     }
 
@@ -205,8 +188,7 @@ abstract class TTFDataStream implements Closeable
      * @return An signed short.
      * @throws IOException If there is an error reading the data.
      */
-    public Calendar readInternationalDate() throws IOException
-    {
+    public Calendar readInternationalDate() throws IOException {
         long secondsSince1904 = readLong();
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.set(1904, 0, 1, 0, 0, 0);
@@ -221,8 +203,7 @@ abstract class TTFDataStream implements Closeable
      * Reads a tag, an array of four uint8s used to identify a script, language system, feature,
      * or baseline.
      */
-    public String readTag() throws IOException
-    {
+    public String readTag() throws IOException {
         return new String(read(4), StandardCharsets.US_ASCII);
     }
 
@@ -241,37 +222,29 @@ abstract class TTFDataStream implements Closeable
      * @return The byte buffer.
      * @throws IOException If there is an error while reading.
      */
-    public byte[] read(int numberOfBytes) throws IOException
-    {
+    public byte[] read(int numberOfBytes) throws IOException {
         byte[] data = new byte[numberOfBytes];
         int amountRead = 0;
         int totalAmountRead = 0;
         // read at most numberOfBytes bytes from the stream.
         while (totalAmountRead < numberOfBytes
-                && (amountRead = read(data, totalAmountRead, numberOfBytes - totalAmountRead)) != -1)
-        {
+                && (amountRead = read(data, totalAmountRead, numberOfBytes - totalAmountRead)) != -1) {
             totalAmountRead += amountRead;
         }
-        if (totalAmountRead == numberOfBytes)
-        {
+        if (totalAmountRead == numberOfBytes) {
             return data;
-        }
-        else
-        {
+        } else {
             throw new IOException("Unexpected end of TTF stream reached");
         }
     }
 
     /**
-     * @see java.io.InputStream#read(byte[], int, int )
-     *
-     * @param b The buffer to write to.
+     * @param b   The buffer to write to.
      * @param off The offset into the buffer.
      * @param len The length into the buffer.
-     *
      * @return The number of bytes read, or -1 at the end of the stream
-     *
      * @throws IOException If there is an error reading from the stream.
+     * @see java.io.InputStream#read(byte[], int, int)
      */
     public abstract int read(byte[] b, int off, int len) throws IOException;
 

@@ -21,6 +21,7 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNumber;
+
 import java.io.IOException;
 
 /**
@@ -29,8 +30,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class PDFunctionType2 extends PDFunction
-{
+public class PDFunctionType2 extends PDFunction {
 
     /**
      * The C0 values of the exponential function.
@@ -50,35 +50,26 @@ public class PDFunctionType2 extends PDFunction
      *
      * @param function The function.
      */
-    public PDFunctionType2(COSBase function)
-    {
+    public PDFunctionType2(COSBase function) {
         super(function);
 
         COSArray cosArray0 = getCOSObject().getCOSArray(COSName.C0);
-        if (cosArray0 != null)
-        {
+        if (cosArray0 != null) {
             c0 = cosArray0;
-        }
-        else
-        {
+        } else {
             c0 = new COSArray();
         }
-        if (c0.size() == 0)
-        {
+        if (c0.size() == 0) {
             c0.add(new COSFloat(0));
         }
 
         COSArray cosArray1 = getCOSObject().getCOSArray(COSName.C1);
-        if (cosArray1 != null)
-        {
+        if (cosArray1 != null) {
             c1 = cosArray1;
-        }
-        else
-        {
+        } else {
             c1 = new COSArray();
         }
-        if (c1.size() == 0)
-        {
+        if (c1.size() == 0) {
             c1.add(new COSFloat(1));
         }
 
@@ -89,25 +80,22 @@ public class PDFunctionType2 extends PDFunction
      * {@inheritDoc}
      */
     @Override
-    public int getFunctionType()
-    {
+    public int getFunctionType() {
         return 2;
     }
 
     /**
      * Performs exponential interpolation
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override
-    public float[] eval(float[] input) throws IOException
-    {
+    public float[] eval(float[] input) throws IOException {
         // exponential interpolation
         float xToN = (float) Math.pow(input[0], exponent); // x^exponent
 
-        float[] result = new float[Math.min(c0.size(),c1.size())];
-        for (int j = 0; j < result.length; j++)
-        {
+        float[] result = new float[Math.min(c0.size(), c1.size())];
+        for (int j = 0; j < result.length; j++) {
             float c0j = ((COSNumber) c0.get(j)).floatValue();
             float c1j = ((COSNumber) c1.get(j)).floatValue();
             result[j] = c0j + xToN * (c1j - c0j);
@@ -121,8 +109,7 @@ public class PDFunctionType2 extends PDFunction
      *
      * @return a COSArray with the C0 values
      */
-    public COSArray getC0()
-    {
+    public COSArray getC0() {
         return c0;
     }
 
@@ -131,8 +118,7 @@ public class PDFunctionType2 extends PDFunction
      *
      * @return a COSArray with the C1 values
      */
-    public COSArray getC1()
-    {
+    public COSArray getC1() {
         return c1;
     }
 
@@ -141,8 +127,7 @@ public class PDFunctionType2 extends PDFunction
      *
      * @return the float value of the exponent
      */
-    public float getN()
-    {
+    public float getN() {
         return exponent;
     }
 
@@ -150,8 +135,7 @@ public class PDFunctionType2 extends PDFunction
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "FunctionType2{"
                 + "C0: " + getC0() + " "
                 + "C1: " + getC1() + " "

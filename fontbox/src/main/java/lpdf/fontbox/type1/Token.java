@@ -20,18 +20,14 @@ package lpdf.fontbox.type1;
 /**
  * A lexical token in an Adobe Type 1 font.
  *
- * @see Type1Lexer
- *
  * @author John Hewson
+ * @see Type1Lexer
  */
-class Token
-{
+class Token {
     /**
      * All different types of tokens.
-     *
      */
-    enum Kind
-    {
+    enum Kind {
         NONE, STRING, NAME, LITERAL, REAL, INTEGER,
         START_ARRAY, END_ARRAY,
         START_PROC, END_PROC,
@@ -59,22 +55,22 @@ class Token
 
     /**
      * Constructs a new Token object given its text and kind.
+     *
      * @param text
      * @param type
      */
-    Token(String text, Kind type)
-    {
+    Token(String text, Kind type) {
         this.text = text;
         this.kind = type;
     }
 
     /**
      * Constructs a new Token object given its single-character text and kind.
+     *
      * @param character
      * @param type
      */
-    Token(char character, Kind type)
-    {
+    Token(char character, Kind type) {
         this.text = Character.toString(character);
         this.kind = type;
     }
@@ -82,43 +78,37 @@ class Token
     /**
      * Constructs a new Token object given its raw data and kind.
      * This is for CHARSTRING tokens only.
+     *
      * @param data
      * @param type
      */
-    Token(byte[] data, Kind type)
-    {
+    Token(byte[] data, Kind type) {
         this.data = data;
         this.kind = type;
     }
 
-    public String getText()
-    {
+    public String getText() {
         return text;
     }
 
-    public Kind getKind()
-    {
+    public Kind getKind() {
         return kind;
     }
 
-    public int intValue()
-    {
+    public int intValue() {
         // some fonts have reals where integers should be, so we tolerate it
-        return (int)Float.parseFloat(text);
+        return (int) Float.parseFloat(text);
     }
 
-    public float floatValue()
-    {
+    public float floatValue() {
         return Float.parseFloat(text);
     }
 
-    public boolean booleanValue()
-    {
+    public boolean booleanValue() {
         return text.equals("true");
     }
 
-    public byte[] getData()
-    {
+    public byte[] getData() {
         return data;
     }
 
@@ -126,14 +116,10 @@ class Token
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
-        if (kind == CHARSTRING)
-        {
+    public String toString() {
+        if (kind == CHARSTRING) {
             return "Token[kind=CHARSTRING, data=" + data.length + " bytes]";
-        }
-        else
-        {
+        } else {
             return "Token[kind=" + kind + ", text=" + text + "]";
         }
     }

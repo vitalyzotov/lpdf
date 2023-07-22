@@ -28,18 +28,16 @@ import java.util.Map;
 
 /**
  * Parses an Adobe Type 1 (.pfb) font. It is used exclusively by Type1Font.
- *
+ * <p>
  * The Type 1 font format is a free-text format which is somewhat difficult
  * to parse. This is made worse by the fact that many Type 1 font files do
  * not conform to the specification, especially those embedded in PDFs. This
  * parser therefore tries to be as forgiving as possible.
  *
- * @see "Adobe Type 1 Font Format, Adobe Systems (1999)"
- *
  * @author John Hewson
+ * @see "Adobe Type 1 Font Format, Adobe Systems (1999)"
  */
-final class Type1Parser
-{
+final class Type1Parser {
     // constants for encryption
     private static final int EEXEC_KEY = 55665;
     private static final int CHARSTRING_KEY = 4330;
@@ -55,19 +53,14 @@ final class Type1Parser
      * @param segment2 Segment 2: Binary
      * @throws IOException
      */
-    public Type1Font parse(byte[] segment1, byte[] segment2) throws IOException
-    {
+    public Type1Font parse(byte[] segment1, byte[] segment2) throws IOException {
         font = new Type1Font(segment1, segment2);
-        try
-        {
+        try {
             parseASCII(segment1);
-        }
-        catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             throw new IOException(ex);
         }
-        if (segment2.length > 0)
-        {
+        if (segment2.length > 0) {
             parseBinary(segment2);
         }
         return font;
@@ -76,25 +69,21 @@ final class Type1Parser
     /**
      * Parses the ASCII portion of a Type 1 font.
      */
-    private void parseASCII(byte[] bytes) throws IOException
-    {
-        if (bytes.length == 0)
-        {
+    private void parseASCII(byte[] bytes) throws IOException {
+        if (bytes.length == 0) {
             throw new IOException("ASCII segment of type 1 font is empty");
         }
 
         // %!FontType1-1.0
         // %!PS-AdobeFont-1.0
-        if (bytes.length < 2 || (bytes[0] != '%' && bytes[1] != '!'))
-        {
+        if (bytes.length < 2 || (bytes[0] != '%' && bytes[1] != '!')) {
             throw new IOException("Invalid start of ASCII segment of type 1 font");
         }
 
         lexer = new Type1Lexer(bytes);
 
         // (corrupt?) synthetic font
-        if ("FontDirectory".equals(lexer.peekToken().getText()))
-        {
+        if ("FontDirectory".equals(lexer.peekToken().getText())) {
             read(Token.NAME, "FontDirectory");
             read(Token.LITERAL); // font name
             read(Token.NAME, "known");
@@ -113,24 +102,20 @@ final class Type1Parser
         // if present, the "currentdict" is not required
         read(Token.NAME, "begin");
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             // premature end
             Token token = lexer.peekToken();
-            if (token == null)
-            {
+            if (token == null) {
                 break;
             }
             if (token.getKind() == Token.NAME &&
-                ("currentdict".equals(token.getText()) || "end".equals(token.getText())))
-            {
+                    ("currentdict".equals(token.getText()) || "end".equals(token.getText()))) {
                 break;
             }
 
             // key/value
             String key = read(Token.LITERAL).getText();
-            switch (key)
-            {
+            switch (key) {
                 case "FontInfo":
                 case "Fontinfo":
                     readFontInfo(readSimpleDict());
@@ -154,12 +139,10 @@ final class Type1Parser
         read(Token.NAME, "eexec");
     }
 
-    private void readSimpleValue(String key) throws IOException
-    {
+    private void readSimpleValue(String key) throws IOException {
         List<Token> value = readDictValue();
 
-        switch (key)
-        {
+        switch (key) {
             case "FontName":
                 font.fontName = value.get(0).getText();
                 break;
@@ -189,25 +172,18 @@ final class Type1Parser
         }
     }
 
-    private void readEncoding() throws IOException
-    {
-        if (lexer.peekKind(Token.NAME))
-        {
+    private void readEncoding() throws IOException {
+        if (lexer.peekKind(Token.NAME)) {
             String name = lexer.nextToken().getText();
 
-            if (name.equals("StandardEncoding"))
-            {
+            if (name.equals("StandardEncoding")) {
                 font.encoding = StandardEncoding.INSTANCE;
-            }
-            else
-            {
+            } else {
                 throw new IOException("Unknown encoding: " + name);
             }
             readMaybe(Token.NAME, "readonly");
             read(Token.NAME, "def");
-        }
-        else
-        {
+        } else {
             read(Token.INTEGER).intValue();
             readMaybe(Token.NAME, "array");
 
@@ -216,19 +192,16 @@ final class Type1Parser
             // as some fonts don't provide any dup-values, see PDFBOX-2134
             while (!(lexer.peekKind(Token.NAME)
                     && (lexer.peekToken().getText().equals("dup")
-                            || lexer.peekToken().getText().equals("readonly")
-                            || lexer.peekToken().getText().equals("def"))))
-            {
-                if ( lexer.nextToken() == null )
-                {
-                    throw new IOException( "Incomplete data while reading encoding of type 1 font" );
+                    || lexer.peekToken().getText().equals("readonly")
+                    || lexer.peekToken().getText().equals("def")))) {
+                if (lexer.nextToken() == null) {
+                    throw new IOException("Incomplete data while reading encoding of type 1 font");
                 }
             }
 
             Map<Integer, String> codeToName = new HashMap<>();
             while (lexer.peekKind(Token.NAME) &&
-                    lexer.peekToken().getText().equals("dup"))
-            {
+                    lexer.peekToken().getText().equals("dup")) {
                 read(Token.NAME, "dup");
                 int code = read(Token.INTEGER).intValue();
                 String name = read(Token.LITERAL).getText();
@@ -244,22 +217,15 @@ final class Type1Parser
     /**
      * Extracts values from an array as numbers.
      */
-    private List<Number> arrayToNumbers(List<Token> value) throws IOException
-    {
+    private List<Number> arrayToNumbers(List<Token> value) throws IOException {
         List<Number> numbers = new ArrayList<>();
-        for (int i = 1, size = value.size() - 1; i < size; i++)
-        {
+        for (int i = 1, size = value.size() - 1; i < size; i++) {
             Token token = value.get(i);
-            if (token.getKind() == Token.REAL)
-            {
+            if (token.getKind() == Token.REAL) {
                 numbers.add(token.floatValue());
-            }
-            else if (token.getKind() == Token.INTEGER)
-            {
+            } else if (token.getKind() == Token.INTEGER) {
                 numbers.add(token.intValue());
-            }
-            else
-            {
+            } else {
                 throw new IOException("Expected INTEGER or REAL but got " + token +
                         " at array position " + i);
             }
@@ -270,15 +236,12 @@ final class Type1Parser
     /**
      * Extracts values from the /FontInfo dictionary.
      */
-    private void readFontInfo(Map<String, List<Token>> fontInfo)
-    {
-        for (Map.Entry<String, List<Token>> entry : fontInfo.entrySet())
-        {
+    private void readFontInfo(Map<String, List<Token>> fontInfo) {
+        for (Map.Entry<String, List<Token>> entry : fontInfo.entrySet()) {
             String key = entry.getKey();
             List<Token> value = entry.getValue();
 
-            switch (key)
-            {
+            switch (key) {
                 case "version":
                     font.version = value.get(0).getText();
                     break;
@@ -316,8 +279,7 @@ final class Type1Parser
      * Reads a dictionary whose values are simple, i.e., do not contain
      * nested dictionaries.
      */
-    private Map<String, List<Token>> readSimpleDict() throws IOException
-    {
+    private Map<String, List<Token>> readSimpleDict() throws IOException {
         Map<String, List<Token>> dict = new HashMap<>();
 
         int length = read(Token.INTEGER).intValue();
@@ -325,25 +287,20 @@ final class Type1Parser
         readMaybe(Token.NAME, "dup");
         read(Token.NAME, "begin");
 
-        for (int i = 0; i < length; i++)
-        {
-            if (lexer.peekToken() == null)
-            {
+        for (int i = 0; i < length; i++) {
+            if (lexer.peekToken() == null) {
                 break;
             }
             if (lexer.peekKind(Token.NAME) &&
-               !lexer.peekToken().getText().equals("end"))
-            {
+                    !lexer.peekToken().getText().equals("end")) {
                 read(Token.NAME);
             }
             // premature end
-            if (lexer.peekToken() == null)
-            {
+            if (lexer.peekToken() == null) {
                 break;
             }
             if (lexer.peekKind(Token.NAME) &&
-                lexer.peekToken().getText().equals("end"))
-            {
+                    lexer.peekToken().getText().equals("end")) {
                 break;
             }
 
@@ -363,8 +320,7 @@ final class Type1Parser
     /**
      * Reads a simple value from a dictionary.
      */
-    private List<Token> readDictValue() throws IOException
-    {
+    private List<Token> readDictValue() throws IOException {
         List<Token> value = readValue();
         readDef();
         return value;
@@ -375,49 +331,37 @@ final class Type1Parser
      * a name, a literal name, an array, a procedure, or a charstring.
      * This method does not support reading nested dictionaries unless they're empty.
      */
-    private List<Token> readValue() throws IOException
-    {
+    private List<Token> readValue() throws IOException {
         List<Token> value = new ArrayList<>();
         Token token = lexer.nextToken();
-        if (lexer.peekToken() == null)
-        {
+        if (lexer.peekToken() == null) {
             return value;
         }
         value.add(token);
 
-        if (token.getKind() == Token.START_ARRAY)
-        {
+        if (token.getKind() == Token.START_ARRAY) {
             int openArray = 1;
-            while (true)
-            {
-                if (lexer.peekToken() == null)
-                {
+            while (true) {
+                if (lexer.peekToken() == null) {
                     return value;
                 }
-                if (lexer.peekKind(Token.START_ARRAY))
-                {
+                if (lexer.peekKind(Token.START_ARRAY)) {
                     openArray++;
                 }
 
                 token = lexer.nextToken();
                 value.add(token);
 
-                if (token.getKind() == Token.END_ARRAY)
-                {
+                if (token.getKind() == Token.END_ARRAY) {
                     openArray--;
-                    if (openArray == 0)
-                    {
+                    if (openArray == 0) {
                         break;
                     }
                 }
             }
-        }
-        else if (token.getKind() == Token.START_PROC)
-        {
+        } else if (token.getKind() == Token.START_PROC) {
             value.addAll(readProc());
-        }
-        else if (token.getKind() == Token.START_DICT)
-        {
+        } else if (token.getKind() == Token.START_DICT) {
             // skip "/GlyphNames2HostCode << >> def"
             read(Token.END_DICT);
             return value;
@@ -427,15 +371,12 @@ final class Type1Parser
         return value;
     }
 
-    private void readPostScriptWrapper(List<Token> value) throws IOException
-    {
-        if (lexer.peekToken() == null)
-        {
+    private void readPostScriptWrapper(List<Token> value) throws IOException {
+        if (lexer.peekToken() == null) {
             throw new IOException("Missing start token for the system dictionary");
         }
         // postscript wrapper (not in the Type 1 spec)
-        if ("systemdict".equals(lexer.peekToken().getText()))
-        {
+        if ("systemdict".equals(lexer.peekToken().getText())) {
             read(Token.NAME, "systemdict");
             read(Token.LITERAL, "internaldict");
             read(Token.NAME, "known");
@@ -462,38 +403,31 @@ final class Type1Parser
     /**
      * Reads a procedure.
      */
-    private List<Token> readProc() throws IOException
-    {
+    private List<Token> readProc() throws IOException {
         List<Token> value = new ArrayList<>();
 
         int openProc = 1;
-        while (true)
-        {
-            if (lexer.peekToken() == null)
-            {
+        while (true) {
+            if (lexer.peekToken() == null) {
                 throw new IOException("Malformed procedure: missing token");
             }
 
-            if (lexer.peekKind(Token.START_PROC))
-            {
+            if (lexer.peekKind(Token.START_PROC)) {
                 openProc++;
             }
 
             Token token = lexer.nextToken();
             value.add(token);
 
-            if (token.getKind() == Token.END_PROC)
-            {
+            if (token.getKind() == Token.END_PROC) {
                 openProc--;
-                if (openProc == 0)
-                {
+                if (openProc == 0) {
                     break;
                 }
             }
         }
         Token executeonly = readMaybe(Token.NAME, "executeonly");
-        if (executeonly != null)
-        {
+        if (executeonly != null) {
             value.add(executeonly);
         }
 
@@ -503,27 +437,21 @@ final class Type1Parser
     /**
      * Reads a procedure but without returning anything.
      */
-    private void readProcVoid() throws IOException
-    {
+    private void readProcVoid() throws IOException {
         int openProc = 1;
-        while (true)
-        {
-            if (lexer.peekToken() == null)
-            {
+        while (true) {
+            if (lexer.peekToken() == null) {
                 throw new IOException("Malformed procedure: missing token");
             }
-            if (lexer.peekKind(Token.START_PROC))
-            {
+            if (lexer.peekKind(Token.START_PROC)) {
                 openProc++;
             }
 
             Token token = lexer.nextToken();
 
-            if (token.getKind() == Token.END_PROC)
-            {
+            if (token.getKind() == Token.END_PROC) {
                 openProc--;
-                if (openProc == 0)
-                {
+                if (openProc == 0) {
                     break;
                 }
             }
@@ -534,32 +462,26 @@ final class Type1Parser
     /**
      * Parses the binary portion of a Type 1 font.
      */
-    private void parseBinary(byte[] bytes) throws IOException
-    {
+    private void parseBinary(byte[] bytes) throws IOException {
         byte[] decrypted;
         // Sometimes, fonts use the hex format, so this needs to be converted before decryption
-        if (isBinary(bytes))
-        {
+        if (isBinary(bytes)) {
             decrypted = decrypt(bytes, EEXEC_KEY, 4);
-        }
-        else
-        {
+        } else {
             decrypted = decrypt(hexToBinary(bytes), EEXEC_KEY, 4);
         }
         lexer = new Type1Lexer(decrypted);
 
         // find /Private dict
         Token peekToken = lexer.peekToken();
-        while (peekToken != null && !"Private".equals(peekToken.getText()))
-        {
+        while (peekToken != null && !"Private".equals(peekToken.getText())) {
             // for a more thorough validation, the presence of "begin" before Private
             // determines how code before and following charstrings should look
             // it is not currently checked anyway
             lexer.nextToken();
             peekToken = lexer.peekToken();
         }
-        if (peekToken == null)
-        {
+        if (peekToken == null) {
             throw new IOException("/Private token not found");
         }
 
@@ -574,19 +496,16 @@ final class Type1Parser
 
         int lenIV = 4; // number of random bytes at start of charstring
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             // premature end
-            if (!lexer.peekKind(Token.LITERAL))
-            {
+            if (!lexer.peekKind(Token.LITERAL)) {
                 break;
             }
 
             // key/value
             String key = read(Token.LITERAL).getText();
 
-            switch (key)
-            {
+            switch (key) {
                 case "Subrs":
                     readSubrs(lenIV);
                     break;
@@ -634,11 +553,9 @@ final class Type1Parser
         // sometimes followed by "put". Either way, we just skip until
         // the /CharStrings dict is found
         while (!(lexer.peekKind(Token.LITERAL)
-                && lexer.peekToken().getText().equals("CharStrings")))
-        {
-            if ( lexer.nextToken() == null )
-            {
-                throw new IOException( "Missing 'CharStrings' dictionary in type 1 font" );
+                && lexer.peekToken().getText().equals("CharStrings"))) {
+            if (lexer.nextToken() == null) {
+                throw new IOException("Missing 'CharStrings' dictionary in type 1 font");
             }
         }
 
@@ -650,10 +567,8 @@ final class Type1Parser
     /**
      * Extracts values from the /Private dictionary.
      */
-    private void readPrivate(String key, List<Token> value) throws IOException
-    {
-        switch (key)
-        {
+    private void readPrivate(String key, List<Token> value) throws IOException {
+        switch (key) {
             case "BlueValues":
                 font.blueValues = arrayToNumbers(value);
                 break;
@@ -700,28 +615,24 @@ final class Type1Parser
 
     /**
      * Reads the /Subrs array.
+     *
      * @param lenIV The number of random bytes used in charstring encryption.
      */
-    private void readSubrs(int lenIV) throws IOException
-    {
+    private void readSubrs(int lenIV) throws IOException {
         // allocate size (array indexes may not be in-order)
         int length = read(Token.INTEGER).intValue();
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             font.subrs.add(null);
         }
         read(Token.NAME, "array");
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             // premature end
-            if (lexer.peekToken() == null)
-            {
+            if (lexer.peekToken() == null) {
                 break;
             }
             if (!(lexer.peekKind(Token.NAME) &&
-                  lexer.peekToken().getText().equals("dup")))
-            {
+                    lexer.peekToken().getText().equals("dup"))) {
                 break;
             }
 
@@ -732,8 +643,7 @@ final class Type1Parser
             // RD
             Token charstring = read(Token.CHARSTRING);
             int j = index.intValue();
-            if (j < font.subrs.size())
-            {
+            if (j < font.subrs.size()) {
                 font.subrs.set(j, decrypt(charstring.getData(), CHARSTRING_KEY, lenIV));
             }
             readPut();
@@ -742,24 +652,18 @@ final class Type1Parser
     }
 
     // OtherSubrs are embedded PostScript procedures which we can safely ignore
-    private void readOtherSubrs() throws IOException
-    {
-        if (lexer.peekToken() == null)
-        {
+    private void readOtherSubrs() throws IOException {
+        if (lexer.peekToken() == null) {
             throw new IOException("Missing start token of OtherSubrs procedure");
         }
-        if (lexer.peekKind(Token.START_ARRAY))
-        {
+        if (lexer.peekKind(Token.START_ARRAY)) {
             readValue();
             readDef();
-        }
-        else
-        {
+        } else {
             int length = read(Token.INTEGER).intValue();
             read(Token.NAME, "array");
 
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 read(Token.NAME, "dup");
                 read(Token.INTEGER); // index
                 readValue(); // PostScript
@@ -771,10 +675,10 @@ final class Type1Parser
 
     /**
      * Reads the /CharStrings dictionary.
+     *
      * @param lenIV The number of random bytes used in charstring encryption.
      */
-    private void readCharStrings(int lenIV) throws IOException
-    {
+    private void readCharStrings(int lenIV) throws IOException {
         int length = read(Token.INTEGER).intValue();
         read(Token.NAME, "dict");
         // could actually be a sequence ending in "CharStrings begin", too
@@ -782,16 +686,13 @@ final class Type1Parser
         read(Token.NAME, "dup");
         read(Token.NAME, "begin");
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             // premature end
-            if (lexer.peekToken() == null)
-            {
+            if (lexer.peekToken() == null) {
                 break;
             }
             if (lexer.peekKind(Token.NAME) &&
-                lexer.peekToken().getText().equals("end"))
-            {
+                    lexer.peekToken().getText().equals("end")) {
                 break;
             }
             // key/value
@@ -814,14 +715,12 @@ final class Type1Parser
     /**
      * Reads the sequence "noaccess def" or equivalent.
      */
-    private void readDef() throws IOException
-    {
+    private void readDef() throws IOException {
         readMaybe(Token.NAME, "readonly");
         readMaybe(Token.NAME, "noaccess"); // allows "noaccess ND" (not in the Type 1 spec)
 
         Token token = read(Token.NAME);
-        switch (token.getText())
-        {
+        switch (token.getText()) {
             case "ND":
             case "|-":
                 return;
@@ -832,8 +731,7 @@ final class Type1Parser
                 break;
         }
 
-        if (token.getText().equals("def"))
-        {
+        if (token.getText().equals("def")) {
             return;
         }
         throw new IOException("Found " + token + " but expected ND");
@@ -842,13 +740,11 @@ final class Type1Parser
     /**
      * Reads the sequence "noaccess put" or equivalent.
      */
-    private void readPut() throws IOException
-    {
+    private void readPut() throws IOException {
         readMaybe(Token.NAME, "readonly");
 
         Token token = read(Token.NAME);
-        switch (token.getText())
-        {
+        switch (token.getText()) {
             case "NP":
             case "|":
                 return;
@@ -859,8 +755,7 @@ final class Type1Parser
                 break;
         }
 
-        if (token.getText().equals("put"))
-        {
+        if (token.getText().equals("put")) {
             return;
         }
         throw new IOException("Found " + token + " but expected NP");
@@ -871,11 +766,9 @@ final class Type1Parser
      *
      * @return token, never null
      */
-    private Token read(Token.Kind kind) throws IOException
-    {
+    private Token read(Token.Kind kind) throws IOException {
         Token token = lexer.nextToken();
-        if (token == null || token.getKind() != kind)
-        {
+        if (token == null || token.getKind() != kind) {
             throw new IOException("Found " + token + " but expected " + kind);
         }
         return token;
@@ -887,11 +780,9 @@ final class Type1Parser
      *
      * @return token, never null
      */
-    private void read(Token.Kind kind, String name) throws IOException
-    {
+    private void read(Token.Kind kind, String name) throws IOException {
         Token token = read(kind);
-        if (token.getText() == null || !token.getText().equals(name))
-        {
+        if (token.getText() == null || !token.getText().equals(name)) {
             throw new IOException("Found " + token + " but expected " + name);
         }
     }
@@ -902,10 +793,8 @@ final class Type1Parser
      *
      * @return token or null if not the expected one
      */
-    private Token readMaybe(Token.Kind kind, String name) throws IOException
-    {
-        if (lexer.peekKind(kind) && lexer.peekToken().getText().equals(name))
-        {
+    private Token readMaybe(Token.Kind kind, String name) throws IOException {
+        if (lexer.peekKind(kind) && lexer.peekToken().getText().equals(name)) {
             return lexer.nextToken();
         }
         return null;
@@ -915,32 +804,27 @@ final class Type1Parser
      * Type 1 Decryption (eexec, charstring).
      *
      * @param cipherBytes cipher text
-     * @param r key
-     * @param n number of random bytes (lenIV)
+     * @param r           key
+     * @param n           number of random bytes (lenIV)
      * @return plain text
      */
-    private byte[] decrypt(byte[] cipherBytes, int r, int n)
-    {
+    private byte[] decrypt(byte[] cipherBytes, int r, int n) {
         // lenIV of -1 means no encryption (not documented)
-        if (n == -1)
-        {
+        if (n == -1) {
             return cipherBytes;
         }
         // empty charstrings and charstrings of insufficient length
-        if (cipherBytes.length == 0 || n > cipherBytes.length)
-        {
-            return new byte[] {};
+        if (cipherBytes.length == 0 || n > cipherBytes.length) {
+            return new byte[]{};
         }
         // decrypt
         int c1 = 52845;
         int c2 = 22719;
         byte[] plainBytes = new byte[cipherBytes.length - n];
-        for (int i = 0; i < cipherBytes.length; i++)
-        {
+        for (int i = 0; i < cipherBytes.length; i++) {
             int cipher = cipherBytes[i] & 0xFF;
             int plain = cipher ^ r >> 8;
-            if (i >= n)
-            {
+            if (i >= n) {
                 plainBytes[i - n] = (byte) plain;
             }
             r = (cipher + r) * c1 + c2 & 0xffff;
@@ -950,51 +834,39 @@ final class Type1Parser
 
     // Check whether binary or hex encoded. See Adobe Type 1 Font Format specification
     // 7.2 eexec encryption
-    private boolean isBinary(byte[] bytes)
-    {
-        if (bytes.length < 4)
-        {
+    private boolean isBinary(byte[] bytes) {
+        if (bytes.length < 4) {
             return true;
         }
         // "At least one of the first 4 ciphertext bytes must not be one of
         // the ASCII hexadecimal character codes (a code for 0-9, A-F, or a-f)."
-        for (int i = 0; i < 4; ++i)
-        {
+        for (int i = 0; i < 4; ++i) {
             byte by = bytes[i];
             if (by != 0x0a && by != 0x0d && by != 0x20 && by != '\t' &&
-                    Character.digit((char) by, 16) == -1)
-            {
+                    Character.digit((char) by, 16) == -1) {
                 return true;
             }
         }
         return false;
     }
 
-    private byte[] hexToBinary(byte[] bytes)
-    {
+    private byte[] hexToBinary(byte[] bytes) {
         // calculate needed length
         int len = 0;
-        for (byte by : bytes)
-        {
-            if (Character.digit((char) by, 16) != -1)
-            {
+        for (byte by : bytes) {
+            if (Character.digit((char) by, 16) != -1) {
                 ++len;
             }
         }
         byte[] res = new byte[len / 2];
         int r = 0;
         int prev = -1;
-        for (byte by : bytes)
-        {
+        for (byte by : bytes) {
             int digit = Character.digit((char) by, 16);
-            if (digit != -1)
-            {
-                if (prev == -1)
-                {
+            if (digit != -1) {
+                if (prev == -1) {
                     prev = digit;
-                }
-                else
-                {
+                } else {
                     res[r++] = (byte) (prev * 16 + digit);
                     prev = -1;
                 }

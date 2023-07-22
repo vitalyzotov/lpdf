@@ -25,8 +25,7 @@ package lpdf.pdfbox.cos;
  * @see COSUpdateInfo
  * @see COSIncrement
  */
-public class COSUpdateState
-{
+public class COSUpdateState {
 
     /**
      * The {@link COSUpdateInfo} the {@link COSUpdateState} does manage update states for.
@@ -50,8 +49,7 @@ public class COSUpdateState
      *
      * @param updateInfo The {@link COSUpdateInfo}, that shall be managed by this {@link COSUpdateState}.
      */
-    public COSUpdateState(COSUpdateInfo updateInfo)
-    {
+    public COSUpdateState(COSUpdateInfo updateInfo) {
         this.updateInfo = updateInfo;
     }
 
@@ -79,8 +77,7 @@ public class COSUpdateState
      * @see #originDocumentState
      * @see #updated
      */
-    public void setOriginDocumentState(COSDocumentState originDocumentState)
-    {
+    public void setOriginDocumentState(COSDocumentState originDocumentState) {
         setOriginDocumentState(originDocumentState, false);
     }
 
@@ -115,46 +112,33 @@ public class COSUpdateState
      * @see #originDocumentState
      * @see #updated
      */
-    private void setOriginDocumentState(COSDocumentState originDocumentState, boolean dereferencing)
-    {
-        if(this.originDocumentState != null || originDocumentState == null)
-        {
+    private void setOriginDocumentState(COSDocumentState originDocumentState, boolean dereferencing) {
+        if (this.originDocumentState != null || originDocumentState == null) {
             return;
         }
         this.originDocumentState = originDocumentState;
-        if(!dereferencing)
-        {
+        if (!dereferencing) {
             update();
         }
 
-        if(updateInfo instanceof COSDictionary)
-        {
+        if (updateInfo instanceof COSDictionary) {
             COSDictionary dictionary = (COSDictionary) updateInfo;
-            for(COSBase entry : dictionary.getValues())
-            {
-                if (entry instanceof COSUpdateInfo)
-                {
+            for (COSBase entry : dictionary.getValues()) {
+                if (entry instanceof COSUpdateInfo) {
                     ((COSUpdateInfo) entry).getUpdateState().setOriginDocumentState(originDocumentState, dereferencing);
                 }
             }
-        }
-        else if(updateInfo instanceof COSArray)
-        {
+        } else if (updateInfo instanceof COSArray) {
             COSArray array = (COSArray) updateInfo;
-            for(COSBase entry : array)
-            {
-                if (entry instanceof COSUpdateInfo)
-                {
+            for (COSBase entry : array) {
+                if (entry instanceof COSUpdateInfo) {
                     ((COSUpdateInfo) entry).getUpdateState().setOriginDocumentState(originDocumentState, dereferencing);
                 }
             }
-        }
-        else if(updateInfo instanceof COSObject)
-        {
+        } else if (updateInfo instanceof COSObject) {
             COSObject object = (COSObject) updateInfo;
             COSBase reference;
-            if(object.isDereferenced() && (reference = object.getObject()) instanceof COSUpdateInfo)
-            {
+            if (object.isDereferenced() && (reference = object.getObject()) instanceof COSUpdateInfo) {
                 ((COSUpdateInfo) reference).getUpdateState().setOriginDocumentState(originDocumentState, dereferencing);
             }
         }
@@ -175,8 +159,7 @@ public class COSUpdateState
      * @return The {@link COSDocumentState} linked to this {@link COSUpdateState}.
      * @see #setOriginDocumentState(COSDocumentState)
      */
-    public COSDocumentState getOriginDocumentState()
-    {
+    public COSDocumentState getOriginDocumentState() {
         return originDocumentState;
     }
 
@@ -189,8 +172,7 @@ public class COSUpdateState
      * @see #originDocumentState
      * @see COSDocumentState#isAcceptingUpdates()
      */
-    boolean isAcceptingUpdates()
-    {
+    boolean isAcceptingUpdates() {
         return originDocumentState != null && originDocumentState.isAcceptingUpdates();
     }
 
@@ -200,8 +182,7 @@ public class COSUpdateState
      * @return The actual {@link #updated} state of the managed {@link #updateInfo}
      * @see #updated
      */
-    public boolean isUpdated()
-    {
+    public boolean isUpdated() {
         return updated;
     }
 
@@ -213,8 +194,7 @@ public class COSUpdateState
      * @see #updated
      * @see #isAcceptingUpdates()
      */
-    void update()
-    {
+    void update() {
         update(true);
     }
 
@@ -227,10 +207,8 @@ public class COSUpdateState
      * @see #updated
      * @see #isAcceptingUpdates()
      */
-    void update(boolean updated)
-    {
-        if(isAcceptingUpdates())
-        {
+    void update(boolean updated) {
+        if (isAcceptingUpdates()) {
             this.updated = updated;
         }
     }
@@ -249,11 +227,9 @@ public class COSUpdateState
      * @see #update()
      * @see #setOriginDocumentState(COSDocumentState)
      */
-    void update(COSBase child)
-    {
+    void update(COSBase child) {
         update();
-        if(child instanceof COSUpdateInfo)
-        {
+        if (child instanceof COSUpdateInfo) {
             ((COSUpdateInfo) child).getUpdateState().setOriginDocumentState(originDocumentState);
         }
     }
@@ -272,8 +248,7 @@ public class COSUpdateState
      * @see #update()
      * @see #setOriginDocumentState(COSDocumentState)
      */
-    void update(COSArray children)
-    {
+    void update(COSArray children) {
         update((Iterable<COSBase>) children);
     }
 
@@ -291,17 +266,13 @@ public class COSUpdateState
      * @see #update()
      * @see #setOriginDocumentState(COSDocumentState)
      */
-    void update(Iterable<COSBase> children)
-    {
+    void update(Iterable<COSBase> children) {
         update();
-        if(children == null)
-        {
+        if (children == null) {
             return;
         }
-        for(COSBase child : children)
-        {
-            if(child instanceof COSUpdateInfo)
-            {
+        for (COSBase child : children) {
+            if (child instanceof COSUpdateInfo) {
                 ((COSUpdateInfo) child).getUpdateState().setOriginDocumentState(originDocumentState);
             }
         }
@@ -319,10 +290,8 @@ public class COSUpdateState
      * @param child The child, that has been dereferenced.
      * @see #setOriginDocumentState(COSDocumentState, boolean)
      */
-    void dereferenceChild(COSBase child)
-    {
-        if(child instanceof COSUpdateInfo)
-        {
+    void dereferenceChild(COSBase child) {
+        if (child instanceof COSUpdateInfo) {
             ((COSUpdateInfo) child).getUpdateState().setOriginDocumentState(originDocumentState, true);
         }
     }
@@ -334,8 +303,7 @@ public class COSUpdateState
      * @see COSUpdateInfo
      * @see COSIncrement
      */
-    COSIncrement toIncrement()
-    {
+    COSIncrement toIncrement() {
         return new COSIncrement(updateInfo);
     }
 

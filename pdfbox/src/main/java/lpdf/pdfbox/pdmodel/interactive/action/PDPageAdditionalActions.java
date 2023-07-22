@@ -27,15 +27,13 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDPageAdditionalActions implements COSObjectable
-{
+public class PDPageAdditionalActions implements COSObjectable {
     private final COSDictionary actions;
 
     /**
      * Default constructor.
      */
-    public PDPageAdditionalActions()
-    {
+    public PDPageAdditionalActions() {
         actions = new COSDictionary();
     }
 
@@ -44,8 +42,7 @@ public class PDPageAdditionalActions implements COSObjectable
      *
      * @param a The action dictionary.
      */
-    public PDPageAdditionalActions( COSDictionary a )
-    {
+    public PDPageAdditionalActions(COSDictionary a) {
         actions = a;
     }
 
@@ -55,8 +52,7 @@ public class PDPageAdditionalActions implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return actions;
     }
 
@@ -68,8 +64,7 @@ public class PDPageAdditionalActions implements COSObjectable
      *
      * @return The O entry of page object's additional actions dictionary.
      */
-    public PDAction getO()
-    {
+    public PDAction getO() {
         COSDictionary o = actions.getCOSDictionary(COSName.O);
         return o != null ? PDActionFactory.createAction(o) : null;
     }
@@ -82,8 +77,7 @@ public class PDPageAdditionalActions implements COSObjectable
      *
      * @param o The action to be performed.
      */
-    public void setO( PDAction o )
-    {
+    public void setO(PDAction o) {
         actions.setItem(COSName.O, o);
     }
 
@@ -94,8 +88,7 @@ public class PDPageAdditionalActions implements COSObjectable
      *
      * @return The C entry of page object's additional actions dictionary.
      */
-    public PDAction getC()
-    {
+    public PDAction getC() {
         COSDictionary c = actions.getCOSDictionary(COSName.C);
         return c != null ? PDActionFactory.createAction(c) : null;
     }
@@ -107,8 +100,7 @@ public class PDPageAdditionalActions implements COSObjectable
      *
      * @param c The action to be performed.
      */
-    public void setC( PDAction c )
-    {
+    public void setC(PDAction c) {
         actions.setItem(COSName.C, c);
     }
 }

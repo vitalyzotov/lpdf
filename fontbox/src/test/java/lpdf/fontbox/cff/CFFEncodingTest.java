@@ -15,15 +15,13 @@
  */
 package lpdf.fontbox.cff;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
-class CFFEncodingTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class CFFEncodingTest {
     @Test
-    void testCFFExpertEncoding()
-    {
+    void testCFFExpertEncoding() {
         CFFExpertEncoding cffExpertEncoding = CFFExpertEncoding.getInstance();
         // check some randomly chosen mappings
         assertEquals(".notdef", cffExpertEncoding.getName(0));
@@ -36,8 +34,7 @@ class CFFEncodingTest
     }
 
     @Test
-    void testCFFStandardEncoding()
-    {
+    void testCFFStandardEncoding() {
         CFFStandardEncoding cffStandardEncoding = CFFStandardEncoding.getInstance();
         // check some randomly chosen mappings
         assertEquals(".notdef", cffStandardEncoding.getName(0));

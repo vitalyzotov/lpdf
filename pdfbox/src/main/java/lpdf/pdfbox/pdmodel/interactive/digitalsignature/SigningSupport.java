@@ -25,32 +25,26 @@ import java.io.InputStream;
 /**
  * Class to be used when creating PDF signatures externally. COSWriter is used to obtain data to be
  * signed and set the resulted CMS signature.
- *
  */
-public class SigningSupport implements ExternalSigningSupport, Closeable
-{
+public class SigningSupport implements ExternalSigningSupport, Closeable {
     private COSWriter cosWriter;
 
-    public SigningSupport(COSWriter cosWriter)
-    {
+    public SigningSupport(COSWriter cosWriter) {
         this.cosWriter = cosWriter;
     }
 
     @Override
-    public InputStream getContent() throws IOException
-    {
+    public InputStream getContent() throws IOException {
         return cosWriter.getDataToSign();
     }
 
     @Override
-    public void setSignature(byte[] signature) throws IOException
-    {
+    public void setSignature(byte[] signature) throws IOException {
         cosWriter.writeExternalSignature(signature);
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         cosWriter = null;
     }
 }

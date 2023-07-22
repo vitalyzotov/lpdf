@@ -16,11 +16,6 @@
  */
 package lpdf.pdfbox.pdfwriter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.cos.COSArray;
@@ -33,31 +28,35 @@ import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSNull;
 import lpdf.pdfbox.cos.COSString;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+
 /**
  * A class that will take a list of tokens and write out a stream with them.
  *
  * @author Ben Litchfield
  */
-public class ContentStreamWriter
-{
+public class ContentStreamWriter {
     private final OutputStream output;
     /**
      * space character.
      */
-    public static final byte[] SPACE = new byte[] { 32 };
+    public static final byte[] SPACE = new byte[]{32};
 
     /**
      * standard line separator
      */
-    public static final byte[] EOL = new byte[] { 0x0A };
+    public static final byte[] EOL = new byte[]{0x0A};
 
     /**
      * This will create a new content stream writer.
      *
      * @param out The stream to write the data to.
      */
-    public ContentStreamWriter( OutputStream out )
-    {
+    public ContentStreamWriter(OutputStream out) {
         output = out;
     }
 
@@ -67,19 +66,17 @@ public class ContentStreamWriter
      * @param base The operand to write to the stream.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writeToken(COSBase base) throws IOException
-    {
+    public void writeToken(COSBase base) throws IOException {
         writeObject(base);
     }
 
     /**
-     *  Writes a single operator token.
+     * Writes a single operator token.
      *
      * @param op The operator to write to the stream.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writeToken(Operator op) throws IOException
-    {
+    public void writeToken(Operator op) throws IOException {
         writeObject(op);
     }
 
@@ -89,10 +86,8 @@ public class ContentStreamWriter
      * @param tokens The tokens to write to the stream.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writeTokens(Object... tokens) throws IOException
-    {
-        for (Object token : tokens)
-        {
+    public void writeTokens(Object... tokens) throws IOException {
+        for (Object token : tokens) {
             writeObject(token);
         }
         output.write("\n".getBytes(StandardCharsets.US_ASCII));
@@ -104,39 +99,28 @@ public class ContentStreamWriter
      * @param tokens The tokens to write to the stream.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writeTokens( List<?> tokens ) throws IOException
-    {
-        for (Object token : tokens)
-        {
+    public void writeTokens(List<?> tokens) throws IOException {
+        for (Object token : tokens) {
             writeObject(token);
         }
     }
 
-    private void writeObject(Object o) throws IOException
-    {
-        if (o instanceof COSBase)
-        {
+    private void writeObject(Object o) throws IOException {
+        if (o instanceof COSBase) {
             writeObject((COSBase) o);
-        }
-        else if (o instanceof Operator)
-        {
+        } else if (o instanceof Operator) {
             writeObject((Operator) o);
-        }
-        else
-        {
+        } else {
             throw new IOException("Error:Unknown type in content stream:" + o);
         }
     }
 
-    private void writeObject(Operator op) throws IOException
-    {
-        if (op.getName().equals(OperatorName.BEGIN_INLINE_IMAGE))
-        {
+    private void writeObject(Operator op) throws IOException {
+        if (op.getName().equals(OperatorName.BEGIN_INLINE_IMAGE)) {
             output.write(OperatorName.BEGIN_INLINE_IMAGE.getBytes(StandardCharsets.ISO_8859_1));
             output.write(EOL);
             COSDictionary dic = op.getImageParameters();
-            for (COSName key : dic.keySet())
-            {
+            for (COSName key : dic.keySet()) {
                 COSBase value = dic.getDictionaryObject(key);
                 key.writePDF(output);
                 output.write(SPACE);
@@ -149,75 +133,52 @@ public class ContentStreamWriter
             output.write(EOL);
             output.write(OperatorName.END_INLINE_IMAGE.getBytes(StandardCharsets.ISO_8859_1));
             output.write(EOL);
-        }
-        else
-        {
+        } else {
             output.write(op.getName().getBytes(StandardCharsets.ISO_8859_1));
             output.write(EOL);
         }
     }
 
-    private void writeObject( COSBase o ) throws IOException
-    {
-        if( o instanceof COSString )
-        {
-            COSWriter.writeString((COSString)o, output);
-            output.write( SPACE );
-        }
-        else if( o instanceof COSFloat )
-        {
-            ((COSFloat)o).writePDF( output );
-            output.write( SPACE );
-        }
-        else if( o instanceof COSInteger )
-        {
-            ((COSInteger)o).writePDF( output );
-            output.write( SPACE );
-        }
-        else if( o instanceof COSBoolean )
-        {
-            ((COSBoolean)o).writePDF( output );
-            output.write( SPACE );
-        }
-        else if( o instanceof COSName )
-        {
-            ((COSName)o).writePDF( output );
-            output.write( SPACE );
-        }
-        else if( o instanceof COSArray )
-        {
-            COSArray array = (COSArray)o;
+    private void writeObject(COSBase o) throws IOException {
+        if (o instanceof COSString) {
+            COSWriter.writeString((COSString) o, output);
+            output.write(SPACE);
+        } else if (o instanceof COSFloat) {
+            ((COSFloat) o).writePDF(output);
+            output.write(SPACE);
+        } else if (o instanceof COSInteger) {
+            ((COSInteger) o).writePDF(output);
+            output.write(SPACE);
+        } else if (o instanceof COSBoolean) {
+            ((COSBoolean) o).writePDF(output);
+            output.write(SPACE);
+        } else if (o instanceof COSName) {
+            ((COSName) o).writePDF(output);
+            output.write(SPACE);
+        } else if (o instanceof COSArray) {
+            COSArray array = (COSArray) o;
             output.write(COSWriter.ARRAY_OPEN);
-            for( int i=0; i<array.size(); i++ )
-            {
+            for (int i = 0; i < array.size(); i++) {
                 writeObject(array.get(i));
             }
             output.write(COSWriter.ARRAY_CLOSE);
             output.write(SPACE);
-        }
-        else if( o instanceof COSDictionary )
-        {
-            COSDictionary obj = (COSDictionary)o;
-            output.write( COSWriter.DICT_OPEN );
-            for (Map.Entry<COSName, COSBase> entry : obj.entrySet())
-            {
-                if (entry.getValue() != null)
-                {
+        } else if (o instanceof COSDictionary) {
+            COSDictionary obj = (COSDictionary) o;
+            output.write(COSWriter.DICT_OPEN);
+            for (Map.Entry<COSName, COSBase> entry : obj.entrySet()) {
+                if (entry.getValue() != null) {
                     writeObject(entry.getKey());
                     writeObject(entry.getValue());
                 }
             }
-            output.write( COSWriter.DICT_CLOSE );
-            output.write( SPACE );
-        }
-        else if (o instanceof COSNull)
-        {
+            output.write(COSWriter.DICT_CLOSE);
+            output.write(SPACE);
+        } else if (o instanceof COSNull) {
             output.write("null".getBytes(StandardCharsets.US_ASCII));
             output.write(SPACE);
-        }
-        else
-        {
-            throw new IOException( "Error:Unknown type in content stream:" + o );
+        } else {
+            throw new IOException("Error:Unknown type in content stream:" + o);
         }
     }
 }

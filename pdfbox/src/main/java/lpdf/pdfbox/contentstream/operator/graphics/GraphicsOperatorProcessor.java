@@ -24,11 +24,9 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
  *
  * @author John Hewson
  */
-public abstract class GraphicsOperatorProcessor extends OperatorProcessor
-{
+public abstract class GraphicsOperatorProcessor extends OperatorProcessor {
 
-    protected GraphicsOperatorProcessor(PDFGraphicsStreamEngine context)
-    {
+    protected GraphicsOperatorProcessor(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
@@ -37,8 +35,7 @@ public abstract class GraphicsOperatorProcessor extends OperatorProcessor
      *
      * @return PDFGraphicsStreamEngine to be used for processing
      */
-    protected PDFGraphicsStreamEngine getGraphicsContext()
-    {
+    protected PDFGraphicsStreamEngine getGraphicsContext() {
         return (PDFGraphicsStreamEngine) getContext();
     }
 }

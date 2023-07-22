@@ -22,80 +22,69 @@ import java.util.regex.Pattern;
 
 /**
  * Basic parser for Type 4 functions which is used to build up instruction sequences.
- *
  */
-public final class InstructionSequenceBuilder extends Parser.AbstractSyntaxHandler
-{
+public final class InstructionSequenceBuilder extends Parser.AbstractSyntaxHandler {
     private static final Pattern INTEGER_PATTERN = Pattern.compile("[\\+\\-]?\\d+");
     private static final Pattern REAL_PATTERN = Pattern.compile("[\\-]?\\d*\\.\\d*([Ee]\\-?\\d+)?");
 
     private final InstructionSequence mainSequence = new InstructionSequence();
     private final Stack<InstructionSequence> seqStack = new Stack<>();
 
-    private InstructionSequenceBuilder()
-    {
+    private InstructionSequenceBuilder() {
         this.seqStack.push(this.mainSequence);
     }
 
     /**
      * Returns the instruction sequence that has been build from the syntactic elements.
+     *
      * @return the instruction sequence
      */
-    public InstructionSequence getInstructionSequence()
-    {
+    public InstructionSequence getInstructionSequence() {
         return this.mainSequence;
     }
 
     /**
      * Parses the given text into an instruction sequence representing a Type 4 function
      * that can be executed.
+     *
      * @param text the Type 4 function text
      * @return the instruction sequence
      */
-    public static InstructionSequence parse(CharSequence text)
-    {
+    public static InstructionSequence parse(CharSequence text) {
         InstructionSequenceBuilder builder = new InstructionSequenceBuilder();
         Parser.parse(text, builder);
         return builder.getInstructionSequence();
     }
 
-    private InstructionSequence getCurrentSequence()
-    {
+    private InstructionSequence getCurrentSequence() {
         return this.seqStack.peek();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void token(CharSequence text)
-    {
+    public void token(CharSequence text) {
         String token = text.toString();
         token(token);
     }
 
-    private void token(String token)
-    {
-        if ("{".equals(token))
-        {
+    private void token(String token) {
+        if ("{".equals(token)) {
             InstructionSequence child = new InstructionSequence();
             getCurrentSequence().addProc(child);
             this.seqStack.push(child);
-        }
-        else if ("}".equals(token))
-        {
+        } else if ("}".equals(token)) {
             this.seqStack.pop();
-        }
-        else
-        {
+        } else {
             Matcher m = INTEGER_PATTERN.matcher(token);
-            if (m.matches())
-            {
+            if (m.matches()) {
                 getCurrentSequence().addInteger(parseInt(token));
                 return;
             }
 
             m = REAL_PATTERN.matcher(token);
-            if (m.matches())
-            {
+            if (m.matches()) {
                 getCurrentSequence().addReal(parseReal(token));
                 return;
             }
@@ -108,21 +97,21 @@ public final class InstructionSequenceBuilder extends Parser.AbstractSyntaxHandl
 
     /**
      * Parses a value of type "int".
+     *
      * @param token the token to be parsed
      * @return the parsed value
      */
-    public static int parseInt(String token)
-    {
+    public static int parseInt(String token) {
         return Integer.parseInt(token);
     }
 
     /**
      * Parses a value of type "real".
+     *
      * @param token the token to be parsed
      * @return the parsed value
      */
-    public static float parseReal(String token)
-    {
+    public static float parseReal(String token) {
         return Float.parseFloat(token);
     }
 

@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class IndexToLocationTable extends TTFTable
-{
+public class IndexToLocationTable extends TTFTable {
     private static final short SHORT_OFFSETS = 0;
     private static final short LONG_OFFSETS = 1;
 
@@ -35,57 +34,48 @@ public class IndexToLocationTable extends TTFTable
 
     private long[] offsets;
 
-    IndexToLocationTable()
-    {
+    IndexToLocationTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         HeaderTable head = ttf.getHeader();
-        if (head == null)
-        {
+        if (head == null) {
             throw new IOException("Could not get head table");
         }
         int numGlyphs = ttf.getNumberOfGlyphs();
-        offsets = new long[ numGlyphs +1];
-        for( int i=0; i<numGlyphs+1; i++ )
-        {
-            if( head.getIndexToLocFormat() == SHORT_OFFSETS )
-            {
+        offsets = new long[numGlyphs + 1];
+        for (int i = 0; i < numGlyphs + 1; i++) {
+            if (head.getIndexToLocFormat() == SHORT_OFFSETS) {
                 offsets[i] = data.readUnsignedShort() * 2L;
-            }
-            else if(  head.getIndexToLocFormat() == LONG_OFFSETS )
-            {
+            } else if (head.getIndexToLocFormat() == LONG_OFFSETS) {
                 offsets[i] = data.readUnsignedInt();
-            }
-            else
-            {
-                throw new IOException( "Error:TTF.loca unknown offset format: " + head.getIndexToLocFormat());
+            } else {
+                throw new IOException("Error:TTF.loca unknown offset format: " + head.getIndexToLocFormat());
             }
         }
         initialized = true;
     }
+
     /**
      * @return Returns the offsets.
      */
-    public long[] getOffsets()
-    {
+    public long[] getOffsets() {
         return offsets;
     }
+
     /**
      * @param offsetsValue The offsets to set.
      */
-    public void setOffsets(long[] offsetsValue)
-    {
+    public void setOffsets(long[] offsetsValue) {
         offsets = offsetsValue;
     }
 }

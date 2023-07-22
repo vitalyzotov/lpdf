@@ -16,17 +16,9 @@
  */
 package lpdf.pdfbox.pdmodel.font;
 
-import lpdf.harmony.awt.geom.GeneralPath;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.util.BoundingBox;
+import lpdf.harmony.awt.geom.GeneralPath;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -40,14 +32,20 @@ import lpdf.pdfbox.pdmodel.font.encoding.Encoding;
 import lpdf.pdfbox.pdmodel.font.encoding.GlyphList;
 import lpdf.pdfbox.util.Matrix;
 import lpdf.pdfbox.util.Vector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A PostScript Type 3 Font.
  *
  * @author Ben Litchfield
  */
-public class PDType3Font extends PDSimpleFont
-{
+public class PDType3Font extends PDSimpleFont {
     /**
      * Log instance.
      */
@@ -63,11 +61,9 @@ public class PDType3Font extends PDSimpleFont
      * Constructor.
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
-     *
      * @throws IOException if the font could not be created
      */
-    public PDType3Font(COSDictionary fontDictionary) throws IOException
-    {
+    public PDType3Font(COSDictionary fontDictionary) throws IOException {
         this(fontDictionary, null);
     }
 
@@ -75,157 +71,125 @@ public class PDType3Font extends PDSimpleFont
      * Constructor.
      *
      * @param fontDictionary The font dictionary according to the PDF specification.
-     * @param resourceCache Resource cache, can be null.
-     *
+     * @param resourceCache  Resource cache, can be null.
      * @throws IOException if the font could not be created
      */
-    public PDType3Font(COSDictionary fontDictionary, ResourceCache resourceCache) throws IOException
-    {
+    public PDType3Font(COSDictionary fontDictionary, ResourceCache resourceCache) throws IOException {
         super(fontDictionary);
         this.resourceCache = resourceCache;
         readEncoding();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return dict.getNameAsString(COSName.NAME);
     }
 
     @Override
-    protected final void readEncoding() throws IOException
-    {
+    protected final void readEncoding() throws IOException {
         COSBase encodingBase = dict.getDictionaryObject(COSName.ENCODING);
-        if (encodingBase instanceof COSName)
-        {
+        if (encodingBase instanceof COSName) {
             COSName encodingName = (COSName) encodingBase;
             encoding = Encoding.getInstance(encodingName);
-            if (encoding == null)
-            {
+            if (encoding == null) {
                 LOG.warn("Unknown encoding: " + encodingName.getName());
             }
-        }
-        else if (encodingBase instanceof COSDictionary)
-        {
+        } else if (encodingBase instanceof COSDictionary) {
             encoding = new DictionaryEncoding((COSDictionary) encodingBase);
         }
         glyphList = GlyphList.getAdobeGlyphList();
     }
 
     @Override
-    protected Encoding readEncodingFromFont() throws IOException
-    {
+    protected Encoding readEncodingFromFont() throws IOException {
         // Type 3 fonts do not have a built-in encoding
         throw new UnsupportedOperationException("not supported for Type 3 fonts");
     }
 
     @Override
-    protected Boolean isFontSymbolic()
-    {
+    protected Boolean isFontSymbolic() {
         return false;
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
+    public GeneralPath getPath(String name) throws IOException {
         // Type 3 fonts do not use vector paths
         throw new UnsupportedOperationException("not supported for Type 3 fonts");
     }
 
     @Override
-    public boolean hasGlyph(String name) throws IOException
-    {
+    public boolean hasGlyph(String name) throws IOException {
         COSDictionary cp = getCharProcs();
         return cp != null && cp.getCOSStream(COSName.getPDFName(name)) != null;
     }
 
     @Override
-    public FontBoxFont getFontBoxFont()
-    {
+    public FontBoxFont getFontBoxFont() {
         // Type 3 fonts do not use FontBox fonts
         throw new UnsupportedOperationException("not supported for Type 3 fonts");
     }
 
     @Override
-    public Vector getDisplacement(int code) throws IOException
-    {
+    public Vector getDisplacement(int code) throws IOException {
         return getFontMatrix().transform(new Vector(getWidth(code), 0));
     }
 
     @Override
-    public float getWidth(int code) throws IOException
-    {
+    public float getWidth(int code) throws IOException {
         int firstChar = dict.getInt(COSName.FIRST_CHAR, -1);
         int lastChar = dict.getInt(COSName.LAST_CHAR, -1);
         List<Float> widths = getWidths();
-        if (!widths.isEmpty() && code >= firstChar && code <= lastChar)
-        {
-            if (code - firstChar >= widths.size())
-            {
+        if (!widths.isEmpty() && code >= firstChar && code <= lastChar) {
+            if (code - firstChar >= widths.size()) {
                 return 0;
             }
             Float w = widths.get(code - firstChar);
             return w == null ? 0 : w;
-        }
-        else
-        {
+        } else {
             PDFontDescriptor fd = getFontDescriptor();
-            if (fd != null)
-            {
+            if (fd != null) {
                 return fd.getMissingWidth();
-            }
-            else
-            {
+            } else {
                 return getWidthFromFont(code);
             }
         }
     }
 
     @Override
-    public float getWidthFromFont(int code) throws IOException
-    {
+    public float getWidthFromFont(int code) throws IOException {
         PDType3CharProc charProc = getCharProc(code);
-        if (charProc == null || charProc.getCOSObject().getLength() == 0)
-        {
+        if (charProc == null || charProc.getCOSObject().getLength() == 0) {
             return 0;
         }
         return charProc.getWidth();
     }
 
     @Override
-    public boolean isEmbedded()
-    {
+    public boolean isEmbedded() {
         return true;
     }
 
     @Override
-    public float getHeight(int code) throws IOException
-    {
+    public float getHeight(int code) throws IOException {
         PDFontDescriptor desc = getFontDescriptor();
-        if (desc != null)
-        {
+        if (desc != null) {
             // the following values are all more or less accurate at least all are average
             // values. Maybe we'll find another way to get those value for every single glyph
             // in the future if needed
             PDRectangle bbox = desc.getFontBoundingBox();
             float retval = 0;
-            if (bbox != null)
-            {
+            if (bbox != null) {
                 retval = bbox.getHeight() / 2;
             }
-            if (Float.compare(retval, 0) == 0)
-            {
+            if (Float.compare(retval, 0) == 0) {
                 retval = desc.getCapHeight();
             }
-            if (Float.compare(retval, 0) == 0)
-            {
+            if (Float.compare(retval, 0) == 0) {
                 retval = desc.getAscent();
             }
-            if (Float.compare(retval, 0) == 0)
-            {
+            if (Float.compare(retval, 0) == 0) {
                 retval = desc.getXHeight();
-                if (retval > 0)
-                {
+                if (retval > 0) {
                     retval -= desc.getDescent();
                 }
             }
@@ -235,22 +199,18 @@ public class PDType3Font extends PDSimpleFont
     }
 
     @Override
-    protected byte[] encode(int unicode) throws IOException
-    {
+    protected byte[] encode(int unicode) throws IOException {
         throw new UnsupportedOperationException("Not implemented: Type3");
     }
 
     @Override
-    public int readCode(InputStream in) throws IOException
-    {
+    public int readCode(InputStream in) throws IOException {
         return in.read();
     }
 
     @Override
-    public Matrix getFontMatrix()
-    {
-        if (fontMatrix == null)
-        {
+    public Matrix getFontMatrix() {
+        if (fontMatrix == null) {
             COSArray matrix = dict.getCOSArray(COSName.FONT_MATRIX);
             fontMatrix = checkFontMatrixValues(matrix) ? Matrix.createMatrix(matrix)
                     : super.getFontMatrix();
@@ -258,22 +218,19 @@ public class PDType3Font extends PDSimpleFont
         return fontMatrix;
     }
 
-    private boolean checkFontMatrixValues(COSArray matrix)
-    {
+    private boolean checkFontMatrixValues(COSArray matrix) {
         return matrix != null && matrix.size() == 6
                 && matrix.toCOSNumberFloatList().stream().allMatch(Objects::nonNull);
     }
 
     @Override
-    public boolean isDamaged()
-    {
+    public boolean isDamaged() {
         // there's no font file to load
         return false;
     }
 
     @Override
-    public boolean isStandard14()
-    {
+    public boolean isStandard14() {
         return false;
     }
 
@@ -282,13 +239,10 @@ public class PDType3Font extends PDSimpleFont
      *
      * @return the resources bound to be used when parsing the type3 stream
      */
-    public PDResources getResources()
-    {
-        if (resources == null)
-        {
+    public PDResources getResources() {
+        if (resources == null) {
             COSDictionary resDict = dict.getCOSDictionary(COSName.RESOURCES);
-            if (resDict != null)
-            {
+            if (resDict != null) {
                 resources = new PDResources(resDict, resourceCache);
             }
         }
@@ -300,47 +254,36 @@ public class PDType3Font extends PDSimpleFont
      *
      * @return The fonts bounding box.
      */
-    public PDRectangle getFontBBox()
-    {
+    public PDRectangle getFontBBox() {
         COSArray bBox = dict.getCOSArray(COSName.FONT_BBOX);
         return bBox != null ? new PDRectangle(bBox) : null;
     }
 
     @Override
-    public BoundingBox getBoundingBox()
-    {
-        if (fontBBox == null)
-        {
+    public BoundingBox getBoundingBox() {
+        if (fontBBox == null) {
             fontBBox = generateBoundingBox();
         }
         return fontBBox;
     }
 
-    private BoundingBox generateBoundingBox()
-    {
+    private BoundingBox generateBoundingBox() {
         PDRectangle rect = getFontBBox();
-        if (rect == null)
-        {
+        if (rect == null) {
             LOG.warn("FontBBox missing, returning empty rectangle");
             return new BoundingBox();
         }
-        if (!isNonZeroBoundingBox(rect))
-        {
+        if (!isNonZeroBoundingBox(rect)) {
             // Plan B: get the max bounding box of the glyphs
             COSDictionary cp = getCharProcs();
-            if (cp != null)
-            {
-                for (COSName name : cp.keySet())
-                {
+            if (cp != null) {
+                for (COSName name : cp.keySet()) {
                     COSStream typ3CharProcStream = cp.getCOSStream(name);
-                    if (typ3CharProcStream != null)
-                    {
+                    if (typ3CharProcStream != null) {
                         PDType3CharProc charProc = new PDType3CharProc(this, typ3CharProcStream);
-                        try
-                        {
+                        try {
                             PDRectangle glyphBBox = charProc.getGlyphBBox();
-                            if (glyphBBox == null)
-                            {
+                            if (glyphBBox == null) {
                                 continue;
                             }
                             rect.setLowerLeftX(
@@ -351,9 +294,7 @@ public class PDType3Font extends PDSimpleFont
                                     Math.max(rect.getUpperRightX(), glyphBBox.getUpperRightX()));
                             rect.setUpperRightY(
                                     Math.max(rect.getUpperRightY(), glyphBBox.getUpperRightY()));
-                        }
-                        catch (IOException ex)
-                        {
+                        } catch (IOException ex) {
                             // ignore
                             LOG.debug(
                                     "error getting the glyph bounding box - font bounding box will be used",
@@ -372,10 +313,8 @@ public class PDType3Font extends PDSimpleFont
      *
      * @return the dictionary containing all glyph streams.
      */
-    public COSDictionary getCharProcs()
-    {
-        if (charProcs == null)
-        {
+    public COSDictionary getCharProcs() {
+        if (charProcs == null) {
             charProcs = dict.getCOSDictionary(COSName.CHAR_PROCS);
         }
         return charProcs;
@@ -387,10 +326,8 @@ public class PDType3Font extends PDSimpleFont
      * @param code character code
      * @return the stream to be used to render the glyph
      */
-    public PDType3CharProc getCharProc(int code)
-    {
-        if (getEncoding() == null || getCharProcs() == null)
-        {
+    public PDType3CharProc getCharProc(int code) {
+        if (getEncoding() == null || getCharProcs() == null) {
             return null;
         }
         String name = getEncoding().getName(code);

@@ -16,30 +16,27 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.blend;
 
+import lpdf.pdfbox.cos.COSArray;
+import lpdf.pdfbox.cos.COSInteger;
+import lpdf.pdfbox.cos.COSName;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lpdf.pdfbox.cos.COSArray;
-import lpdf.pdfbox.cos.COSInteger;
-import lpdf.pdfbox.cos.COSName;
-import org.junit.jupiter.api.Test;
-
 /**
- *
  * @author Tilman Hausherr
  */
-class BlendModeTest
-{
+class BlendModeTest {
 
     /**
      * Check that BlendMode.* constant instances are not null.
      */
     @Test
-    void testInstances()
-    {
+    void testInstances() {
         assertEquals(BlendMode.NORMAL, BlendMode.getInstance(COSName.NORMAL));
         assertEquals(BlendMode.NORMAL, BlendMode.getInstance(COSName.COMPATIBLE));
         assertEquals(BlendMode.MULTIPLY, BlendMode.getInstance(COSName.MULTIPLY));
@@ -69,8 +66,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeNormal()
-    {
+    void testBlendModeNormal() {
         assertTrue(BlendMode.NORMAL.isSeparableBlendMode());
         assertNull(BlendMode.NORMAL.getBlendFunction());
         assertNotNull(BlendMode.NORMAL.getBlendChannelFunction());
@@ -81,8 +77,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeMultiply()
-    {
+    void testBlendModeMultiply() {
         assertTrue(BlendMode.MULTIPLY.isSeparableBlendMode());
         assertNull(BlendMode.MULTIPLY.getBlendFunction());
         assertNotNull(BlendMode.MULTIPLY.getBlendChannelFunction());
@@ -91,8 +86,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeScreen()
-    {
+    void testBlendModeScreen() {
         assertTrue(BlendMode.SCREEN.isSeparableBlendMode());
         assertNull(BlendMode.SCREEN.getBlendFunction());
         assertNotNull(BlendMode.SCREEN.getBlendChannelFunction());
@@ -101,8 +95,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeOverlay()
-    {
+    void testBlendModeOverlay() {
         assertTrue(BlendMode.OVERLAY.isSeparableBlendMode());
         assertNull(BlendMode.OVERLAY.getBlendFunction());
         assertNotNull(BlendMode.OVERLAY.getBlendChannelFunction());
@@ -112,8 +105,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeDarken()
-    {
+    void testBlendModeDarken() {
         assertTrue(BlendMode.DARKEN.isSeparableBlendMode());
         assertNull(BlendMode.DARKEN.getBlendFunction());
         assertNotNull(BlendMode.DARKEN.getBlendChannelFunction());
@@ -122,8 +114,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeLighten()
-    {
+    void testBlendModeLighten() {
         assertTrue(BlendMode.LIGHTEN.isSeparableBlendMode());
         assertNull(BlendMode.LIGHTEN.getBlendFunction());
         assertNotNull(BlendMode.LIGHTEN.getBlendChannelFunction());
@@ -132,8 +123,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeColorDodge()
-    {
+    void testBlendModeColorDodge() {
         assertTrue(BlendMode.COLOR_DODGE.isSeparableBlendMode());
         assertNull(BlendMode.COLOR_DODGE.getBlendFunction());
         assertNotNull(BlendMode.COLOR_DODGE.getBlendChannelFunction());
@@ -143,8 +133,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeColorBurn()
-    {
+    void testBlendModeColorBurn() {
         assertTrue(BlendMode.COLOR_BURN.isSeparableBlendMode());
         assertNull(BlendMode.COLOR_BURN.getBlendFunction());
         assertNotNull(BlendMode.COLOR_BURN.getBlendChannelFunction());
@@ -154,8 +143,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeHardLight()
-    {
+    void testBlendModeHardLight() {
         assertTrue(BlendMode.HARD_LIGHT.isSeparableBlendMode());
         assertNull(BlendMode.HARD_LIGHT.getBlendFunction());
         assertNotNull(BlendMode.HARD_LIGHT.getBlendChannelFunction());
@@ -167,8 +155,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeSoftLight()
-    {
+    void testBlendModeSoftLight() {
         assertTrue(BlendMode.SOFT_LIGHT.isSeparableBlendMode());
         assertNull(BlendMode.SOFT_LIGHT.getBlendFunction());
         assertNotNull(BlendMode.SOFT_LIGHT.getBlendChannelFunction());
@@ -181,8 +168,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeDifference()
-    {
+    void testBlendModeDifference() {
         assertTrue(BlendMode.DIFFERENCE.isSeparableBlendMode());
         assertNull(BlendMode.DIFFERENCE.getBlendFunction());
         assertNotNull(BlendMode.DIFFERENCE.getBlendChannelFunction());
@@ -191,8 +177,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeExclusion()
-    {
+    void testBlendModeExclusion() {
         assertTrue(BlendMode.EXCLUSION.isSeparableBlendMode());
         assertNull(BlendMode.EXCLUSION.getBlendFunction());
         assertNotNull(BlendMode.EXCLUSION.getBlendChannelFunction());
@@ -200,8 +185,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeHue()
-    {
+    void testBlendModeHue() {
         assertFalse(BlendMode.HUE.isSeparableBlendMode());
         assertNotNull(BlendMode.HUE.getBlendFunction());
         assertNull(BlendMode.HUE.getBlendChannelFunction());
@@ -209,8 +193,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeSaturation()
-    {
+    void testBlendModeSaturation() {
         assertFalse(BlendMode.SATURATION.isSeparableBlendMode());
         assertNotNull(BlendMode.SATURATION.getBlendFunction());
         assertNull(BlendMode.SATURATION.getBlendChannelFunction());
@@ -218,8 +201,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeLuminosity()
-    {
+    void testBlendModeLuminosity() {
         assertFalse(BlendMode.LUMINOSITY.isSeparableBlendMode());
         assertNotNull(BlendMode.LUMINOSITY.getBlendFunction());
         assertNull(BlendMode.LUMINOSITY.getBlendChannelFunction());
@@ -227,8 +209,7 @@ class BlendModeTest
     }
 
     @Test
-    void testBlendModeColor()
-    {
+    void testBlendModeColor() {
         assertFalse(BlendMode.COLOR.isSeparableBlendMode());
         assertNotNull(BlendMode.COLOR.getBlendFunction());
         assertNull(BlendMode.COLOR.getBlendChannelFunction());

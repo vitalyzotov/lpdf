@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -28,34 +25,31 @@ import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.pdmodel.graphics.state.RenderingMode;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * Tr: Set text rendering mode.
  *
  * @author Ben Litchfield
  */
-public class SetTextRenderingMode extends OperatorProcessor
-{
-    public SetTextRenderingMode(PDFStreamEngine context)
-    {
+public class SetTextRenderingMode extends OperatorProcessor {
+    public SetTextRenderingMode(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             throw new MissingOperandException(operator, arguments);
         }
         COSBase base0 = arguments.get(0);
-        if (!(base0 instanceof COSNumber))
-        {
+        if (!(base0 instanceof COSNumber)) {
             return;
         }
         COSNumber mode = (COSNumber) base0;
         int val = mode.intValue();
-        if (val < 0 || val >= RenderingMode.values().length)
-        {
+        if (val < 0 || val >= RenderingMode.values().length) {
             return;
         }
         RenderingMode renderingMode = RenderingMode.fromInt(val);
@@ -63,8 +57,7 @@ public class SetTextRenderingMode extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SET_TEXT_RENDERINGMODE;
     }
 }

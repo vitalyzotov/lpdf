@@ -17,10 +17,11 @@
 
 package lpdf.pdfbox.pdmodel.font;
 
+import lpdf.fontbox.FontBoxFont;
+
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lpdf.fontbox.FontBoxFont;
 
 /**
  * An in-memory cache for system fonts. This allows PDFBox to manage caching for a {@link FontProvider}.
@@ -28,8 +29,7 @@ import lpdf.fontbox.FontBoxFont;
  *
  * @author John Hewson
  */
-public final class FontCache
-{
+public final class FontCache {
     private final Map<FontInfo, SoftReference<FontBoxFont>> cache = new ConcurrentHashMap<>();
 
     /**
@@ -38,8 +38,7 @@ public final class FontCache
      * @param info the FontInfo to be used as key
      * @param font the font to be cached
      */
-    public void addFont(FontInfo info, FontBoxFont font)
-    {
+    public void addFont(FontInfo info, FontBoxFont font) {
         cache.put(info, new SoftReference<>(font));
     }
 
@@ -47,11 +46,9 @@ public final class FontCache
      * Returns the FontBox font associated with the given FontInfo.
      *
      * @param info the FontInfo of the cached font
-     *
      * @return the cached font if available, otherwise null
      */
-    public FontBoxFont getFont(FontInfo info)
-    {
+    public FontBoxFont getFont(FontInfo info) {
         SoftReference<FontBoxFont> reference = cache.get(info);
         return reference != null ? reference.get() : null;
     }

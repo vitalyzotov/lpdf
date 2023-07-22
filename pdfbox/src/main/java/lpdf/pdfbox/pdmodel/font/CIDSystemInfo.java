@@ -22,37 +22,31 @@ package lpdf.pdfbox.pdmodel.font;
  *
  * @author John Hewson
  */
-public final class CIDSystemInfo
-{
+public final class CIDSystemInfo {
     private final String registry;
     private final String ordering;
     private final int supplement;
 
-    public CIDSystemInfo(String registry, String ordering, int supplement)
-    {
+    public CIDSystemInfo(String registry, String ordering, int supplement) {
         this.registry = registry;
         this.ordering = ordering;
         this.supplement = supplement;
     }
 
-    public String getRegistry()
-    {
+    public String getRegistry() {
         return registry;
     }
 
-    public String getOrdering()
-    {
+    public String getOrdering() {
         return ordering;
     }
 
-    public int getSupplement()
-    {
+    public int getSupplement() {
         return supplement;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getRegistry() + "-" + getOrdering() + "-" + getSupplement();
     }
 }

@@ -23,33 +23,27 @@ package lpdf.fontbox.ttf.table.common;
  * table</a> in the Open Type layout common tables.
  *
  * @author Palash Ray
- *
  */
-public class FeatureListTable
-{
+public class FeatureListTable {
     private final int featureCount;
     private final FeatureRecord[] featureRecords;
 
-    public FeatureListTable(int featureCount, FeatureRecord[] featureRecords)
-    {
+    public FeatureListTable(int featureCount, FeatureRecord[] featureRecords) {
         this.featureCount = featureCount;
         this.featureRecords = featureRecords;
     }
 
-    public int getFeatureCount()
-    {
+    public int getFeatureCount() {
         return featureCount;
     }
 
-    public FeatureRecord[] getFeatureRecords()
-    {
+    public FeatureRecord[] getFeatureRecords() {
         return featureRecords;
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("%s[featureCount=%d]", FeatureListTable.class.getSimpleName(),
                 featureCount);
     }

@@ -16,16 +16,16 @@
  */
 package lpdf.pdfbox.contentstream.operator.color;
 
-import java.io.IOException;
-import java.util.List;
-
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
 import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * CS: Set color space for stroking operations.
@@ -33,23 +33,18 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
  * @author Ben Litchfield
  * @author John Hewson
  */
-public class SetStrokingColorSpace extends OperatorProcessor
-{
-    public SetStrokingColorSpace(PDFStreamEngine context)
-    {
+public class SetStrokingColorSpace extends OperatorProcessor {
+    public SetStrokingColorSpace(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
-        if (arguments.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
+        if (arguments.isEmpty()) {
             return;
         }
         COSBase base = arguments.get(0);
-        if (!(base instanceof COSName))
-        {
+        if (!(base instanceof COSName)) {
             return;
         }
         PDFStreamEngine context = getContext();
@@ -59,8 +54,7 @@ public class SetStrokingColorSpace extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.STROKING_COLORSPACE;
     }
 }

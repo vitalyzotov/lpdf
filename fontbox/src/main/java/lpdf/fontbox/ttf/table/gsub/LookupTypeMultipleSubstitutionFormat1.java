@@ -20,28 +20,23 @@ import lpdf.fontbox.ttf.table.common.CoverageTable;
 import lpdf.fontbox.ttf.table.common.LookupSubTable;
 
 /**
- *
  * @author Tilman Hausherr
  */
-public class LookupTypeMultipleSubstitutionFormat1 extends LookupSubTable
-{
+public class LookupTypeMultipleSubstitutionFormat1 extends LookupSubTable {
     private final SequenceTable[] sequenceTables;
 
     public LookupTypeMultipleSubstitutionFormat1(
-            int substFormat, CoverageTable coverageTable, SequenceTable[] sequenceTables)
-    {
+            int substFormat, CoverageTable coverageTable, SequenceTable[] sequenceTables) {
         super(substFormat, coverageTable);
         this.sequenceTables = sequenceTables;
     }
 
-    public SequenceTable[] getSequenceTables()
-    {
+    public SequenceTable[] getSequenceTables() {
         return sequenceTables;
     }
 
     @Override
-    public int doSubstitution(int gid, int coverageIndex)
-    {
+    public int doSubstitution(int gid, int coverageIndex) {
         throw new UnsupportedOperationException("not applicable");
     }
 }

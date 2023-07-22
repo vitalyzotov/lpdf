@@ -22,7 +22,6 @@ package lpdf.io;
  *
  * @author Ben Litchfield
  */
-public interface RandomAccess extends RandomAccessRead, RandomAccessWrite
-{
+public interface RandomAccess extends RandomAccessRead, RandomAccessWrite {
     // super interface for both read and write
 }

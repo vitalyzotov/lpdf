@@ -30,43 +30,39 @@ import lpdf.pdfbox.cos.COSName;
  * @author John Hewson
  * @author Ben Litchfield
  */
-public class PDDeviceCMYK extends PDDeviceColorSpace
-{
-    /**  The single instance of this class. */
+public class PDDeviceCMYK extends PDDeviceColorSpace {
+    /**
+     * The single instance of this class.
+     */
     public static PDDeviceCMYK INSTANCE;
-    static
-    {
+
+    static {
         INSTANCE = new PDDeviceCMYK();
     }
 
-    private final PDColor initialColor = new PDColor(new float[] { 0, 0, 0, 1 }, this);
+    private final PDColor initialColor = new PDColor(new float[]{0, 0, 0, 1}, this);
     private boolean usePureJavaCMYKConversion = false;
 
-    protected PDDeviceCMYK()
-    {
+    protected PDDeviceCMYK() {
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return COSName.DEVICECMYK.getName();
     }
 
     @Override
-    public int getNumberOfComponents()
-    {
+    public int getNumberOfComponents() {
         return 4;
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1, 0, 1, 0, 1, 0, 1 };
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1, 0, 1, 0, 1, 0, 1};
     }
 
     @Override
-    public PDColor getInitialColor()
-    {
+    public PDColor getInitialColor() {
         return initialColor;
     }
 

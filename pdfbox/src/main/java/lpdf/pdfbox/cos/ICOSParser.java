@@ -16,12 +16,11 @@
  */
 package lpdf.pdfbox.cos;
 
-import java.io.IOException;
-
 import lpdf.io.RandomAccessReadView;
 
-public interface ICOSParser
-{
+import java.io.IOException;
+
+public interface ICOSParser {
 
     /**
      * Dereference the COSBase object which is referenced by the given COSObject.
@@ -36,7 +35,7 @@ public interface ICOSParser
      * Creates a random access read view starting at the given position with the given length.
      *
      * @param startPosition start position within the underlying random access read
-     * @param streamLength stream length
+     * @param streamLength  stream length
      * @return the random access read view
      * @throws IOException if something went wrong when creating the view for the RandomAccessRead
      */

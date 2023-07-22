@@ -26,46 +26,43 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
  *
  * @author John Hewson
  */
-public class SetNonStrokingColor extends SetColor
-{
-    public SetNonStrokingColor(PDFStreamEngine context)
-    {
+public class SetNonStrokingColor extends SetColor {
+    public SetNonStrokingColor(PDFStreamEngine context) {
         super(context);
     }
 
     /**
      * Returns the non-stroking color.
+     *
      * @return The non-stroking color.
      */
     @Override
-    protected PDColor getColor()
-    {
+    protected PDColor getColor() {
         return getContext().getGraphicsState().getNonStrokingColor();
     }
 
     /**
      * Sets the non-stroking color.
+     *
      * @param color The new non-stroking color.
      */
     @Override
-    protected void setColor(PDColor color)
-    {
+    protected void setColor(PDColor color) {
         getContext().getGraphicsState().setNonStrokingColor(color);
     }
 
     /**
      * Returns the non-stroking color space.
+     *
      * @return The non-stroking color space.
      */
     @Override
-    protected PDColorSpace getColorSpace()
-    {
+    protected PDColorSpace getColorSpace() {
         return getContext().getGraphicsState().getNonStrokingColorSpace();
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.NON_STROKING_COLOR;
     }
 }

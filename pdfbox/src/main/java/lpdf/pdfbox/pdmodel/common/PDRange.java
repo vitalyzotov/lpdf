@@ -26,19 +26,17 @@ import lpdf.pdfbox.cos.COSNumber;
  *
  * @author Ben Litchfield
  */
-public class PDRange implements COSObjectable
-{
+public class PDRange implements COSObjectable {
     private final COSArray rangeArray;
     private int startingIndex;
 
     /**
      * Constructor with an initial range of 0..1.
      */
-    public PDRange()
-    {
+    public PDRange() {
         rangeArray = new COSArray();
-        rangeArray.add( new COSFloat( 0.0f ) );
-        rangeArray.add( new COSFloat( 1.0f ) );
+        rangeArray.add(new COSFloat(0.0f));
+        rangeArray.add(new COSFloat(1.0f));
         startingIndex = 0;
     }
 
@@ -47,8 +45,7 @@ public class PDRange implements COSObjectable
      *
      * @param range The array that describes the range.
      */
-    public PDRange( COSArray range )
-    {
+    public PDRange(COSArray range) {
         rangeArray = range;
     }
 
@@ -61,8 +58,7 @@ public class PDRange implements COSObjectable
      * @param range The array that describes the index
      * @param index The range index into the array for the start of the range.
      */
-    public PDRange( COSArray range, int index )
-    {
+    public PDRange(COSArray range, int index) {
         rangeArray = range;
         startingIndex = index;
     }
@@ -73,8 +69,7 @@ public class PDRange implements COSObjectable
      * @return The cos object that matches this Java object.
      */
     @Override
-    public COSBase getCOSObject()
-    {
+    public COSBase getCOSObject() {
         return rangeArray;
     }
 
@@ -83,8 +78,7 @@ public class PDRange implements COSObjectable
      *
      * @return The cos object that this object wraps.
      */
-    public COSArray getCOSArray()
-    {
+    public COSArray getCOSArray() {
         return rangeArray;
     }
 
@@ -93,9 +87,8 @@ public class PDRange implements COSObjectable
      *
      * @return The min value.
      */
-    public float getMin()
-    {
-        COSNumber min = (COSNumber)rangeArray.getObject( startingIndex*2 );
+    public float getMin() {
+        COSNumber min = (COSNumber) rangeArray.getObject(startingIndex * 2);
         return min.floatValue();
     }
 
@@ -104,9 +97,8 @@ public class PDRange implements COSObjectable
      *
      * @param min The new minimum for the range.
      */
-    public void setMin( float min )
-    {
-        rangeArray.set( startingIndex*2, new COSFloat( min ) );
+    public void setMin(float min) {
+        rangeArray.set(startingIndex * 2, new COSFloat(min));
     }
 
     /**
@@ -114,9 +106,8 @@ public class PDRange implements COSObjectable
      *
      * @return The max value.
      */
-    public float getMax()
-    {
-        COSNumber max = (COSNumber)rangeArray.getObject( startingIndex*2+1 );
+    public float getMax() {
+        COSNumber max = (COSNumber) rangeArray.getObject(startingIndex * 2 + 1);
         return max.floatValue();
     }
 
@@ -125,17 +116,15 @@ public class PDRange implements COSObjectable
      *
      * @param max The new maximum for the range.
      */
-    public void setMax( float max )
-    {
-        rangeArray.set( startingIndex*2+1, new COSFloat( max ) );
+    public void setMax(float max) {
+        rangeArray.set(startingIndex * 2 + 1, new COSFloat(max));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PDRange{" + getMin() + ", " + getMax() + '}';
     }
 

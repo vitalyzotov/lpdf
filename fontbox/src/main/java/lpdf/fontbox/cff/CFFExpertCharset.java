@@ -21,13 +21,11 @@ package lpdf.fontbox.cff;
  *
  * @author Villu Ruusmann
  */
-public final class CFFExpertCharset extends CFFCharsetType1
-{
+public final class CFFExpertCharset extends CFFCharsetType1 {
     private static final int CHAR_CODE = 0;
     private static final int CHAR_NAME = 1;
 
-    private CFFExpertCharset()
-    {
+    private CFFExpertCharset() {
         // Table of character codes and their corresponding names.
         Object[][] cffExpertCharsetTable = {
                 {0, ".notdef"},
@@ -199,18 +197,17 @@ public final class CFFExpertCharset extends CFFCharsetType1
         };
 
         int gid = 0;
-        for (Object[] charsetEntry : cffExpertCharsetTable)
-        {
+        for (Object[] charsetEntry : cffExpertCharsetTable) {
             addSID(gid++, (Integer) charsetEntry[CHAR_CODE], charsetEntry[CHAR_NAME].toString());
         }
     }
 
     /**
      * Returns an instance of the CFFExpertCharset class.
+     *
      * @return an instance of CFFExpertCharset
      */
-    public static CFFExpertCharset getInstance()
-    {
+    public static CFFExpertCharset getInstance() {
         return CFFExpertCharset.INSTANCE;
     }
 

@@ -25,61 +25,51 @@ import java.io.InputStream;
  *
  * @author John Hewson
  */
-class TTCDataStream extends TTFDataStream
-{
+class TTCDataStream extends TTFDataStream {
     private final TTFDataStream stream;
 
-    TTCDataStream(TTFDataStream stream)
-    {
+    TTCDataStream(TTFDataStream stream) {
         this.stream = stream;
     }
 
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         return stream.read();
     }
 
     @Override
-    public long readLong() throws IOException
-    {
+    public long readLong() throws IOException {
         return stream.readLong();
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         // don't close the underlying stream, as it is shared by all fonts from the same TTC
         // TrueTypeCollection.close() must be called instead
     }
 
     @Override
-    public void seek(long pos) throws IOException
-    {
+    public void seek(long pos) throws IOException {
         stream.seek(pos);
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
+    public int read(byte[] b, int off, int len) throws IOException {
         return stream.read(b, off, len);
     }
 
     @Override
-    public long getCurrentPosition() throws IOException
-    {
+    public long getCurrentPosition() throws IOException {
         return stream.getCurrentPosition();
     }
 
     @Override
-    public InputStream getOriginalData() throws IOException
-    {
+    public InputStream getOriginalData() throws IOException {
         return stream.getOriginalData();
     }
 
     @Override
-    public long getOriginalDataSize()
-    {
+    public long getOriginalDataSize() {
         return stream.getOriginalDataSize();
     }
 

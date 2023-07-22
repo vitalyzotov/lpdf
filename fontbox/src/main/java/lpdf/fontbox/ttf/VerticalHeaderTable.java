@@ -20,21 +20,19 @@ import java.io.IOException;
 
 /**
  * A vertical header 'vhea' table in a TrueType or OpenType font.
- *
+ * <p>
  * Supports versions 1.0 and 1.1, for which the only difference is changing
  * the specification names and descriptions of the ascender, descender,
  * and lineGap fields to vertTypoAscender, vertTypoDescender, vertTypeLineGap.
- *
+ * <p>
  * This table is required by the OpenType CJK Font Guidelines for "all
  * OpenType fonts that are used for vertical writing".
- *
+ * <p>
  * This table is specified in both the TrueType and OpenType specifications.
  *
  * @author Glenn Adams
- *
  */
-public class VerticalHeaderTable extends TTFTable
-{
+public class VerticalHeaderTable extends TTFTable {
     /**
      * A tag that identifies this table type.
      */
@@ -58,21 +56,19 @@ public class VerticalHeaderTable extends TTFTable
     private short metricDataFormat;
     private int numberOfVMetrics;
 
-    VerticalHeaderTable()
-    {
+    VerticalHeaderTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         version = data.read32Fixed();
         ascender = data.readSignedShort();
         descender = data.readSignedShort();
@@ -96,120 +92,119 @@ public class VerticalHeaderTable extends TTFTable
     /**
      * @return Returns the advanceHeightMax.
      */
-    public int getAdvanceHeightMax()
-    {
+    public int getAdvanceHeightMax() {
         return advanceHeightMax;
     }
+
     /**
      * @return Returns the ascender.
      */
-    public short getAscender()
-    {
+    public short getAscender() {
         return ascender;
     }
+
     /**
      * @return Returns the caretSlopeRise.
      */
-    public short getCaretSlopeRise()
-    {
+    public short getCaretSlopeRise() {
         return caretSlopeRise;
     }
+
     /**
      * @return Returns the caretSlopeRun.
      */
-    public short getCaretSlopeRun()
-    {
+    public short getCaretSlopeRun() {
         return caretSlopeRun;
     }
+
     /**
      * @return Returns the caretOffset.
      */
-    public short getCaretOffset()
-    {
+    public short getCaretOffset() {
         return caretOffset;
     }
+
     /**
      * @return Returns the descender.
      */
-    public short getDescender()
-    {
+    public short getDescender() {
         return descender;
     }
+
     /**
      * @return Returns the lineGap.
      */
-    public short getLineGap()
-    {
+    public short getLineGap() {
         return lineGap;
     }
+
     /**
      * @return Returns the metricDataFormat.
      */
-    public short getMetricDataFormat()
-    {
+    public short getMetricDataFormat() {
         return metricDataFormat;
     }
+
     /**
      * @return Returns the minTopSideBearing.
      */
-    public short getMinTopSideBearing()
-    {
+    public short getMinTopSideBearing() {
         return minTopSideBearing;
     }
+
     /**
      * @return Returns the minBottomSideBearing.
      */
-    public short getMinBottomSideBearing()
-    {
+    public short getMinBottomSideBearing() {
         return minBottomSideBearing;
     }
+
     /**
      * @return Returns the numberOfVMetrics.
      */
-    public int getNumberOfVMetrics()
-    {
+    public int getNumberOfVMetrics() {
         return numberOfVMetrics;
     }
+
     /**
      * @return Returns the reserved1.
      */
-    public short getReserved1()
-    {
+    public short getReserved1() {
         return reserved1;
     }
+
     /**
      * @return Returns the reserved2.
      */
-    public short getReserved2()
-    {
+    public short getReserved2() {
         return reserved2;
     }
+
     /**
      * @return Returns the reserved3.
      */
-    public short getReserved3()
-    {
+    public short getReserved3() {
         return reserved3;
     }
+
     /**
      * @return Returns the reserved4.
      */
-    public short getReserved4()
-    {
+    public short getReserved4() {
         return reserved4;
     }
+
     /**
      * @return Returns the version.
      */
-    public float getVersion()
-    {
+    public float getVersion() {
         return version;
     }
+
     /**
      * @return Returns the yMaxExtent.
      */
-    public short getYMaxExtent()
-    {
+    public short getYMaxExtent() {
         return yMaxExtent;
     }
 }

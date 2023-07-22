@@ -16,17 +16,18 @@
  */
 package lpdf.fontbox.cff;
 
-import java.util.Random;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**
  * This class includes some tests for the Type1FontUtil class.
  *
  * @author Villu Ruusmann
  */
-class Type1FontUtilTest
-{
+class Type1FontUtilTest {
     static final long DEFAULTSEED = 12345;
     static final long LOOPS = 1000;
 
@@ -34,18 +35,15 @@ class Type1FontUtilTest
      * Tests the hex encoding/decoding.
      */
     @Test
-    void testHexEncoding()
-    {
+    void testHexEncoding() {
         long seed = DEFAULTSEED;
         tryHexEncoding(seed);
-        for (int i = 0; i < LOOPS; ++i)
-        {
+        for (int i = 0; i < LOOPS; ++i) {
             tryHexEncoding(System.currentTimeMillis());
         }
     }
 
-    private void tryHexEncoding(long seed)
-    {
+    private void tryHexEncoding(long seed) {
         byte[] bytes = createRandomByteArray(128, seed);
 
         String encodedBytes = Type1FontUtil.hexEncode(bytes);
@@ -58,18 +56,15 @@ class Type1FontUtilTest
      * Tests the eexec encryption/decryption.
      */
     @Test
-    void testEexecEncryption()
-    {
+    void testEexecEncryption() {
         long seed = DEFAULTSEED;
         tryEexecEncryption(seed);
-        for (int i = 0; i < LOOPS; ++i)
-        {
+        for (int i = 0; i < LOOPS; ++i) {
             tryEexecEncryption(System.currentTimeMillis());
         }
     }
 
-    private void tryEexecEncryption(long seed)
-    {
+    private void tryEexecEncryption(long seed) {
         byte[] bytes = createRandomByteArray(128, seed);
 
         byte[] encryptedBytes = Type1FontUtil.eexecEncrypt(bytes);
@@ -82,18 +77,15 @@ class Type1FontUtilTest
      * Tests the charstring encryption/decryption.
      */
     @Test
-    void testCharstringEncryption()
-    {
+    void testCharstringEncryption() {
         long seed = DEFAULTSEED;
         tryCharstringEncryption(seed);
-        for (int i = 0; i < LOOPS; ++i)
-        {
+        for (int i = 0; i < LOOPS; ++i) {
             tryCharstringEncryption(System.currentTimeMillis());
         }
     }
 
-    private void tryCharstringEncryption(long seed)
-    {
+    private void tryCharstringEncryption(long seed) {
         byte[] bytes = createRandomByteArray(128, seed);
 
         byte[] encryptedBytes = Type1FontUtil.charstringEncrypt(bytes, 4);
@@ -102,13 +94,11 @@ class Type1FontUtilTest
         assertArrayEquals(bytes, decryptedBytes, "Seed: " + seed);
     }
 
-    private static byte[] createRandomByteArray(int arrayLength, long seed)
-    {
+    private static byte[] createRandomByteArray(int arrayLength, long seed) {
         byte[] bytes = new byte[arrayLength];
         Random ramdom = new Random(seed);
 
-        for (int i = 0; i < arrayLength; i++)
-        {
+        for (int i = 0; i < arrayLength; i++) {
             bytes[i] = (byte) ramdom.nextInt(256);
         }
         return bytes;

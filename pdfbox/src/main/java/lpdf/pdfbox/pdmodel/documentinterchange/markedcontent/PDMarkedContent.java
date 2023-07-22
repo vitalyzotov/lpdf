@@ -16,34 +16,31 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.markedcontent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.documentinterchange.taggedpdf.PDArtifactMarkedContent;
 import lpdf.pdfbox.pdmodel.graphics.PDXObject;
 import lpdf.pdfbox.text.TextPosition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A marked content.
  *
  * @author Johannes Koch
  */
-public class PDMarkedContent
-{
+public class PDMarkedContent {
 
     /**
      * Creates a marked-content sequence.
      *
-     * @param tag the tag
+     * @param tag        the tag
      * @param properties the properties
      * @return the marked-content sequence
      */
-    public static PDMarkedContent create(COSName tag, COSDictionary properties)
-    {
-        if (COSName.ARTIFACT.equals(tag))
-        {
+    public static PDMarkedContent create(COSName tag, COSDictionary properties) {
+        if (COSName.ARTIFACT.equals(tag)) {
             return new PDArtifactMarkedContent(properties);
         }
         return new PDMarkedContent(tag, properties);
@@ -58,11 +55,10 @@ public class PDMarkedContent
     /**
      * Creates a new marked content object.
      *
-     * @param tag the tag
+     * @param tag        the tag
      * @param properties the properties
      */
-    public PDMarkedContent(COSName tag, COSDictionary properties)
-    {
+    public PDMarkedContent(COSName tag, COSDictionary properties) {
         this.tag = tag == null ? null : tag.getName();
         this.properties = properties;
         this.contents = new ArrayList<>();
@@ -74,8 +70,7 @@ public class PDMarkedContent
      *
      * @return the tag
      */
-    public String getTag()
-    {
+    public String getTag() {
         return this.tag;
     }
 
@@ -84,8 +79,7 @@ public class PDMarkedContent
      *
      * @return the properties
      */
-    public COSDictionary getProperties()
-    {
+    public COSDictionary getProperties() {
         return this.properties;
     }
 
@@ -94,10 +88,9 @@ public class PDMarkedContent
      *
      * @return the marked-content identifier, or -1 if it doesn't exist.
      */
-    public int getMCID()
-    {
+    public int getMCID() {
         return this.getProperties() == null ? -1 :
-            this.getProperties().getInt(COSName.MCID);
+                this.getProperties().getInt(COSName.MCID);
     }
 
     /**
@@ -105,10 +98,9 @@ public class PDMarkedContent
      *
      * @return the language
      */
-    public String getLanguage()
-    {
+    public String getLanguage() {
         return this.getProperties() == null ? null :
-            this.getProperties().getNameAsString(COSName.LANG);
+                this.getProperties().getNameAsString(COSName.LANG);
     }
 
     /**
@@ -116,10 +108,9 @@ public class PDMarkedContent
      *
      * @return the actual text
      */
-    public String getActualText()
-    {
+    public String getActualText() {
         return this.getProperties() == null ? null :
-            this.getProperties().getString(COSName.ACTUAL_TEXT);
+                this.getProperties().getString(COSName.ACTUAL_TEXT);
     }
 
     /**
@@ -127,10 +118,9 @@ public class PDMarkedContent
      *
      * @return the alternate description
      */
-    public String getAlternateDescription()
-    {
+    public String getAlternateDescription() {
         return this.getProperties() == null ? null :
-            this.getProperties().getString(COSName.ALT);
+                this.getProperties().getString(COSName.ALT);
     }
 
     /**
@@ -138,10 +128,9 @@ public class PDMarkedContent
      *
      * @return the expanded form
      */
-    public String getExpandedForm()
-    {
+    public String getExpandedForm() {
         return this.getProperties() == null ? null :
-            this.getProperties().getString(COSName.E);
+                this.getProperties().getString(COSName.E);
     }
 
     /**
@@ -154,8 +143,7 @@ public class PDMarkedContent
      *
      * @return the contents of the marked content sequence
      */
-    public List<Object> getContents()
-    {
+    public List<Object> getContents() {
         return this.contents;
     }
 
@@ -164,8 +152,7 @@ public class PDMarkedContent
      *
      * @param text the text position
      */
-    public void addText(TextPosition text)
-    {
+    public void addText(TextPosition text) {
         this.getContents().add(text);
     }
 
@@ -174,8 +161,7 @@ public class PDMarkedContent
      *
      * @param markedContent the marked content
      */
-    public void addMarkedContent(PDMarkedContent markedContent)
-    {
+    public void addMarkedContent(PDMarkedContent markedContent) {
         this.getContents().add(markedContent);
     }
 
@@ -184,15 +170,13 @@ public class PDMarkedContent
      *
      * @param xobject the XObject
      */
-    public void addXObject(PDXObject xobject)
-    {
+    public void addXObject(PDXObject xobject) {
         this.getContents().add(xobject);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "tag=" + this.tag +
                 ", properties=" + this.properties +
                 ", contents=" + this.contents;

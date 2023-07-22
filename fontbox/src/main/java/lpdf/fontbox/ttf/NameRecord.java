@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class NameRecord
-{
+public class NameRecord {
     // platform ids
     public static final int PLATFORM_UNICODE = 0;
     public static final int PLATFORM_MACINTOSH = 1;
@@ -75,98 +74,95 @@ public class NameRecord
     /**
      * @return Returns the stringLength.
      */
-    public int getStringLength()
-    {
+    public int getStringLength() {
         return stringLength;
     }
+
     /**
      * @param stringLengthValue The stringLength to set.
      */
-    public void setStringLength(int stringLengthValue)
-    {
+    public void setStringLength(int stringLengthValue) {
         this.stringLength = stringLengthValue;
     }
+
     /**
      * @return Returns the stringOffset.
      */
-    public int getStringOffset()
-    {
+    public int getStringOffset() {
         return stringOffset;
     }
+
     /**
      * @param stringOffsetValue The stringOffset to set.
      */
-    public void setStringOffset(int stringOffsetValue)
-    {
+    public void setStringOffset(int stringOffsetValue) {
         this.stringOffset = stringOffsetValue;
     }
 
     /**
      * @return Returns the languageId.
      */
-    public int getLanguageId()
-    {
+    public int getLanguageId() {
         return languageId;
     }
+
     /**
      * @param languageIdValue The languageId to set.
      */
-    public void setLanguageId(int languageIdValue)
-    {
+    public void setLanguageId(int languageIdValue) {
         this.languageId = languageIdValue;
     }
+
     /**
      * @return Returns the nameId.
      */
-    public int getNameId()
-    {
+    public int getNameId() {
         return nameId;
     }
+
     /**
      * @param nameIdValue The nameId to set.
      */
-    public void setNameId(int nameIdValue)
-    {
+    public void setNameId(int nameIdValue) {
         this.nameId = nameIdValue;
     }
+
     /**
      * @return Returns the platformEncodingId.
      */
-    public int getPlatformEncodingId()
-    {
+    public int getPlatformEncodingId() {
         return platformEncodingId;
     }
+
     /**
      * @param platformEncodingIdValue The platformEncodingId to set.
      */
-    public void setPlatformEncodingId(int platformEncodingIdValue)
-    {
+    public void setPlatformEncodingId(int platformEncodingIdValue) {
         this.platformEncodingId = platformEncodingIdValue;
     }
+
     /**
      * @return Returns the platformId.
      */
-    public int getPlatformId()
-    {
+    public int getPlatformId() {
         return platformId;
     }
+
     /**
      * @param platformIdValue The platformId to set.
      */
-    public void setPlatformId(int platformIdValue)
-    {
+    public void setPlatformId(int platformIdValue) {
         this.platformId = platformIdValue;
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
-    void initData( TrueTypeFont ttf, TTFDataStream data ) throws IOException
-    {
+    void initData(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         platformId = data.readUnsignedShort();
         platformEncodingId = data.readUnsignedShort();
         languageId = data.readUnsignedShort();
@@ -180,27 +176,26 @@ public class NameRecord
      *
      * @return A string for this class.
      */
-    public String toString()
-    {
+    public String toString() {
         return
-            "platform=" + platformId +
-            " pEncoding=" + platformEncodingId +
-            " language=" + languageId +
-            " name=" + nameId +
-            " " + string;
+                "platform=" + platformId +
+                        " pEncoding=" + platformEncodingId +
+                        " language=" + languageId +
+                        " name=" + nameId +
+                        " " + string;
     }
+
     /**
      * @return Returns the string.
      */
-    public String getString()
-    {
+    public String getString() {
         return string;
     }
+
     /**
      * @param stringValue The string to set.
      */
-    public void setString(String stringValue)
-    {
+    public void setString(String stringValue) {
         this.string = stringValue;
     }
 }

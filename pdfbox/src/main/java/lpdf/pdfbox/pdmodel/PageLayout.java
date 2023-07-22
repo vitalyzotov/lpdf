@@ -24,15 +24,20 @@ import lpdf.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences;
  *
  * @author John Hewson
  */
-public enum PageLayout
-{
-    /** Display one page at a time. */
+public enum PageLayout {
+    /**
+     * Display one page at a time.
+     */
     SINGLE_PAGE("SinglePage"),
 
-    /**  Display the pages in one column. */
+    /**
+     * Display the pages in one column.
+     */
     ONE_COLUMN("OneColumn"),
 
-    /** Display the pages in two columns), with odd numbered pages on the left. */
+    /**
+     * Display the pages in two columns), with odd numbered pages on the left.
+     */
     TWO_COLUMN_LEFT("TwoColumnLeft"),
 
     /**
@@ -42,21 +47,21 @@ public enum PageLayout
      */
     TWO_COLUMN_RIGHT("TwoColumnRight"),
 
-    /** Display the pages two at a time), with odd-numbered pages on the left. */
+    /**
+     * Display the pages two at a time), with odd-numbered pages on the left.
+     */
     TWO_PAGE_LEFT("TwoPageLeft"),
 
-    /** Display the pages two at a time), with odd-numbered pages on the right. See also
+    /**
+     * Display the pages two at a time), with odd-numbered pages on the right. See also
      * {@link PDViewerPreferences#setReadingDirection(lpdf.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences.READING_DIRECTION) PDViewerPreferences.setReadingDirection()}
      * if dealing with RTL language.
      */
     TWO_PAGE_RIGHT("TwoPageRight");
 
-    public static PageLayout fromString(String value)
-    {
-        for (PageLayout instance : PageLayout.values())
-        {
-            if (instance.value.equals(value))
-            {
+    public static PageLayout fromString(String value) {
+        for (PageLayout instance : PageLayout.values()) {
+            if (instance.value.equals(value)) {
                 return instance;
             }
         }
@@ -65,8 +70,7 @@ public enum PageLayout
 
     private final String value;
 
-    PageLayout(String value)
-    {
+    PageLayout(String value) {
         this.value = value;
     }
 
@@ -75,8 +79,7 @@ public enum PageLayout
      *
      * @return the string value
      */
-    public String stringValue()
-    {
+    public String stringValue() {
         return value;
     }
 }

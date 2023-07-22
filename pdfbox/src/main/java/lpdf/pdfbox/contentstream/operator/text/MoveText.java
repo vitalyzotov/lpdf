@@ -16,10 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.text;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -28,44 +24,41 @@ import lpdf.pdfbox.contentstream.operator.OperatorProcessor;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSNumber;
 import lpdf.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Td: Move text position.
  *
  * @author Laurent Huault
  */
-public class MoveText extends OperatorProcessor
-{
+public class MoveText extends OperatorProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(MoveText.class);
 
-    public MoveText(PDFStreamEngine context)
-    {
+    public MoveText(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException
-    {
-        if (arguments.size() < 2)
-        {
+    public void process(Operator operator, List<COSBase> arguments) throws MissingOperandException {
+        if (arguments.size() < 2) {
             throw new MissingOperandException(operator, arguments);
         }
         PDFStreamEngine context = getContext();
         Matrix textLineMatrix = context.getTextLineMatrix();
-        if (textLineMatrix == null)
-        {
+        if (textLineMatrix == null) {
             LOG.warn("TextLineMatrix is null, " + getName() + " operator will be ignored");
             return;
         }
 
         COSBase base0 = arguments.get(0);
         COSBase base1 = arguments.get(1);
-        if (!(base0 instanceof COSNumber))
-        {
+        if (!(base0 instanceof COSNumber)) {
             return;
         }
-        if (!(base1 instanceof COSNumber))
-        {
+        if (!(base1 instanceof COSNumber)) {
             return;
         }
         COSNumber x = (COSNumber) base0;
@@ -77,8 +70,7 @@ public class MoveText extends OperatorProcessor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.MOVE_TEXT;
     }
 }

@@ -26,8 +26,7 @@ import java.util.List;
  * An implementation of the RandomAccessRead interface to store data in memory. The data will be stored in chunks
  * organized in an ArrayList.
  */
-public class RandomAccessReadBuffer implements RandomAccessRead
-{
+public class RandomAccessReadBuffer implements RandomAccessRead {
     // default chunk size is 4kb
     private static final int DEFAULT_CHUNK_SIZE_4KB = 1 << 12;
     // use the default chunk size
@@ -50,16 +49,14 @@ public class RandomAccessReadBuffer implements RandomAccessRead
     /**
      * Default constructor.
      */
-    private RandomAccessReadBuffer()
-    {
+    private RandomAccessReadBuffer() {
         this(DEFAULT_CHUNK_SIZE_4KB);
     }
 
     /**
      * Default constructor.
      */
-    private RandomAccessReadBuffer(int definedChunkSize)
-    {
+    private RandomAccessReadBuffer(int definedChunkSize) {
         // starting with one chunk
         chunkSize = definedChunkSize;
         currentBuffer = ByteBuffer.allocate(chunkSize);
@@ -72,8 +69,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      *
      * @param input the byte array to be read
      */
-    public RandomAccessReadBuffer(byte[] input)
-    {
+    public RandomAccessReadBuffer(byte[] input) {
         // this is a special case. Wrap the given byte array to a single ByteBuffer.
         this(ByteBuffer.wrap(input));
     }
@@ -83,8 +79,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      *
      * @param input the ByteBuffer to be read
      */
-    public RandomAccessReadBuffer(ByteBuffer input)
-    {
+    public RandomAccessReadBuffer(ByteBuffer input) {
         chunkSize = input.capacity();
         size = chunkSize;
         currentBuffer = input;
@@ -98,21 +93,18 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * @param input the input stream to be read
      * @throws IOException if something went wrong while copying the data
      */
-    public RandomAccessReadBuffer(InputStream input) throws IOException
-    {
+    public RandomAccessReadBuffer(InputStream input) throws IOException {
         this();
         int bytesRead = 0;
         int remainingBytes = chunkSize;
         int offset = 0;
         byte[] eofCheck = new byte[1];
         while (remainingBytes > 0 &&
-                (bytesRead = input.read(currentBuffer.array(), offset, remainingBytes)) > -1)
-        {
+                (bytesRead = input.read(currentBuffer.array(), offset, remainingBytes)) > -1) {
             remainingBytes -= bytesRead;
             offset += bytesRead;
             size += bytesRead;
-            if (remainingBytes == 0 && input.read(eofCheck) > 0)
-            {
+            if (remainingBytes == 0 && input.read(eofCheck) > 0) {
                 expandBuffer();
                 currentBuffer.put(eofCheck);
                 offset = 1;
@@ -124,14 +116,12 @@ public class RandomAccessReadBuffer implements RandomAccessRead
         seek(0);
     }
 
-    private RandomAccessReadBuffer(RandomAccessReadBuffer parent)
-    {
+    private RandomAccessReadBuffer(RandomAccessReadBuffer parent) {
         chunkSize = parent.chunkSize;
         size = parent.size;
         bufferListMaxIndex = parent.bufferListMaxIndex;
         bufferList = new ArrayList<>(parent.bufferList.size());
-        for (ByteBuffer buffer : parent.bufferList)
-        {
+        for (ByteBuffer buffer : parent.bufferList) {
             ByteBuffer newBuffer = buffer.duplicate();
             newBuffer.rewind();
             bufferList.add(newBuffer);
@@ -143,8 +133,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         currentBuffer = null;
         bufferList.clear();
     }
@@ -153,23 +142,18 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void seek(long position) throws IOException
-    {
+    public void seek(long position) throws IOException {
         checkClosed();
-        if (position < 0)
-        {
+        if (position < 0) {
             throw new IOException("Invalid position " + position);
         }
-        if (position < size)
-        {
+        if (position < size) {
             pointer = position;
             // calculate the chunk list index
             bufferListIndex = chunkSize > 0 ? (int) (pointer / chunkSize) : 0;
             currentBufferPointer = chunkSize > 0 ? (int) (pointer % chunkSize) : 0;
             currentBuffer = bufferList.get(bufferListIndex);
-        }
-        else
-        {
+        } else {
             // it is allowed to jump beyond the end of the file
             // jump to the end of the buffer
             pointer = size;
@@ -183,8 +167,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long getPosition() throws IOException
-    {
+    public long getPosition() throws IOException {
         checkClosed();
         return pointer;
     }
@@ -193,21 +176,15 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         checkClosed();
-        if (pointer >= this.size)
-        {
+        if (pointer >= this.size) {
             return -1;
         }
-        if (currentBufferPointer >= chunkSize)
-        {
-            if (bufferListIndex >= bufferListMaxIndex)
-            {
+        if (currentBufferPointer >= chunkSize) {
+            if (bufferListIndex >= bufferListMaxIndex) {
                 return -1;
-            }
-            else
-            {
+            } else {
                 currentBuffer = bufferList.get(++bufferListIndex);
                 currentBufferPointer = 0;
             }
@@ -220,25 +197,18 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int offset, int length) throws IOException
-    {
+    public int read(byte[] b, int offset, int length) throws IOException {
         checkClosed();
         int bytesRead = readRemainingBytes(b, offset, length);
-        if (bytesRead == -1)
-        {
-            if (available() > 0)
-            {
+        if (bytesRead == -1) {
+            if (available() > 0) {
                 bytesRead = 0;
-            }
-            else
-            {
+            } else {
                 return -1;
             }
         }
-        while (bytesRead < length && available() > 0)
-        {
-            if (currentBufferPointer == chunkSize)
-            {
+        while (bytesRead < length && available() > 0) {
+            if (currentBufferPointer == chunkSize) {
                 nextBuffer();
             }
             bytesRead += readRemainingBytes(b, offset + bytesRead, length - bytesRead);
@@ -246,21 +216,17 @@ public class RandomAccessReadBuffer implements RandomAccessRead
         return bytesRead;
     }
 
-    private int readRemainingBytes(byte[] b, int offset, int length)
-    {
-        if (pointer >= size)
-        {
+    private int readRemainingBytes(byte[] b, int offset, int length) {
+        if (pointer >= size) {
             return -1;
         }
         int maxLength = (int) Math.min(length, size - pointer);
         int remainingBytes = chunkSize - currentBufferPointer;
         // no more bytes left
-        if (remainingBytes == 0)
-        {
+        if (remainingBytes == 0) {
             return -1;
         }
-        if (maxLength >= remainingBytes)
-        {
+        if (maxLength >= remainingBytes) {
             // copy the remaining bytes from the current buffer
             currentBuffer.position(currentBufferPointer);
             currentBuffer.get(b, offset, remainingBytes);
@@ -268,9 +234,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
             currentBufferPointer += remainingBytes;
             pointer += remainingBytes;
             return remainingBytes;
-        }
-        else
-        {
+        } else {
             // copy the remaining bytes from the whole buffer
             currentBuffer.position(currentBufferPointer);
             currentBuffer.get(b, offset, maxLength);
@@ -285,8 +249,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long length() throws IOException
-    {
+    public long length() throws IOException {
         checkClosed();
         return size;
     }
@@ -294,15 +257,11 @@ public class RandomAccessReadBuffer implements RandomAccessRead
     /**
      * create a new buffer chunk and adjust all pointers and indices.
      */
-    private void expandBuffer() throws IOException
-    {
-        if (bufferListMaxIndex > bufferListIndex)
-        {
+    private void expandBuffer() throws IOException {
+        if (bufferListMaxIndex > bufferListIndex) {
             // there is already an existing chunk
             nextBuffer();
-        }
-        else
-        {
+        } else {
             // create a new chunk and add it to the buffer
             currentBuffer = ByteBuffer.allocate(chunkSize);
             bufferList.add(currentBuffer);
@@ -315,10 +274,8 @@ public class RandomAccessReadBuffer implements RandomAccessRead
     /**
      * switch to the next buffer chunk and reset the buffer pointer.
      */
-    private void nextBuffer() throws IOException
-    {
-        if (bufferListIndex == bufferListMaxIndex)
-        {
+    private void nextBuffer() throws IOException {
+        if (bufferListIndex == bufferListMaxIndex) {
             throw new IOException("No more chunks available, end of buffer reached");
         }
         currentBufferPointer = 0;
@@ -327,12 +284,11 @@ public class RandomAccessReadBuffer implements RandomAccessRead
 
     /**
      * Ensure that the RandomAccessBuffer is not closed
+     *
      * @throws IOException If RandomAccessBuffer already closed
      */
-    private void checkClosed() throws IOException
-    {
-        if (currentBuffer == null)
-        {
+    private void checkClosed() throws IOException {
+        if (currentBuffer == null) {
             // consider that the rab is closed if there is no current buffer
             throw new IOException("RandomAccessBuffer already closed");
         }
@@ -342,8 +298,7 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isClosed()
-    {
+    public boolean isClosed() {
         return currentBuffer == null;
     }
 
@@ -351,15 +306,13 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isEOF() throws IOException
-    {
+    public boolean isEOF() throws IOException {
         checkClosed();
         return pointer >= size;
     }
 
     @Override
-    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException
-    {
+    public RandomAccessReadView createView(long startPosition, long streamLength) throws IOException {
         return new RandomAccessReadView(new RandomAccessReadBuffer(this), startPosition,
                 streamLength, true);
     }
@@ -369,19 +322,14 @@ public class RandomAccessReadBuffer implements RandomAccessRead
      * InputStream is closed.
      *
      * @param inputStream the InputStream holding the data to be copied
-     *
      * @return the RandomAccessReadBuffer holding the data of the InputStream
      * @throws IOException if something went wrong while copying the data
      */
-    public static RandomAccessReadBuffer createBufferFromStream(InputStream inputStream) throws IOException
-    {
+    public static RandomAccessReadBuffer createBufferFromStream(InputStream inputStream) throws IOException {
         RandomAccessReadBuffer randomAccessRead = null;
-        try
-        {
+        try {
             randomAccessRead = new RandomAccessReadBuffer(inputStream);
-        }
-        finally
-        {
+        } finally {
             inputStream.close();
         }
         return randomAccessRead;

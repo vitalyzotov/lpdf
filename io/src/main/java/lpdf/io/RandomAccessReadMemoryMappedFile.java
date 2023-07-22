@@ -29,8 +29,7 @@ import java.util.function.Consumer;
  * An implementation of the RandomAccess interface backed by a memory mapped file channel. The whole file is mapped to
  * memory and the max size is limited to Integer.MAX_VALUE.
  */
-public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
-{
+public class RandomAccessReadMemoryMappedFile implements RandomAccessRead {
 
     // mapped byte buffer
     private ByteBuffer mappedByteBuffer;
@@ -48,11 +47,9 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * Default constructor.
      *
      * @param filename the filename of the file to be read
-     *
      * @throws IOException If there is an IO error opening the file.
      */
-    public RandomAccessReadMemoryMappedFile(String filename) throws IOException
-    {
+    public RandomAccessReadMemoryMappedFile(String filename) throws IOException {
         this(new File(filename));
     }
 
@@ -60,16 +57,13 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * Default constructor.
      *
      * @param file the file to be read
-     *
      * @throws IOException If there is an IO error opening the file.
      */
-    public RandomAccessReadMemoryMappedFile(File file) throws IOException
-    {
+    public RandomAccessReadMemoryMappedFile(File file) throws IOException {
         fileChannel = FileChannel.open(file.toPath(), EnumSet.of(StandardOpenOption.READ));
         size = fileChannel.size();
         // TODO only ints are allowed -> implement paging
-        if (size > Integer.MAX_VALUE)
-        {
+        if (size > Integer.MAX_VALUE) {
             throw new IOException(getClass().getName()
                     + " doesn't yet support files bigger than "
                     + Integer.MAX_VALUE);
@@ -79,8 +73,7 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
         unmapper = IOUtils::unmap;
     }
 
-    private RandomAccessReadMemoryMappedFile(RandomAccessReadMemoryMappedFile parent)
-    {
+    private RandomAccessReadMemoryMappedFile(RandomAccessReadMemoryMappedFile parent) {
         mappedByteBuffer = parent.mappedByteBuffer.duplicate();
         size = parent.size;
         mappedByteBuffer.rewind();
@@ -93,14 +86,11 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void close() throws IOException
-    {
-        if (fileChannel != null)
-        {
+    public void close() throws IOException {
+        if (fileChannel != null) {
             fileChannel.close();
         }
-        if (mappedByteBuffer != null)
-        {
+        if (mappedByteBuffer != null) {
             Optional.ofNullable(unmapper).ifPresent(u -> u.accept(mappedByteBuffer));
             mappedByteBuffer = null;
         }
@@ -110,12 +100,10 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public void seek(long position) throws IOException
-    {
+    public void seek(long position) throws IOException {
         checkClosed();
-        if (position < 0)
-        {
-            throw new IOException("Invalid position "+position);
+        if (position < 0) {
+            throw new IOException("Invalid position " + position);
         }
         // it is allowed to jump beyond the end of the file
         // jump to the end of the reader
@@ -126,20 +114,17 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long getPosition() throws IOException
-    {
-       checkClosed();
-       return mappedByteBuffer.position();
+    public long getPosition() throws IOException {
+        checkClosed();
+        return mappedByteBuffer.position();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
-        if (isEOF())
-        {
+    public int read() throws IOException {
+        if (isEOF()) {
             return -1;
         }
         return mappedByteBuffer.get() & 0xff;
@@ -149,13 +134,11 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int offset, int length) throws IOException
-    {
-        if (isEOF())
-        {
+    public int read(byte[] b, int offset, int length) throws IOException {
+        if (isEOF()) {
             return -1;
         }
-        int remainingBytes = (int)size - mappedByteBuffer.position();
+        int remainingBytes = (int) size - mappedByteBuffer.position();
         remainingBytes = Math.min(remainingBytes, length);
         mappedByteBuffer.get(b, offset, remainingBytes);
         return remainingBytes;
@@ -165,8 +148,7 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public long length() throws IOException
-    {
+    public long length() throws IOException {
         checkClosed();
         return size;
     }
@@ -176,10 +158,8 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      *
      * @throws IOException If RandomAccessBuffer already closed
      */
-    private void checkClosed() throws IOException
-    {
-        if (isClosed())
-        {
+    private void checkClosed() throws IOException {
+        if (isClosed()) {
             throw new IOException(getClass().getSimpleName() + " already closed");
         }
     }
@@ -188,8 +168,7 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isClosed()
-    {
+    public boolean isClosed() {
         return mappedByteBuffer == null;
     }
 
@@ -197,15 +176,13 @@ public class RandomAccessReadMemoryMappedFile implements RandomAccessRead
      * {@inheritDoc}
      */
     @Override
-    public boolean isEOF() throws IOException
-    {
+    public boolean isEOF() throws IOException {
         checkClosed();
         return mappedByteBuffer.position() >= size;
     }
 
     @Override
-    public RandomAccessReadView createView(long startPosition, long streamLength)
-    {
+    public RandomAccessReadView createView(long startPosition, long streamLength) {
         return new RandomAccessReadView(new RandomAccessReadMemoryMappedFile(this), startPosition,
                 streamLength, true);
     }

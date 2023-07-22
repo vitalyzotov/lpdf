@@ -16,12 +16,12 @@
  */
 package lpdf.pdfbox.contentstream.operator.color;
 
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,10 +31,8 @@ import java.util.List;
  *
  * @author John Hewson
  */
-public class SetStrokingDeviceRGBColor extends SetStrokingColor
-{
-    public SetStrokingDeviceRGBColor(PDFStreamEngine context)
-    {
+public class SetStrokingDeviceRGBColor extends SetStrokingColor {
+    public SetStrokingDeviceRGBColor(PDFStreamEngine context) {
         super(context);
     }
 
@@ -42,13 +40,12 @@ public class SetStrokingDeviceRGBColor extends SetStrokingColor
      * RG Set the stroking colour space to DeviceRGB and set the colour to
      * use for stroking operations.
      *
-     * @param operator The operator that is being executed.
+     * @param operator  The operator that is being executed.
      * @param arguments List
      * @throws IOException If the color space cannot be read.
      */
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDFStreamEngine context = getContext();
         PDColorSpace cs = context.getResources().getColorSpace(COSName.DEVICERGB);
         context.getGraphicsState().setStrokingColorSpace(cs);
@@ -56,8 +53,7 @@ public class SetStrokingDeviceRGBColor extends SetStrokingColor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.STROKING_COLOR_RGB;
     }
 }

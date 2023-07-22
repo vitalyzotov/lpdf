@@ -16,9 +16,6 @@
  */
 package lpdf.pdfbox.contentstream.operator.color;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -30,30 +27,27 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDColor;
 import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import lpdf.pdfbox.pdmodel.graphics.color.PDPattern;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * sc,scn,SC,SCN: Sets the color to use for stroking or non-stroking operations.
  *
  * @author John Hewson
  */
-public abstract class SetColor extends OperatorProcessor
-{
-    protected SetColor(PDFStreamEngine context)
-    {
+public abstract class SetColor extends OperatorProcessor {
+    protected SetColor(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDColorSpace colorSpace = getColorSpace();
-        if (!(colorSpace instanceof PDPattern))
-        {
-            if (arguments.size() < colorSpace.getNumberOfComponents())
-            {
+        if (!(colorSpace instanceof PDPattern)) {
+            if (arguments.size() < colorSpace.getNumberOfComponents()) {
                 throw new MissingOperandException(operator, arguments);
             }
-            if (!checkArrayTypesClass(arguments, COSNumber.class))
-            {
+            if (!checkArrayTypesClass(arguments, COSNumber.class)) {
                 return;
             }
         }
@@ -64,18 +58,21 @@ public abstract class SetColor extends OperatorProcessor
 
     /**
      * Returns either the stroking or non-stroking color value.
+     *
      * @return The stroking or non-stroking color value.
      */
     protected abstract PDColor getColor();
 
     /**
      * Sets either the stroking or non-stroking color value.
+     *
      * @param color The stroking or non-stroking color value.
      */
     protected abstract void setColor(PDColor color);
 
     /**
      * Returns either the stroking or non-stroking color space.
+     *
      * @return The stroking or non-stroking color space.
      */
     protected abstract PDColorSpace getColorSpace();

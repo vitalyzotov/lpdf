@@ -18,22 +18,20 @@ package lpdf.pdfbox.util;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSFloat;
 import lpdf.pdfbox.cos.COSName;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
 
 /**
- *
  * @author Neil McErlean
  * @author Tilman Hausherr
  */
-class MatrixTest
-{
+class MatrixTest {
 
     @Test
-    void testConstructionAndCopy() throws Exception
-    {
+    void testConstructionAndCopy() throws Exception {
         Matrix m1 = new Matrix();
         assertMatrixIsPristine(m1);
 
@@ -43,8 +41,7 @@ class MatrixTest
     }
 
     @Test
-    void testGetScalingFactor()
-    {
+    void testGetScalingFactor() {
         // check scaling factor of an initial matrix
         Matrix m1 = new Matrix();
         assertEquals(1, m1.getScalingFactorX(), 0);
@@ -57,8 +54,7 @@ class MatrixTest
     }
 
     @Test
-    void testCreateMatrixUsingInvalidInput()
-    {
+    void testCreateMatrixUsingInvalidInput() {
         // anything but a COSArray is invalid and leads to an initial matrix
         Matrix createMatrix = Matrix.createMatrix(COSName.A);
         assertMatrixIsPristine(createMatrix);
@@ -71,8 +67,7 @@ class MatrixTest
 
         // a COSArray containing other kind of objects than COSNumber leads to an initial matrix
         cosArray = new COSArray();
-        for (int i = 0; i < 6; i++)
-        {
+        for (int i = 0; i < 6; i++) {
             cosArray.add(COSName.A);
         }
         createMatrix = Matrix.createMatrix(cosArray);
@@ -80,8 +75,7 @@ class MatrixTest
     }
 
     @Test
-    void testMultiplication()
-    {
+    void testMultiplication() {
         // These matrices will not change - we use it to drive the various multiplications.
         final Matrix const1 = new Matrix();
         final Matrix const2 = new Matrix();
@@ -90,18 +84,16 @@ class MatrixTest
         // [ 0, 1, 2
         // 1, 2, 3
         // 2, 3, 4]
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
                 const1.setValue(x, y, x + y);
                 const2.setValue(x, y, 8 + x + y);
             }
         }
 
-        float[] m1MultipliedByM1 = new float[] { 5,  8,  11,  8, 14, 20, 11, 20,  29 };
-        float[] m1MultipliedByM2 = new float[] { 29, 32, 35, 56, 62, 68, 83, 92, 101 };
-        float[] m2MultipliedByM1 = new float[] { 29, 56, 83, 32, 62, 92, 35, 68, 101 };
+        float[] m1MultipliedByM1 = new float[]{5, 8, 11, 8, 14, 20, 11, 20, 29};
+        float[] m1MultipliedByM2 = new float[]{29, 32, 35, 56, 62, 68, 83, 92, 101};
+        float[] m2MultipliedByM1 = new float[]{29, 56, 83, 32, 62, 92, 35, 68, 101};
 
         Matrix var1 = const1.clone();
         Matrix var2 = const2.clone();
@@ -141,8 +133,7 @@ class MatrixTest
     }
 
     @Test
-    void testOldMultiplication() throws Exception
-    {
+    void testOldMultiplication() throws Exception {
         // This matrix will not change - we use it to drive the various multiplications.
         final Matrix testMatrix = new Matrix();
 
@@ -150,10 +141,8 @@ class MatrixTest
         // [ 0, 1, 2
         // 1, 2, 3
         // 2, 3, 4]
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
                 testMatrix.setValue(x, y, x + y);
             }
         }
@@ -168,54 +157,50 @@ class MatrixTest
         assertNotSame(m2, product);
 
         // Operand 1 should not have changed
-        assertMatrixValuesEqualTo(new float[] { 0, 1, 2, 1, 2, 3, 2, 3, 4 }, m1);
+        assertMatrixValuesEqualTo(new float[]{0, 1, 2, 1, 2, 3, 2, 3, 4}, m1);
         // Operand 2 should not have changed
-        assertMatrixValuesEqualTo(new float[] { 0, 1, 2, 1, 2, 3, 2, 3, 4 }, m2);
-        assertMatrixValuesEqualTo(new float[] { 5, 8, 11, 8, 14, 20, 11, 20, 29 }, product);
+        assertMatrixValuesEqualTo(new float[]{0, 1, 2, 1, 2, 3, 2, 3, 4}, m2);
+        assertMatrixValuesEqualTo(new float[]{5, 8, 11, 8, 14, 20, 11, 20, 29}, product);
 
         Matrix retVal = m1.multiply(m2);
         // Operand 1 should not have changed
-        assertMatrixValuesEqualTo(new float[] { 0, 1, 2, 1, 2, 3, 2, 3, 4 }, m1);
+        assertMatrixValuesEqualTo(new float[]{0, 1, 2, 1, 2, 3, 2, 3, 4}, m1);
         // Operand 2 should not have changed
-        assertMatrixValuesEqualTo(new float[] { 0, 1, 2, 1, 2, 3, 2, 3, 4 }, m2);
-        assertMatrixValuesEqualTo(new float[] { 5, 8, 11, 8, 14, 20, 11, 20, 29 }, retVal);
+        assertMatrixValuesEqualTo(new float[]{0, 1, 2, 1, 2, 3, 2, 3, 4}, m2);
+        assertMatrixValuesEqualTo(new float[]{5, 8, 11, 8, 14, 20, 11, 20, 29}, retVal);
 
         // Multiply the same matrix with itself with the result being written into 'this' matrix
         m1 = testMatrix.clone();
 
         retVal = m1.multiply(m1);
         // Operand 1 should not have changed
-        assertMatrixValuesEqualTo(new float[] { 0, 1, 2, 1, 2, 3, 2, 3, 4 }, m1);
-        assertMatrixValuesEqualTo(new float[] { 5, 8, 11, 8, 14, 20, 11, 20, 29 }, retVal);
+        assertMatrixValuesEqualTo(new float[]{0, 1, 2, 1, 2, 3, 2, 3, 4}, m1);
+        assertMatrixValuesEqualTo(new float[]{5, 8, 11, 8, 14, 20, 11, 20, 29}, retVal);
     }
 
     @Test
-    void testIllegalValueNaN1()
-    {
+    void testIllegalValueNaN1() {
         Matrix m = new Matrix();
         m.setValue(0, 0, Float.MAX_VALUE);
         assertThrows(IllegalArgumentException.class, () -> m.multiply(m));
     }
 
     @Test
-    void testIllegalValueNaN2()
-    {
+    void testIllegalValueNaN2() {
         Matrix m = new Matrix();
         m.setValue(0, 0, Float.NaN);
         assertThrows(IllegalArgumentException.class, () -> m.multiply(m));
     }
 
     @Test
-    void testIllegalValuePositiveInfinity()
-    {
+    void testIllegalValuePositiveInfinity() {
         Matrix m = new Matrix();
         m.setValue(0, 0, Float.POSITIVE_INFINITY);
         assertThrows(IllegalArgumentException.class, () -> m.multiply(m));
     }
 
     @Test
-    void testIllegalValueNegativeInfinity()
-    {
+    void testIllegalValueNegativeInfinity() {
         Matrix m = new Matrix();
         m.setValue(0, 0, Float.NEGATIVE_INFINITY);
         assertThrows(IllegalArgumentException.class, () -> m.multiply(m));
@@ -225,8 +210,7 @@ class MatrixTest
      * Test of PDFBOX-2872 bug
      */
     @Test
-    void testPdfbox2872()
-    {
+    void testPdfbox2872() {
         Matrix m = new Matrix(2, 4, 5, 8, 2, 0);
         COSArray toCOSArray = m.toCOSArray();
         assertEquals(new COSFloat(2), toCOSArray.get(0));
@@ -239,8 +223,7 @@ class MatrixTest
     }
 
     @Test
-    void testGetValues()
-    {
+    void testGetValues() {
         Matrix m = new Matrix(2, 4, 4, 2, 15, 30);
         float[][] values = m.getValues();
         assertEquals(2, values[0][0], 0);
@@ -255,8 +238,7 @@ class MatrixTest
     }
 
     @Test
-    void testScaling()
-    {
+    void testScaling() {
         Matrix m = new Matrix(2, 4, 4, 2, 15, 30);
         m.scale(2, 3);
         // first row, multiplication with 2
@@ -276,8 +258,7 @@ class MatrixTest
     }
 
     @Test
-    void testTranslation()
-    {
+    void testTranslation() {
         Matrix m = new Matrix(2, 4, 4, 2, 15, 30);
         m.translate(2, 3);
         // first row, no changes at all
@@ -302,22 +283,19 @@ class MatrixTest
      *
      * @param m the Matrix to test.
      */
-    private void assertMatrixIsPristine(Matrix m)
-    {
-        assertMatrixValuesEqualTo(new float[] { 1, 0, 0, 0, 1, 0, 0, 0, 1 }, m);
+    private void assertMatrixIsPristine(Matrix m) {
+        assertMatrixValuesEqualTo(new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1}, m);
     }
 
     /**
      * This method asserts that the matrix values for the given {@link Matrix} object have the specified values.
      *
      * @param values the expected values
-     * @param m the matrix to test
+     * @param m      the matrix to test
      */
-    private void assertMatrixValuesEqualTo(float[] values, Matrix m)
-    {
+    private void assertMatrixValuesEqualTo(float[] values, Matrix m) {
         float delta = 0.00001f;
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             // Need to convert a (row, column) coordinate into a straight index.
             int row = (int) Math.floor(i / 3);
             int column = i % 3;
@@ -334,7 +312,7 @@ class MatrixTest
         long start = System.currentTimeMillis();
         Matrix c;
         Matrix d;
-        for (int i=0; i<100000000; i++) {
+        for (int i = 0; i < 100000000; i++) {
             c = new Matrix(15, 3, 235, 55, 422, 1);
             d = new Matrix(45, 345, 23, 551, 66, 832);
             c.multiply(d);

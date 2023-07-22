@@ -23,10 +23,8 @@ import java.io.IOException;
 /**
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics.
  * see http://xmlgraphics.apache.org/batik/ for further details.
- *
  */
-public abstract class GlyfDescript implements GlyphDescription
-{
+public abstract class GlyfDescript implements GlyphDescription {
 
     // Flags describing a coordinate of a glyph.
     /**
@@ -73,8 +71,7 @@ public abstract class GlyfDescript implements GlyphDescription
      *
      * @param numberOfContours the number of contours
      */
-    GlyfDescript(short numberOfContours)
-    {
+    GlyfDescript(short numberOfContours) {
         contourCount = numberOfContours;
     }
 
@@ -82,36 +79,34 @@ public abstract class GlyfDescript implements GlyphDescription
      * {@inheritDoc}
      */
     @Override
-    public void resolve()
-    {
+    public void resolve() {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getContourCount()
-    {
+    public int getContourCount() {
         return contourCount;
     }
 
     /**
      * Returns the hinting instructions.
+     *
      * @return an array containing the hinting instructions.
      */
-    public int[] getInstructions()
-    {
+    public int[] getInstructions() {
         return instructions;
     }
 
     /**
      * Read the hinting instructions.
-     * @param bais the stream to be read
+     *
+     * @param bais  the stream to be read
      * @param count the number of instructions to be read
      * @throws IOException is thrown if something went wrong
      */
-    void readInstructions(TTFDataStream bais, int count) throws IOException
-    {
+    void readInstructions(TTFDataStream bais, int count) throws IOException {
         instructions = bais.readUnsignedByteArray(count);
     }
 

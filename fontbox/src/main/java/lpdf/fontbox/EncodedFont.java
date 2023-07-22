@@ -24,8 +24,7 @@ import lpdf.fontbox.encoding.Encoding;
  *
  * @author John Hewson
  */
-public interface EncodedFont
-{
+public interface EncodedFont {
     /**
      * Returns the PostScript Encoding vector for the font.
      *

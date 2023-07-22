@@ -18,13 +18,13 @@
 package lpdf.fontbox.ttf;
 
 import lpdf.harmony.awt.geom.GeneralPath;
+
 import java.io.IOException;
 
 /**
  * An OpenType (OTF/TTF) font.
  */
-public class OpenTypeFont extends TrueTypeFont
-{
+public class OpenTypeFont extends TrueTypeFont {
     private boolean isPostScript;
 
     /**
@@ -32,14 +32,12 @@ public class OpenTypeFont extends TrueTypeFont
      *
      * @param fontData The font data.
      */
-    OpenTypeFont(TTFDataStream fontData)
-    {
+    OpenTypeFont(TTFDataStream fontData) {
         super(fontData);
     }
 
     @Override
-    void setVersion(float versionValue)
-    {
+    void setVersion(float versionValue) {
         isPostScript = Float.floatToIntBits(versionValue) == 0x469EA8A9; // OTTO
         super.setVersion(versionValue);
     }
@@ -48,39 +46,30 @@ public class OpenTypeFont extends TrueTypeFont
      * Get the "CFF" table for this OTF.
      *
      * @return The "CFF" table.
-     *
-     * @throws IOException if the font data could not be read
+     * @throws IOException                   if the font data could not be read
      * @throws UnsupportedOperationException if the current font isn't a CFF font
      */
-    public CFFTable getCFF() throws IOException
-    {
-        if (!isPostScript)
-        {
+    public CFFTable getCFF() throws IOException {
+        if (!isPostScript) {
             throw new UnsupportedOperationException("TTF fonts do not have a CFF table");
         }
         return (CFFTable) getTable(CFFTable.TAG);
     }
 
     @Override
-    public GlyphTable getGlyph() throws IOException
-    {
-        if (isPostScript)
-        {
+    public GlyphTable getGlyph() throws IOException {
+        if (isPostScript) {
             throw new UnsupportedOperationException("OTF fonts do not have a glyf table");
         }
         return super.getGlyph();
     }
 
     @Override
-    public GeneralPath getPath(String name) throws IOException
-    {
-        if (isPostScript && isSupportedOTF())
-        {
+    public GeneralPath getPath(String name) throws IOException {
+        if (isPostScript && isSupportedOTF()) {
             int gid = nameToGID(name);
             return getCFF().getFont().getType2CharString(gid).getPath();
-        }
-        else
-        {
+        } else {
             return super.getPath(name);
         }
     }
@@ -90,22 +79,20 @@ public class OpenTypeFont extends TrueTypeFont
      *
      * @return true if the font is a PostScript outline font, otherwise false
      */
-    public boolean isPostScript()
-    {
+    public boolean isPostScript() {
         return isPostScript || tables.containsKey(CFFTable.TAG) || tables.containsKey("CFF2");
     }
 
     /**
      * Returns true if this font is supported.
-     *
+     * <p>
      * There are 3 kind of OpenType fonts, fonts using TrueType outlines, fonts using CFF outlines (version 1 and 2)
-     *
+     * <p>
      * Fonts using CFF outlines version 2 aren't supported yet.
      *
      * @return true if the font is supported
      */
-    public boolean isSupportedOTF()
-    {
+    public boolean isSupportedOTF() {
         // OTF using CFF2 based outlines aren't yet supported
         return !(isPostScript //
                 && !tables.containsKey(CFFTable.TAG) //
@@ -118,8 +105,7 @@ public class OpenTypeFont extends TrueTypeFont
      *
      * @return true if the font has any layout table, otherwise false
      */
-    public boolean hasLayoutTables()
-    {
+    public boolean hasLayoutTables() {
         return tables.containsKey("BASE") //
                 || tables.containsKey("GDEF") //
                 || tables.containsKey("GPOS") //

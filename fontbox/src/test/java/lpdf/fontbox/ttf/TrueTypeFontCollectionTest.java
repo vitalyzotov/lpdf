@@ -16,20 +16,18 @@
  */
 package lpdf.fontbox.ttf;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TrueTypeFontCollectionTest
-{
+class TrueTypeFontCollectionTest {
     @Test
-    void testNumberOfFonts()
-    {
-        byte[] payload = { 0x74, 0x74, 0x63, 0x66, 0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF,
-                (byte) 0xFF, (byte) 0xFF };
+    void testNumberOfFonts() {
+        byte[] payload = {0x74, 0x74, 0x63, 0x66, 0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF,
+                (byte) 0xFF, (byte) 0xFF};
         assertThrows(IOException.class,
                 () -> new TrueTypeCollection(new ByteArrayInputStream(payload)),
                 "Invalid number of fonts not detected!");

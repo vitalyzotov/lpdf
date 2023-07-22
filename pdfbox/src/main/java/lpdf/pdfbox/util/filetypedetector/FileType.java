@@ -18,17 +18,16 @@ package lpdf.pdfbox.util.filetypedetector;
 
 /**
  * @author Drew Noakes
- *
+ * <p>
  * code taken from https://github.com/drewnoakes/metadata-extractor
- *
+ * <p>
  * 2016-01-04
- *
+ * <p>
  * latest commit number 73f1a48
- *
+ * <p>
  * Enumeration of supported image file formats.
  */
-public enum FileType
-{
+public enum FileType {
     UNKNOWN,
     JPEG,
     TIFF,
@@ -40,18 +39,32 @@ public enum FileType
     PCX,
     RIFF,
 
-    /** Sony camera raw. */
+    /**
+     * Sony camera raw.
+     */
     ARW,
-    /** Canon camera raw, version 1. */
+    /**
+     * Canon camera raw, version 1.
+     */
     CRW,
-    /** Canon camera raw, version 2. */
+    /**
+     * Canon camera raw, version 2.
+     */
     CR2,
-    /** Nikon camera raw. */
+    /**
+     * Nikon camera raw.
+     */
     NEF,
-    /** Olympus camera raw. */
+    /**
+     * Olympus camera raw.
+     */
     ORF,
-    /** FujiFilm camera raw. */
+    /**
+     * FujiFilm camera raw.
+     */
     RAF,
-    /** Panasonic camera raw. */
+    /**
+     * Panasonic camera raw.
+     */
     RW2
 }

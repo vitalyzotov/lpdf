@@ -16,14 +16,14 @@
  */
 package lpdf.fontbox.cff;
 
-import java.io.IOException;
 import lpdf.io.RandomAccessRead;
+
+import java.io.IOException;
 
 /**
  * This class implements the DataInput interface using a RandomAccessRead as source.
  */
-public class DataInputRandomAccessRead implements DataInput
-{
+public class DataInputRandomAccessRead implements DataInput {
 
     private final RandomAccessRead randomAccessRead;
 
@@ -32,28 +32,27 @@ public class DataInputRandomAccessRead implements DataInput
      *
      * @param randomAccessRead the source to be read from
      */
-    public DataInputRandomAccessRead(RandomAccessRead randomAccessRead)
-    {
+    public DataInputRandomAccessRead(RandomAccessRead randomAccessRead) {
         this.randomAccessRead = randomAccessRead;
     }
 
     /**
      * Determines if there are any bytes left to read or not.
+     *
      * @return true if there are any bytes left to read
      */
     @Override
-    public boolean hasRemaining() throws IOException
-    {
+    public boolean hasRemaining() throws IOException {
         return randomAccessRead.available() > 0;
     }
 
     /**
      * Returns the current position.
+     *
      * @return current position
      */
     @Override
-    public int getPosition() throws IOException
-    {
+    public int getPosition() throws IOException {
         return (int) randomAccessRead.getPosition();
     }
 
@@ -64,14 +63,11 @@ public class DataInputRandomAccessRead implements DataInput
      * @throws IOException if the new position ist out of range
      */
     @Override
-    public void setPosition(int position) throws IOException
-    {
-        if (position < 0)
-        {
+    public void setPosition(int position) throws IOException {
+        if (position < 0) {
             throw new IOException("position is negative");
         }
-        if (position >= randomAccessRead.length())
-        {
+        if (position >= randomAccessRead.length()) {
             throw new IOException("New position is out of range " + position + " >= "
                     + randomAccessRead.length());
         }
@@ -80,14 +76,13 @@ public class DataInputRandomAccessRead implements DataInput
 
     /**
      * Read one single byte from the buffer.
+     *
      * @return the byte
      * @throws IOException if an error occurs during reading
      */
     @Override
-    public byte readByte() throws IOException
-    {
-        if (!hasRemaining())
-        {
+    public byte readByte() throws IOException {
+        if (!hasRemaining()) {
             throw new IOException("End off buffer reached");
         }
         return (byte) randomAccessRead.read();
@@ -95,14 +90,13 @@ public class DataInputRandomAccessRead implements DataInput
 
     /**
      * Read one single unsigned byte from the buffer.
+     *
      * @return the unsigned byte as int
      * @throws IOException if an error occurs during reading
      */
     @Override
-    public int readUnsignedByte() throws IOException
-    {
-        if (!hasRemaining())
-        {
+    public int readUnsignedByte() throws IOException {
+        if (!hasRemaining()) {
             throw new IOException("End off buffer reached");
         }
         return randomAccessRead.read();
@@ -116,19 +110,15 @@ public class DataInputRandomAccessRead implements DataInput
      * @throws IOException if an error occurs during reading
      */
     @Override
-    public int peekUnsignedByte(int offset) throws IOException
-    {
-        if (offset < 0)
-        {
+    public int peekUnsignedByte(int offset) throws IOException {
+        if (offset < 0) {
             throw new IOException("offset is negative");
         }
-        if (offset == 0)
-        {
+        if (offset == 0) {
             return randomAccessRead.peek();
         }
         long currentPosition = randomAccessRead.getPosition();
-        if (currentPosition + offset >= randomAccessRead.length())
-        {
+        if (currentPosition + offset >= randomAccessRead.length()) {
             throw new IOException("Offset position is out of range " + (currentPosition + offset)
                     + " >= " + randomAccessRead.length());
         }
@@ -140,19 +130,17 @@ public class DataInputRandomAccessRead implements DataInput
 
     /**
      * Read a number of single byte values from the buffer.
+     *
      * @param length the number of bytes to be read
      * @return an array with containing the bytes from the buffer
      * @throws IOException if an error occurs during reading
      */
     @Override
-    public byte[] readBytes(int length) throws IOException
-    {
-        if (length < 0)
-        {
+    public byte[] readBytes(int length) throws IOException {
+        if (length < 0) {
             throw new IOException("length is negative");
         }
-        if (randomAccessRead.length() - randomAccessRead.getPosition() < length)
-        {
+        if (randomAccessRead.length() - randomAccessRead.getPosition() < length) {
             throw new IOException("Premature end of buffer reached");
         }
         byte[] bytes = new byte[length];
@@ -162,8 +150,7 @@ public class DataInputRandomAccessRead implements DataInput
     }
 
     @Override
-    public int length() throws IOException
-    {
+    public int length() throws IOException {
         return (int) randomAccessRead.length();
     }
 

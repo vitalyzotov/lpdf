@@ -16,14 +16,14 @@
  */
 package lpdf.fontbox.cff;
 
+import lpdf.fontbox.FontBoxFont;
+import lpdf.fontbox.util.BoundingBox;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import lpdf.fontbox.FontBoxFont;
-import lpdf.fontbox.util.BoundingBox;
 
 /**
  * An Adobe Compact Font Format (CFF) font. Thread safe.
@@ -31,8 +31,7 @@ import lpdf.fontbox.util.BoundingBox;
  * @author Villu Ruusmann
  * @author John Hewson
  */
-public abstract class CFFFont implements FontBoxFont
-{
+public abstract class CFFFont implements FontBoxFont {
     private String fontName;
     private CFFCharset charset;
     private CFFParser.ByteSource source;
@@ -46,8 +45,7 @@ public abstract class CFFFont implements FontBoxFont
      * @return the name of the font
      */
     @Override
-    public String getName()
-    {
+    public String getName() {
         return fontName;
     }
 
@@ -56,21 +54,18 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @param name the name of the font
      */
-    void setName(String name)
-    {
+    void setName(String name) {
         fontName = name;
     }
 
     /**
      * Adds the given key/value pair to the top dictionary.
      *
-     * @param name the given key
+     * @param name  the given key
      * @param value the given value
      */
-    public void addValueToTopDict(String name, Object value)
-    {
-        if (value != null)
-        {
+    public void addValueToTopDict(String name, Object value) {
+        if (value != null) {
             topDict.put(name, value);
         }
     }
@@ -80,8 +75,7 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @return the dictionary
      */
-    public Map<String, Object> getTopDict()
-    {
+    public Map<String, Object> getTopDict() {
         return topDict;
     }
 
@@ -89,8 +83,7 @@ public abstract class CFFFont implements FontBoxFont
      * Returns the FontMatrix.
      */
     @Override
-    public List<Number> getFontMatrix()
-    {
+    public List<Number> getFontMatrix() {
         return (List<Number>) topDict.get("FontMatrix");
     }
 
@@ -100,11 +93,9 @@ public abstract class CFFFont implements FontBoxFont
      * @throws IOException if there are less than 4 numbers
      */
     @Override
-    public BoundingBox getFontBBox() throws IOException
-    {
+    public BoundingBox getFontBBox() throws IOException {
         List<Number> numbers = (List<Number>) topDict.get("FontBBox");
-        if (numbers.size() < 4)
-        {
+        if (numbers.size() < 4) {
             throw new IOException("FontBBox must have 4 numbers, but is " + numbers);
         }
         return new BoundingBox(numbers);
@@ -115,8 +106,7 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @return the charset
      */
-    public CFFCharset getCharset()
-    {
+    public CFFCharset getCharset() {
         return charset;
     }
 
@@ -125,8 +115,7 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @param charset the given CFFCharset
      */
-    void setCharset(CFFCharset charset)
-    {
+    void setCharset(CFFCharset charset) {
         this.charset = charset;
     }
 
@@ -135,16 +124,14 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @return the character strings dictionary as a list of byte arrays.
      */
-    public final List<byte[]> getCharStringBytes()
-    {
+    public final List<byte[]> getCharStringBytes() {
         return Arrays.asList(charStrings);
     }
 
     /**
      * Sets a byte source to re-read the CFF data in the future.
      */
-    final void setData(CFFParser.ByteSource source)
-    {
+    final void setData(CFFParser.ByteSource source) {
         this.source = source;
     }
 
@@ -152,11 +139,9 @@ public abstract class CFFFont implements FontBoxFont
      * Returns the CFF data.
      *
      * @return the cff data as byte array
-     *
      * @throws IOException if the data could not be read
      */
-    public byte[] getData() throws IOException
-    {
+    public byte[] getData() throws IOException {
         return source.getBytes();
     }
 
@@ -165,8 +150,7 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @return the number of charstrings
      */
-    public int getNumCharStrings()
-    {
+    public int getNumCharStrings() {
         return charStrings.length;
     }
 
@@ -175,18 +159,16 @@ public abstract class CFFFont implements FontBoxFont
      *
      * @param globalSubrIndexValue a list of the global subroutines.
      */
-    void setGlobalSubrIndex(byte[][] globalSubrIndexValue)
-    {
+    void setGlobalSubrIndex(byte[][] globalSubrIndexValue) {
         globalSubrIndex = globalSubrIndexValue;
     }
 
-     /**
+    /**
      * Returns the list containing the global subroutines.
      *
      * @return a list of the global subroutines.
      */
-    public List<byte[]> getGlobalSubrIndex()
-    {
+    public List<byte[]> getGlobalSubrIndex() {
         return Arrays.asList(globalSubrIndex);
     }
 
@@ -194,16 +176,13 @@ public abstract class CFFFont implements FontBoxFont
      * Returns the Type 2 charstring for the given CID.
      *
      * @param cidOrGid CID for CIFFont, or GID for Type 1 font
-     *
      * @return the Type2 charstring of the given cid/gid
-     *
      * @throws IOException if the charstring could not be read
      */
     public abstract Type2CharString getType2CharString(int cidOrGid) throws IOException;
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getClass().getSimpleName() + "[name=" + fontName + ", topDict=" + topDict
                 + ", charset=" + charset + ", charStrings=" + Arrays.deepToString(charStrings)
                 + "]";

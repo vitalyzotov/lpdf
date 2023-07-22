@@ -18,6 +18,7 @@
 package lpdf.pdfbox.pdmodel.font;
 
 import lpdf.harmony.awt.geom.GeneralPath;
+
 import java.io.IOException;
 
 /**
@@ -25,8 +26,7 @@ import java.io.IOException;
  *
  * @author John Hewson
  */
-public interface PDVectorFont
-{
+public interface PDVectorFont {
     /**
      * Returns the glyph path for the given character code.
      *

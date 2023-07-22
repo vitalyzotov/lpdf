@@ -16,9 +16,8 @@
 
 package lpdf.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,20 +27,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unittest for {@link RandomAccessReadMemoryMappedFile}
  */
-class RandomAccessReadMemoryMappedFileTest
-{
+class RandomAccessReadMemoryMappedFileTest {
     @Test
-    void testPositionSkip() throws IOException, URISyntaxException
-    {
+    void testPositionSkip() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI())))
-        {
+                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()))) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.skip(5);
             assertEquals('5', randomAccessSource.read());
@@ -50,8 +47,7 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testPositionRead() throws IOException, URISyntaxException
-    {
+    void testPositionRead() throws IOException, URISyntaxException {
         RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
                 new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()));
 
@@ -67,8 +63,7 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testSeekEOF() throws IOException, URISyntaxException
-    {
+    void testSeekEOF() throws IOException, URISyntaxException {
         RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
                 new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()));
 
@@ -90,11 +85,9 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testPositionReadBytes() throws IOException, URISyntaxException
-    {
+    void testPositionReadBytes() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI())))
-        {
+                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()))) {
             assertEquals(0, randomAccessSource.getPosition());
             byte[] buffer = new byte[4];
             randomAccessSource.read(buffer);
@@ -112,11 +105,9 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testPositionPeek() throws IOException, URISyntaxException
-    {
+    void testPositionPeek() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI())))
-        {
+                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()))) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.skip(6);
             assertEquals(6, randomAccessSource.getPosition());
@@ -127,11 +118,9 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testPositionUnreadBytes() throws IOException, URISyntaxException
-    {
+    void testPositionUnreadBytes() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI())))
-        {
+                new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()))) {
             assertEquals(0, randomAccessSource.getPosition());
             randomAccessSource.read();
             randomAccessSource.read();
@@ -150,11 +139,9 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testEmptyBuffer() throws IOException, URISyntaxException
-    {
+    void testEmptyBuffer() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                new File(getClass().getResource("RandomAccessReadEmptyFile.txt").toURI())))
-        {
+                new File(getClass().getResource("RandomAccessReadEmptyFile.txt").toURI()))) {
             assertEquals(-1, randomAccessSource.read());
             assertEquals(-1, randomAccessSource.peek());
             byte[] readBytes = new byte[6];
@@ -170,19 +157,16 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testUnmapping() throws IOException
-    {
+    void testUnmapping() throws IOException {
         // This is a special test case for some unmapping issues limited to windows enviroments
         // see https://bugs.openjdk.java.net/browse/JDK-4724038
         Path tempFile = Files.createTempFile("PDFBOX", "txt");
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(tempFile, StandardOpenOption.WRITE))
-        {
+        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(tempFile, StandardOpenOption.WRITE)) {
             bufferedWriter.write("Apache PDFBox test");
         }
 
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
-                tempFile.toFile()))
-        {
+                tempFile.toFile())) {
             assertEquals(65, randomAccessSource.read());
         }
 
@@ -190,12 +174,10 @@ class RandomAccessReadMemoryMappedFileTest
     }
 
     @Test
-    void testView() throws IOException, URISyntaxException
-    {
+    void testView() throws IOException, URISyntaxException {
         try (RandomAccessRead randomAccessSource = new RandomAccessReadMemoryMappedFile(
                 new File(getClass().getResource("RandomAccessReadFile1.txt").toURI()));
-             RandomAccessReadView view = randomAccessSource.createView(3, 10))
-        {
+             RandomAccessReadView view = randomAccessSource.createView(3, 10)) {
             assertEquals(0, view.getPosition());
             assertEquals('3', view.read());
             assertEquals('4', view.read());

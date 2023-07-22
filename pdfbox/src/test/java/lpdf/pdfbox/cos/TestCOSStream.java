@@ -16,8 +16,11 @@
  */
 package lpdf.pdfbox.cos;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lpdf.io.IOUtils;
+import lpdf.pdfbox.filter.Filter;
+import lpdf.pdfbox.filter.FilterFactory;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,22 +29,17 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import lpdf.pdfbox.filter.Filter;
-import lpdf.pdfbox.filter.FilterFactory;
-import lpdf.io.IOUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TestCOSStream
-{
+class TestCOSStream {
     /**
      * Tests encoding of a stream without any filter applied.
      *
      * @throws IOException
      */
     @Test
-    void testUncompressedStreamEncode() throws IOException
-    {
+    void testUncompressedStreamEncode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         COSStream stream = createStream(testString, null);
         validateEncoded(stream, testString);
@@ -53,8 +51,7 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testUncompressedStreamDecode() throws IOException
-    {
+    void testUncompressedStreamDecode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         COSStream stream = createStream(testString, null);
         validateDecoded(stream, testString);
@@ -66,8 +63,7 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testCompressedStream1Encode() throws IOException
-    {
+    void testCompressedStream1Encode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         byte[] testStringEncoded = encodeData(testString, COSName.FLATE_DECODE);
         COSStream stream = createStream(testString, COSName.FLATE_DECODE);
@@ -80,14 +76,12 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testCompressedStream1Decode() throws IOException
-    {
+    void testCompressedStream1Decode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         byte[] testStringEncoded = encodeData(testString, COSName.FLATE_DECODE);
         COSStream stream = new COSStream();
 
-        try (OutputStream output = stream.createRawOutputStream())
-        {
+        try (OutputStream output = stream.createRawOutputStream()) {
             output.write(testStringEncoded);
         }
 
@@ -101,8 +95,7 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testCompressedStream2Encode() throws IOException
-    {
+    void testCompressedStream2Encode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         byte[] testStringEncoded = encodeData(testString, COSName.FLATE_DECODE);
         testStringEncoded = encodeData(testStringEncoded, COSName.ASCII85_DECODE);
@@ -121,8 +114,7 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testCompressedStream2Decode() throws IOException
-    {
+    void testCompressedStream2Decode() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         byte[] testStringEncoded = encodeData(testString, COSName.FLATE_DECODE);
         testStringEncoded = encodeData(testStringEncoded, COSName.ASCII85_DECODE);
@@ -133,8 +125,7 @@ class TestCOSStream
         filters.add(COSName.FLATE_DECODE);
         stream.setItem(COSName.FILTER, filters);
 
-        try (OutputStream output = stream.createRawOutputStream())
-        {
+        try (OutputStream output = stream.createRawOutputStream()) {
             output.write(testStringEncoded);
         }
 
@@ -149,8 +140,7 @@ class TestCOSStream
      * @throws IOException
      */
     @Test
-    void testCompressedStreamDoubleClose() throws IOException
-    {
+    void testCompressedStreamDoubleClose() throws IOException {
         byte[] testString = "This is a test string to be used as input for TestCOSStream".getBytes(StandardCharsets.US_ASCII);
         byte[] testStringEncoded = encodeData(testString, COSName.FLATE_DECODE);
         COSStream stream = new COSStream();
@@ -162,51 +152,43 @@ class TestCOSStream
     }
 
     @Test
-    void testHasStreamData() throws IOException
-    {
-        try (COSStream stream = new COSStream())
-        {
+    void testHasStreamData() throws IOException {
+        try (COSStream stream = new COSStream()) {
             assertFalse(stream.hasData());
             Assertions.assertThrows(IOException.class, () -> stream.createInputStream(),
-                "createInputStream should have thrown an IOException");
+                    "createInputStream should have thrown an IOException");
 
             byte[] testString = "This is a test string to be used as input for TestCOSStream"
                     .getBytes(StandardCharsets.US_ASCII);
-            try (OutputStream output = stream.createOutputStream())
-            {
+            try (OutputStream output = stream.createOutputStream()) {
                 output.write(testString);
             }
             assertTrue(stream.hasData());
         }
     }
 
-    private byte[] encodeData(byte[] original, COSName filter) throws IOException
-    {
+    private byte[] encodeData(byte[] original, COSName filter) throws IOException {
         Filter encodingFilter = FilterFactory.INSTANCE.getFilter(filter);
         ByteArrayOutputStream encoded = new ByteArrayOutputStream();
         encodingFilter.encode(new ByteArrayInputStream(original), encoded, new COSDictionary(), 0);
         return encoded.toByteArray();
     }
 
-    private COSStream createStream(byte[] testString, COSBase filters) throws IOException
-    {
+    private COSStream createStream(byte[] testString, COSBase filters) throws IOException {
         COSStream stream = new COSStream();
-        try (OutputStream output = stream.createOutputStream(filters))
-        {
+        try (OutputStream output = stream.createOutputStream(filters)) {
             output.write(testString);
         }
         return stream;
     }
 
-    private void validateEncoded(COSStream stream, byte[] expected) throws IOException
-    {
+    private void validateEncoded(COSStream stream, byte[] expected) throws IOException {
         byte[] decoded = IOUtils.toByteArray(stream.createRawInputStream());
         stream.close();
         assertTrue(Arrays.equals(expected, decoded), "Encoded data doesn't match input");
     }
 
-    private void validateDecoded(COSStream stream, byte[] expected) throws IOException
-    {
+    private void validateDecoded(COSStream stream, byte[] expected) throws IOException {
         byte[] encoded = IOUtils.toByteArray(stream.createInputStream());
         stream.close();
         assertTrue(Arrays.equals(expected, encoded), "Decoded data doesn't match input");

@@ -16,12 +16,12 @@
  */
 package lpdf.pdfbox.contentstream.operator.color;
 
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
-import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,16 +32,13 @@ import java.util.List;
  *
  * @author John Hewson
  */
-public class SetNonStrokingDeviceGrayColor extends SetNonStrokingColor
-{
-    public SetNonStrokingDeviceGrayColor(PDFStreamEngine context)
-    {
+public class SetNonStrokingDeviceGrayColor extends SetNonStrokingColor {
+    public SetNonStrokingDeviceGrayColor(PDFStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> arguments) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> arguments) throws IOException {
         PDFStreamEngine context = getContext();
         PDColorSpace cs = context.getResources().getColorSpace(COSName.DEVICEGRAY);
         context.getGraphicsState().setNonStrokingColorSpace(cs);
@@ -49,8 +46,7 @@ public class SetNonStrokingDeviceGrayColor extends SetNonStrokingColor
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.NON_STROKING_GRAY;
     }
 }

@@ -16,6 +16,7 @@
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
 import lpdf.harmony.awt.Point;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +26,7 @@ import java.util.Set;
  *
  * @author Shaola Ren
  */
-class Line
-{
+class Line {
     private final Point point0;
     private final Point point1;
     private final float[] color0;
@@ -42,8 +42,7 @@ class Line
      * @param c0 color of point p0
      * @param c1 color of point p1
      */
-    Line(Point p0, Point p1, float[] c0, float[] c1)
-    {
+    Line(Point p0, Point p1, float[] c0, float[] c1) {
         point0 = p0;
         point1 = p1;
         color0 = c0.clone();
@@ -63,29 +62,24 @@ class Line
      * @param y1 coordinate
      * @return all the points on the rasterized line from (x0, y0) to (x1, y1)
      */
-    private Set<Point> calcLine(int x0, int y0, int x1, int y1)
-    {
+    private Set<Point> calcLine(int x0, int y0, int x1, int y1) {
         Set<Point> points = new HashSet<>(3);
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
         int sx = x0 < x1 ? 1 : -1;
         int sy = y0 < y1 ? 1 : -1;
         int err = dx - dy;
-        while (true)
-        {
+        while (true) {
             points.add(new IntPoint(x0, y0));
-            if (x0 == x1 && y0 == y1)
-            {
+            if (x0 == x1 && y0 == y1) {
                 break;
             }
             int e2 = 2 * err;
-            if (e2 > -dy)
-            {
+            if (e2 > -dy) {
                 err -= dy;
                 x0 += sx;
             }
-            if (e2 < dx)
-            {
+            if (e2 < dx) {
                 err += dx;
                 y0 += sy;
             }
@@ -100,28 +94,21 @@ class Line
      * @param p target point, p should always be contained in linePoints
      * @return color
      */
-    protected float[] calcColor(Point p)
-    {
-        if (point0.x == point1.x && point0.y == point1.y)
-        {
+    protected float[] calcColor(Point p) {
+        if (point0.x == point1.x && point0.y == point1.y) {
             return color0;
         }
         int numberOfColorComponents = color0.length;
         float[] pc = new float[numberOfColorComponents];
-        if (point0.x == point1.x)
-        {
+        if (point0.x == point1.x) {
             float l = point1.y - point0.y;
-            for (int i = 0; i < numberOfColorComponents; i++)
-            {
+            for (int i = 0; i < numberOfColorComponents; i++) {
                 pc[i] = (color0[i] * (point1.y - p.y) / l
                         + color1[i] * (p.y - point0.y) / l);
             }
-        }
-        else
-        {
+        } else {
             float l = point1.x - point0.x;
-            for (int i = 0; i < numberOfColorComponents; i++)
-            {
+            for (int i = 0; i < numberOfColorComponents; i++) {
                 pc[i] = (color0[i] * (point1.x - p.x) / l
                         + color1[i] * (p.x - point0.x) / l);
             }

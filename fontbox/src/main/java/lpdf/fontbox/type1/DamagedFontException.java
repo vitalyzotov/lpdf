@@ -24,10 +24,8 @@ import java.io.IOException;
  *
  * @author John Hewson
  */
-public class DamagedFontException extends IOException
-{
-    public DamagedFontException(String message)
-    {
+public class DamagedFontException extends IOException {
+    public DamagedFontException(String message) {
         super(message);
     }
 }

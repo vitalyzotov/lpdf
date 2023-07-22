@@ -16,6 +16,8 @@
  */
 package lpdf.pdfbox.cos;
 
+import lpdf.pdfbox.util.Hex;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -23,15 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import lpdf.pdfbox.util.Hex;
-
 /**
  * A PDF Name object.
  *
  * @author Ben Litchfield
  */
-public final class COSName extends COSBase implements Comparable<COSName>
-{
+public final class COSName extends COSBase implements Comparable<COSName> {
     // using ConcurrentHashMap because this can be accessed by multiple threads
     private static final Map<String, COSName> nameMap = new ConcurrentHashMap<>(8192);
 
@@ -592,7 +591,9 @@ public final class COSName extends COSBase implements Comparable<COSName>
     public static final COSName TRUE_TYPE = new COSName("TrueType");
     public static final COSName TRUSTED_MODE = new COSName("TrustedMode");
     public static final COSName TU = new COSName("TU");
-    /** Acro form field type for text field. */
+    /**
+     * Acro form field type for text field.
+     */
     public static final COSName TX = new COSName("Tx");
     public static final COSName TYPE = new COSName("Type");
     public static final COSName TYPE0 = new COSName("Type0");
@@ -661,22 +662,17 @@ public final class COSName extends COSBase implements Comparable<COSName>
      * This will get a COSName object with that name.
      *
      * @param aName The name of the object.
-     *
      * @return A COSName with the specified name.
      */
-    public static COSName getPDFName(String aName)
-    {
+    public static COSName getPDFName(String aName) {
         COSName name = null;
-        if (aName != null)
-        {
+        if (aName != null) {
             // Is it a common COSName ??
             name = commonNameMap.get(aName);
-            if (name == null)
-            {
+            if (name == null) {
                 // It seems to be a document specific COSName
                 name = nameMap.get(aName);
-                if (name == null)
-                {
+                if (name == null) {
                     // name is added to the synchronized map in the constructor
                     name = new COSName(aName, false);
                 }
@@ -688,20 +684,16 @@ public final class COSName extends COSBase implements Comparable<COSName>
     /**
      * Private constructor. This will limit the number of COSName objects. that are created.
      *
-     * @param aName The name of the COSName object.
+     * @param aName       The name of the COSName object.
      * @param staticValue Indicates if the COSName object is static so that it can be stored in the HashMap without
-     * synchronizing.
+     *                    synchronizing.
      */
-    private COSName(String aName, boolean staticValue)
-    {
+    private COSName(String aName, boolean staticValue) {
         name = aName;
         hashCode = name.hashCode();
-        if (staticValue)
-        {
+        if (staticValue) {
             commonNameMap.put(aName, this);
-        }
-        else
-        {
+        } else {
             nameMap.put(aName, this);
         }
     }
@@ -711,8 +703,7 @@ public final class COSName extends COSBase implements Comparable<COSName>
      *
      * @param aName The name of the COSName object.
      */
-    private COSName(String aName)
-    {
+    private COSName(String aName) {
         this(aName, true);
     }
 
@@ -721,47 +712,41 @@ public final class COSName extends COSBase implements Comparable<COSName>
      *
      * @return The name of the object.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "COSName{" + name + "}";
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         return object instanceof COSName && name.equals(((COSName) object).name);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hashCode;
     }
 
     @Override
-    public int compareTo(COSName other)
-    {
+    public int compareTo(COSName other) {
         return name.compareTo(other.name);
     }
 
     /**
      * Returns true if the name is the empty string.
+     *
      * @return true if the name is the empty string.
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return name.isEmpty();
     }
 
     @Override
-    public void accept(ICOSVisitor visitor) throws IOException
-    {
+    public void accept(ICOSVisitor visitor) throws IOException {
         visitor.visitFromName(this);
     }
 
@@ -771,12 +756,10 @@ public final class COSName extends COSBase implements Comparable<COSName>
      * @param output The stream to write to.
      * @throws IOException If there is an error writing to the stream.
      */
-    public void writePDF(OutputStream output) throws IOException
-    {
+    public void writePDF(OutputStream output) throws IOException {
         output.write('/');
         byte[] bytes = getName().getBytes(StandardCharsets.UTF_8);
-        for (byte b : bytes)
-        {
+        for (byte b : bytes) {
             int current = b & 0xFF;
 
             // be more restrictive than the PDF spec, "Name Objects", see PDFBOX-2073
@@ -790,12 +773,9 @@ public final class COSName extends COSBase implements Comparable<COSName>
                     current == '*' ||
                     current == '$' ||
                     current == ';' ||
-                    current == '.')
-            {
+                    current == '.') {
                 output.write(current);
-            }
-            else
-            {
+            } else {
                 output.write('#');
                 Hex.writeHexByte(b, output);
             }
@@ -805,8 +785,7 @@ public final class COSName extends COSBase implements Comparable<COSName>
     /**
      * Not usually needed except if resources need to be reclaimed in a long running process.
      */
-    public static void clearResources()
-    {
+    public static void clearResources() {
         // Clear them all
         nameMap.clear();
     }

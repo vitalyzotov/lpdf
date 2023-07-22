@@ -15,54 +15,47 @@
  */
 package lpdf.pdfbox.util;
 
+import org.junit.jupiter.api.Test;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * @author Michael Doswald
  */
-class TestHexUtil
-{
+class TestHexUtil {
 
     /**
      * Test conversion from short to char[]
      */
     @Test
-    void testGetCharsFromShortWithoutPassingInABuffer()
-    {
-        assertArrayEquals(new char[]{'0','0','0','0'}, Hex.getChars((short)0x0000));
-        assertArrayEquals(new char[]{'0','0','0','F'}, Hex.getChars((short)0x000F));
-        assertArrayEquals(new char[]{'A','B','C','D'}, Hex.getChars((short)0xABCD));
-        assertArrayEquals(new char[]{'B','A','B','E'}, Hex.getChars((short)0xCAFEBABE));
+    void testGetCharsFromShortWithoutPassingInABuffer() {
+        assertArrayEquals(new char[]{'0', '0', '0', '0'}, Hex.getChars((short) 0x0000));
+        assertArrayEquals(new char[]{'0', '0', '0', 'F'}, Hex.getChars((short) 0x000F));
+        assertArrayEquals(new char[]{'A', 'B', 'C', 'D'}, Hex.getChars((short) 0xABCD));
+        assertArrayEquals(new char[]{'B', 'A', 'B', 'E'}, Hex.getChars((short) 0xCAFEBABE));
     }
 
     /**
      * Check conversion from String to a char[] which contains the UTF16-BE encoded
      * bytes of the string as hex digits
-     *
      */
     @Test
-    void testGetCharsUTF16BE()
-    {
-        assertArrayEquals(new char[]{'0','0','6','1','0','0','6','2'}, Hex.getCharsUTF16BE("ab"));
-        assertArrayEquals(new char[]{'5','E','2','E','5','2','A','9'}, Hex.getCharsUTF16BE("帮助"));
+    void testGetCharsUTF16BE() {
+        assertArrayEquals(new char[]{'0', '0', '6', '1', '0', '0', '6', '2'}, Hex.getCharsUTF16BE("ab"));
+        assertArrayEquals(new char[]{'5', 'E', '2', 'E', '5', '2', 'A', '9'}, Hex.getCharsUTF16BE("帮助"));
     }
 
     /**
      * Test getBytes() and getString() and decodeHex()
      */
     @Test
-    void testMisc()
-    {
+    void testMisc() {
         byte[] byteSrcArray = new byte[256];
-        for (int i = 0; i < 256; ++i)
-        {
+        for (int i = 0; i < 256; ++i) {
             byteSrcArray[i] = (byte) i;
 
             byte[] bytes = Hex.getBytes((byte) i);

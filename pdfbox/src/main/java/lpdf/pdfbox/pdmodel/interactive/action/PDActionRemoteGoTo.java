@@ -16,14 +16,13 @@
  */
 package lpdf.pdfbox.pdmodel.interactive.action;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSBoolean;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-
 import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
+
+import java.io.IOException;
 
 /**
  * This represents a remote go-to action that can be executed in a PDF document.
@@ -31,8 +30,7 @@ import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
  * @author Ben Litchfield
  * @author Panagiotis Toumasis
  */
-public class PDActionRemoteGoTo extends PDAction
-{
+public class PDActionRemoteGoTo extends PDAction {
     /**
      * This type of action this object represents.
      */
@@ -41,9 +39,8 @@ public class PDActionRemoteGoTo extends PDAction
     /**
      * Default constructor.
      */
-    public PDActionRemoteGoTo()
-    {
-        setSubType( SUB_TYPE );
+    public PDActionRemoteGoTo() {
+        setSubType(SUB_TYPE);
     }
 
     /**
@@ -51,21 +48,18 @@ public class PDActionRemoteGoTo extends PDAction
      *
      * @param a The action dictionary.
      */
-    public PDActionRemoteGoTo( COSDictionary a )
-    {
-        super( a );
+    public PDActionRemoteGoTo(COSDictionary a) {
+        super(a);
     }
 
     /**
      * This will get the file in which the destination is located.
      *
      * @return The F entry of the specific remote go-to action dictionary.
-     *
      * @throws IOException If there is an error creating the file spec.
      */
-    public PDFileSpecification getFile() throws IOException
-    {
-        return PDFileSpecification.createFS( action.getDictionaryObject( COSName.F ) );
+    public PDFileSpecification getFile() throws IOException {
+        return PDFileSpecification.createFS(action.getDictionaryObject(COSName.F));
     }
 
     /**
@@ -73,9 +67,8 @@ public class PDActionRemoteGoTo extends PDAction
      *
      * @param fs The file specification.
      */
-    public void setFile( PDFileSpecification fs )
-    {
-        action.setItem( COSName.F, fs );
+    public void setFile(PDFileSpecification fs) {
+        action.setItem(COSName.F, fs);
     }
 
     /**
@@ -89,9 +82,8 @@ public class PDActionRemoteGoTo extends PDAction
      */
 
     // Array or String.
-    public COSBase getD()
-    {
-        return action.getDictionaryObject( COSName.D );
+    public COSBase getD() {
+        return action.getDictionaryObject(COSName.D);
     }
 
     /**
@@ -105,9 +97,8 @@ public class PDActionRemoteGoTo extends PDAction
      */
 
     // In case the value is an array.
-    public void setD( COSBase d )
-    {
-        action.setItem( COSName.D, d );
+    public void setD(COSBase d) {
+        action.setItem(COSName.D, d);
     }
 
     /**
@@ -116,10 +107,8 @@ public class PDActionRemoteGoTo extends PDAction
      *
      * @return A flag specifying how to open the destination document.
      */
-    public OpenMode getOpenInNewWindow()
-    {
-        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean)
-        {
+    public OpenMode getOpenInNewWindow() {
+        if (getCOSObject().getDictionaryObject(COSName.NEW_WINDOW) instanceof COSBoolean) {
             COSBoolean b = (COSBoolean) getCOSObject().getDictionaryObject(COSName.NEW_WINDOW);
             return b.getValue() ? OpenMode.NEW_WINDOW : OpenMode.SAME_WINDOW;
         }
@@ -131,15 +120,12 @@ public class PDActionRemoteGoTo extends PDAction
      *
      * @param value The flag value.
      */
-    public void setOpenInNewWindow(OpenMode value)
-    {
-        if (null == value)
-        {
+    public void setOpenInNewWindow(OpenMode value) {
+        if (null == value) {
             getCOSObject().removeItem(COSName.NEW_WINDOW);
             return;
         }
-        switch (value)
-        {
+        switch (value) {
             case USER_PREFERENCE:
                 getCOSObject().removeItem(COSName.NEW_WINDOW);
                 break;

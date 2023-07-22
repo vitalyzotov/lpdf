@@ -22,41 +22,35 @@ package lpdf.pdfbox.pdmodel.font;
  *
  * @author John Hewson
  */
-public final class FontMappers
-{
+public final class FontMappers {
     private static FontMapper instance;
 
-    private FontMappers()
-    {
+    private FontMappers() {
     }
-    
+
     // lazy thread safe singleton
-    private static class DefaultFontMapper
-    {
+    private static class DefaultFontMapper {
         private static final FontMapper INSTANCE = new FontMapperImpl();
     }
-    
+
     /**
      * Returns the singleton FontMapper instance.
-     * 
+     *
      * @return a singleton FontMapper instance
      */
-    public static FontMapper instance()
-    {
-        if (instance == null)
-        {
+    public static FontMapper instance() {
+        if (instance == null) {
             instance = DefaultFontMapper.INSTANCE;
         }
         return instance;
     }
-    
+
     /**
      * Sets the singleton FontMapper instance.
-     * 
+     *
      * @param fontMapper the singleton FontMapper instance to be stored
      */
-    public static synchronized void set(FontMapper fontMapper)
-    {
+    public static synchronized void set(FontMapper fontMapper) {
         instance = fontMapper;
     }
 }

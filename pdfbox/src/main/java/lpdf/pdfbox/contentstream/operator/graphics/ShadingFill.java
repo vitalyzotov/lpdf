@@ -16,46 +16,40 @@
  */
 package lpdf.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
-
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
-import lpdf.pdfbox.cos.COSBase;
-import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.contentstream.operator.OperatorName;
+import lpdf.pdfbox.cos.COSBase;
+import lpdf.pdfbox.cos.COSName;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * sh Fills the clipping area with the given shading pattern.
  *
  * @author Daniel Wilson
  */
-public final class ShadingFill extends GraphicsOperatorProcessor
-{
-    public ShadingFill(PDFGraphicsStreamEngine context)
-    {
+public final class ShadingFill extends GraphicsOperatorProcessor {
+    public ShadingFill(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.isEmpty())
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.isEmpty()) {
             throw new MissingOperandException(operator, operands);
         }
         COSBase base = operands.get(0);
-        if (!(base instanceof COSName))
-        {
+        if (!(base instanceof COSName)) {
             throw new MissingOperandException(operator, operands);
         }
         getGraphicsContext().shadingFill((COSName) base);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.SHADING_FILL;
     }
 }

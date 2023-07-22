@@ -15,25 +15,21 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.pdmodel.graphics.form.PDFormXObject;
 
+import java.io.IOException;
+
 /**
- *
  * @author Tilman Hausherr
  */
-public final class PDFormContentStream extends PDAbstractContentStream
-{
+public final class PDFormContentStream extends PDAbstractContentStream {
     /**
      * Create a new form XObject content stream.
      *
      * @param form The form XObject stream to write to.
-     *
      * @throws IOException If there is an error writing to the form contents.
      */
-    public PDFormContentStream(PDFormXObject form) throws IOException
-    {
+    public PDFormContentStream(PDFormXObject form) throws IOException {
         super(null, form.getContentStream().createOutputStream(), form.getResources());
     }
 }

@@ -23,8 +23,7 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class CmapTable extends TTFTable
-{
+public class CmapTable extends TTFTable {
     /**
      * A tag used to identify this table.
      */
@@ -56,34 +55,30 @@ public class CmapTable extends TTFTable
 
     private CmapSubtable[] cmaps;
 
-    CmapTable()
-    {
+    CmapTable() {
         super();
     }
 
     /**
      * This will read the required data from the stream.
      *
-     * @param ttf The font that is being read.
+     * @param ttf  The font that is being read.
      * @param data The stream to read the data from.
      * @throws IOException If there is an error reading the data.
      */
     @Override
-    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException
-    {
+    void read(TrueTypeFont ttf, TTFDataStream data) throws IOException {
         @SuppressWarnings({"unused", "squid:S1854", "squid:S1481"})
         int version = data.readUnsignedShort();
         int numberOfTables = data.readUnsignedShort();
         cmaps = new CmapSubtable[numberOfTables];
-        for (int i = 0; i < numberOfTables; i++)
-        {
+        for (int i = 0; i < numberOfTables; i++) {
             CmapSubtable cmap = new CmapSubtable();
             cmap.initData(data);
             cmaps[i] = cmap;
         }
         int numberOfGlyphs = ttf.getNumberOfGlyphs();
-        for (int i = 0; i < numberOfTables; i++)
-        {
+        for (int i = 0; i < numberOfTables; i++) {
             cmaps[i].initSubtable(this, numberOfGlyphs, data);
         }
         initialized = true;
@@ -92,34 +87,28 @@ public class CmapTable extends TTFTable
     /**
      * @return Returns the cmaps.
      */
-    public CmapSubtable[] getCmaps()
-    {
+    public CmapSubtable[] getCmaps() {
         return cmaps;
     }
 
     /**
      * @param cmapsValue The cmaps to set.
      */
-    public void setCmaps(CmapSubtable[] cmapsValue)
-    {
+    public void setCmaps(CmapSubtable[] cmapsValue) {
         cmaps = cmapsValue;
     }
 
     /**
      * Returns the subtable, if any, for the given platform and encoding.
      *
-     * @param platformId the ID of the given platform
+     * @param platformId         the ID of the given platform
      * @param platformEncodingId the ID of the given encoding
-     *
      * @return the subtable, if any, or null
      */
-    public CmapSubtable getSubtable(int platformId, int platformEncodingId)
-    {
-        for (CmapSubtable cmap : cmaps)
-        {
+    public CmapSubtable getSubtable(int platformId, int platformEncodingId) {
+        for (CmapSubtable cmap : cmaps) {
             if (cmap.getPlatformId() == platformId &&
-                cmap.getPlatformEncodingId() == platformEncodingId)
-            {
+                    cmap.getPlatformEncodingId() == platformEncodingId) {
                 return cmap;
             }
         }

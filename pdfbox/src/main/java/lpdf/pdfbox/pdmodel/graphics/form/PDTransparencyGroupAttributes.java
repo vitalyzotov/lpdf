@@ -16,45 +16,42 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.form;
 
-import java.io.IOException;
-
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.PDResources;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
 import lpdf.pdfbox.pdmodel.graphics.color.PDColorSpace;
 
+import java.io.IOException;
+
 /**
  * Transparency group attributes.
  *
  * @author Kühn &amp; Weyh Software GmbH
  */
-public final class PDTransparencyGroupAttributes implements COSObjectable
-{
+public final class PDTransparencyGroupAttributes implements COSObjectable {
     private final COSDictionary dictionary;
     private PDColorSpace colorSpace;
 
     /**
      * Creates a group object with /Transparency subtype entry.
      */
-    public PDTransparencyGroupAttributes()
-    {
+    public PDTransparencyGroupAttributes() {
         dictionary = new COSDictionary();
         dictionary.setItem(COSName.S, COSName.TRANSPARENCY);
     }
 
     /**
      * Creates a group object from a given dictionary
+     *
      * @param dic {@link COSDictionary} object
      */
-    public PDTransparencyGroupAttributes(COSDictionary dic)
-    {
+    public PDTransparencyGroupAttributes(COSDictionary dic) {
         dictionary = dic;
     }
 
     @Override
-    public COSDictionary getCOSObject()
-    {
+    public COSDictionary getCOSObject() {
         return dictionary;
     }
 
@@ -64,8 +61,7 @@ public final class PDTransparencyGroupAttributes implements COSObjectable
      * @return the group color space.
      * @throws IOException if the colorspace could not be created
      */
-    public PDColorSpace getColorSpace() throws IOException
-    {
+    public PDColorSpace getColorSpace() throws IOException {
         return getColorSpace(null);
     }
 
@@ -76,10 +72,8 @@ public final class PDTransparencyGroupAttributes implements COSObjectable
      * @return the group color space.
      * @throws IOException if the colorspace could not be created
      */
-    public PDColorSpace getColorSpace(PDResources resources) throws IOException
-    {
-        if (colorSpace == null && getCOSObject().containsKey(COSName.CS))
-        {
+    public PDColorSpace getColorSpace(PDResources resources) throws IOException {
+        if (colorSpace == null && getCOSObject().containsKey(COSName.CS)) {
             colorSpace = PDColorSpace.create(getCOSObject().getDictionaryObject(COSName.CS), resources);
         }
         return colorSpace;
@@ -91,8 +85,7 @@ public final class PDTransparencyGroupAttributes implements COSObjectable
      *
      * @return true if this group is isolated
      */
-    public boolean isIsolated()
-    {
+    public boolean isIsolated() {
         return getCOSObject().getBoolean(COSName.I, false);
     }
 
@@ -102,8 +95,7 @@ public final class PDTransparencyGroupAttributes implements COSObjectable
      *
      * @return true if this group is a knockout
      */
-    public boolean isKnockout()
-    {
+    public boolean isKnockout() {
         return getCOSObject().getBoolean(COSName.K, false);
     }
 }

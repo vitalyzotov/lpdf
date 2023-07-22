@@ -30,22 +30,18 @@ import java.util.List;
  *
  * @author Daniel Wilson
  */
-public final class ClipEvenOddRule extends GraphicsOperatorProcessor
-{
-    public ClipEvenOddRule(PDFGraphicsStreamEngine context)
-    {
+public final class ClipEvenOddRule extends GraphicsOperatorProcessor {
+    public ClipEvenOddRule(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
         getGraphicsContext().clip(PathIterator.WIND_EVEN_ODD);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CLIP_EVEN_ODD;
     }
 }

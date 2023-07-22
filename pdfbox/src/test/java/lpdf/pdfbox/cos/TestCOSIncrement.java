@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.cos;
 
-import lpdf.pdfbox.Loader;
 import lpdf.io.RandomAccessReadBuffer;
+import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +31,7 @@ import java.util.ConcurrentModificationException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class TestCOSIncrement
-{
+class TestCOSIncrement {
 
     // TODO Very basic and primitive test - add in depth testing for all this.
 
@@ -45,28 +44,22 @@ class TestCOSIncrement
      * @throws URISyntaxException
      */
     @Test
-    void testConcurrentModification() throws IOException, URISyntaxException
-    {
+    void testConcurrentModification() throws IOException, URISyntaxException {
         URL pdfLocation =
-            new URI("https://issues.apache.org/jira/secure/attachment/12891316/YTW2VWJQTDAE67PGJT6GS7QSKW3GNUQR.pdf").toURL();
+                new URI("https://issues.apache.org/jira/secure/attachment/12891316/YTW2VWJQTDAE67PGJT6GS7QSKW3GNUQR.pdf").toURL();
 
         try (PDDocument document = Loader
-                .loadPDF(RandomAccessReadBuffer.createBufferFromStream(pdfLocation.openStream())))
-        {
+                .loadPDF(RandomAccessReadBuffer.createBufferFromStream(pdfLocation.openStream()))) {
             document.setAllSecurityToBeRemoved(true);
-            try
-            {
+            try {
                 document.save(new ByteArrayOutputStream());
-            }
-            catch (ConcurrentModificationException e)
-            {
+            } catch (ConcurrentModificationException e) {
                 fail("There shouldn't be a ConcurrentModificationException", e.getCause());
             }
         }
     }
 
-    private PDDocument loadDocument(byte[] documentData)
-    {
+    private PDDocument loadDocument(byte[] documentData) {
         return assertDoesNotThrow(() -> Loader.loadPDF(documentData), "Loading the document failed.");
     }
 
