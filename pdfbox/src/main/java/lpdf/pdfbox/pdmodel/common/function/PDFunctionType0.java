@@ -19,9 +19,8 @@ package lpdf.pdfbox.pdmodel.common.function;
 import java.io.IOException;
 import java.io.InputStream;
 
-//todo: vz can we use it?
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.MemoryCacheImageInputStream;
+import lpdf.harmony.imageio.stream.ImageInputStream;
+import lpdf.harmony.imageio.stream.MemoryCacheImageInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

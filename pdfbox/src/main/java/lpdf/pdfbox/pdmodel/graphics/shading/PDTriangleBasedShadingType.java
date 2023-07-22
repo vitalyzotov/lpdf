@@ -15,19 +15,18 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.Point2D;
+import lpdf.harmony.imageio.stream.ImageInputStream;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.PDRange;
 import lpdf.pdfbox.util.Matrix;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import javax.imageio.stream.ImageInputStream;
-import lpdf.harmony.awt.geom.AffineTransform;
-import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Common resources for shading types 4,5,6 and 7
