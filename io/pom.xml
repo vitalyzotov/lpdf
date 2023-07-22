@@ -21,21 +21,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.pdfbox</groupId>
-        <artifactId>pdfbox-parent</artifactId>
+        <groupId>lpdf</groupId>
+        <artifactId>lpdf-parent</artifactId>
         <version>3.0.0-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>pdfbox-io</artifactId>
-    <packaging>bundle</packaging>
+    <artifactId>lpdf-io</artifactId>
 
-    <name>Apache PDFBox io</name>
+    <name>LPDF io</name>
     <description>
-        The Apache PDFBox library is an open source Java tool for working with PDF documents. 
-        This artefact contains IO related classes.
+        The LPDF library is a port of Apache PDFBox library to be usable for parsing PDF documents in GraalVM native images.
+        This artifact contains IO related classes.
     </description>
-    <inceptionYear>2002</inceptionYear>
 
     <dependencies>
         <dependency>
@@ -45,27 +43,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Automatic-Module-Name>org.apache.pdfbox.io</Automatic-Module-Name>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>src/test/resources/org/apache/pdfbox/io/*.txt</exclude>
+                        <exclude>src/test/resources/lpdf/io/*.txt</exclude>
                     </excludes>
                 </configuration>
             </plugin>

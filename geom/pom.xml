@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.apache.pdfbox</groupId>
-        <artifactId>pdfbox-parent</artifactId>
+        <groupId>lpdf</groupId>
+        <artifactId>lpdf-parent</artifactId>
         <version>3.0.0-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
@@ -12,4 +12,8 @@
 
     <artifactId>geom</artifactId>
 
+    <name>Harmony Geom</name>
+    <description>
+        The Harmony Geom library is a subset of java.awt and java.awt.geom classes from Apache Harmony JDK.
+    </description>
 </project>

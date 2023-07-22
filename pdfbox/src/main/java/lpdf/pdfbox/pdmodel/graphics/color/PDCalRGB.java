@@ -1,0 +1,140 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package lpdf.pdfbox.pdmodel.graphics.color;
+
+import lpdf.pdfbox.cos.COSArray;
+import lpdf.pdfbox.cos.COSFloat;
+import lpdf.pdfbox.cos.COSName;
+import lpdf.pdfbox.util.Matrix;
+
+/**
+ * A CalRGB colour space is a CIE-based colour space with one transformation stage instead of two.
+ * In this type of space, A, B, and C represent calibrated red, green, and blue colour values.
+ *
+ * @author Ben Litchfield
+ * @author John Hewson
+ */
+public class PDCalRGB extends PDCIEDictionaryBasedColorSpace {
+    private final PDColor initialColor = new PDColor(new float[]{0, 0, 0}, this);
+
+    /**
+     * Creates a new CalRGB color space.
+     */
+    public PDCalRGB() {
+        super(COSName.CALRGB);
+    }
+
+    /**
+     * Creates a new CalRGB color space using the given COS array.
+     *
+     * @param rgb the cos array which represents this color space
+     */
+    public PDCalRGB(COSArray rgb) {
+        super(rgb);
+    }
+
+    @Override
+    public String getName() {
+        return COSName.CALRGB.getName();
+    }
+
+    @Override
+    public int getNumberOfComponents() {
+        return 3;
+    }
+
+    @Override
+    public float[] getDefaultDecode(int bitsPerComponent) {
+        return new float[]{0, 1, 0, 1, 0, 1};
+    }
+
+    @Override
+    public PDColor getInitialColor() {
+        return initialColor;
+    }
+
+    /**
+     * Returns the gamma value.
+     * If none is present then the default of 1,1,1 will be returned.
+     *
+     * @return the gamma value
+     */
+    public final PDGamma getGamma() {
+        COSArray gammaArray = dictionary.getCOSArray(COSName.GAMMA);
+        if (gammaArray == null) {
+            gammaArray = new COSArray();
+            gammaArray.add(new COSFloat(1.0f));
+            gammaArray.add(new COSFloat(1.0f));
+            gammaArray.add(new COSFloat(1.0f));
+            dictionary.setItem(COSName.GAMMA, gammaArray);
+        }
+        return new PDGamma(gammaArray);
+    }
+
+    /**
+     * Returns the linear interpretation matrix, which is an array of nine numbers.
+     * If the underlying dictionary contains null then the identity matrix will be returned.
+     *
+     * @return the linear interpretation matrix
+     */
+    public final float[] getMatrix() {
+        COSArray matrix = dictionary.getCOSArray(COSName.MATRIX);
+        if (matrix == null) {
+            return new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1};
+        } else {
+            return matrix.toFloatArray();
+        }
+    }
+
+    /**
+     * Sets the gamma value.
+     *
+     * @param gamma the new gamma value
+     */
+    public final void setGamma(PDGamma gamma) {
+        COSArray gammaArray = null;
+        if (gamma != null) {
+            gammaArray = gamma.getCOSArray();
+        }
+        dictionary.setItem(COSName.GAMMA, gammaArray);
+    }
+
+    /**
+     * Sets the linear interpretation matrix.
+     * Passing in null will clear the matrix.
+     *
+     * @param matrix the new linear interpretation matrix, or null
+     */
+    public final void setMatrix(Matrix matrix) {
+        COSArray matrixArray = null;
+        if (matrix != null) {
+            // We can't use matrix.toCOSArray(), as it only returns a subset of the matrix
+            float[][] values = matrix.getValues();
+            matrixArray = new COSArray();
+            matrixArray.add(new COSFloat(values[0][0]));
+            matrixArray.add(new COSFloat(values[0][1]));
+            matrixArray.add(new COSFloat(values[0][2]));
+            matrixArray.add(new COSFloat(values[1][0]));
+            matrixArray.add(new COSFloat(values[1][1]));
+            matrixArray.add(new COSFloat(values[1][2]));
+            matrixArray.add(new COSFloat(values[2][0]));
+            matrixArray.add(new COSFloat(values[2][1]));
+            matrixArray.add(new COSFloat(values[2][2]));
+        }
+        dictionary.setItem(COSName.MATRIX, matrixArray);
+    }
+}
