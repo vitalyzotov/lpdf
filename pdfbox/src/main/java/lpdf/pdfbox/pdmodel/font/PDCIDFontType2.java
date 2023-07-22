@@ -16,7 +16,6 @@
  */
 package lpdf.pdfbox.pdmodel.font;
 
-//todo: vz can we use it?
 import lpdf.harmony.awt.geom.AffineTransform;
 import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;

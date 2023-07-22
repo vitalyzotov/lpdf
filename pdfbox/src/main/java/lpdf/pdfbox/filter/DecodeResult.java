@@ -17,7 +17,6 @@
 package lpdf.pdfbox.filter;
 
 import lpdf.pdfbox.cos.COSDictionary;
-import lpdf.pdfbox.pdmodel.graphics.color.PDJPXColorSpace;
 
 /**
  * The result of a filter decode operation. Allows information such as color space to be
@@ -25,20 +24,11 @@ import lpdf.pdfbox.pdmodel.graphics.color.PDJPXColorSpace;
  *
  * @author John Hewson
  */
-public final class DecodeResult
-{
+public final class DecodeResult {
     private final COSDictionary parameters;
-    private PDJPXColorSpace colorSpace;
 
-    DecodeResult(COSDictionary parameters)
-    {
+    DecodeResult(COSDictionary parameters) {
         this.parameters = parameters;
-    }
-
-    DecodeResult(COSDictionary parameters, PDJPXColorSpace colorSpace)
-    {
-        this.parameters = parameters;
-        this.colorSpace = colorSpace;
     }
 
     /**
@@ -46,32 +36,16 @@ public final class DecodeResult
      *
      * @return a default instance of DecodeResult
      */
-    public static DecodeResult createDefault()
-    {
+    public static DecodeResult createDefault() {
         return new DecodeResult(new COSDictionary());
     }
 
     /**
      * Returns the stream parameters, repaired using the embedded stream data.
+     *
      * @return the repaired stream parameters, or an empty dictionary
      */
-    public COSDictionary getParameters()
-    {
+    public COSDictionary getParameters() {
         return parameters;
-    }
-
-    /**
-     * Returns the embedded JPX color space, if any.
-     * @return the embedded JPX color space, or null if there is none.
-     */
-    public PDJPXColorSpace getJPXColorSpace()
-    {
-        return colorSpace;
-    }
-
-    // Sets the JPX color space
-    void setColorSpace(PDJPXColorSpace colorSpace)
-    {
-        this.colorSpace = colorSpace;
     }
 }

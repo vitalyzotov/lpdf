@@ -82,31 +82,6 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
         wpZ = whitepoint.getZ();
     }
 
-    protected float[] convXYZtoRGB(float x, float y, float z)
-    {
-        // toRGB() malfunctions with negative values
-        // XYZ must be non-negative anyway:
-        // http://ninedegreesbelow.com/photography/icc-profile-negative-tristimulus.html
-        if (x < 0)
-        {
-            x = 0;
-        }
-        if (y < 0)
-        {
-            y = 0;
-        }
-        if (z < 0)
-        {
-            z = 0;
-        }
-
-        throw new UnsupportedOperationException("Not implemented");//todo: vz implement
-//        return CIEXYZ.toRGB(new float[]
-//        {
-//            x, y, z
-//        });
-    }
-
     /**
      * This will return the whitepoint tristimulus. As this is a required field
      * this will never return null. A default of 1,1,1 will be returned if the

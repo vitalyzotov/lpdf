@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-//todo: vz remove AWT usage
-
 /**
  * This package contains provides classes for working with content streams.
  */

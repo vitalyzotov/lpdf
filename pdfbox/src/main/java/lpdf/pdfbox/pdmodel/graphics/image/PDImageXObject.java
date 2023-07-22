@@ -118,7 +118,6 @@ public final class PDImageXObject extends PDXObject implements PDImage {
             try (COSInputStream is = stream.createInputStream()) {
                 DecodeResult decodeResult = is.getDecodeResult();
                 stream.getCOSObject().addAll(decodeResult.getParameters());
-                this.colorSpace = decodeResult.getJPXColorSpace();
             }
         }
     }
