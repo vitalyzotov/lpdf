@@ -15,7 +15,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Point;
+import lpdf.harmony.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 

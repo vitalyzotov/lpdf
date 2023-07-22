@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.multipdf;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -134,7 +134,7 @@ public class LayerUtility
      * <p>
      * You may want to call {@link #wrapInSaveRestore(PDPage) wrapInSaveRestore(PDPage)} before invoking the Form XObject to
      * make sure that the graphics state is reset.
-     * 
+     *
      * @param sourceDoc the source PDF document that contains the page to be copied
      * @param pageNumber the 0-based page number of the page to be copied
      * @return a Form XObject containing the original page's content
@@ -155,7 +155,7 @@ public class LayerUtility
      * <p>
      * You may want to call {@link #wrapInSaveRestore(PDPage) wrapInSaveRestore(PDPage)} before invoking the Form XObject to
      * make sure that the graphics state is reset.
-     * 
+     *
      * @param sourceDoc the source PDF document that contains the page to be copied
      * @param page the page in the source PDF document to be copied
      * @return a Form XObject containing the original page's content
@@ -263,8 +263,8 @@ public class LayerUtility
         PDRectangle cropBox = targetPage.getCropBox();
         if ((cropBox.getLowerLeftX() < 0 || cropBox.getLowerLeftY() < 0) && transform.isIdentity())
         {
-            // PDFBOX-4044 
-            LOG.warn("Negative cropBox " + cropBox + 
+            // PDFBOX-4044
+            LOG.warn("Negative cropBox " + cropBox +
                      " and identity transform may make your form invisible");
         }
 

@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.multipdf;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -49,9 +49,9 @@ import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 
 /**
  * Adds an overlay to an existing PDF document.
- * 
+ *
  * Based on code contributed by Balazs Jerk.
- * 
+ *
  */
 public class Overlay implements Closeable
 {
@@ -85,13 +85,13 @@ public class Overlay implements Closeable
 
     private String lastPageOverlayFilename = null;
     private PDDocument lastPageOverlay = null;
-    
+
     private String allPagesOverlayFilename = null;
     private PDDocument allPagesOverlay = null;
-    
+
     private String oddPageOverlayFilename = null;
     private PDDocument oddPageOverlay = null;
-    
+
     private String evenPageOverlayFilename = null;
     private PDDocument evenPageOverlay = null;
 
@@ -271,7 +271,7 @@ public class Overlay implements Closeable
             numberOfOverlayPages = specificPageOverlayLayoutPageMap.size();
         }
     }
-    
+
     private PDDocument loadPDF(String pdfName) throws IOException
     {
         return Loader.loadPDF(new File(pdfName));
@@ -301,7 +301,7 @@ public class Overlay implements Closeable
      *
      * @param doc
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     private LayoutPage getLayoutPage(PDDocument doc) throws IOException
     {
@@ -312,7 +312,7 @@ public class Overlay implements Closeable
      * Create a LayoutPage object from given PDPage object.
      *
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     private LayoutPage createLayoutPage(PDPage page) throws IOException
     {
@@ -325,7 +325,7 @@ public class Overlay implements Closeable
         return new LayoutPage(page.getMediaBox(), createCombinedContentStream(contents),
                 resources.getCOSObject(), (short) page.getRotation());
     }
-    
+
     private Map<Integer,LayoutPage> getLayoutPages(PDDocument doc) throws IOException
     {
         int i = 0;
@@ -337,7 +337,7 @@ public class Overlay implements Closeable
         }
         return layoutPages;
     }
-    
+
     private COSStream createCombinedContentStream(COSBase contents) throws IOException
     {
         List<COSStream> contentStreams = createContentStreamList(contents);
@@ -585,7 +585,7 @@ public class Overlay implements Closeable
 
     private String float2String(float floatValue)
     {
-        // use a BigDecimal as intermediate state to avoid 
+        // use a BigDecimal as intermediate state to avoid
         // a floating point string representation of the float value
         BigDecimal value = new BigDecimal(String.valueOf(floatValue));
         String stringValue = value.toPlainString();
@@ -599,7 +599,7 @@ public class Overlay implements Closeable
         }
         return stringValue;
     }
-    
+
     private COSStream createStream(String content) throws IOException
     {
         COSStream stream = inputPDFDocument.getDocument().createCOSStream();
@@ -613,7 +613,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the overlay position.
-     * 
+     *
      * @param overlayPosition the overlay position
      */
     public void setOverlayPosition(Position overlayPosition)
@@ -646,7 +646,7 @@ public class Overlay implements Closeable
 
     /**
      * Returns the input file.
-     * 
+     *
      * @return the input file
      */
     public String getInputFile()
@@ -656,7 +656,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the default overlay file.
-     * 
+     *
      * @param defaultOverlayFile the default overlay file
      */
     public void setDefaultOverlayFile(String defaultOverlayFile)
@@ -667,7 +667,7 @@ public class Overlay implements Closeable
     /**
      * Sets the default overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param defaultOverlayPDF the default overlay PDF
      */
     public void setDefaultOverlayPDF(PDDocument defaultOverlayPDF)
@@ -677,7 +677,7 @@ public class Overlay implements Closeable
 
     /**
      * Returns the default overlay file.
-     * 
+     *
      * @return the default overlay file
      */
     public String getDefaultOverlayFile()
@@ -687,7 +687,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the first page overlay file.
-     * 
+     *
      * @param firstPageOverlayFile the first page overlay file
      */
     public void setFirstPageOverlayFile(String firstPageOverlayFile)
@@ -698,7 +698,7 @@ public class Overlay implements Closeable
     /**
      * Sets the first page overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param firstPageOverlayPDF the first page overlay PDF
      */
     public void setFirstPageOverlayPDF(PDDocument firstPageOverlayPDF)
@@ -708,7 +708,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the last page overlay file.
-     * 
+     *
      * @param lastPageOverlayFile the last page overlay file
      */
     public void setLastPageOverlayFile(String lastPageOverlayFile)
@@ -719,7 +719,7 @@ public class Overlay implements Closeable
     /**
      * Sets the last page overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param lastPageOverlayPDF the last page overlay PDF
      */
     public void setLastPageOverlayPDF(PDDocument lastPageOverlayPDF)
@@ -729,7 +729,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the all pages overlay file.
-     * 
+     *
      * @param allPagesOverlayFile the all pages overlay file
      */
     public void setAllPagesOverlayFile(String allPagesOverlayFile)
@@ -740,7 +740,7 @@ public class Overlay implements Closeable
     /**
      * Sets the all pages overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param allPagesOverlayPDF the all pages overlay PDF. This should not be a PDDocument that you
      * created on the fly, it should be saved first, if it contains any fonts that are subset.
      */
@@ -751,7 +751,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the odd page overlay file.
-     * 
+     *
      * @param oddPageOverlayFile the odd page overlay file
      */
     public void setOddPageOverlayFile(String oddPageOverlayFile)
@@ -762,7 +762,7 @@ public class Overlay implements Closeable
     /**
      * Sets the odd page overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param oddPageOverlayPDF the odd page overlay PDF
      */
     public void setOddPageOverlayPDF(PDDocument oddPageOverlayPDF)
@@ -772,7 +772,7 @@ public class Overlay implements Closeable
 
     /**
      * Sets the even page overlay file.
-     * 
+     *
      * @param evenPageOverlayFile the even page overlay file
      */
     public void setEvenPageOverlayFile(String evenPageOverlayFile)
@@ -783,7 +783,7 @@ public class Overlay implements Closeable
     /**
      * Sets the even page overlay PDF. If you created the overlay document with
      * subsetted fonts, you need to save it first so that the subsetting gets done.
-     * 
+     *
      * @param evenPageOverlayPDF the even page overlay PDF
      */
     public void setEvenPageOverlayPDF(PDDocument evenPageOverlayPDF)

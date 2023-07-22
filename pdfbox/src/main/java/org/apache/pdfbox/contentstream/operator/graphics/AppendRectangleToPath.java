@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.List;
 

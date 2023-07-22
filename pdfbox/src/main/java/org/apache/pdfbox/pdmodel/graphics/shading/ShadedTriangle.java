@@ -15,8 +15,8 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.Point;
+import lpdf.harmony.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ class ShadedTriangle
     private final double area; // area of the triangle
 
     /*
-     degree = 3 describes a normal triangle, 
+     degree = 3 describes a normal triangle,
      degree = 2 when a triangle degenerates to a line,
      degree = 1 when a triangle degenerates to a point
      */
@@ -166,12 +166,12 @@ class ShadedTriangle
         }
 
         /*
-         the following code judges whether a point is contained in a normal triangle, 
+         the following code judges whether a point is contained in a normal triangle,
          taking the on edge case as contained
          */
         double pv0 = edgeEquationValue(p, corner[1], corner[2]);
         /*
-         if corner[0] and point p are on different sides of line from corner[1] to corner[2], 
+         if corner[0] and point p are on different sides of line from corner[1] to corner[2],
          p is outside of the triangle
          */
         if (pv0 * v0 < 0)
@@ -180,7 +180,7 @@ class ShadedTriangle
         }
         double pv1 = edgeEquationValue(p, corner[2], corner[0]);
         /*
-         if vertex corner[1] and point p are on different sides of line from corner[2] to corner[0], 
+         if vertex corner[1] and point p are on different sides of line from corner[2] to corner[0],
          p is outside of the triangle
          */
         if (pv1 * v1 < 0)
@@ -190,14 +190,14 @@ class ShadedTriangle
         double pv2 = edgeEquationValue(p, corner[0], corner[1]);
         /*
          only left one case:
-         if corner[1] and point p are on different sides of line from corner[2] to corner[0], 
+         if corner[1] and point p are on different sides of line from corner[2] to corner[0],
          p is outside of the triangle, otherwise p is contained in the triangle
          */
         return pv2 * v2 >= 0; // !(pv2 * v2 < 0)
     }
 
     /*
-     check whether two points overlaps each other, as points' coordinates are 
+     check whether two points overlaps each other, as points' coordinates are
      of type double, the coordinates' accuracy used here is 0.001
      */
     private boolean overlaps(Point2D p0, Point2D p1)
@@ -206,8 +206,8 @@ class ShadedTriangle
     }
 
     /*
-     two points can define a line equation, adjust the form of the equation to 
-     let the rhs equals 0, calculate the lhs value by plugging the coordinate 
+     two points can define a line equation, adjust the form of the equation to
+     let the rhs equals 0, calculate the lhs value by plugging the coordinate
      of p in the lhs expression
      */
     private double edgeEquationValue(Point2D p, Point2D p1, Point2D p2)

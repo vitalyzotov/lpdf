@@ -51,7 +51,7 @@ import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.util.NumberFormatUtil;
 import org.apache.pdfbox.util.RgbColor;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;

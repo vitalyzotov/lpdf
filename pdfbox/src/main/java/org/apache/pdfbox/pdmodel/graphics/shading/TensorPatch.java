@@ -15,7 +15,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ class TensorPatch extends Patch
     }
 
     /*
-     order the 16 1d points to a square matrix which is as the one described 
+     order the 16 1d points to a square matrix which is as the one described
      in p.199 of PDF3200_2008.pdf rotated 90 degrees clockwise
      */
     private Point2D[][] reshapeControlPoints(Point2D[] tcp)
@@ -82,8 +82,8 @@ class TensorPatch extends Patch
         if (isEdgeALine(ctlC1) && isEdgeALine(ctlC2))
         {
             /*
-             if any of the 4 inner control points is out of the patch formed by the 4 edges, 
-             keep the high dividing level, 
+             if any of the 4 inner control points is out of the patch formed by the 4 edges,
+             keep the high dividing level,
              otherwise, determine the dividing level by the lengths of edges
              */
             if (isOnSameSideCC(controlPoints[1][1]) || isOnSameSideCC(controlPoints[1][2])
@@ -204,9 +204,9 @@ class TensorPatch extends Patch
     }
 
     /*
-     dividing a patch into a grid according to level, then calculate the coordinate and color of 
-     each crossing point in the grid, the rule to calculate the coordinate is tensor-product which 
-     is defined in page 119 of PDF32000_2008.pdf, the method to calculate the corresponding color is 
+     dividing a patch into a grid according to level, then calculate the coordinate and color of
+     each crossing point in the grid, the rule to calculate the coordinate is tensor-product which
+     is defined in page 119 of PDF32000_2008.pdf, the method to calculate the corresponding color is
      bilinear interpolation
      */
     private CoordinateColorPair[][] getPatchCoordinatesColor()

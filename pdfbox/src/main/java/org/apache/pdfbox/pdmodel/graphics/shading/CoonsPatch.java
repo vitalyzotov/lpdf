@@ -15,7 +15,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -160,8 +160,8 @@ class CoonsPatch extends Patch
     }
 
     /*
-     dividing a patch into a grid, return a matrix of the coordinate and color at the crossing points of the grid, 
-     the rule to calculate the coordinate is defined in page 195 of PDF32000_2008.pdf, the rule to calculate the 
+     dividing a patch into a grid, return a matrix of the coordinate and color at the crossing points of the grid,
+     the rule to calculate the coordinate is defined in page 195 of PDF32000_2008.pdf, the rule to calculate the
      corresponding color is bilinear interpolation
      */
     private CoordinateColorPair[][] getPatchCoordinatesColor(CubicBezierCurve c1, CubicBezierCurve c2, CubicBezierCurve d1, CubicBezierCurve d2)

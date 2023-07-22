@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.pattern;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 import java.io.IOException;
 
 import org.apache.pdfbox.cos.COSArray;
@@ -128,7 +128,7 @@ public abstract class PDAbstractPattern implements COSObjectable
 
     /**
      * Returns the pattern matrix, or the identity matrix is none is available.
-     * 
+     *
      * @return the pattern matrix
      */
     public Matrix getMatrix()

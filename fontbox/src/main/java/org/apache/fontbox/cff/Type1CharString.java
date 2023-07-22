@@ -16,10 +16,10 @@
  */
 package org.apache.fontbox.cff;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -140,7 +140,7 @@ public class Type1CharString
     /**
      * Renders the Type 1 char string sequence to a GeneralPath.
      */
-    private void render() 
+    private void render()
     {
         path = new GeneralPath();
         leftSideBearing = new Point2D.Float(0, 0);
@@ -456,7 +456,7 @@ public class Type1CharString
         {
             path.closePath();
         }
-        path.moveTo(current.getX(), current.getY());
+        path.moveTo((float) current.getX(), (float) current.getY());
     }
 
     /**
@@ -486,7 +486,7 @@ public class Type1CharString
             GeneralPath accentPath = accent.getPath();
             if (path == accentPath)
             {
-                // PDFBOX-5339: avoid ArrayIndexOutOfBoundsException 
+                // PDFBOX-5339: avoid ArrayIndexOutOfBoundsException
                 // reproducable with poc file crash-4698e0dc7833a3f959d06707e01d03cda52a83f4
                 LOG.warn("Path for " + baseName + " and for accent " + accentName + " are same, ignored");
                 return;
@@ -504,7 +504,7 @@ public class Type1CharString
 
     /**
      * Add a command to the type1 sequence.
-     * 
+     *
      * @param numbers the parameters of the command to be added
      * @param command the command to be added
      */
@@ -516,7 +516,7 @@ public class Type1CharString
 
     /**
      * Indicates if the underlying type1 sequence is empty.
-     * 
+     *
      * @return true if the sequence is empty
      */
     protected boolean isSequenceEmpty()
@@ -526,7 +526,7 @@ public class Type1CharString
 
     /**
      * Returns the last entry of the underlying type1 sequence.
-     * 
+     *
      * @return the last entry of the type 1 sequence or null if empty
      */
     protected Object getLastSequenceEntry()

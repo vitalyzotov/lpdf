@@ -16,8 +16,8 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.Point;
+import lpdf.harmony.awt.geom.Point2D;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -15,7 +15,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ abstract class Patch
     protected final float[][] cornerColor;
 
     /*
-     level = {levelU, levelV}, levelU defines the patch's u direction edges should be 
+     level = {levelU, levelV}, levelU defines the patch's u direction edges should be
      divided into 2^levelU parts, level V defines the patch's v direction edges should
      be divided into 2^levelV parts
      */

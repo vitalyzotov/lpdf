@@ -19,7 +19,7 @@ package org.apache.fontbox.ttf;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +30,7 @@ import java.util.Locale;
  *
  * @see
  * <a href="http://xmlgraphics.apache.org/batik">http://xmlgraphics.apache.org/batik</a>
- * 
+ *
  * Contour rendering ported from PDF.js, viewed on 14.2.2015, rev 2e97c0d
  *
  * @see
@@ -141,7 +141,7 @@ class GlyphRenderer
                         quadTo(path, pnow, midValue(pnow, contour.get(j + 1)));
                     }
                 }
-                path.closePath();            
+                path.closePath();
                 start = p + 1;
             }
         }
@@ -218,5 +218,5 @@ class GlyphRenderer
                     endOfContour ? "endOfContour" : "");
         }
     }
-    
+
 }

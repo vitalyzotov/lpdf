@@ -16,36 +16,30 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.util.List;
-
-import org.apache.pdfbox.cos.COSBase;
+import lpdf.harmony.awt.geom.PathIterator;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.operator.OperatorName;
+import org.apache.pdfbox.cos.COSBase;
 
-import java.awt.geom.Path2D;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * B* Fill and then stroke the path, using the even-odd rule to determine the region to fill.
- *
  */
-public final class FillEvenOddAndStrokePath extends GraphicsOperatorProcessor
-{
-    public FillEvenOddAndStrokePath(PDFGraphicsStreamEngine context)
-    {
+public final class FillEvenOddAndStrokePath extends GraphicsOperatorProcessor {
+    public FillEvenOddAndStrokePath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        getGraphicsContext().fillAndStrokePath(Path2D.WIND_EVEN_ODD);
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        getGraphicsContext().fillAndStrokePath(PathIterator.WIND_EVEN_ODD);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.FILL_EVEN_ODD_AND_STROKE;
     }
 }

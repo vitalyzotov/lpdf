@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -125,19 +125,19 @@ public abstract class PDSimpleFont extends PDFont
         FontName standard14Name = Standard14Fonts.getMappedFontName(getName());
         assignGlyphList(standard14Name);
     }
-    
+
     /**
      * Called by readEncoding() if the encoding needs to be extracted from the font file.
      *
      * @return encoding of the font
-     * 
+     *
      * @throws IOException if the font file could not be read.
      */
     protected abstract Encoding readEncodingFromFont() throws IOException;
 
     /**
      * Returns the Encoding.
-     * 
+     *
      * @return encoding
      */
     public Encoding getEncoding()
@@ -147,17 +147,17 @@ public abstract class PDSimpleFont extends PDFont
 
     /**
      * Returns the glyphlist.
-     * 
+     *
      * @return the glyphlist
      */
     public GlyphList getGlyphList()
     {
         return glyphList;
     }
-    
+
     /**
      * Returns true if the font is a symbolic (that is, it does not use the Adobe Standard Roman character set).
-     * 
+     *
      * @return true if the font is a symbolic
      */
     public final boolean isSymbolic()
@@ -180,7 +180,7 @@ public abstract class PDSimpleFont extends PDFont
 
     /**
      * Internal implementation of isSymbolic, allowing for the fact that the result may be indeterminate.
-     * 
+     *
      * @return true if isSymbolic
      */
     protected Boolean isFontSymbolic()
@@ -243,7 +243,7 @@ public abstract class PDSimpleFont extends PDFont
 
     /**
      * Returns the value of the symbolic flag, allowing for the fact that the result may be indeterminate.
-     * 
+     *
      * @return the value of the isSymbolic flag form the font descriptor
      */
     protected final Boolean getSymbolicFlag()
@@ -396,10 +396,10 @@ public abstract class PDSimpleFont extends PDFont
     /**
      * Returns the path for the character with the given name. For some fonts, GIDs may be used instead of names when
      * calling this method. *
-     * 
+     *
      * @param name glyph name
      * @return glyph path of the character with the given name
-     * 
+     *
      * @throws IOException if the path could not be read
      */
     public abstract GeneralPath getPath(String name) throws IOException;
@@ -409,14 +409,14 @@ public abstract class PDSimpleFont extends PDFont
      *
      * @param name glyph name
      * @return true if the font contains the character with the given name
-     * 
+     *
      * @throws IOException if the path could not be read
      */
     public abstract boolean hasGlyph(String name) throws IOException;
 
     /**
      * Returns the embedded or system font used for rendering. This is never null.
-     * 
+     *
      * @return the embedded or system font used for rendering
      */
     public abstract FontBoxFont getFontBoxFont();

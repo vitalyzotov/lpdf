@@ -17,7 +17,7 @@
 
 package org.apache.fontbox.ttf;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 
 /**
@@ -26,7 +26,7 @@ import java.io.IOException;
 public class OpenTypeFont extends TrueTypeFont
 {
     private boolean isPostScript;
-    
+
     /**
      * Constructor. Clients should use the OTFParser to create a new OpenTypeFont object.
      *
@@ -43,12 +43,12 @@ public class OpenTypeFont extends TrueTypeFont
         isPostScript = Float.floatToIntBits(versionValue) == 0x469EA8A9; // OTTO
         super.setVersion(versionValue);
     }
-    
+
     /**
      * Get the "CFF" table for this OTF.
      *
      * @return The "CFF" table.
-     * 
+     *
      * @throws IOException if the font data could not be read
      * @throws UnsupportedOperationException if the current font isn't a CFF font
      */
@@ -87,7 +87,7 @@ public class OpenTypeFont extends TrueTypeFont
 
     /**
      * Returns true if this font is a PostScript outline font.
-     * 
+     *
      * @return true if the font is a PostScript outline font, otherwise false
      */
     public boolean isPostScript()
@@ -97,11 +97,11 @@ public class OpenTypeFont extends TrueTypeFont
 
     /**
      * Returns true if this font is supported.
-     * 
+     *
      * There are 3 kind of OpenType fonts, fonts using TrueType outlines, fonts using CFF outlines (version 1 and 2)
-     * 
+     *
      * Fonts using CFF outlines version 2 aren't supported yet.
-     * 
+     *
      * @return true if the font is supported
      */
     public boolean isSupportedOTF()
@@ -115,7 +115,7 @@ public class OpenTypeFont extends TrueTypeFont
 
     /**
      * Returns true if this font uses OpenType Layout (Advanced Typographic) tables.
-     * 
+     *
      * @return true if the font has any layout table, otherwise false
      */
     public boolean hasLayoutTables()

@@ -22,7 +22,7 @@ import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.util.Matrix;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 
 /**
  * Resources for a function based shading.

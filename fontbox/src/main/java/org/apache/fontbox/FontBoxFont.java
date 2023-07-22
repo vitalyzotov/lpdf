@@ -17,7 +17,7 @@
 
 package org.apache.fontbox;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.List;
 import org.apache.fontbox.util.BoundingBox;
@@ -31,27 +31,27 @@ public interface FontBoxFont
 {
     /**
      * The PostScript name of the font.
-     * 
+     *
      * @return the postscript of the font or null
-     * 
+     *
      * @throws IOException if something went wrong when accessing the font data
      */
     String getName() throws IOException;
-    
+
     /**
      * Returns the font's bounding box in PostScript units.
      *
      * @return the bounding box of the font
-     * 
+     *
      * @throws IOException if something went wrong when accessing the font data
      */
     BoundingBox getFontBBox() throws IOException;
 
     /**
      * Returns the FontMatrix in PostScript units.
-     * 
+     *
      * @return the font matrix
-     * 
+     *
      * @throws IOException if something went wrong when accessing the font data
      */
     List<Number> getFontMatrix() throws IOException;
@@ -76,11 +76,11 @@ public interface FontBoxFont
 
     /**
      * Returns true if the font contains the given glyph.
-     * 
+     *
      * @param name PostScript glyph name
-     * 
+     *
      * @return true if the font contains a glyph with the given name, otherwise false
-     * 
+     *
      * @throws IOException if something went wrong when accessing the font data
      */
     boolean hasGlyph(String name) throws IOException;

@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.filter;
 
-import org.apache.pdfbox.util.Rect;
+import lpdf.harmony.awt.Rectangle;
 
 /**
  * Options that may be passed to a Filter to request special handling when decoding the stream.
@@ -31,7 +31,7 @@ public class DecodeOptions
      */
     public static final DecodeOptions DEFAULT = new FinalDecodeOptions(true);
 
-    private Rect sourceRegion = null;
+    private Rectangle sourceRegion = null;
     private int subsamplingX = 1;
     private int subsamplingY = 1;
     private int subsamplingOffsetX = 0;
@@ -52,7 +52,7 @@ public class DecodeOptions
      *
      * @param sourceRegion Region of the source image that should be decoded
      */
-    public DecodeOptions(Rect sourceRegion)
+    public DecodeOptions(Rectangle sourceRegion)
     {
         this.sourceRegion = sourceRegion;
     }
@@ -68,7 +68,7 @@ public class DecodeOptions
      */
     public DecodeOptions(int x, int y, int width, int height)
     {
-        this(new Rect(x, y, width, height));
+        this(new Rectangle(x, y, width, height));
     }
 
     /**
@@ -90,7 +90,7 @@ public class DecodeOptions
      *
      * @return The source region to decode, or null if the entire image should be decoded
      */
-    public Rect getSourceRegion()
+    public Rectangle getSourceRegion()
     {
         return sourceRegion;
     }
@@ -103,7 +103,7 @@ public class DecodeOptions
      * @param sourceRegion The source region to decode, or null if the entire image should be
      * decoded.
      */
-    public void setSourceRegion(Rect sourceRegion)
+    public void setSourceRegion(Rectangle sourceRegion)
     {
         this.sourceRegion = sourceRegion;
     }
@@ -226,7 +226,7 @@ public class DecodeOptions
         }
 
         @Override
-        public void setSourceRegion(Rect sourceRegion)
+        public void setSourceRegion(Rectangle sourceRegion)
         {
             throw new UnsupportedOperationException("This instance may not be modified.");
         }

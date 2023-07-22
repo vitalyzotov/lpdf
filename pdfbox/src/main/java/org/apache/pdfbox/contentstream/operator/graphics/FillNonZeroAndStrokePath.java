@@ -16,15 +16,14 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.util.List;
-
-import org.apache.pdfbox.cos.COSBase;
+import lpdf.harmony.awt.geom.PathIterator;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.operator.OperatorName;
+import org.apache.pdfbox.cos.COSBase;
 
-import java.awt.geom.Path2D;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * B Fill and then stroke the path, using the nonzero winding number rule to determine the region
@@ -32,22 +31,18 @@ import java.io.IOException;
  *
  * @author Ben Litchfield
  */
-public class FillNonZeroAndStrokePath extends GraphicsOperatorProcessor
-{
-    public FillNonZeroAndStrokePath(PDFGraphicsStreamEngine context)
-    {
+public class FillNonZeroAndStrokePath extends GraphicsOperatorProcessor {
+    public FillNonZeroAndStrokePath(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        getGraphicsContext().fillAndStrokePath(Path2D.WIND_NON_ZERO);
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        getGraphicsContext().fillAndStrokePath(PathIterator.WIND_NON_ZERO);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.FILL_NON_ZERO_AND_STROKE;
     }
 }

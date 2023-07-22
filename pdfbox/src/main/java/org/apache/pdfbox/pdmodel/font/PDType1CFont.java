@@ -17,10 +17,9 @@
 
 package org.apache.pdfbox.pdmodel.font;
 
-//todo: vz can we use it?
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;

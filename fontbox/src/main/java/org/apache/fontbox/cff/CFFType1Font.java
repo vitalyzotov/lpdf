@@ -16,7 +16,7 @@
  */
 package org.apache.fontbox.cff;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -84,7 +84,7 @@ public class CFFType1Font extends CFFFont implements EncodedFont
      *
      * @param name PostScript glyph name
      * @return Type1 charstring of the given PostScript glyph name
-     * 
+     *
      * @throws IOException if the charstring could not be read
      */
     public Type1CharString getType1CharString(String name) throws IOException
@@ -98,7 +98,7 @@ public class CFFType1Font extends CFFFont implements EncodedFont
 
     /**
      * Returns the GID for the given PostScript glyph name.
-     * 
+     *
      * @param name a PostScript glyph name.
      * @return GID
      */

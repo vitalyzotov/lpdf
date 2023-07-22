@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.form;
 
-import java.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.pdfbox.contentstream.PDContentStream;
@@ -52,7 +52,7 @@ final and all fields private.
 
 /**
  * A Form XObject.
- * 
+ *
  * @author Ben Litchfield
  */
 public class PDFormXObject extends PDXObject implements PDContentStream
@@ -82,7 +82,7 @@ public class PDFormXObject extends PDXObject implements PDContentStream
 
     /**
      * Creates a Form XObject for reading.
-     * 
+     *
      * @param stream The XObject stream
      * @param cache the cache to be used for the resources
      */
@@ -91,7 +91,7 @@ public class PDFormXObject extends PDXObject implements PDContentStream
         super(stream, COSName.FORM);
         this.cache = cache;
     }
-    
+
     /**
      * Creates a Form Image XObject for writing, in the given document.
      * @param document The current document
@@ -127,17 +127,17 @@ public class PDFormXObject extends PDXObject implements PDContentStream
      */
     public PDTransparencyGroupAttributes getGroup()
     {
-        if( group == null ) 
+        if( group == null )
         {
             COSDictionary dic = getCOSObject().getCOSDictionary(COSName.GROUP);
-            if( dic != null ) 
+            if( dic != null )
             {
                 group = new PDTransparencyGroupAttributes(dic);
             }
         }
         return group;
     }
-    
+
     public PDStream getContentStream()
     {
         return new PDStream(getCOSObject());
@@ -157,7 +157,7 @@ public class PDFormXObject extends PDXObject implements PDContentStream
     /**
      * This will get the resources for this Form XObject.
      * This will return null if no resources are available.
-     * 
+     *
      * @return The resources for this Form XObject.
      */
     @Override

@@ -16,9 +16,8 @@
  */
 package org.apache.pdfbox.pdmodel.common;
 
-//todo: can we use it?
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.Point2D;
 import java.util.Arrays;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
@@ -317,10 +316,10 @@ public class PDRectangle implements COSObjectable
         Point2D.Float p3 = matrix.transformPoint(x1, y2);
 
         GeneralPath path = new GeneralPath();
-        path.moveTo(p0.getX(), p0.getY());
-        path.lineTo(p1.getX(), p1.getY());
-        path.lineTo(p2.getX(), p2.getY());
-        path.lineTo(p3.getX(), p3.getY());
+        path.moveTo((float) p0.getX(), (float) p0.getY());
+        path.lineTo((float) p1.getX(), (float) p1.getY());
+        path.lineTo((float) p2.getX(), (float) p2.getY());
+        path.lineTo((float) p3.getX(), (float) p3.getY());
         path.closePath();
         return path;
     }

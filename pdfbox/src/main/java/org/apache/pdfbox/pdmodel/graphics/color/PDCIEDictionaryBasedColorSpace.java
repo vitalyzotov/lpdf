@@ -20,7 +20,6 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 
-import java.awt.color.ColorSpace;
 
 /**
  * CIE-based colour spaces that use a dictionary.

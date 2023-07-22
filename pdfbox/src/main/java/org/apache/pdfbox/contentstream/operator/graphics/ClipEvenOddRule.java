@@ -16,14 +16,14 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.awt.geom.Path2D;
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.pdfbox.cos.COSBase;
+import lpdf.harmony.awt.geom.PathIterator;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.operator.OperatorName;
+import org.apache.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * W* Set clipping path using even odd rule.
@@ -40,7 +40,7 @@ public final class ClipEvenOddRule extends GraphicsOperatorProcessor
     @Override
     public void process(Operator operator, List<COSBase> operands) throws IOException
     {
-        getGraphicsContext().clip(Path2D.WIND_EVEN_ODD);
+        getGraphicsContext().clip(PathIterator.WIND_EVEN_ODD);
     }
 
     @Override

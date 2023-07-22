@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 
 /**
  * Vertex for Type 4 and Type 5 shadings.

@@ -24,8 +24,8 @@ import org.apache.pdfbox.pdmodel.common.PDRange;
 import org.apache.pdfbox.util.Matrix;
 
 import javax.imageio.stream.ImageInputStream;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.AffineTransform;
+import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.List;
 

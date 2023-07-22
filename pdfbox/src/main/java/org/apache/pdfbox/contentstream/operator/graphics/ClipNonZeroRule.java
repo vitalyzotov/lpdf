@@ -16,36 +16,32 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.awt.geom.Path2D;
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.pdfbox.cos.COSBase;
+import lpdf.harmony.awt.geom.PathIterator;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.operator.OperatorName;
+import org.apache.pdfbox.cos.COSBase;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * W Set the clipping path using non zero winding rule.
  *
  * @author Daniel Wilson
  */
-public class ClipNonZeroRule extends GraphicsOperatorProcessor
-{
-    public ClipNonZeroRule(PDFGraphicsStreamEngine context)
-    {
+public class ClipNonZeroRule extends GraphicsOperatorProcessor {
+    public ClipNonZeroRule(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        getGraphicsContext().clip(Path2D.WIND_NON_ZERO);
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        getGraphicsContext().clip(PathIterator.WIND_NON_ZERO);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.CLIP_NON_ZERO;
     }
 }

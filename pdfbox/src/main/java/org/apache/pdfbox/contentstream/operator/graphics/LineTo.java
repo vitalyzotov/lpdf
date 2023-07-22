@@ -16,48 +16,42 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.io.IOException;
-import java.util.List;
-import java.awt.geom.Point2D;
-
+import lpdf.harmony.awt.geom.Point2D;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.operator.MissingOperandException;
-import org.apache.pdfbox.cos.COSBase;
-import org.apache.pdfbox.cos.COSNumber;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.operator.OperatorName;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSNumber;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * l Append straight line segment to path.
  *
  * @author Ben Litchfield
  */
-public class LineTo extends GraphicsOperatorProcessor
-{
+public class LineTo extends GraphicsOperatorProcessor {
     private static final Log LOG = LogFactory.getLog(LineTo.class);
-    
-    public LineTo(PDFGraphicsStreamEngine context)
-    {
+
+    public LineTo(PDFGraphicsStreamEngine context) {
         super(context);
     }
 
     @Override
-    public void process(Operator operator, List<COSBase> operands) throws IOException
-    {
-        if (operands.size() < 2)
-        {
+    public void process(Operator operator, List<COSBase> operands) throws IOException {
+        if (operands.size() < 2) {
             throw new MissingOperandException(operator, operands);
         }
         COSBase base0 = operands.get(0);
-        if (!(base0 instanceof COSNumber))
-        {
+        if (!(base0 instanceof COSNumber)) {
             return;
         }
         COSBase base1 = operands.get(1);
-        if (!(base1 instanceof COSNumber))
-        {
+        if (!(base1 instanceof COSNumber)) {
             return;
         }
         // append straight line segment from the current point to the point
@@ -67,20 +61,16 @@ public class LineTo extends GraphicsOperatorProcessor
         PDFGraphicsStreamEngine context = getGraphicsContext();
         Point2D.Float pos = context.transformedPoint(x.floatValue(), y.floatValue());
 
-        if (context.getCurrentPoint() == null)
-        {
+        if (context.getCurrentPoint() == null) {
             LOG.warn("LineTo (" + pos.x + "," + pos.y + ") without initial MoveTo");
             context.moveTo(pos.x, pos.y);
-        }
-        else
-        {
+        } else {
             context.lineTo(pos.x, pos.y);
         }
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return OperatorName.LINE_TO;
     }
 }

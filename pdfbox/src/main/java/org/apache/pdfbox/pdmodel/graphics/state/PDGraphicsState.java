@@ -16,38 +16,28 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.state;
 
-//todo: vz can we use it?
-import java.awt.BasicStroke;
-import java.awt.Composite;
-import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-
+import lpdf.harmony.awt.geom.GeneralPath;
 import org.apache.pdfbox.cos.COSBase;
-
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.PDLineDashPattern;
-import org.apache.pdfbox.pdmodel.graphics.blend.BlendComposite;
 import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceGray;
 import org.apache.pdfbox.util.Matrix;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The current state of the graphics parameters when executing a content stream.
  *
  * @author Ben Litchfield
  */
-public class PDGraphicsState implements Cloneable
-{
+public class PDGraphicsState implements Cloneable {
     private boolean isClippingPathDirty;
-    private List<Path2D> clippingPaths = new ArrayList<>(1);
-    private Map<Path2D, Area> clippingCache = new IdentityHashMap<>();
+    private List<GeneralPath> clippingPaths = new ArrayList<>(1);
+
     private Matrix currentTransformationMatrix = new Matrix();
     private PDColor strokingColor = PDDeviceGray.INSTANCE.getInitialColor();
     private PDColor nonStrokingColor = PDDeviceGray.INSTANCE.getInitialColor();
@@ -55,8 +45,8 @@ public class PDGraphicsState implements Cloneable
     private PDColorSpace nonStrokingColorSpace = PDDeviceGray.INSTANCE;
     private PDTextState textState = new PDTextState();
     private float lineWidth = 1;
-    private int lineCap = BasicStroke.CAP_BUTT;
-    private int lineJoin = BasicStroke.JOIN_MITER;
+    private int lineCap = 0;//BasicStroke.CAP_BUTT;
+    private int lineJoin = 0;//BasicStroke.JOIN_MITER;
     private float miterLimit = 10;
     private PDLineDashPattern lineDashPattern = new PDLineDashPattern();
     private RenderingIntent renderingIntent;
@@ -80,11 +70,11 @@ public class PDGraphicsState implements Cloneable
 
     /**
      * Constructor with a given page size to initialize the clipping path.
+     *
      * @param page the size of the page
      */
-    public PDGraphicsState(PDRectangle page)
-    {
-        clippingPaths.add(new Path2D.Double(page.toGeneralPath()));
+    public PDGraphicsState(PDRectangle page) {
+        clippingPaths.add(page.toGeneralPath());
     }
 
     /**
@@ -92,8 +82,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current transformation matrix.
      */
-    public Matrix getCurrentTransformationMatrix()
-    {
+    public Matrix getCurrentTransformationMatrix() {
         return currentTransformationMatrix;
     }
 
@@ -102,8 +91,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The current transformation matrix.
      */
-    public void setCurrentTransformationMatrix(Matrix value)
-    {
+    public void setCurrentTransformationMatrix(Matrix value) {
         currentTransformationMatrix = value;
     }
 
@@ -112,8 +100,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current line width.
      */
-    public float getLineWidth()
-    {
+    public float getLineWidth() {
         return lineWidth;
     }
 
@@ -122,8 +109,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The current line width.
      */
-    public void setLineWidth(float value)
-    {
+    public void setLineWidth(float value) {
         lineWidth = value;
     }
 
@@ -132,8 +118,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current line cap.
      */
-    public int getLineCap()
-    {
+    public int getLineCap() {
         return lineCap;
     }
 
@@ -142,8 +127,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The current line cap.
      */
-    public void setLineCap(int value)
-    {
+    public void setLineCap(int value) {
         lineCap = value;
     }
 
@@ -152,8 +136,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current line join value.
      */
-    public int getLineJoin()
-    {
+    public int getLineJoin() {
         return lineJoin;
     }
 
@@ -162,8 +145,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The current line join
      */
-    public void setLineJoin(int value)
-    {
+    public void setLineJoin(int value) {
         lineJoin = value;
     }
 
@@ -172,8 +154,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current miter limit.
      */
-    public float getMiterLimit()
-    {
+    public float getMiterLimit() {
         return miterLimit;
     }
 
@@ -182,8 +163,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The current miter limit.
      */
-    public void setMiterLimit(float value)
-    {
+    public void setMiterLimit(float value) {
         miterLimit = value;
     }
 
@@ -192,8 +172,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The current stroke adjustment.
      */
-    public boolean isStrokeAdjustment()
-    {
+    public boolean isStrokeAdjustment() {
         return strokeAdjustment;
     }
 
@@ -202,8 +181,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the stroke adjustment parameter.
      */
-    public void setStrokeAdjustment(boolean value)
-    {
+    public void setStrokeAdjustment(boolean value) {
         strokeAdjustment = value;
     }
 
@@ -212,8 +190,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the stroke alpha constant parameter.
      */
-    public double getAlphaConstant()
-    {
+    public double getAlphaConstant() {
         return alphaConstant;
     }
 
@@ -222,8 +199,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the stroke alpha constant parameter.
      */
-    public void setAlphaConstant(double value)
-    {
+    public void setAlphaConstant(double value) {
         alphaConstant = value;
     }
 
@@ -232,8 +208,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the non-stroke alpha constant parameter.
      */
-    public double getNonStrokeAlphaConstant()
-    {
+    public double getNonStrokeAlphaConstant() {
         return nonStrokingAlphaConstant;
     }
 
@@ -242,8 +217,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the non-stroke alpha constant parameter.
      */
-    public void setNonStrokeAlphaConstant(double value)
-    {
+    public void setNonStrokeAlphaConstant(double value) {
         nonStrokingAlphaConstant = value;
     }
 
@@ -252,8 +226,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the stroke alpha source parameter.
      */
-    public boolean isAlphaSource()
-    {
+    public boolean isAlphaSource() {
         return alphaSource;
     }
 
@@ -262,8 +235,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the alpha source parameter.
      */
-    public void setAlphaSource(boolean value)
-    {
+    public void setAlphaSource(boolean value) {
         alphaSource = value;
     }
 
@@ -272,8 +244,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return softMask
      */
-    public PDSoftMask getSoftMask()
-    {
+    public PDSoftMask getSoftMask() {
         return softMask;
     }
 
@@ -283,8 +254,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param softMask soft mask
      */
-    public void setSoftMask(PDSoftMask softMask)
-    {
+    public void setSoftMask(PDSoftMask softMask) {
         this.softMask = softMask;
     }
 
@@ -293,8 +263,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return the current blend mode
      */
-    public BlendMode getBlendMode()
-    {
+    public BlendMode getBlendMode() {
         return blendMode;
     }
 
@@ -304,10 +273,8 @@ public class PDGraphicsState implements Cloneable
      * @param blendMode blend mode
      * @throws IllegalArgumentException if blendMode is null.
      */
-    public void setBlendMode(BlendMode blendMode)
-    {
-        if (blendMode == null)
-        {
+    public void setBlendMode(BlendMode blendMode) {
+        if (blendMode == null) {
             throw new IllegalArgumentException("blendMode parameter cannot be null");
         }
         this.blendMode = blendMode;
@@ -318,8 +285,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the overprint parameter.
      */
-    public boolean isOverprint()
-    {
+    public boolean isOverprint() {
         return overprint;
     }
 
@@ -328,8 +294,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the overprint parameter.
      */
-    public void setOverprint(boolean value)
-    {
+    public void setOverprint(boolean value) {
         overprint = value;
     }
 
@@ -338,8 +303,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the non stroking overprint parameter.
      */
-    public boolean isNonStrokingOverprint()
-    {
+    public boolean isNonStrokingOverprint() {
         return nonStrokingOverprint;
     }
 
@@ -348,8 +312,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the non stroking overprint parameter.
      */
-    public void setNonStrokingOverprint(boolean value)
-    {
+    public void setNonStrokingOverprint(boolean value) {
         nonStrokingOverprint = value;
     }
 
@@ -358,8 +321,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the overprint mode parameter.
      */
-    public int getOverprintMode()
-    {
+    public int getOverprintMode() {
         return overprintMode;
     }
 
@@ -368,8 +330,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the overprint mode parameter.
      */
-    public void setOverprintMode(int value)
-    {
+    public void setOverprintMode(int value) {
         overprintMode = value;
     }
 
@@ -378,8 +339,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the flatness parameter.
      */
-    public double getFlatness()
-    {
+    public double getFlatness() {
         return flatness;
     }
 
@@ -388,8 +348,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the flatness parameter.
      */
-    public void setFlatness(double value)
-    {
+    public void setFlatness(double value) {
         flatness = value;
     }
 
@@ -398,8 +357,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The value of the smoothness parameter.
      */
-    public double getSmoothness()
-    {
+    public double getSmoothness() {
         return smoothness;
     }
 
@@ -408,8 +366,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The value of the smoothness parameter.
      */
-    public void setSmoothness(double value)
-    {
+    public void setSmoothness(double value) {
         smoothness = value;
     }
 
@@ -418,8 +375,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The graphics text state.
      */
-    public PDTextState getTextState()
-    {
+    public PDTextState getTextState() {
         return textState;
     }
 
@@ -428,8 +384,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The graphics text state.
      */
-    public void setTextState(PDTextState value)
-    {
+    public void setTextState(PDTextState value) {
         textState = value;
     }
 
@@ -438,8 +393,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The line dash pattern.
      */
-    public PDLineDashPattern getLineDashPattern()
-    {
+    public PDLineDashPattern getLineDashPattern() {
         return lineDashPattern;
     }
 
@@ -448,20 +402,17 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The new line dash pattern.
      */
-    public void setLineDashPattern(PDLineDashPattern value)
-    {
+    public void setLineDashPattern(PDLineDashPattern value) {
         lineDashPattern = value;
     }
 
     /**
      * This will get the rendering intent.
      *
-     * @see PDExtendedGraphicsState
-     *
      * @return The rendering intent
+     * @see PDExtendedGraphicsState
      */
-    public RenderingIntent getRenderingIntent()
-    {
+    public RenderingIntent getRenderingIntent() {
         return renderingIntent;
     }
 
@@ -470,29 +421,23 @@ public class PDGraphicsState implements Cloneable
      *
      * @param value The new rendering intent.
      */
-    public void setRenderingIntent(RenderingIntent value)
-    {
+    public void setRenderingIntent(RenderingIntent value) {
         renderingIntent = value;
     }
 
     @Override
-    public PDGraphicsState clone()
-    {
-        try
-        {
-            PDGraphicsState clone = (PDGraphicsState)super.clone();
+    public PDGraphicsState clone() {
+        try {
+            PDGraphicsState clone = (PDGraphicsState) super.clone();
             clone.textState = textState.clone();
             clone.currentTransformationMatrix = currentTransformationMatrix.clone();
             clone.strokingColor = strokingColor; // immutable
             clone.nonStrokingColor = nonStrokingColor; // immutable
             clone.lineDashPattern = lineDashPattern; // immutable
             clone.clippingPaths = clippingPaths; // not cloned, see intersectClippingPath
-            clone.clippingCache = clippingCache;
             clone.isClippingPathDirty = false;
             return clone;
-        }
-        catch (CloneNotSupportedException e)
-        {
+        } catch (CloneNotSupportedException e) {
             // should not happen
             throw new RuntimeException(e);
         }
@@ -503,8 +448,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return stroking color
      */
-    public PDColor getStrokingColor()
-    {
+    public PDColor getStrokingColor() {
         return strokingColor;
     }
 
@@ -513,8 +457,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param color The new stroking color
      */
-    public void setStrokingColor(PDColor color)
-    {
+    public void setStrokingColor(PDColor color) {
         strokingColor = color;
     }
 
@@ -523,8 +466,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The non-stroking color
      */
-    public PDColor getNonStrokingColor()
-    {
+    public PDColor getNonStrokingColor() {
         return nonStrokingColor;
     }
 
@@ -533,8 +475,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param color The new non-stroking color
      */
-    public void setNonStrokingColor(PDColor color)
-    {
+    public void setNonStrokingColor(PDColor color) {
         nonStrokingColor = color;
     }
 
@@ -543,8 +484,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The stroking color space.
      */
-    public PDColorSpace getStrokingColorSpace()
-    {
+    public PDColorSpace getStrokingColorSpace() {
         return strokingColorSpace;
     }
 
@@ -553,8 +493,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @param colorSpace The new stroking color space.
      */
-    public void setStrokingColorSpace(PDColorSpace colorSpace)
-    {
+    public void setStrokingColorSpace(PDColorSpace colorSpace) {
         strokingColorSpace = colorSpace;
     }
 
@@ -563,8 +502,7 @@ public class PDGraphicsState implements Cloneable
      *
      * @return The non-stroking color space.
      */
-    public PDColorSpace getNonStrokingColorSpace()
-    {
+    public PDColorSpace getNonStrokingColorSpace() {
         return nonStrokingColorSpace;
     }
 
@@ -573,25 +511,22 @@ public class PDGraphicsState implements Cloneable
      *
      * @param colorSpace The new non-stroking color space.
      */
-    public void setNonStrokingColorSpace(PDColorSpace colorSpace)
-    {
+    public void setNonStrokingColorSpace(PDColorSpace colorSpace) {
         nonStrokingColorSpace = colorSpace;
     }
 
     /**
      * Modify the current clipping path by intersecting it with the given path.
+     *
      * @param path path to intersect with the clipping path
      */
-    public void intersectClippingPath(GeneralPath path)
-    {
-        intersectClippingPath(new Path2D.Double(path), true);
+    public void intersectClippingPath(GeneralPath path) {
+        intersectClippingPath(path, true);
     }
 
-    private void intersectClippingPath(Path2D path, boolean clonePath)
-    {
+    private void intersectClippingPath(GeneralPath path, boolean clonePath) {
         // lazy cloning of clipping path for performance
-        if (!isClippingPathDirty)
-        {
+        if (!isClippingPathDirty) {
             // shallow copy
             clippingPaths = new ArrayList<>(clippingPaths);
 
@@ -599,66 +534,9 @@ public class PDGraphicsState implements Cloneable
         }
 
         // add path to current clipping paths, combined later (see getCurrentClippingPath)
-        clippingPaths.add(clonePath ? (Path2D) path.clone() : path);
+        clippingPaths.add(clonePath ? (GeneralPath) path.clone() : path);
     }
 
-    /**
-     * Modify the current clipping path by intersecting it with the given path.
-     *
-     * @param area area to intersect with the clipping path
-     */
-    public void intersectClippingPath(Area area)
-    {
-        intersectClippingPath(new Path2D.Double(area), false);
-    }
-
-    /**
-     * This will get the current clipping path. Do not modify this Area object!
-     *
-     * @return The current clipping path.
-     */
-    public Area getCurrentClippingPath()
-    {
-        if (clippingPaths.size() == 1)
-        {
-            // If there is just a single clipping path, no intersections are needed.
-            Path2D path = clippingPaths.get(0);
-            return clippingCache.computeIfAbsent(path, Area::new);
-        }
-        // If there are multiple clipping paths, combine them to a single area.
-        Area clippingArea = new Area();
-        clippingArea.add(new Area(clippingPaths.get(0)));
-        for (int i = 1; i < clippingPaths.size(); i++)
-        {
-            clippingArea.intersect(new Area(clippingPaths.get(i)));
-        }
-        // Replace the list of individual clipping paths with the intersection, and add it to the cache.
-        Path2D newPath = new Path2D.Double(clippingArea);
-        clippingPaths = new ArrayList<>(1);
-        clippingPaths.add(newPath);
-        clippingCache.put(newPath, clippingArea);
-        return clippingArea;
-    }
-
-    /**
-     * This will get the current clipping path, as one or more individual paths. Do not modify the list or the paths!
-     *
-     * @return The current clipping paths.
-     */
-    public List<Path2D> getCurrentClippingPaths()
-    {
-        return clippingPaths;
-    }
-
-    public Composite getStrokingJavaComposite()
-    {
-        return BlendComposite.getInstance(blendMode, (float) alphaConstant);
-    }
-
-    public Composite getNonStrokingJavaComposite()
-    {
-        return BlendComposite.getInstance(blendMode, (float) nonStrokingAlphaConstant);
-    }
 
     /**
      * This will get the transfer function.
@@ -669,8 +547,7 @@ public class PDGraphicsState implements Cloneable
      * identity function, and the name Default denotes the transfer function that was in effect at
      * the start of the page.
      */
-    public COSBase getTransfer()
-    {
+    public COSBase getTransfer() {
         return transfer;
     }
 
@@ -678,13 +555,12 @@ public class PDGraphicsState implements Cloneable
      * This will set the transfer function.
      *
      * @param transfer The transfer function. According to the PDF specification, this is either a
-     * single function (which applies to all process colorants) or an array of four functions (which
-     * apply to the process colorants individually). The name Identity may be used to represent the
-     * identity function, and the name Default denotes the transfer function that was in effect at
-     * the start of the page.
+     *                 single function (which applies to all process colorants) or an array of four functions (which
+     *                 apply to the process colorants individually). The name Identity may be used to represent the
+     *                 identity function, and the name Default denotes the transfer function that was in effect at
+     *                 the start of the page.
      */
-    public void setTransfer(COSBase transfer)
-    {
+    public void setTransfer(COSBase transfer) {
         this.transfer = transfer;
     }
 }

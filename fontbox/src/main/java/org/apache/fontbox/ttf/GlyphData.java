@@ -16,14 +16,14 @@
  */
 package org.apache.fontbox.ttf;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 
 import org.apache.fontbox.util.BoundingBox;
 
 /**
  * A glyph data record in the glyf table.
- * 
+ *
  * @author Ben Litchfield
  */
 public class GlyphData
@@ -35,10 +35,10 @@ public class GlyphData
     private BoundingBox boundingBox = null;
     private short numberOfContours;
     private GlyfDescript glyphDescription = null;
-    
+
     /**
      * This will read the required data from the stream.
-     * 
+     *
      * @param glyphTable The glyph table this glyph belongs to.
      * @param data The stream to read the data from.
      * @param leftSideBearing The left side bearing for this glyph.
@@ -53,13 +53,13 @@ public class GlyphData
         yMax = data.readSignedShort();
         boundingBox = new BoundingBox(xMin, yMin, xMax, yMax);
 
-        if (numberOfContours >= 0) 
+        if (numberOfContours >= 0)
         {
             // create a simple glyph
             short x0 = (short) (leftSideBearing - xMin);
             glyphDescription = new GlyfSimpleDescript(numberOfContours, data, x0);
         }
-        else 
+        else
         {
             // create a composite glyph
             glyphDescription = new GlyfCompositeDescript(data, glyphTable);
@@ -113,7 +113,7 @@ public class GlyphData
      * Returns the xMax value.
      * @return the XMax value
      */
-    public short getXMaximum() 
+    public short getXMaximum()
     {
         return xMax;
     }
@@ -122,7 +122,7 @@ public class GlyphData
      * Returns the xMin value.
      * @return the xMin value
      */
-    public short getXMinimum() 
+    public short getXMinimum()
     {
         return xMin;
     }
@@ -131,7 +131,7 @@ public class GlyphData
      * Returns the yMax value.
      * @return the yMax value
      */
-    public short getYMaximum() 
+    public short getYMaximum()
     {
         return yMax;
     }
@@ -140,7 +140,7 @@ public class GlyphData
      * Returns the yMin value.
      * @return the yMin value
      */
-    public short getYMinimum() 
+    public short getYMinimum()
     {
         return yMin;
     }

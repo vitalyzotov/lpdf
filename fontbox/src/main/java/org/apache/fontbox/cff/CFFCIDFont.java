@@ -17,7 +17,7 @@
 
 package org.apache.fontbox.cff;
 
-import java.awt.geom.GeneralPath;
+import lpdf.harmony.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -50,10 +50,10 @@ public class CFFCIDFont extends CFFFont
 
     /**
      * Returns the registry value.
-     * 
+     *
      * @return the registry
      */
-    public String getRegistry() 
+    public String getRegistry()
     {
         return registry;
     }
@@ -73,7 +73,7 @@ public class CFFCIDFont extends CFFFont
      *
      * @return the ordering
      */
-    public String getOrdering() 
+    public String getOrdering()
     {
         return ordering;
     }
@@ -93,7 +93,7 @@ public class CFFCIDFont extends CFFFont
      *
      * @return the supplement
      */
-    public int getSupplement() 
+    public int getSupplement()
     {
         return supplement;
     }

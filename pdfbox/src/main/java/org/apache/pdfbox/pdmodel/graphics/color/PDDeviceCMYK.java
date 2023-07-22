@@ -16,19 +16,12 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.util.Arrays;
 
 import org.apache.pdfbox.cos.COSName;
 
 //import java.awt.color.ColorSpace;
 //import java.awt.color.ICC_ColorSpace;
 //import java.awt.color.ICC_Profile;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-
-import java.io.InputStream;
 
 /**
  * Allows colors to be specified according to the subtractive CMYK (cyan, magenta, yellow, black)

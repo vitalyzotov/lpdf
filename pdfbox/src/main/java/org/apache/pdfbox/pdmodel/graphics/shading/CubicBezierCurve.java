@@ -15,7 +15,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.shading;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 
 /**
  * This class is used to describe the edge of each patch for type 6 shading.

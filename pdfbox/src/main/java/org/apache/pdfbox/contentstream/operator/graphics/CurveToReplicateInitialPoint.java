@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.contentstream.operator.graphics;
 
-import java.awt.geom.Point2D;
+import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,7 +37,7 @@ import org.apache.pdfbox.contentstream.operator.OperatorName;
 public class CurveToReplicateInitialPoint extends GraphicsOperatorProcessor
 {
     private static final Log LOG = LogFactory.getLog(CurveToReplicateInitialPoint.class);
-    
+
     public CurveToReplicateInitialPoint(PDFGraphicsStreamEngine context)
     {
         super(context);
