@@ -38,8 +38,8 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -61,7 +61,7 @@ import lpdf.pdfbox.pdmodel.PDDocument;
  */
 public abstract class SecurityHandler<T_POLICY extends ProtectionPolicy>
 {
-    private static final Log LOG = LogFactory.getLog(SecurityHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SecurityHandler.class);
 
     private static final short DEFAULT_KEY_LENGTH = 40;
 

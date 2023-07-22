@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -41,7 +41,7 @@ import lpdf.pdfbox.cos.COSString;
  */
 public abstract class PDNameTreeNode<T extends COSObjectable> implements COSObjectable
 {
-    private static final Log LOG = LogFactory.getLog(PDNameTreeNode.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDNameTreeNode.class);
     
     private final COSDictionary node;
     private PDNameTreeNode<T> parent;

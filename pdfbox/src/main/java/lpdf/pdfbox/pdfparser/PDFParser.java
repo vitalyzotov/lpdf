@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.Loader;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSDocument;
@@ -34,12 +34,12 @@ import lpdf.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
 public class PDFParser extends COSParser
 {
-    private static final Log LOG = LogFactory.getLog(PDFParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFParser.class);
 
     /**
      * Constructor.
      * Unrestricted main memory will be used for buffering PDF streams.
-     * 
+     *
      * @param source source representing the pdf.
      * @throws IOException If something went wrong.
      */
@@ -51,7 +51,7 @@ public class PDFParser extends COSParser
     /**
      * Constructor.
      * Unrestricted main memory will be used for buffering PDF streams.
-     * 
+     *
      * @param source input representing the pdf.
      * @param decryptionPassword password to be used for decryption.
      * @throws IOException If something went wrong.
@@ -64,10 +64,10 @@ public class PDFParser extends COSParser
     /**
      * Constructor.
      * Unrestricted main memory will be used for buffering PDF streams.
-     * 
+     *
      * @param source input representing the pdf.
      * @param decryptionPassword password to be used for decryption.
-     * @param keyStore key store to be used for decryption when using public key security 
+     * @param keyStore key store to be used for decryption when using public key security
      * @param alias alias to be used for decryption when using public key security
      *
      * @throws IOException If something went wrong.
@@ -80,7 +80,7 @@ public class PDFParser extends COSParser
 
     /**
      * Constructor.
-     * 
+     *
      * @param source input representing the pdf.
      * @param decryptionPassword password to be used for decryption.
      * @param keyStore key store to be used for decryption when using public key security
@@ -113,19 +113,19 @@ public class PDFParser extends COSParser
         }
         document = new COSDocument(streamCacheCreateFunction, this);
     }
-    
+
     /**
      * The initial parse will first parse only the trailer, the xrefstart and all xref tables to have a pointer (offset)
      * to all the pdf's objects. It can handle linearized pdfs, which will have an xref at the end pointing to an xref
      * at the beginning of the file. Last the root object is parsed.
-     * 
+     *
      * @throws InvalidPasswordException If the password is incorrect.
      * @throws IOException If something went wrong.
      */
     protected void initialParse() throws IOException
     {
         COSDictionary trailer = retrieveTrailer();
-    
+
         COSDictionary root = trailer.getCOSDictionary(COSName.ROOT);
         if (root == null)
         {
@@ -162,7 +162,7 @@ public class PDFParser extends COSParser
      *
      * @param lenient activate leniency if set to true
      * @return the populated PDDocument
-     * 
+     *
      * @throws InvalidPasswordException If the password is incorrect.
      * @throws IOException If there is an error reading from the stream or corrupt data is found.
      */
@@ -178,7 +178,7 @@ public class PDFParser extends COSParser
             {
                 throw new IOException( "Error: Header doesn't contain versioninfo" );
             }
-    
+
             if (!initialParseDone)
             {
                 initialParse();
@@ -200,7 +200,7 @@ public class PDFParser extends COSParser
 
     /**
      * Create the resulting document. Maybe overwritten if the parser uses another class as document.
-     * 
+     *
      * @return the resulting document
      * @throws IOException if the method is called before parsing the document
      */
@@ -211,14 +211,14 @@ public class PDFParser extends COSParser
 
     /**
      * Parses a PDF. Unrestricted main memory will be used for buffering PDF streams.
-     * 
+     *
      * @param file file to be loaded
-     * 
+     *
      * @return loaded document
-     * 
+     *
      * @throws InvalidPasswordException If the file required a non-empty password.
      * @throws IOException in case of a file reading or parsing error
-     * 
+     *
      * @deprecated use {@link Loader#loadPDF(File)} instead
      */
     @Deprecated
@@ -229,15 +229,15 @@ public class PDFParser extends COSParser
 
     /**
      * Parses a PDF. Unrestricted main memory will be used for buffering PDF streams.
-     * 
+     *
      * @param file file to be loaded
      * @param password password to be used for decryption
-     * 
+     *
      * @return loaded document
-     * 
+     *
      * @throws InvalidPasswordException If the password is incorrect.
      * @throws IOException in case of a file reading or parsing error
-     * 
+     *
      * @deprecated use {@link Loader#loadPDF(File, String)} instead
      */
     @Deprecated

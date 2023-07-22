@@ -29,8 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.state.EmptyGraphicsStackException;
 import lpdf.pdfbox.cos.COSArray;
@@ -72,7 +72,7 @@ import lpdf.pdfbox.pdmodel.graphics.blend.BlendMode;
  */
 public abstract class PDFStreamEngine
 {
-    private static final Log LOG = LogFactory.getLog(PDFStreamEngine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFStreamEngine.class);
 
     private final Map<String, OperatorProcessor> operators = new HashMap<>(80);
 

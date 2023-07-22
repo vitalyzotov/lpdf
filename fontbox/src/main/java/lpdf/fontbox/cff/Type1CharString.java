@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.cff.CharStringCommand.Type1KeyWord;
 import lpdf.fontbox.encoding.StandardEncoding;
 import lpdf.fontbox.type1.Type1CharStringReader;
@@ -39,7 +39,7 @@ import lpdf.fontbox.type1.Type1CharStringReader;
  */
 public class Type1CharString
 {
-    private static final Log LOG = LogFactory.getLog(Type1CharString.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Type1CharString.class);
 
     private final Type1CharStringReader font;
     private final String fontName;

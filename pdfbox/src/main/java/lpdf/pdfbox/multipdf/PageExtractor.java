@@ -19,8 +19,8 @@ package lpdf.pdfbox.multipdf;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.PDDocument;
 import lpdf.pdfbox.pdmodel.PDPage;
@@ -31,7 +31,7 @@ import lpdf.pdfbox.pdmodel.PDPage;
  */
 public class PageExtractor
 {
-    private static final Log LOG = LogFactory.getLog(PageExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PageExtractor.class);
 
     private final PDDocument sourceDocument;
 

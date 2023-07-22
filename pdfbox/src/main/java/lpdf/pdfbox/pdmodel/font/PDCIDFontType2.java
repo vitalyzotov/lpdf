@@ -23,8 +23,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.cff.CFFFont;
 import lpdf.fontbox.cff.Type2CharString;
 import lpdf.fontbox.cmap.CMap;
@@ -48,7 +48,7 @@ import lpdf.pdfbox.util.Matrix;
  */
 public class PDCIDFontType2 extends PDCIDFont
 {
-    private static final Log LOG = LogFactory.getLog(PDCIDFontType2.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDCIDFontType2.class);
 
     private final TrueTypeFont ttf;
     private final OpenTypeFont otf;

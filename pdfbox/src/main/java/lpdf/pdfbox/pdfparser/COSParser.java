@@ -29,8 +29,8 @@ import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -141,7 +141,7 @@ public class COSParser extends BaseParser implements ICOSParser
      */
     private int readTrailBytes = DEFAULT_TRAIL_BYTECOUNT;
 
-    private static final Log LOG = LogFactory.getLog(COSParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(COSParser.class);
 
     /**
      * Collects all Xref/trailer objects and resolves them into single

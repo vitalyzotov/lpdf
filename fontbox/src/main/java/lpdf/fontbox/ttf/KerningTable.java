@@ -18,8 +18,8 @@ package lpdf.fontbox.ttf;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A 'kern' table in a true type font.
@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 public class KerningTable extends TTFTable
 {
 
-    private static final Log LOG = LogFactory.getLog(KerningTable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KerningTable.class);
 
     /**
      * Tag to identify this table.

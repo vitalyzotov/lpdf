@@ -28,8 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.filter.DecodeOptions;
 import lpdf.pdfbox.filter.Filter;
 import lpdf.pdfbox.filter.FilterFactory;
@@ -60,7 +60,7 @@ public class COSStream extends COSDictionary implements Closeable
     // random access view to be read from
     private RandomAccessReadView randomAccessReadView;
 
-    private static final Log LOG = LogFactory.getLog(COSStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(COSStream.class);
 
     /**
      * Creates a new stream with an empty dictionary.

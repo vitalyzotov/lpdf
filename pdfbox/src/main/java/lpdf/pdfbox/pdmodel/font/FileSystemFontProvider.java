@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.cff.CFFCIDFont;
 import lpdf.fontbox.cff.CFFFont;
@@ -54,7 +54,7 @@ import lpdf.io.RandomAccessReadBufferedFile;
  */
 final class FileSystemFontProvider extends FontProvider
 {
-    private static final Log LOG = LogFactory.getLog(FileSystemFontProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileSystemFontProvider.class);
 
     private final List<FSFontInfo> fontInfoList = new ArrayList<>();
     private final FontCache cache;

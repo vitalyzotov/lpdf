@@ -20,8 +20,8 @@ import java.io.IOException;
 
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.pdmodel.ResourceCache;
 
 /**
@@ -30,7 +30,7 @@ import lpdf.pdfbox.pdmodel.ResourceCache;
  */
 public final class PDFontFactory
 {
-    private static final Log LOG = LogFactory.getLog(PDFontFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFontFactory.class);
 
     private PDFontFactory()
     {

@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.cmap.CMap;
 import lpdf.fontbox.ttf.CmapLookup;
 import lpdf.fontbox.ttf.TTFParser;
@@ -50,7 +50,7 @@ import lpdf.pdfbox.util.Vector;
  */
 public class PDType0Font extends PDFont implements PDVectorFont
 {
-    private static final Log LOG = LogFactory.getLog(PDType0Font.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDType0Font.class);
 
     private final PDCIDFont descendantFont;
     private final Set<Integer> noUnicode = new HashSet<>();

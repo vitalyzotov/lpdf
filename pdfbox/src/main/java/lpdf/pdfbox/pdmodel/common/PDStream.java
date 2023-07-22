@@ -26,8 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -50,7 +50,7 @@ import lpdf.pdfbox.pdmodel.common.filespecification.PDFileSpecification;
  */
 public class PDStream implements COSObjectable
 {
-    private static final Log LOG = LogFactory.getLog(PDStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDStream.class);
 
     private final COSStream stream;
 

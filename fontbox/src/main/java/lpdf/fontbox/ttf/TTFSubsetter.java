@@ -37,8 +37,8 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Subsetter for TrueType (TTF) fonts.
@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class TTFSubsetter
 {
-    private static final Log LOG = LogFactory.getLog(TTFSubsetter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TTFSubsetter.class);
 
     private static final byte[] PAD_BUF = new byte[] { 0, 0, 0 };
 

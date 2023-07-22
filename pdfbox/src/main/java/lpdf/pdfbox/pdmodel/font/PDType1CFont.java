@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.EncodedFont;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.cff.CFFFont;
@@ -54,7 +54,7 @@ import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
  */
 public class PDType1CFont extends PDSimpleFont implements PDVectorFont
 {
-    private static final Log LOG = LogFactory.getLog(PDType1CFont.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDType1CFont.class);
 
     private final Map<String, Float> glyphHeights = new HashMap<>();
     private final AffineTransform fontMatrixTransform;

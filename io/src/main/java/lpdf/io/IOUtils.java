@@ -44,8 +44,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 
 /**
@@ -66,7 +66,7 @@ public final class IOUtils
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(IOUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IOUtils.class);
 
     private IOUtils()
     {
@@ -164,7 +164,7 @@ public final class IOUtils
      * exception while closing the IO resource
      * @return the IOException is there was any but only if initialException is null
      */
-    public static IOException closeAndLogException(Closeable closeable, Log logger, String resourceName, IOException initialException)
+    public static IOException closeAndLogException(Closeable closeable, Logger logger, String resourceName, IOException initialException)
     {
         try
         {

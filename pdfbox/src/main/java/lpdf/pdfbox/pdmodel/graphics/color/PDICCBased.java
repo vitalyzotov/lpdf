@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSFloat;
@@ -41,7 +41,7 @@ import java.util.List;
  * @author John Hewson
  */
 public final class PDICCBased extends PDCIEBasedColorSpace {
-    private static final Log LOG = LogFactory.getLog(PDICCBased.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDICCBased.class);
 
     private final PDStream stream;
     private int numberOfComponents = -1;

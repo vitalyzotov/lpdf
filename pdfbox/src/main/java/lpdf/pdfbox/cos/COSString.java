@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.util.Hex;
 
 /**
@@ -45,7 +45,7 @@ import lpdf.pdfbox.util.Hex;
  */
 public final class COSString extends COSBase
 {
-    private static final Log LOG = LogFactory.getLog(COSString.class);
+    private static final Logger LOG = LoggerFactory.getLogger(COSString.class);
 
     private byte[] bytes;
     private boolean forceHexForm;

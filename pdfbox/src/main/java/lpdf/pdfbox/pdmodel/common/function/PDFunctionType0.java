@@ -22,8 +22,8 @@ import java.io.InputStream;
 import lpdf.harmony.imageio.stream.ImageInputStream;
 import lpdf.harmony.imageio.stream.MemoryCacheImageInputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSInteger;
@@ -43,7 +43,7 @@ public class PDFunctionType0 extends PDFunction
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(PDFunctionType0.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFunctionType0.class);
 
     /**
      * An array of 2 x m numbers specifying the linear mapping of input values

@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.cff.CFFCIDFont;
 import lpdf.fontbox.cff.CFFFont;
@@ -49,7 +49,7 @@ import static lpdf.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
  */
 public class PDCIDFontType0 extends PDCIDFont
 {
-    private static final Log LOG = LogFactory.getLog(PDCIDFontType0.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDCIDFontType0.class);
 
     private final CFFCIDFont cidFont;  // Top DICT that uses CIDFont operators
     private final FontBoxFont t1Font; // Top DICT that does not use CIDFont operators

@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 
 /**
@@ -25,7 +25,7 @@ import lpdf.pdfbox.cos.COSDictionary;
  */
 abstract class PDMeshBasedShadingType extends PDShadingType4 {
 
-    private static final Log LOG = LogFactory.getLog(PDMeshBasedShadingType.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDMeshBasedShadingType.class);
 
     PDMeshBasedShadingType(COSDictionary shadingDictionary) {
         super(shadingDictionary);

@@ -23,8 +23,8 @@ import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.PDRange;
 import lpdf.pdfbox.util.Matrix;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ abstract class PDTriangleBasedShadingType extends PDShading {
     // value: same as the value of Range
     private COSArray decode = null;
 
-    private static final Log LOG = LogFactory.getLog(PDTriangleBasedShadingType.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDTriangleBasedShadingType.class);
 
     private int bitsPerCoordinate = -1;
     private int bitsPerColorComponent = -1;

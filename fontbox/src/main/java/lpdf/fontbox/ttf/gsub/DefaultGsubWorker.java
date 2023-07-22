@@ -19,8 +19,8 @@ package lpdf.fontbox.ttf.gsub;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.GlyphSubstitutionTable;
 
 /**
@@ -32,7 +32,7 @@ import lpdf.fontbox.ttf.GlyphSubstitutionTable;
  */
 class DefaultGsubWorker implements GsubWorker
 {
-    private static final Log LOG = LogFactory.getLog(DefaultGsubWorker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultGsubWorker.class);
 
     @Override
     public List<Integer> applyTransforms(List<Integer> originalGlyphIds)

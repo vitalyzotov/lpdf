@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSStream;
@@ -37,7 +37,7 @@ public class PDObjectReference implements COSObjectable {
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(PDObjectReference.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDObjectReference.class);
 
     /**
      * TYPE of this object.

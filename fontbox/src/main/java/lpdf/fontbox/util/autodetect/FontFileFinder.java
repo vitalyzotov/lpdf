@@ -22,8 +22,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helps to autodetect/locate available operating system fonts. This class is based on a class provided by Apache FOP.
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FontFileFinder
 {
-    private static final Log LOG = LogFactory.getLog(FontFileFinder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FontFileFinder.class);
 
     private FontDirFinder fontDirFinder = null;
 

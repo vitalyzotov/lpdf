@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.multipdf;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
@@ -37,7 +37,7 @@ import java.util.List;
  * @author Ben Litchfield
  */
 public class Splitter {
-    private static final Log LOG = LogFactory.getLog(Splitter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Splitter.class);
 
     private PDDocument sourceDocument;
     private PDDocument currentDestinationDocument;

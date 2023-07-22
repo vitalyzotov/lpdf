@@ -22,8 +22,8 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.zip.Deflater;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -37,7 +37,7 @@ import lpdf.pdfbox.cos.COSName;
  */
 public abstract class Filter
 {
-    private static final Log LOG = LogFactory.getLog(Filter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Filter.class);
 
     /**
      * Compression Level System Property. Set this to a value from 0 to 9 to change the zlib deflate

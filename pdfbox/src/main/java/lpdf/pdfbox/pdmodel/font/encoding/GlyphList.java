@@ -19,8 +19,8 @@ package lpdf.pdfbox.pdmodel.font.encoding;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class GlyphList
 {
-    private static final Log LOG = LogFactory.getLog(GlyphList.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyphList.class);
 
     // Adobe Glyph List (AGL)
     private static final GlyphList DEFAULT = load("glyphlist.txt", 4281);

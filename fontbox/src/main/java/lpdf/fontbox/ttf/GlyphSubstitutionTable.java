@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.gsub.GlyphSubstitutionDataExtractor;
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.fontbox.ttf.table.common.CoverageTable;
@@ -59,7 +59,7 @@ import lpdf.fontbox.ttf.table.gsub.SequenceTable;
  */
 public class GlyphSubstitutionTable extends TTFTable
 {
-    private static final Log LOG = LogFactory.getLog(GlyphSubstitutionTable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyphSubstitutionTable.class);
 
     public static final String TAG = "GSUB";
 

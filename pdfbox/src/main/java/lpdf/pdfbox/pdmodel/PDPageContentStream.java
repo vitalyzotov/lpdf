@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
@@ -64,7 +64,7 @@ public final class PDPageContentStream extends PDAbstractContentStream implement
         }
     }
 
-    private static final Log LOG = LogFactory.getLog(PDPageContentStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDPageContentStream.class);
 
     private boolean sourcePageHadContents = false;
 

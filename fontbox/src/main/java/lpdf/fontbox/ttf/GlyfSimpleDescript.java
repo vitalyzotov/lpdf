@@ -19,8 +19,8 @@
 package lpdf.fontbox.ttf;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics. see
@@ -32,7 +32,7 @@ public class GlyfSimpleDescript extends GlyfDescript
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(GlyfSimpleDescript.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyfSimpleDescript.class);
 
     private int[] endPtsOfContours;
     private byte[] flags;

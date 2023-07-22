@@ -18,8 +18,8 @@ package lpdf.pdfbox.pdmodel.graphics.state;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -69,7 +69,7 @@ public final class PDSoftMask implements COSObjectable
         }
     }
 
-    private static final Log LOG = LogFactory.getLog(PDSoftMask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDSoftMask.class);
 
     private final COSDictionary dictionary;
     private COSName subType = null;

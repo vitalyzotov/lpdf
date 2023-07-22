@@ -23,8 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.fontbox.ttf.model.Language;
 import lpdf.fontbox.ttf.model.MapBackedGsubData;
@@ -55,7 +55,7 @@ import lpdf.fontbox.ttf.table.gsub.SequenceTable;
 public class GlyphSubstitutionDataExtractor
 {
 
-    private static final Log LOG = LogFactory.getLog(GlyphSubstitutionDataExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyphSubstitutionDataExtractor.class);
 
     public GsubData getGsubData(Map<String, ScriptTable> scriptList,
             FeatureListTable featureListTable, LookupListTable lookupListTable)

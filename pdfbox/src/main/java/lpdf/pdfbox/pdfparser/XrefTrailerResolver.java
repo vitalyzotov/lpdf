@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.cos.COSObjectKey;
@@ -100,7 +100,7 @@ public class XrefTrailerResolver
     private XrefTrailerObj resolvedXrefTrailer = null;
 
     /** Log instance. */
-    private static final Log LOG = LogFactory.getLog( XrefTrailerResolver.class );
+    private static final Logger LOG = LoggerFactory.getLogger( XrefTrailerResolver.class );
 
     /**
      * Returns the first trailer if at least one exists.

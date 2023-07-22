@@ -25,8 +25,8 @@ import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.pdfbox.cos.COSString;
 
@@ -64,7 +64,7 @@ import lpdf.pdfbox.cos.COSString;
  */
 public final class DateConverter
 {
-    private static final Log LOG = LogFactory.getLog(DateConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateConverter.class);
 
     private DateConverter()
     {

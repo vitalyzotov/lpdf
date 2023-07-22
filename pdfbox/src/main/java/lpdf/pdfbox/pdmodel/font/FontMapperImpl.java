@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.ttf.OpenTypeFont;
 import lpdf.fontbox.ttf.TTFParser;
@@ -46,7 +46,7 @@ import lpdf.pdfbox.pdmodel.font.Standard14Fonts.FontName;
  */
 final class FontMapperImpl implements FontMapper
 {
-    private static final Log LOG = LogFactory.getLog(FontMapperImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FontMapperImpl.class);
 
     private static final FontCache fontCache = new FontCache(); // todo: static cache isn't ideal
     private FontProvider fontProvider;

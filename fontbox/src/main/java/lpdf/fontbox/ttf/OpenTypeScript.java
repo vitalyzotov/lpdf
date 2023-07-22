@@ -28,8 +28,8 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class for mapping Unicode codepoints to OpenType script tags
@@ -42,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class OpenTypeScript
 {
-    private static final Log LOG = LogFactory.getLog(OpenTypeScript.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenTypeScript.class);
 
     public static final String INHERITED = "Inherited";
     public static final String UNKNOWN = "Unknown";

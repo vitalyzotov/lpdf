@@ -26,8 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.io.RandomAccessRead;
 
 
@@ -40,7 +40,7 @@ public class CFFParser
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(CFFParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CFFParser.class);
 
     private static final String TAG_OTTO = "OTTO";
     private static final String TAG_TTCF = "ttcf";

@@ -24,8 +24,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class WindowsFontDirFinder implements FontDirFinder
 {
 
-    private static final Log LOG = LogFactory.getLog(WindowsFontDirFinder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WindowsFontDirFinder.class);
 
     /**
      * Attempts to read windir environment variable on windows (disclaimer: This is a bit dirty but seems to work

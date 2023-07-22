@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.CmapLookup;
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.fontbox.ttf.model.ScriptFeature;
@@ -38,7 +38,7 @@ import lpdf.fontbox.ttf.model.ScriptFeature;
  */
 public class GsubWorkerForLatin implements GsubWorker
 {
-    private static final Log LOG = LogFactory.getLog(GsubWorkerForLatin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GsubWorkerForLatin.class);
 
     /**
      * This sequence is very important. This has been taken from <a href=

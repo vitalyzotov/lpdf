@@ -18,8 +18,8 @@ package lpdf.pdfbox.contentstream.operator.state;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -36,7 +36,7 @@ import lpdf.pdfbox.cos.COSNumber;
  */
 public class SetLineDashPattern extends OperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(SetLineDashPattern.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SetLineDashPattern.class);
     
     public SetLineDashPattern(PDFStreamEngine context)
     {

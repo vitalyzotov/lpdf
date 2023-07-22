@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -41,7 +41,7 @@ import lpdf.pdfbox.pdmodel.common.COSObjectable;
  */
 public class PDFCloneUtility
 {
-    private static final Log LOG = LogFactory.getLog(PDFCloneUtility.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFCloneUtility.class);
 
     private final PDDocument destination;
     private final Map<COSBase, COSBase> clonedVersion = new HashMap<>();

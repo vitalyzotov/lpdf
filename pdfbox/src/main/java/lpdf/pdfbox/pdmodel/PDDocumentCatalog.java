@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
@@ -50,7 +50,7 @@ import lpdf.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences;
  */
 public class PDDocumentCatalog implements COSObjectable
 {
-    private static final Log LOG = LogFactory.getLog(PDDocumentCatalog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDDocumentCatalog.class);
 
     private final COSDictionary root;
     private final PDDocument document;

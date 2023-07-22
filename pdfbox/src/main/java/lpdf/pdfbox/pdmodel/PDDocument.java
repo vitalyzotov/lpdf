@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.TrueTypeFont;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -71,7 +71,7 @@ public class PDDocument implements Closeable
      */
     private static final int[] RESERVE_BYTE_RANGE = new int[] { 0, 1000000000, 1000000000, 1000000000 };
 
-    private static final Log LOG = LogFactory.getLog(PDDocument.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDDocument.class);
 
     private final COSDocument document;
 

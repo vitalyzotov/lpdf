@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.afm.FontMetrics;
 import lpdf.fontbox.cmap.CMap;
 import lpdf.pdfbox.cos.COSArray;
@@ -49,7 +49,7 @@ import lpdf.pdfbox.util.Vector;
  */
 public abstract class PDFont implements COSObjectable, PDFontLike
 {
-    private static final Log LOG = LogFactory.getLog(PDFont.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFont.class);
     protected static final Matrix DEFAULT_FONT_MATRIX = new Matrix(0.001f, 0, 0, 0.001f, 0, 0);
 
     protected final COSDictionary dict;

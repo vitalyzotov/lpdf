@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.image;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -52,7 +52,7 @@ public final class PDImageXObject extends PDXObject implements PDImage {
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(PDImageXObject.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDImageXObject.class);
 
     private PDColorSpace colorSpace;
 

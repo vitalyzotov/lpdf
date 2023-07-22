@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDContentStream;
 import lpdf.pdfbox.contentstream.operator.Operator;
 import lpdf.pdfbox.cos.COSBase;
@@ -46,7 +46,7 @@ import lpdf.pdfbox.util.Matrix;
  */
 public final class PDType3CharProc implements COSObjectable, PDContentStream
 {
-    private static final Log LOG = LogFactory.getLog(PDType3CharProc.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDType3CharProc.class);
 
     private final PDType3Font font;
     private final COSStream charStream;

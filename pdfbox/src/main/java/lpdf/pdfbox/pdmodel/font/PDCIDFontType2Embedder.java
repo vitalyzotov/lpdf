@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.GlyphData;
 import lpdf.fontbox.ttf.GlyphTable;
 import lpdf.fontbox.ttf.HorizontalMetricsTable;
@@ -51,7 +51,7 @@ import lpdf.pdfbox.pdmodel.common.PDStream;
 final class PDCIDFontType2Embedder extends TrueTypeEmbedder
 {
 
-    private static final Log LOG = LogFactory.getLog(PDCIDFontType2Embedder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDCIDFontType2Embedder.class);
 
     private final PDDocument document;
     private final PDType0Font parent;

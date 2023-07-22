@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.util.Hex;
 
@@ -32,7 +32,7 @@ import lpdf.pdfbox.util.Hex;
  */
 final class ASCIIHexFilter extends Filter
 {
-    private static final Log LOG = LogFactory.getLog(ASCIIHexFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ASCIIHexFilter.class);
 
     private static final int[] REVERSE_HEX = {
       /*   0 */  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,

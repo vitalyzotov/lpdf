@@ -19,8 +19,8 @@ package lpdf.pdfbox.pdmodel.graphics.shading;
 import lpdf.harmony.awt.Point;
 import lpdf.harmony.awt.geom.Point2D;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Point class with faster hashCode() to speed up the rendering of Gouraud shadings. Should only be
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class IntPoint extends Point
 {
-    private static final Log LOG = LogFactory.getLog(IntPoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IntPoint.class);
 
     IntPoint(int x, int y)
     {

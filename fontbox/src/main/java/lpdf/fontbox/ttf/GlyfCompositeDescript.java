@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Glyph description for composite glyphs. Composite glyphs are made up of one
@@ -41,7 +41,7 @@ public class GlyfCompositeDescript extends GlyfDescript
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(GlyfCompositeDescript.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyfCompositeDescript.class);
 
     private final List<GlyfCompositeComp> components = new ArrayList<>();
     private final Map<Integer,GlyphDescription> descriptions = new HashMap<>();
@@ -308,7 +308,7 @@ public class GlyfCompositeDescript extends GlyfDescript
             }
             catch (IOException e)
             {
-                LOG.error(e);
+                LOG.error("getting glyph", e);
             }
         }
     }

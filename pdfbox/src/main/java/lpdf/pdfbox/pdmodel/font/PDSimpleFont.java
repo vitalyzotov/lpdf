@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -43,7 +43,7 @@ import lpdf.pdfbox.pdmodel.font.encoding.WinAnsiEncoding;
  */
 public abstract class PDSimpleFont extends PDFont
 {
-    private static final Log LOG = LogFactory.getLog(PDSimpleFont.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDSimpleFont.class);
 
     protected Encoding encoding;
     protected GlyphList glyphList;

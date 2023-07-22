@@ -18,8 +18,8 @@ package lpdf.pdfbox.cos;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a PDF object.
@@ -36,7 +36,7 @@ public class COSObject extends COSBase implements COSUpdateInfo
     private boolean isDereferenced = false;
     private final COSUpdateState updateState;
 
-    private static final Log LOG = LogFactory.getLog(COSObject.class);
+    private static final Logger LOG = LoggerFactory.getLogger(COSObject.class);
 
     /**
      * Constructor.

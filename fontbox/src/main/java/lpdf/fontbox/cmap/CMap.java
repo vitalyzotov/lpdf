@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a CMap file.
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CMap
 {
-    private static final Log LOG = LogFactory.getLog(CMap.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CMap.class);
 
     private int wmode = 0;
     private String cmapName = null;

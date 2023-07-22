@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -68,7 +68,7 @@ public class BruteForceParser extends COSParser
      */
     private static final char[] OBJ_STREAM = new char[] { '/', 'O', 'b', 'j', 'S', 't', 'm' };
 
-    private static final Log LOG = LogFactory.getLog(BruteForceParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BruteForceParser.class);
 
     /**
      * Contains all found objects of a brute force search.

@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.ttf.model.GsubData;
 import lpdf.fontbox.util.BoundingBox;
@@ -42,7 +42,7 @@ import lpdf.fontbox.util.BoundingBox;
 public class TrueTypeFont implements FontBoxFont, Closeable
 {
 
-    private static final Log LOG = LogFactory.getLog(TrueTypeFont.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrueTypeFont.class);
 
     private float version;
     private int numberOfGlyphs = -1;

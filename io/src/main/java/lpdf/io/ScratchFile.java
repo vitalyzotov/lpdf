@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a memory page handling mechanism as base for creating (multiple)
@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ScratchFile implements RandomAccessStreamCache
 {
-    private static final Log LOG = LogFactory.getLog(ScratchFile.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScratchFile.class);
 
     /** number of pages by which we enlarge the scratch file (reduce I/O-operations) */
     private static final int ENLARGE_PAGE_COUNT = 16;

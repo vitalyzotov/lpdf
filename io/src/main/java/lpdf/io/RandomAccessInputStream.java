@@ -19,8 +19,8 @@ package lpdf.io;
 import java.io.InputStream;
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An InputStream which reads from a RandomAccessRead.
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RandomAccessInputStream extends InputStream
 {
-    private static final Log LOG = LogFactory.getLog(RandomAccessInputStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RandomAccessInputStream.class);
 
     private final RandomAccessRead input;
     private long position;

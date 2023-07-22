@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.shading;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 
@@ -25,7 +25,7 @@ import lpdf.pdfbox.cos.COSName;
  * Resources for a shading type 4 (Free-Form Gouraud-Shaded Triangle Mesh).
  */
 public class PDShadingType4 extends PDTriangleBasedShadingType {
-    private static final Log LOG = LogFactory.getLog(PDShadingType4.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDShadingType4.class);
 
     /**
      * Constructor using the given shading dictionary.

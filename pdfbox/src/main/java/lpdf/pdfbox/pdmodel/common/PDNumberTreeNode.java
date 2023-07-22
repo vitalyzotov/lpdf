@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
@@ -41,7 +41,7 @@ import lpdf.pdfbox.cos.COSNull;
  */
 public class PDNumberTreeNode implements COSObjectable
 {
-    private static final Log LOG = LogFactory.getLog( PDNumberTreeNode.class );
+    private static final Logger LOG = LoggerFactory.getLogger( PDNumberTreeNode.class );
 
     private final COSDictionary node;
     private Class<? extends COSObjectable> valueType = null;

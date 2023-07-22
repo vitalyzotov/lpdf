@@ -17,8 +17,8 @@
 package lpdf.fontbox.ttf;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A table in a true type font.
@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PostScriptTable extends TTFTable
 {
-    private static final Log LOG = LogFactory.getLog(PostScriptTable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostScriptTable.class);
     private float formatType;
     private float italicAngle;
     private short underlinePosition;

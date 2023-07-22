@@ -21,8 +21,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility functions for hex encoding.
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class Hex
 {
-    private static final Log LOG = LogFactory.getLog(Hex.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Hex.class);
 
     /**
      * for hex conversion.

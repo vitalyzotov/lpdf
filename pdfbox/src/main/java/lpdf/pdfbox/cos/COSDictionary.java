@@ -29,8 +29,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.io.IOUtils;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
@@ -49,7 +49,7 @@ public class COSDictionary extends COSBase implements COSUpdateInfo
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(COSDictionary.class);
+    private static final Logger LOG = LoggerFactory.getLogger(COSDictionary.class);
 
     private static final String PATH_SEPARATOR = "/";
     private static final int MAP_THRESHOLD = 1000;

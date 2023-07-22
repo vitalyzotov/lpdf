@@ -18,8 +18,8 @@ package lpdf.pdfbox.contentstream.operator;
 
 import java.io.IOException;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
@@ -35,7 +35,7 @@ import lpdf.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
  */
 public class DrawObject extends OperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(DrawObject.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DrawObject.class);
 
     public DrawObject(PDFStreamEngine context)
     {

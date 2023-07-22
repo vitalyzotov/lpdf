@@ -20,8 +20,8 @@ import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.pdmodel.font.PDFont;
 import lpdf.pdfbox.util.Matrix;
 
@@ -32,7 +32,7 @@ import lpdf.pdfbox.util.Matrix;
  */
 public final class TextPosition
 {
-    private static final Log LOG = LogFactory.getLog(TextPosition.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TextPosition.class);
 
     private static final Map<Integer, String> DIACRITICS = createDiacritics();
 

@@ -20,8 +20,8 @@ import lpdf.harmony.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.cos.COSBase;
@@ -36,7 +36,7 @@ import lpdf.pdfbox.contentstream.operator.OperatorName;
  */
 public class CurveToReplicateInitialPoint extends GraphicsOperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(CurveToReplicateInitialPoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CurveToReplicateInitialPoint.class);
 
     public CurveToReplicateInitialPoint(PDFGraphicsStreamEngine context)
     {

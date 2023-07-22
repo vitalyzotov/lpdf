@@ -17,8 +17,8 @@
 package lpdf.pdfbox.contentstream.operator.graphics;
 
 import lpdf.harmony.awt.geom.Point2D;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author Ben Litchfield
  */
 public class CurveTo extends GraphicsOperatorProcessor {
-    private static final Log LOG = LogFactory.getLog(CurveTo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CurveTo.class);
 
     public CurveTo(PDFGraphicsStreamEngine context) {
         super(context);

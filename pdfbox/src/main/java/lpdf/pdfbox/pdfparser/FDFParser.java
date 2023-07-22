@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdfparser;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSDocument;
 import lpdf.pdfbox.cos.COSName;
@@ -26,7 +26,7 @@ import lpdf.io.RandomAccessRead;
 import java.io.IOException;
 
 public class FDFParser extends COSParser {
-    private static final Log LOG = LogFactory.getLog(FDFParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FDFParser.class);
 
     /**
      * Constructs parser for given file using memory buffer.

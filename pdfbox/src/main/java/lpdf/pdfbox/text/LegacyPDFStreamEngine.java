@@ -21,8 +21,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.fontbox.ttf.TrueTypeFont;
 import lpdf.fontbox.util.BoundingBox;
@@ -77,7 +77,7 @@ import lpdf.pdfbox.pdmodel.font.PDFontDescriptor;
  */
 class LegacyPDFStreamEngine extends PDFStreamEngine
 {
-    private static final Log LOG = LogFactory.getLog(LegacyPDFStreamEngine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LegacyPDFStreamEngine.class);
 
     private int pageRotation;
     private PDRectangle pageSize;
@@ -255,7 +255,7 @@ class LegacyPDFStreamEngine extends PDFStreamEngine
         }
         catch (Exception exception)
         {
-            LOG.warn(exception, exception);
+            LOG.warn(exception.getMessage(), exception);
         }
 
         if (Float.compare(spaceWidthText, 0) == 0)

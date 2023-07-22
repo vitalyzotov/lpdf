@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.fontbox.util.BoundingBox;
 import lpdf.pdfbox.cos.COSArray;
@@ -53,7 +53,7 @@ import lpdf.pdfbox.util.Matrix;
  */
 public class LayerUtility
 {
-    private static final Log LOG = LogFactory.getLog(LayerUtility.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LayerUtility.class);
 
     private static final boolean DEBUG = true;
 

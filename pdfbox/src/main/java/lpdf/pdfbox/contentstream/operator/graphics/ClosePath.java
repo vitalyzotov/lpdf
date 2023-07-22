@@ -19,8 +19,8 @@ package lpdf.pdfbox.contentstream.operator.graphics;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -33,7 +33,7 @@ import lpdf.pdfbox.contentstream.operator.OperatorName;
  */
 public final class ClosePath extends GraphicsOperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(ClosePath.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClosePath.class);
 
     public ClosePath(PDFGraphicsStreamEngine context)
     {

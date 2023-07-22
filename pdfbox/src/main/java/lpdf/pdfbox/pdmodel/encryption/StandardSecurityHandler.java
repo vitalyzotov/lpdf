@@ -31,8 +31,8 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSName;
@@ -51,7 +51,7 @@ public final class StandardSecurityHandler extends SecurityHandler<StandardProte
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(StandardSecurityHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StandardSecurityHandler.class);
 
     /** Type of security handler. */
     public static final String FILTER = "Standard";

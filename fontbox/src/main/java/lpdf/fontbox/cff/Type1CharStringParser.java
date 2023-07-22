@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.cff.CharStringCommand.Type1KeyWord;
 
 /**
@@ -36,7 +36,7 @@ import lpdf.fontbox.cff.CharStringCommand.Type1KeyWord;
  */
 public class Type1CharStringParser
 {
-    private static final Log LOG = LogFactory.getLog(Type1CharStringParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Type1CharStringParser.class);
 
     // 1-byte commands
     private static final int CALLSUBR = 10;

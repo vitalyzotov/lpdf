@@ -16,8 +16,8 @@
  */
 package lpdf.fontbox.ttf;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.harmony.awt.geom.GeneralPath;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.Locale;
  */
 class GlyphRenderer
 {
-    private static final Log LOG = LogFactory.getLog(GlyphRenderer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlyphRenderer.class);
 
     private final GlyphDescription glyphDescription;
 

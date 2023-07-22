@@ -26,8 +26,8 @@ import java.util.List;
 import lpdf.harmony.imageio.stream.MemoryCacheImageInputStream;
 import lpdf.harmony.imageio.stream.MemoryCacheImageOutputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSName;
 
@@ -43,7 +43,7 @@ public class LZWFilter extends Filter
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(LZWFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LZWFilter.class);
 
     /**
      * The LZW clear table code.

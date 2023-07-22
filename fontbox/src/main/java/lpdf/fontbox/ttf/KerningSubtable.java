@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A 'kern' table in a true type font.
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class KerningSubtable
 {
-    private static final Log LOG = LogFactory.getLog(KerningSubtable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KerningSubtable.class);
 
     // coverage field bit masks and values
     private static final int COVERAGE_HORIZONTAL = 0x0001;

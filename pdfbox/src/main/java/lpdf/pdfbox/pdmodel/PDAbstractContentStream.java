@@ -16,8 +16,8 @@
  */
 package lpdf.pdfbox.pdmodel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.fontbox.ttf.CmapLookup;
 import lpdf.fontbox.ttf.gsub.CompoundCharacterTokenizer;
 import lpdf.fontbox.ttf.gsub.GsubWorker;
@@ -76,7 +76,7 @@ import java.util.regex.Pattern;
  */
 abstract class PDAbstractContentStream implements Closeable
 {
-    private static final Log LOG = LogFactory.getLog(PDAbstractContentStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDAbstractContentStream.class);
 
     protected final PDDocument document; // may be null
 

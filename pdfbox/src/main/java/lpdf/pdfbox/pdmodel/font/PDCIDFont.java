@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
@@ -43,7 +43,7 @@ import lpdf.pdfbox.util.Vector;
  */
 public abstract class PDCIDFont implements COSObjectable, PDFontLike, PDVectorFont
 {
-    private static final Log LOG = LogFactory.getLog(PDCIDFont.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDCIDFont.class);
 
     protected final PDType0Font parent;
 

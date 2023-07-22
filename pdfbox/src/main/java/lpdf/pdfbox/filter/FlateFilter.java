@@ -23,8 +23,8 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.io.IOUtils;
 
@@ -37,7 +37,7 @@ import lpdf.io.IOUtils;
  */
 final class FlateFilter extends Filter
 {
-    private static final Log LOG = LogFactory.getLog(FlateFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlateFilter.class);
 
     @Override
     public DecodeResult decode(InputStream encoded, OutputStream decoded,

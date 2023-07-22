@@ -19,8 +19,8 @@ package lpdf.pdfbox.contentstream.operator.state;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
@@ -37,7 +37,7 @@ import lpdf.pdfbox.contentstream.operator.MissingOperandException;
  */
 public class SetGraphicsStateParameters extends OperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(SetGraphicsStateParameters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SetGraphicsStateParameters.class);
 
     public SetGraphicsStateParameters(PDFStreamEngine context)
     {

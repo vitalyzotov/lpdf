@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A "cmap" subtable.
@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CmapSubtable implements CmapLookup
 {
-    private static final Log LOG = LogFactory.getLog(CmapSubtable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CmapSubtable.class);
 
     private static final long LEAD_OFFSET = 0xD800l - (0x10000 >> 10);
     private static final long SURROGATE_OFFSET = 0x10000l - (0xD800 << 10) - 0xDC00;

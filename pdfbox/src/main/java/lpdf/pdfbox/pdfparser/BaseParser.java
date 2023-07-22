@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSBoolean;
@@ -62,7 +62,7 @@ public abstract class BaseParser
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(BaseParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BaseParser.class);
 
     protected static final int E = 'e';
     protected static final int N = 'n';

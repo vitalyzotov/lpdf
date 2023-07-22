@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDContentStream;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSBase;
@@ -60,7 +60,7 @@ public class PDPage implements COSObjectable, PDContentStream
     /**
      * Log instance
      */
-    private static final Log LOG = LogFactory.getLog(PDPage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDPage.class);
 
     private static final byte[] DELIMITER = new byte[] { '\n' };
 

@@ -18,8 +18,8 @@ package lpdf.pdfbox.contentstream.operator.text;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.contentstream.PDFStreamEngine;
 import lpdf.pdfbox.contentstream.operator.MissingOperandException;
 import lpdf.pdfbox.contentstream.operator.Operator;
@@ -36,7 +36,7 @@ import lpdf.pdfbox.util.Matrix;
  */
 public class MoveText extends OperatorProcessor
 {
-    private static final Log LOG = LogFactory.getLog(MoveText.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MoveText.class);
 
     public MoveText(PDFStreamEngine context)
     {

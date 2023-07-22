@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The page tree, which defines the ordering of pages in the document in an efficient manner.
@@ -42,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PDPageTree implements COSObjectable, Iterable<PDPage>
 {
-    private static final Log LOG = LogFactory.getLog(PDPageTree.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDPageTree.class);
     private final COSDictionary root;
     private final PDDocument document; // optional
 

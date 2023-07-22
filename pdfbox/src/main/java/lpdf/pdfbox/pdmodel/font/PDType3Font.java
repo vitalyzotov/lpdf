@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lpdf.fontbox.FontBoxFont;
 import lpdf.fontbox.util.BoundingBox;
@@ -51,7 +51,7 @@ public class PDType3Font extends PDSimpleFont
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(PDType3Font.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDType3Font.class);
 
     private PDResources resources;
     private COSDictionary charProcs;

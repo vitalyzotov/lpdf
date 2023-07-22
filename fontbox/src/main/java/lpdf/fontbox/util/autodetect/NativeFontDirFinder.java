@@ -20,8 +20,8 @@ package lpdf.fontbox.util.autodetect;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Native font finder base class. This class is based on a class provided by Apache FOP. see
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class NativeFontDirFinder implements FontDirFinder
 {
 
-    private static final Log LOG = LogFactory.getLog(NativeFontDirFinder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NativeFontDirFinder.class);
 
     /**
      * Generic method used by Mac and Unix font finders.

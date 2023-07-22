@@ -22,8 +22,8 @@ package lpdf.fontbox.type1;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Lexer for the ASCII portions of an Adobe Type 1 font.
@@ -48,7 +48,7 @@ class Type1Lexer
     /**
      * Log instance.
      */
-    private static final Log LOG = LogFactory.getLog(Type1Lexer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Type1Lexer.class);
 
     private final ByteBuffer buffer;
     private Token aheadToken;

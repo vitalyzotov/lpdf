@@ -22,8 +22,8 @@ import lpdf.pdfbox.cos.COSNumber;
 
 import java.io.IOException;
 import java.util.Arrays;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lpdf.pdfbox.cos.COSBase;
 
 /**
@@ -37,7 +37,7 @@ import lpdf.pdfbox.cos.COSBase;
  */
 public final class PDColor
 {
-    private static final Log LOG = LogFactory.getLog(PDColor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDColor.class);
 
     private final float[] components;
     private final COSName patternName;
