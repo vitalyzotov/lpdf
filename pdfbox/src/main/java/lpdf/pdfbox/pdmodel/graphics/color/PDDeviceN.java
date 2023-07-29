@@ -148,6 +148,69 @@ public class PDDeviceN extends PDSpecialColorSpace {
         }
     }
 
+    @Override
+    public float[] toRGB(float[] value) throws IOException {
+        if (attributes != null) {
+            return toRGBWithAttributes(value);
+        } else {
+            return toRGBWithTintTransform(value);
+        }
+    }
+
+    private float[] toRGBWithAttributes(float[] value) throws IOException {
+        float[] rgbValue = new float[]{1, 1, 1};
+
+        // look up each colorant
+        for (int c = 0; c < numColorants; c++) {
+            PDColorSpace componentColorSpace;
+            boolean isProcessColorant = colorantToComponent[c] >= 0;
+            if (isProcessColorant) {
+                // process color
+                componentColorSpace = processColorSpace;
+            } else if (spotColorSpaces[c] == null) {
+                // TODO this happens in the Altona Visual test, is there a better workaround?
+                // missing spot color, fallback to using tintTransform
+                return toRGBWithTintTransform(value);
+            } else {
+                // spot color
+                componentColorSpace = spotColorSpaces[c];
+            }
+
+            // get the single component
+            float[] componentSamples = new float[componentColorSpace.getNumberOfComponents()];
+
+            if (isProcessColorant) {
+                // process color
+                int componentIndex = colorantToComponent[c];
+                componentSamples[componentIndex] = value[c];
+            } else {
+                // spot color
+                componentSamples[0] = value[c];
+            }
+
+            // convert single component to RGB
+            float[] rgbComponent = componentColorSpace.toRGB(componentSamples);
+
+            // combine the RGB component value with the RGB composite value
+
+            // multiply (blend mode)
+            rgbValue[0] *= rgbComponent[0];
+            rgbValue[1] *= rgbComponent[1];
+            rgbValue[2] *= rgbComponent[2];
+        }
+
+        return rgbValue;
+    }
+
+    private float[] toRGBWithTintTransform(float[] value) throws IOException {
+        // use the tint transform to convert the sample into
+        // the alternate color space (this is usually 1:many)
+        float[] altValue = tintTransform.eval(value);
+
+        // convert the alternate color space to RGB
+        return alternateColorSpace.toRGB(altValue);
+    }
+
     /**
      * Returns true if this color space has the NChannel subtype.
      *

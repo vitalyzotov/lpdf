@@ -28,7 +28,7 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>lpdf</artifactId>
+    <artifactId>pdfbox</artifactId>
 
     <name>LPDF</name>
     <description>
@@ -84,6 +84,13 @@
             <version>4.11.0</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.ajalt.colormath</groupId>
+            <artifactId>colormath-jvm</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

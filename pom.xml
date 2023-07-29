@@ -64,28 +64,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>vzotov-releases</id>
-            <url>https://maven.vzotov.ru/repository/maven-everyone</url>
-        </repository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>vzotov-releases</id>
-            <url>https://maven.vzotov.ru/repository/maven-everyone</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-
 </project>

@@ -55,4 +55,9 @@ public final class PDDeviceGray extends PDDeviceColorSpace {
         return initialColor;
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        return new float[]{value[0], value[0], value[0]};
+    }
+
 }

@@ -17,7 +17,11 @@
 package lpdf.pdfbox.pdmodel.graphics.color;
 
 
+import com.github.ajalt.colormath.model.CMYK;
+import com.github.ajalt.colormath.model.RGB;
 import lpdf.pdfbox.cos.COSName;
+
+import java.io.IOException;
 
 //import java.awt.color.ColorSpace;
 //import java.awt.color.ICC_ColorSpace;
@@ -64,6 +68,15 @@ public class PDDeviceCMYK extends PDDeviceColorSpace {
     @Override
     public PDColor getInitialColor() {
         return initialColor;
+    }
+
+    @Override
+    public float[] toRGB(float[] value) throws IOException {
+        CMYK cmyk = new CMYK(value[0], value[1], value[2], value[3], 1.0f);
+        RGB rgb = cmyk.toSRGB();
+        return new float[]{
+                rgb.getR(), rgb.getG(), rgb.getB()
+        };
     }
 
 

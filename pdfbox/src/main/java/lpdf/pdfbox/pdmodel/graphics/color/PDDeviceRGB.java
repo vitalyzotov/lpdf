@@ -60,5 +60,9 @@ public final class PDDeviceRGB extends PDDeviceColorSpace {
         return initialColor;
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        return value;
+    }
 
 }

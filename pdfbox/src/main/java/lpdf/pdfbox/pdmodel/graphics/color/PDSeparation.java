@@ -23,6 +23,8 @@ import lpdf.pdfbox.cos.COSNull;
 import lpdf.pdfbox.pdmodel.common.function.PDFunction;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A Separation color space used to specify either additional colorants or for isolating the
@@ -44,6 +46,12 @@ public class PDSeparation extends PDSpecialColorSpace {
     // fields
     private PDColorSpace alternateColorSpace = null;
     private PDFunction tintTransform = null;
+
+    /**
+     * Map used to speed up {@link #toRGB(float[])}. This map here is needed for shading, which produce
+     * more than 256 different float values, which we cast to int so that the map can work.
+     */
+    private Map<Integer, float[]> toRGBMap = null;
 
     /**
      * Creates a new Separation color space.
@@ -96,14 +104,20 @@ public class PDSeparation extends PDSpecialColorSpace {
         return initialColor;
     }
 
-
-    protected void tintTransform(float[] samples, int[] alt) throws IOException {
-        samples[0] /= 255; // 0..1
-        float[] result = tintTransform.eval(samples);
-        for (int s = 0; s < alt.length; s++) {
-            // scale to 0..255
-            alt[s] = (int) (result[s] * 255);
+    @Override
+    public float[] toRGB(float[] value) throws IOException {
+        if (toRGBMap == null) {
+            toRGBMap = new HashMap<>();
         }
+        int key = (int) (value[0] * 255);
+        float[] retval = toRGBMap.get(key);
+        if (retval != null) {
+            return retval;
+        }
+        float[] altColor = tintTransform.eval(value);
+        retval = alternateColorSpace.toRGB(altColor);
+        toRGBMap.put(key, retval);
+        return retval;
     }
 
     /**

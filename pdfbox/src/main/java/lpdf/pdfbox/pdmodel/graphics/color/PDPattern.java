@@ -83,6 +83,11 @@ public final class PDPattern extends PDSpecialColorSpace {
         return EMPTY_PATTERN;
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Returns the pattern for the given color.
      *

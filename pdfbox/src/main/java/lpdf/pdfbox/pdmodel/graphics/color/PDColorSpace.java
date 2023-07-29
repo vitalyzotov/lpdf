@@ -226,7 +226,23 @@ public abstract class PDColorSpace implements COSObjectable {
      */
     public abstract PDColor getInitialColor();
 
+    /**
+     * Returns the RGB equivalent of the given color value.
+     *
+     * @param value a color value with component values between 0 and 1
+     * @return an array of R,G,B value between 0 and 1
+     * @throws IOException if the color conversion fails
+     */
+    public abstract float[] toRGB(float[] value) throws IOException;
 
+    /**
+     * Returns the luminance value of the given color value.
+     *
+     * @param value a color value with component values between 0 and 1
+     * @return the luminance value
+     * @throws IOException if the color conversion fails
+     */
+    //public abstract int toLuminance(float[] value) throws IOException;
     @Override
     public COSBase getCOSObject() {
         return array;

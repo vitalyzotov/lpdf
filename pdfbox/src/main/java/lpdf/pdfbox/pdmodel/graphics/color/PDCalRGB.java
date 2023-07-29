@@ -67,6 +67,41 @@ public class PDCalRGB extends PDCIEDictionaryBasedColorSpace {
         return initialColor;
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        if (isWhitePoint()) {
+            float a = value[0];
+            float b = value[1];
+            float c = value[2];
+
+            PDGamma gamma = getGamma();
+            float powAR = (float) Math.pow(a, gamma.getR());
+            float powBG = (float) Math.pow(b, gamma.getG());
+            float powCB = (float) Math.pow(c, gamma.getB());
+
+            float[] matrix = getMatrix();
+            float mXA = matrix[0];
+            float mYA = matrix[1];
+            float mZA = matrix[2];
+            float mXB = matrix[3];
+            float mYB = matrix[4];
+            float mZB = matrix[5];
+            float mXC = matrix[6];
+            float mYC = matrix[7];
+            float mZC = matrix[8];
+
+            float x = mXA * powAR + mXB * powBG + mXC * powCB;
+            float y = mYA * powAR + mYB * powBG + mYC * powCB;
+            float z = mZA * powAR + mZB * powBG + mZC * powCB;
+            return convXYZtoRGB(x, y, z);
+        } else {
+            // this is a hack, we simply skip CIE calibration of the RGB value
+            // this works only with whitepoint D65 (0.9505 1.0 1.089)
+            // see PDFBOX-2553
+            return new float[]{value[0], value[1], value[2]};
+        }
+    }
+
     /**
      * Returns the gamma value.
      * If none is present then the default of 1,1,1 will be returned.

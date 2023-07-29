@@ -51,6 +51,22 @@ public final class PDLab extends PDCIEDictionaryBasedColorSpace {
         return COSName.LAB.getName();
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        // CIE LAB to RGB, see http://en.wikipedia.org/wiki/Lab_color_space
+
+        // L*
+        float lstar = (value[0] + 16f) * (1f / 116f);
+
+        // TODO: how to use the blackpoint? scale linearly between black & white?
+
+        // XYZ
+        float x = wpX * inverse(lstar + value[1] * (1f / 500f));
+        float y = wpY * inverse(lstar);
+        float z = wpZ * inverse(lstar - value[2] * (1f / 200f));
+
+        return convXYZtoRGB(x, y, z);
+    }
 
     // reverse transformation (f^-1)
     private float inverse(float x) {

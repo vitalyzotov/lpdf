@@ -44,7 +44,7 @@ public final class PDIndexed extends PDSpecialColorSpace {
     private byte[] lookupData;
     private float[][] colorTable;
     private int actualMaxIndex;
-    private int[][] rgbColorTable;
+    private float[][] rgbColorTable;
 
     /**
      * Creates a new Indexed color space.
@@ -81,6 +81,7 @@ public final class PDIndexed extends PDSpecialColorSpace {
         // to profit from caching (PDFBOX-4149)
         baseColorSpace = PDColorSpace.create(array.get(1), resources);
         readColorTable();
+        initRgbColorTable();
     }
 
     @Override
@@ -103,6 +104,39 @@ public final class PDIndexed extends PDSpecialColorSpace {
         return initialColor;
     }
 
+    //
+    // WARNING: this method is performance sensitive, modify with care!
+    //
+    private void initRgbColorTable() throws IOException {
+        // build an RGB lookup table from the raster
+        rgbColorTable = new float[actualMaxIndex + 1][3];
+
+        for (int i = 0, n = actualMaxIndex; i <= n; i++) {
+            final float[] rgb = baseColorSpace.toRGB(colorTable[i]);
+            rgbColorTable[i][0] = rgb[0];
+            rgbColorTable[i][1] = rgb[1];
+            rgbColorTable[i][2] = rgb[2];
+        }
+    }
+
+    //
+    // WARNING: this method is performance sensitive, modify with care!
+    //
+    @Override
+    public float[] toRGB(float[] value) {
+        if (value.length != 1) {
+            throw new IllegalArgumentException("Indexed color spaces must have one color value");
+        }
+
+        // scale and clamp input value
+        int index = Math.round(value[0]);
+        index = Math.max(index, 0);
+        index = Math.min(index, actualMaxIndex);
+
+        // lookup rgb
+        float[] rgb = rgbColorTable[index];
+        return rgb;
+    }
 
     /**
      * Returns the base color space.

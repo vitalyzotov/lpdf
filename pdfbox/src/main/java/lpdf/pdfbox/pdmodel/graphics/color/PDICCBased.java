@@ -50,26 +50,6 @@ public final class PDICCBased extends PDCIEBasedColorSpace {
 
     private PDColor initialColor;
     private boolean isRGB = false;
-    // allows to force using alternate color space instead of ICC color space for performance
-    // reasons with LittleCMS (LCMS), see PDFBOX-4309
-    // WARNING: do not activate this in a conforming reader
-    private boolean useOnlyAlternateColorSpace = false;
-    private static final boolean IS_KCMS;
-
-    static {
-        String cmmProperty = System.getProperty("sun.java2d.cmm");
-        boolean result = false;
-        if ("sun.java2d.cmm.kcms.KcmsServiceProvider".equals(cmmProperty)) {
-            try {
-                Class.forName("sun.java2d.cmm.kcms.KcmsServiceProvider");
-                result = true;
-            } catch (ClassNotFoundException e) {
-                // KCMS not available
-            }
-        }
-        // else maybe KCMS was available, but not wished
-        IS_KCMS = result;
-    }
 
     /**
      * Creates a new ICC color space with an empty stream.
@@ -91,11 +71,9 @@ public final class PDICCBased extends PDCIEBasedColorSpace {
      *                     invalid.
      */
     private PDICCBased(COSArray iccArray) throws IOException {
-        useOnlyAlternateColorSpace = System
-                .getProperty("lpdf.pdfbox.rendering.UseAlternateInsteadOfICCColorSpace") != null;
         array = iccArray;
         stream = new PDStream((COSStream) iccArray.getObject(1));
-
+        loadICCProfile();
     }
 
     /**
@@ -150,6 +128,26 @@ public final class PDICCBased extends PDCIEBasedColorSpace {
         return stream;
     }
 
+    private void loadICCProfile() throws IOException {
+        try {
+            fallbackToAlternateColorSpace(null);
+            return;
+        } catch (IOException e) {
+            LOG.warn("Error initializing alternate color space: " + e.getLocalizedMessage());
+        }
+    }
+
+    private void fallbackToAlternateColorSpace(Exception e) throws IOException {
+        alternateColorSpace = getAlternateColorSpace();
+        if (alternateColorSpace.equals(PDDeviceRGB.INSTANCE)) {
+            isRGB = true;
+        }
+        if (e != null) {
+            LOG.warn("Can't read embedded ICC profile (" + e.getLocalizedMessage() +
+                    "), using alternate color space: " + alternateColorSpace.getName());
+        }
+        initialColor = alternateColorSpace.getInitialColor();
+    }
 
     private static void intToBigEndian(int value, byte[] array, int index) {
         array[index] = (byte) (value >> 24);
@@ -158,6 +156,13 @@ public final class PDICCBased extends PDCIEBasedColorSpace {
         array[index + 3] = (byte) (value);
     }
 
+    @Override
+    public float[] toRGB(float[] value) throws IOException {
+        if (isRGB) {
+            return value;
+        }
+        return alternateColorSpace.toRGB(value);
+    }
 
     @Override
     public int getNumberOfComponents() {

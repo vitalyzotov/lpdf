@@ -15,6 +15,10 @@
  */
 package lpdf.pdfbox.pdmodel.graphics.color;
 
+import com.github.ajalt.colormath.model.RGB;
+import com.github.ajalt.colormath.model.XYZ;
+import com.github.ajalt.colormath.model.XYZColorSpace;
+import com.github.ajalt.colormath.model.XYZColorSpaces;
 import lpdf.pdfbox.cos.COSArray;
 import lpdf.pdfbox.cos.COSDictionary;
 import lpdf.pdfbox.cos.COSFloat;
@@ -31,6 +35,7 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
     protected final COSDictionary dictionary;
 
     //private static final ColorSpace CIEXYZ = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
+    private static final XYZColorSpace CM_XYZ = XYZColorSpaces.INSTANCE.getXYZ65();
 
     // we need to cache whitepoint values, because using getWhitePoint()
     // would create a new default object for each pixel conversion if the original
@@ -75,6 +80,27 @@ public abstract class PDCIEDictionaryBasedColorSpace extends PDCIEBasedColorSpac
         wpX = whitepoint.getX();
         wpY = whitepoint.getY();
         wpZ = whitepoint.getZ();
+    }
+
+    protected float[] convXYZtoRGB(float x, float y, float z) {
+        // toRGB() malfunctions with negative values
+        // XYZ must be non-negative anyway:
+        // http://ninedegreesbelow.com/photography/icc-profile-negative-tristimulus.html
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (z < 0) {
+            z = 0;
+        }
+
+        XYZ xyz = new XYZ(x, y, z, 1f, CM_XYZ);
+        RGB rgb = xyz.toSRGB();
+        return new float[]{
+                rgb.getR(), rgb.getG(), rgb.getB()
+        };
     }
 
     /**

@@ -74,6 +74,25 @@ public final class PDCalGray extends PDCIEDictionaryBasedColorSpace {
         return initialColor;
     }
 
+    @Override
+    public float[] toRGB(float[] value) {
+        // see implementation of toRGB in PDCalRGB, and PDFBOX-2971
+        if (isWhitePoint()) {
+            float a = value[0];
+            float[] result = map1.get(a);
+            if (result != null) {
+                return result.clone();
+            }
+            float gamma = getGamma();
+            float powAG = (float) Math.pow(a, gamma);
+            result = convXYZtoRGB(powAG, powAG, powAG);
+            map1.put(a, result.clone());
+            return result;
+        } else {
+            return new float[]{value[0], value[0], value[0]};
+        }
+    }
+
     /**
      * This will get the gamma value. If none is present then the default of 1
      * will be returned.
