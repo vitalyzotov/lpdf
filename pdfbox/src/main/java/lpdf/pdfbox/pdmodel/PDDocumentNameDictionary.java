@@ -65,6 +65,39 @@ public class PDDocumentNameDictionary implements COSObjectable {
         return nameDictionary;
     }
 
+    /**
+     * Get the destination named tree node. The values in this name tree will be
+     * PDPageDestination objects.
+     *
+     * @return The destination name tree node.
+     */
+    public PDDestinationNameTreeNode getDests()
+    {
+        COSDictionary dic = nameDictionary.getCOSDictionary(COSName.DESTS);
+        //The document catalog also contains the Dests entry sometimes
+        //so check there as well.
+        if( dic == null )
+        {
+            dic = catalog.getCOSObject().getCOSDictionary(COSName.DESTS);
+        }
+        return dic != null ? new PDDestinationNameTreeNode(dic) : null;
+    }
+
+    /**
+     * Set the named destinations that are associated with this document.
+     *
+     * @param dests The destination names.
+     */
+    public void setDests( PDDestinationNameTreeNode dests )
+    {
+        nameDictionary.setItem( COSName.DESTS, dests );
+        //The dests can either be in the document catalog or in the
+        //names dictionary, PDFBox will just maintain the one in the
+        //names dictionary for now unless there is a reason to do
+        //something else.
+        //clear the potentially out of date Dests reference.
+        catalog.getCOSObject().setItem( COSName.DESTS, (COSObjectable)null);
+    }
 
     /**
      * Get the embedded files named tree node. The values in this name tree will

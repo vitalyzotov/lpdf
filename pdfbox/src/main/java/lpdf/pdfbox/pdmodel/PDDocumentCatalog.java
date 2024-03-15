@@ -31,8 +31,13 @@ import lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure.PDMarkInfo;
 import lpdf.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 import lpdf.pdfbox.pdmodel.graphics.color.PDOutputIntent;
 import lpdf.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentProperties;
+import lpdf.pdfbox.pdmodel.interactive.action.PDActionFactory;
 import lpdf.pdfbox.pdmodel.interactive.action.PDDocumentCatalogAdditionalActions;
 import lpdf.pdfbox.pdmodel.interactive.action.PDURIDictionary;
+import lpdf.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
+import lpdf.pdfbox.pdmodel.interactive.documentnavigation.destination.PDNamedDestination;
+import lpdf.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
+import lpdf.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import lpdf.pdfbox.pdmodel.interactive.pagenavigation.PDThread;
 import lpdf.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences;
 import org.slf4j.Logger;
@@ -118,6 +123,27 @@ public class PDDocumentCatalog implements COSObjectable {
     }
 
     /**
+     * Get the outline associated with this document or null if it does not exist.
+     *
+     * @return The document's outline.
+     */
+    public PDDocumentOutline getDocumentOutline()
+    {
+        COSDictionary outlineDict = root.getCOSDictionary(COSName.OUTLINES);
+        return outlineDict != null ? new PDDocumentOutline(outlineDict) : null;
+    }
+
+    /**
+     * Sets the document outlines.
+     *
+     * @param outlines The new document outlines.
+     */
+    public void setDocumentOutline(PDDocumentOutline outlines)
+    {
+        root.setItem(COSName.OUTLINES, outlines);
+    }
+
+    /**
      * Returns the document's article threads.
      *
      * @return a list of all threads of the document
@@ -174,6 +200,29 @@ public class PDDocumentCatalog implements COSObjectable {
     }
 
     /**
+     * Get the Document Open Action for this object.
+     *
+     * @return The action to perform when the document is opened.
+     * @throws IOException If there is an error creating the destination or action.
+     */
+    public PDDestinationOrAction getOpenAction() throws IOException
+    {
+        COSBase openAction = root.getDictionaryObject(COSName.OPEN_ACTION);
+        if (openAction instanceof COSDictionary)
+        {
+            return PDActionFactory.createAction((COSDictionary)openAction);
+        }
+        else if (openAction instanceof COSArray)
+        {
+            return PDDestination.create(openAction);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
      * @return The Additional Actions for this Document
      */
     public PDDocumentCatalogAdditionalActions getActions() {
@@ -208,6 +257,38 @@ public class PDDocumentCatalog implements COSObjectable {
     public PDDocumentNameDestinationDictionary getDests() {
         COSDictionary dests = root.getCOSDictionary(COSName.DESTS);
         return dests != null ? new PDDocumentNameDestinationDictionary(dests) : null;
+    }
+
+    /**
+     * Find the page destination from a named destination.
+     * @param namedDest the named destination.
+     * @return a PDPageDestination object or null if not found.
+     * @throws IOException if there is an error creating the PDPageDestination object.
+     */
+    public PDPageDestination findNamedDestinationPage(PDNamedDestination namedDest)
+            throws IOException
+    {
+        PDPageDestination pageDestination = null;
+        PDDocumentNameDictionary namesDict = getNames();
+        if (namesDict != null)
+        {
+            PDDestinationNameTreeNode destsTree = namesDict.getDests();
+            if (destsTree != null)
+            {
+                pageDestination = destsTree.getValue(namedDest.getNamedDestination());
+            }
+        }
+        if (pageDestination == null)
+        {
+            // Look up /Dests dictionary from catalog
+            PDDocumentNameDestinationDictionary nameDestDict = getDests();
+            if (nameDestDict != null)
+            {
+                String name = namedDest.getNamedDestination();
+                pageDestination = (PDPageDestination) nameDestDict.getDestination(name);
+            }
+        }
+        return pageDestination;
     }
 
     /**

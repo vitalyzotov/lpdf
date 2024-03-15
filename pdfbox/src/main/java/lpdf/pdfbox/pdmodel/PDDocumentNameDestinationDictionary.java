@@ -15,8 +15,14 @@
  */
 package lpdf.pdfbox.pdmodel;
 
+import lpdf.pdfbox.cos.COSArray;
+import lpdf.pdfbox.cos.COSBase;
 import lpdf.pdfbox.cos.COSDictionary;
+import lpdf.pdfbox.cos.COSName;
 import lpdf.pdfbox.pdmodel.common.COSObjectable;
+import lpdf.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
+
+import java.io.IOException;
 
 /**
  * This encapsulates the "dictionary of names and corresponding destinations" for the /Dests entry
@@ -46,5 +52,34 @@ public class PDDocumentNameDestinationDictionary implements COSObjectable {
         return nameDictionary;
     }
 
+    /**
+     * Returns the destination corresponding to the parameter.
+     *
+     * @param name The destination name.
+     * @return The destination for that name, or null if there isn't any.
+     *
+     * @throws IOException if something goes wrong when creating the destination object.
+     */
+    public PDDestination getDestination(String name) throws IOException
+    {
+        COSBase item = nameDictionary.getDictionaryObject(name);
+
+        // "The value of this entry shall be a dictionary in which each key is a destination name
+        // and the corresponding value is either an array defining the destination (...)
+        // or a dictionary with a D entry whose value is such an array."
+        if (item instanceof COSArray)
+        {
+            return PDDestination.create(item);
+        }
+        else if (item instanceof COSDictionary)
+        {
+            COSDictionary dict = (COSDictionary) item;
+            if (dict.containsKey(COSName.D))
+            {
+                return PDDestination.create(dict.getDictionaryObject(COSName.D));
+            }
+        }
+        return null;
+    }
 
 }
